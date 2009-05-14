@@ -1,0 +1,93 @@
+[38;1m$ !rm -rf ~/testlib[0m
+[38;1m$ !mkdir ~/testlib[0m
+[38;1m$ library.listlibrary[0m
+components  wrappers  test  syscons  podmylib  pod_library  testlib
+[38;1m$ library.addlibrary ~/testlib[0m
+[31;7m[ERROR][0m  : [31;1mLibrary testlib already exist[0m
+[38;1m$ library.dellibrary test[0m
+[31;7m[ERROR][0m  : [31;1mCan't delete an official library[0m
+[38;1m$ library.load test[0m
+
+[38;1m$ library.load testlib[0m
+
+[38;1m$ library.listcomponents[0m
+<empty>
+[38;1m$ library.component.create industrial_serial_input.wb16[0m
+
+[38;1m$ library.component.addtophdlfile industrial_serial_input.vhd[0m
+[34;7m[INFO][0m   : [34;1mGeneric id added in component[0m
+[34;7m[INFO][0m   : [34;1mGeneric wb_size added in component[0m
+[34;7m[INFO][0m   : [34;1mGeneric clk_freq added in component[0m
+
+[38;1m$ library.component.addhdlfile industrial_serial_input.vhd[0m
+
+[31;7m[ERROR][0m  : [31;1mFile industrial_serial_input.vhd is already in component[0m
+[38;1m$ library.component.addhdlfile tagadatzouintzouin.vhd[0m
+
+[31;7m[ERROR][0m  : [31;1mFile tagadatzouintzouin.vhd doesn't exist[0m
+[38;1m$ library.component.listinterfaces[0m
+
+<empty>
+[38;1m$ library.component.addinterface syscon[0m
+
+[38;1m$ library.component.addinterface wbs[0m
+
+[38;1m$ library.component.addinterface interrupt[0m
+
+[38;1m$ library.component.addinterface sn65hvs882[0m
+
+[38;1m$ library.component.listinterfaces[0m
+
+syscon  wbs  interrupt  sn65hvs882
+[38;1m$ library.component.addport clk syscon[0m
+
+[38;1m$ library.component.addport reset syscon[0m
+
+[38;1m$ library.component.addport clk_titi plip[0m
+
+[31;7m[ERROR][0m  : [31;1mPort named clk_titi can't be found in industrial_serial_input.vhd[0m
+[38;1m$ library.component.addport wbs_add wbs[0m
+
+[38;1m$ library.component.addport wbs_writedata wbs[0m
+
+[38;1m$ library.component.addport wbs_readdata wbs[0m
+
+[38;1m$ library.component.addport wbs_strobe wbs[0m
+
+[38;1m$ library.component.addport wbs_cycle wbs[0m
+
+[38;1m$ library.component.addport wbs_write wbs[0m
+
+[38;1m$ library.component.addport wbs_ack wbs[0m
+
+[38;1m$ library.component.addport interrupt interrupt[0m
+
+[38;1m$ library.component.addport  spi_sip  sn65hvs882[0m
+
+[38;1m$ library.component.addport  spi_ld_n sn65hvs882 [0m
+
+[38;1m$ library.component.addport  spi_ce_n sn65hvs882 [0m
+
+[38;1m$ library.component.addport  spi_clk  sn65hvs882[0m
+
+[38;1m$ library.component.addport  spi_sop  sn65hvs882[0m
+
+[38;1m$ library.component.addport clk plop[0m
+
+[31;7m[ERROR][0m  : [31;1mPort named clk is already placed in syscon[0m
+[38;1m$ library.component.addport reset plop[0m
+
+[31;7m[ERROR][0m  : [31;1mPort named reset is already placed in syscon[0m
+[38;1m$ library.component.setdescription testing component[0m
+
+[38;1m$ library.component.help[0m
+
+Documented commands (type help <topic>):
+========================================
+EOF           addtophdlfile  exit            listports  save          
+addhdlfile    create         help            load       savehistory   
+addinterface  editinterface  history         ls         setdescription
+addport       eof            listinterfaces  quit       shell         
+
+[38;1m$ library.component.save[0m
+

@@ -1,0 +1,50 @@
+# -----------------------------------------------------
+# --  Test 10:
+# --  Two uarts in apf9328
+# -----------------------------------------------------
+!rm -rf biuart
+project.create biuart
+project.selectplatform apf9328
+project.addinstance components.uart16550.wb16 uart00
+project.addinstance components.uart16550.wb16 uart01
+
+project.connectpin uart00.uart.srx_pad_i uart01.uart.stx_pad_o 
+project.connectpin uart00.uart.stx_pad_o uart01.uart.srx_pad_i
+
+project.connectpin uart00.uart.ri_pad_i  apf9328.fpga.IO_L22N_2
+project.connectpin uart00.uart.rts_pad_o apf9328.fpga.IO_L22P_2
+project.connectpin uart00.uart.dsr_pad_i apf9328.fpga.IO_L23N_2
+project.connectpin uart00.uart.dtr_pad_o apf9328.fpga.IO_L23P_2
+project.connectpin uart00.uart.cts_pad_i apf9328.fpga.IO_L24N_2
+project.connectpin uart00.uart.dcd_pad_i apf9328.fpga.IO_L24P_2
+project.connectpin uart01.uart.ri_pad_i  apf9328.fpga.IO_L40N_2
+project.connectpin uart01.uart.rts_pad_o apf9328.fpga.IO_L40P_2
+project.connectpin uart01.uart.dsr_pad_i apf9328.fpga.IO_L40N_3
+project.connectpin uart01.uart.dtr_pad_o apf9328.fpga.IO_L40P_3
+project.connectpin uart01.uart.cts_pad_i apf9328.fpga.IO_L01P_5
+project.connectpin uart01.uart.dcd_pad_i apf9328.fpga.IO_5
+
+project.connectpin uart00.interrupt.int_o irq_mngr00.irq.irqport.0
+project.connectpin uart01.interrupt.int_o irq_mngr00.irq.irqport.1
+
+project.autoconnectbus
+project.intercon imx9328_wb16_wrapper00.mwb16
+project.top
+project.report
+project.synthesis.selecttoolchain ise
+project.synthesis.generateproject
+project.driver.selecttoolchain armadeus
+project.driver.generateproject
+project.driver.selectprojecttree ~/armadeus/target/linux/modules/fpga/POD
+project.driver.copydrivers
+# -----------------------------------------------------
+# -- Project biuart generated
+# --
+# -- To complete test, launch ISE
+# -- and source biuart.tcl in biuart/synthesis/
+# --
+# -- To test drivers, select driver directory with
+# -- driver.selectprojecttree project/driver/path/POD
+# -- then make linux-menuconfig then make
+# -----------------------------------------------------
+exit

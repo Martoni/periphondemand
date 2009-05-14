@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="rstext_syscon" version="1.0">
+    <description>
+        manage rst and clock that come from ext. 
+    </description>
+
+    <generics>
+        <generic name="invert_reset" public="true" value="'1'" match="'0'|'1'" type="std_logic" destination="fpga" />
+    </generics>
+
+    <hdl_files>
+        <hdl_file filename="hdl/rstext_syscon.vhd" scope="spartan3" istop="1"/>
+    </hdl_files>
+
+    <interfaces>
+        <interface name="candr" class="CLK_RST">
+            <ports>
+                <port name="gls_clk" type="CLK" size="1" dir="out"/>
+                <port name="gls_reset" type="RST" size="1" dir="out"/>
+            </ports>
+        </interface>
+
+        <interface name="ext" class="GLS">
+            <ports>
+                <port name="ext_clk" type="CLK" size="1" dir="in">
+                    <pin num="0">
+                        <connect instance_dest="unioc_v11" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/>
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/>
+                    </pin>
+                </port>
+                <port name="ext_rst_n" type="RST" size="1" dir="in">
+                    <pin num="0">
+                        <connect instance_dest="unioc_v11" interface_dest="fpga" port_dest="nRST_fpga" pin_dest="0" />
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="FPGA_RESET" pin_dest="0" />
+                    </pin>
+                </port>
+            </ports>
+        </interface>
+    </interfaces>
+
+</component>

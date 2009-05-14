@@ -1,0 +1,21 @@
+!rm -rf uniocled
+project.create uniocled
+project.selectplatform unioc_v11
+project.addinstance components.led.wb8 led0
+project.autoconnectbus
+project.setaddr led0.swb8 0x1100
+project.getmapping atmega_wb8_wrapper00.mwb8
+project.intercon atmega_wb8_wrapper00.mwb8
+project.top
+project.synthesis.selecttoolchain quartus
+project.synthesis.generateproject
+project.delinstance atmega_wb8_wrapper00_mwb8_intercon
+project.connectpin led0.int_led.led.0 unioc_v11.fpga.TLED
+project.autoconnectbus
+project.intercon atmega_wb8_wrapper00.mwb8
+project.top
+project.synthesis.selecttoolchain quartus
+project.synthesis.generateproject
+project.simulation.selecttoolchain ghdl
+project.simulation.generateproject
+exit

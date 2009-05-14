@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="int_gen" version="1.0">
+	<description>
+		Generate interruptions to test wb_irq_mngr
+	</description>
+
+	<hdl_files>
+		<hdl_file filename="hdl/int_gen.vhd" scope="all" istop="1" />
+    </hdl_files>
+
+
+    <generics>
+		<generic name="periode"      public="true" value="1_000_000" match="^\d+" type="integer"/>
+		<generic name="clockperiode" public="true" value="10" match="^\d+" type="integer"/>
+    </generics>
+
+	<interfaces>
+		<interface name="candr" class="CLK_RST">
+			<ports>
+				<port name="clk" type="CLK" size="1" dir="in"/>
+				<port name="reset" type="RST" size="1" dir="in"/>
+			</ports>
+		</interface>
+
+		<interface name="wb16" class="SLAVE" bus="wishbone16" clockandreset="candr">
+			<registers>
+				<register name="startreg" offset="0x00" size="16" rows="1" />
+			</registers>
+			<ports>
+				<port name="readdata" type="DAT_O" size="16" dir="out"/>
+				<port name="writedata" type="DAT_I" size="16" dir="in"/>
+				<port name="ack" type="ACK" size="1" dir="out" />
+				<port name="strobe" type="STB" size="1" dir="in"/>
+				<port name="cycle" type="CYC" size="1" dir="in"/>
+				<port name="write" type="WE" size="1" dir="in"/>
+			</ports>
+		</interface>
+
+		<interface name="irq" class="GLS" >
+			<ports>
+				<port name="interrupts" type="EXPORT" size="16" dir="out"/>
+			</ports>
+		</interface>
+
+	</interfaces>
+
+</component>

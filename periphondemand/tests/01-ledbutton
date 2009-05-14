@@ -1,0 +1,45 @@
+# -----------------------------------------------------
+# --  Test 01:
+# --  Generate a project with one led and one button
+# -----------------------------------------------------
+!rm -rf ledbutton
+project.listcomponents
+project.create ledbutton
+project.selectplatform apf9328
+project.addinstance components.button
+project.addinstance components.led.wb16
+#project.connectpin led00.int_led.led apf9328.fpga.IO_1
+#project.connectpin button00.int_button.button.0 apf9328.fpga.IO_L01N_0
+project.connectpin button00.int_button.irq irq_mngr00.irq.irqport.0
+project.autoconnectbus
+# -----------------------
+# - Intercon generation
+# -----------------------
+project.intercon imx9328_wb16_wrapper00.mwb16
+# -----------------------
+# - Top generation
+# -----------------------
+project.top
+project.synthesis.selecttoolchain ise
+project.synthesis.generateproject
+project.saveproject
+# ---------------------
+# -- simulation      --
+# ---------------------
+project.simulation.selecttoolchain ghdl
+project.simulation.generateproject
+
+# ---------------------
+# -- driver
+# ---------------------
+project.driver.selecttoolchain armadeus
+project.driver.generateproject
+project.driver.selectprojecttree ~/virgin-apf9328/target/linux/modules/fpga/POD
+project.driver.copydrivers
+project.saveproject
+# ---------------------
+# -- mapping
+# ---------------------
+project.getmapping imx9328_wb16_wrapper00.mwb16
+project.report
+exit

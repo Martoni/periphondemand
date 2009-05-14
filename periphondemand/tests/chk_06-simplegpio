@@ -1,0 +1,111 @@
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ !rm -rf gpio[0m
+[38;1m$ project.create gpio[0m
+Project gpio created
+[38;1m$ project.selectplatform apf9328[0m
+Component platform added as apf9328
+Component imx9328_wb16_wrapper added as imx9328_wb16_wrapper00
+Component rstgen_syscon added as rstgen_syscon00
+Component irq_mngr added as irq_mngr00
+setting base address 0x0 for  irq_mngr00.swb16
+
+Platform apf9328 selected
+[38;1m$ project.addinstance components.simplegpio.wb16 onegpio[0m
+Component simplegpio added as onegpio
+
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.0 apf9328.fpga.IO_L01N_0[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.1 apf9328.fpga.IO_L32N_0[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.2 apf9328.fpga.IO_L32N_1[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.3 apf9328.fpga.IO_L31N_1[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.4 apf9328.fpga.IO_L28N_1[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.5 apf9328.fpga.IO_L01N_1[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.6 apf9328.fpga.IO_L31P_0[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.7 apf9328.fpga.IO_L30P_0[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.8  apf9328.fpga.IO_L01P_0[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.9  apf9328.fpga.IO_L32P_0[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.10 apf9328.fpga.IO_L32P_1[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.11 apf9328.fpga.IO_L31P_1[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.12 apf9328.fpga.IO_L28P_1[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.13 apf9328.fpga.IO_L01P_1[0m
+pin connected
+[38;1m$ project.connectpin onegpio.gpio_int.gpio.14 apf9328.fpga.IO_L31N_0[0m
+pin connected
+[38;1m$ [0m
+[38;1m$ project.delinstance irq_mngr00[0m
+Component irq_mngr00 deleted
+
+[38;1m$ project.autoconnectbus[0m
+setting base address 0x8 for  onegpio.swb16
+Bus connected
+
+[38;1m$ project.intercon imx9328_wb16_wrapper00.mwb16[0m
+Intercon with name : imx9328_wb16_wrapper00_mwb16_intercon Done
+Component imx9328_wb16_wrapper00_mwb16 added as imx9328_wb16_wrapper00_mwb16_intercon
+
+[38;1m$ project.top[0m
+
+Top generated with name : top_gpio.vhd
+[38;1m$ project.synthesis.selecttoolchain ise[0m
+[38;1m$ project.synthesis.generateproject[0m
+Make directory for imx9328_wb16_wrapper
+Make directory for rstgen_syscon
+Make directory for simplegpio
+Make directory for imx9328_wb16_wrapper00_mwb16
+
+Constraint file generated with name :/home/fabien/periphondemand/periphondemand/tests/gpio/synthesis/gpio.ucf
+
+TCL script generated with name : gpio.tcl
+
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ project.getmapping imx9328_wb16_wrapper00.mwb16[0m
+Address  | instance.interface             | size        
+---------------------------------------------------------
+    0x00 |                       --void-- |          8
+     0x8 |                  onegpio.swb16 |          8
+---------------------------------------------------------
+
+[38;1m$ project.report[0m
+
+report : 
+* Master interfaces mapping:
+
+  imx9328_wb16_wrapper00.mwb16:
+    onegpio.swb16:
+      0x08 : rw
+      0x0a : ctrl
+      0x0c : id
+
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ project.driver.selecttoolchain armadeus[0m
+[38;1m$ project.driver.selectprojecttree ~/armadeus/target/linux/modules/fpga/POD[0m
+
+[38;1m$ project.driver.generateproject[0m
+No driver for imx9328_wb16_wrapper
+No driver for rstgen_syscon
+Create directory for simplegpio driver
+No driver for imx9328_wb16_wrapper00_mwb16
+Copy and fill template for simplegpio
+
+[38;1m$ project.driver.copydrivers[0m
+

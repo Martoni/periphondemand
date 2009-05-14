@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bus name="wishbone8" version="1.0" datasize="8">
+	<description></description>
+	<components>
+		<component name="syscon"/>
+	</components>
+	<class name="WBM" type="MASTER">
+		<type name="ADR"   type="address" dir="out" />
+		<type name="DAT_I" type="datain"  dir="in" /> 
+		<type name="DAT_O" type="dataout" dir="out" /> 
+		<type name="WE"    type="write"   dir="out" />
+		<type name="SEL"   type="select"  dir="out" />
+		<type name="ACK"   type="ack"     dir="in" />
+		<type name="CYC"   type="cycle"   dir="out" />
+		<type name="STB"   type="strobe"  dir="out" />
+	</class>
+	<class name="WBS" type="SLAVE">
+		<type name="ADR"   type="address" dir="in" />
+		<type name="DAT_I" type="datain"  dir="in" />
+		<type name="DAT_O" type="dataout" dir="out" />
+		<type name="WE"    type="write"   dir="in" />
+		<type name="SEL"   type="select"  dir="in" />
+		<type name="ACK"   type="ack"     dir="out" />
+		<type name="CYC"   type="cycle"   dir="in" />
+		<type name="STB"   type="strobe"  dir="in" />
+	</class>
+	<class name="WBC" type="CLK_RST">
+		<type name="CLK" type="clock" />
+		<type name="RST" type="reset" />
+	</class>
+</bus>

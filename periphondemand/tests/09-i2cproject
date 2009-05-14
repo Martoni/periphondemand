@@ -1,0 +1,18 @@
+# -----------------------------------------------------
+# --  Test 08:
+# --  test i2cocore
+# -----------------------------------------------------
+!rm -rf i2cproject
+project.create i2cproject
+project.selectplatform apf9328
+project.addinstance components.i2cocore.wb16 i2c
+project.connectpin i2c.i2c.sda apf9328.fpga.IO_L32N_0
+project.connectpin i2c.i2c.scl apf9328.fpga.IO_L01P_0
+project.connectpin i2c.irq.inta_o.0 irq_mngr00.irq.irqport.0
+project.autoconnectbus
+project.synthesis.selecttoolchain ise
+project.intercon imx9328_wb16_wrapper00.mwb16
+project.top
+project.report
+project.synthesis.generateproject
+exit

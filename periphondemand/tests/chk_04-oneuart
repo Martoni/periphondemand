@@ -1,0 +1,112 @@
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ !rm -rf oneuart[0m
+[38;1m$ project.create oneuart[0m
+Project oneuart created
+[38;1m$ project.selectplatform apf9328[0m
+Component platform added as apf9328
+Component imx9328_wb16_wrapper added as imx9328_wb16_wrapper00
+Component rstgen_syscon added as rstgen_syscon00
+Component irq_mngr added as irq_mngr00
+setting base address 0x0 for  irq_mngr00.swb16
+
+Platform apf9328 selected
+[38;1m$ project.addinstance components.uart16550.wb16 uart[0m
+Component uart16550 added as uart
+
+[38;1m$ project.connectpin uart.uart.srx_pad_i apf9328.fpga.IO_L21N_2[0m
+pin connected
+[38;1m$ project.connectpin uart.uart.stx_pad_o apf9328.fpga.IO_L21P_2[0m
+pin connected
+[38;1m$ project.connectpin uart.uart.ri_pad_i apf9328.fpga.IO_L22N_2[0m
+pin connected
+[38;1m$ project.connectpin uart.uart.rts_pad_o apf9328.fpga.IO_L22P_2[0m
+pin connected
+[38;1m$ project.connectpin uart.uart.dsr_pad_i apf9328.fpga.IO_L23N_2[0m
+pin connected
+[38;1m$ project.connectpin uart.uart.dtr_pad_o apf9328.fpga.IO_L23P_2[0m
+pin connected
+[38;1m$ project.connectpin uart.uart.cts_pad_i apf9328.fpga.IO_L24N_2[0m
+pin connected
+[38;1m$ project.connectpin uart.uart.dcd_pad_i apf9328.fpga.IO_L24P_2[0m
+pin connected
+[38;1m$ project.connectpin uart.interrupt.int_o irq_mngr00.irq.irqport.0[0m
+pin connected
+[38;1m$ project.autoconnectbus[0m
+[34;7m[INFO][0m   : [34;1mBus connection for irq_mngr00.swb16 already exists[0m
+setting base address 0x20 for  uart.swb16
+Bus connected
+
+[38;1m$ project.intercon imx9328_wb16_wrapper00.mwb16[0m
+Intercon with name : imx9328_wb16_wrapper00_mwb16_intercon Done
+Component imx9328_wb16_wrapper00_mwb16 added as imx9328_wb16_wrapper00_mwb16_intercon
+
+[38;1m$ project.top[0m
+
+Top generated with name : top_oneuart.vhd
+[38;1m$ project.synthesis.selecttoolchain ise[0m
+[38;1m$ project.synthesis.generateproject[0m
+Make directory for imx9328_wb16_wrapper
+Make directory for rstgen_syscon
+Make directory for irq_mngr
+Make directory for uart16550
+Make directory for imx9328_wb16_wrapper00_mwb16
+
+Constraint file generated with name :/home/fabien/periphondemand/periphondemand/tests/oneuart/synthesis/oneuart.ucf
+
+TCL script generated with name : oneuart.tcl
+
+[38;1m$ project.driver.selecttoolchain armadeus[0m
+[38;1m$ project.driver.generateproject[0m
+No driver for imx9328_wb16_wrapper
+No driver for rstgen_syscon
+Create directory for irq_mngr driver
+Create directory for uart16550 driver
+No driver for imx9328_wb16_wrapper00_mwb16
+Copy and fill template for irq_mngr
+Copy and fill template for uart16550
+
+[38;1m$ project.driver.selectprojecttree ~/armadeus/target/linux/modules/fpga/POD[0m
+
+[38;1m$ project.driver.copydrivers[0m
+
+[38;1m$ project.getmapping imx9328_wb16_wrapper00.mwb16[0m
+Address  | instance.interface             | size        
+---------------------------------------------------------
+     0x0 |               irq_mngr00.swb16 |          8
+    0x08 |                       --void-- |         24
+    0x20 |                     uart.swb16 |         32
+---------------------------------------------------------
+
+[38;1m$ project.report[0m
+
+report : 
+* Master interfaces mapping:
+
+  imx9328_wb16_wrapper00.mwb16:
+    irq_mngr00.swb16:
+      0x00 : irq_mngr_mask
+      0x02 : irq_mngr_pending_ack
+      0x04 : id
+    uart.swb16:
+      0x20 : TXRX_DLL
+      0x22 : IEN_DLH
+      0x24 : II_FIFO
+      0x26 : LCR
+      0x28 : MC
+      0x2a : LS
+      0x2c : MS
+      0x30 : id
+
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ [0m

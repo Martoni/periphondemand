@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<platform name="apf27" version="1.0" >
+    <description>
+        Armadeus apf27 card
+    </description>
+
+    <fpga family="spartan3a" device="XC3S200A" speed="-4" package="FT256" main_clock="133000"/>
+
+    <simulation>
+        <simlib filename="apf27_test_pkg.vhd">
+            <description>
+                Defines communication functions between imx and fpga:
+
+                write procedures
+                procedure imx_write
+                Params :
+                address      : Write address 
+                value        : value to write 
+                gls_clk      : clock signal
+                imx_cs_n     : Chip select 
+                imx_oe_n     : Read signal
+                imx_eb3_n    : Write signal
+                imx_address  : Address signal
+                imx_data     : Data signal
+                WSC          : Value of imx WSC (see MC9328MXLRM.pdf p169) for sync=0
+
+                read procedures
+                procedure imx_read
+                Params :
+                address      : Write address 
+                value        : value returned
+                gls_clk      : clock signal
+                imx_cs_n     : Chip select 
+                imx_oe_n     : Read signal
+                imx_eb3_n    : Write signal
+                imx_address  : Address signal
+                imx_data     : Data signal
+                WSC          : Value of imx WSC (see MC9328MXLRM.pdf p169) for sync=0
+            </description>
+        </simlib>
+    </simulation>
+
+    <components>
+        <component name="wrappers/imx27_wb16_wrapper"/>
+        <component name="syscons/rstgen_syscon"/>
+        <component name="components/irq_mngr"/>
+    </components>
+
+    <interfaces>
+        <interface name="fpga">
+            <ports>
+
+                <port size="1" name="FPGA_RESET" standard="LVCMOS18" drive="8" position="T9" dir="inout"/>
+                <port size="1" name="INT"        standard="LVCMOS18" drive="8" position="T12" dir="inout"/>
+                <port size="1" name="CS4_DTACK"  standard="LVCMOS18" drive="8" position="R3" dir="inout"/>
+                <port size="1" name="CS5N"       standard="LVCMOS18"           position="P10" dir="inout"/>
+                <port size="1" name="DATA0"      standard="LVCMOS18" drive="8" position="T5" dir="inout"/>
+                <port size="1" name="DATA1"      standard="LVCMOS18" drive="8" position="T6" dir="inout"/>
+                <port size="1" name="DATA2"      standard="LVCMOS18" drive="8" position="P7" dir="inout"/>
+                <port size="1" name="DATA3"      standard="LVCMOS18" drive="8" position="N8" dir="inout"/>
+                <port size="1" name="DATA4"      standard="LVCMOS18" drive="8" position="P12" dir="inout"/>
+                <port size="1" name="DATA5"      standard="LVCMOS18" drive="8" position="T13" dir="inout"/>
+                <port size="1" name="DATA6"      standard="LVCMOS18" drive="8" position="R13" dir="inout"/>
+                <port size="1" name="DATA7"      standard="LVCMOS18" drive="8" position="T14" dir="inout"/>
+                <port size="1" name="CLK0"       standard="LVCMOS18"           position="N9" dir="inout" freq="133"/>
+                <port size="1" name="EB0N"       standard="LVCMOS18"           position="P9" dir="inout"/>
+                <port size="1" name="OEN"        standard="LVCMOS18"           position="R9" dir="inout"/>
+                <port size="1" name="ADDR1"      standard="LVCMOS18"           position="N5"  dir="in"/>
+                <port size="1" name="ADDR2"      standard="LVCMOS18"           position="L7"  dir="in"/>
+                <port size="1" name="ADDR3"      standard="LVCMOS18"           position="M7"  dir="in"/>
+                <port size="1" name="ADDR4"      standard="LVCMOS18"           position="M8"  dir="in"/>
+                <port size="1" name="ADDR5"      standard="LVCMOS18"           position="L8"  dir="in"/>
+                <port size="1" name="ADDR6"      standard="LVCMOS18"           position="L9"  dir="in"/>
+                <port size="1" name="ADDR7"      standard="LVCMOS18"           position="L10" dir="in"/>
+                <port size="1" name="ADDR8"      standard="LVCMOS18"           position="M11" dir="in"/>
+                <port size="1" name="DATA8"      standard="LVCMOS18" drive="8" position="P5" dir="inout"/>
+                <port size="1" name="DATA9"      standard="LVCMOS18" drive="8" position="N6" dir="inout"/>
+                <port size="1" name="DATA10"     standard="LVCMOS18" drive="8" position="T3" dir="inout"/>
+                <port size="1" name="DATA11"     standard="LVCMOS18" drive="8" position="T11" dir="inout"/>
+                <port size="1" name="DATA12"     standard="LVCMOS18" drive="8" position="T4" dir="inout"/>
+                <port size="1" name="DATA13"     standard="LVCMOS18" drive="8" position="R5" dir="inout"/>
+                <port size="1" name="DATA14"     standard="LVCMOS18" drive="8" position="M10" dir="inout"/>
+                <port size="1" name="DATA15"     standard="LVCMOS18" drive="8" position="T10" dir="inout"/>
+                <port size="1" name="ADDR9"      standard="LVCMOS18"           position="P11" dir="inout"/>
+                <port size="1" name="ADDR10"     standard="LVCMOS18"           position="N11" dir="inout"/>
+                <port size="1" name="ADDR11"     standard="LVCMOS18"           position="N12" dir="inout"/>
+                <port size="1" name="ADDR12"     standard="LVCMOS18"           position="P13" dir="inout"/>
+
+                <port size="1" name="IO_L01P_0" standard="LVCMOS33" drive="12" position="D13" dir="inout"/>
+                <port size="1" name="IO_L01N_0" standard="LVCMOS33" drive="12" position="C13" dir="inout"/>
+                <port size="1" name="IO_L02P_0" standard="LVCMOS33" drive="12" position="B15" dir="inout"/>
+                <port size="1" name="IO_L02N_0" standard="LVCMOS33" drive="12" position="B14" dir="inout"/>
+                <port size="1" name="IO_L03P_0" standard="LVCMOS33" drive="12" position="C12" dir="inout"/>
+                <port size="1" name="IO_L03N_0" standard="LVCMOS33" drive="12" position="D11" dir="inout"/>
+                <port size="1" name="IO_L04P_0" standard="LVCMOS33" drive="12" position="A14" dir="in"/>
+                <port size="1" name="IO_L04N_0" standard="LVCMOS33" drive="12" position="A13" dir="inout"/>
+                <port size="1" name="IO_L09P_0" standard="LVCMOS33" drive="12" position="C10" dir="inout"/>
+                <port size="1" name="IO_L09N_0" standard="LVCMOS33" drive="12" position="D9" dir="inout"/>
+                <port size="1" name="IO_L10P_0" standard="LVCMOS33" drive="12" position="C9" dir="inout"/>
+                <port size="1" name="IO_L10N_0" standard="LVCMOS33" drive="12" position="A9" dir="inout"/>
+                <port size="1" name="IO_L11P_0" standard="LVCMOS33" drive="12" position="C8" dir="inout"/>
+                <port size="1" name="IO_L11N_0" standard="LVCMOS33" drive="12" position="D8" dir="inout"/>
+                <port size="1" name="IO_L12P_0" standard="LVCMOS33" drive="12" position="A8" dir="inout"/>
+                <port size="1" name="IO_L12N_0" standard="LVCMOS33" drive="12" position="B8" dir="inout"/>
+                <port size="1" name="IO_L07P_0" standard="LVCMOS33" drive="12" position="C11" dir="inout"/>
+                <port size="1" name="IO_L07N_0" standard="LVCMOS33" drive="12" position="A11" dir="inout"/>
+                <port size="1" name="IO_L08P_0" standard="LVCMOS33" drive="12" position="B10" dir="inout"/>
+                <port size="1" name="IO_L08N_0" standard="LVCMOS33" drive="12" position="A10" dir="inout"/>
+                <port size="1" name="IO_L15P_0" standard="LVCMOS33" drive="12" position="A6" dir="inout"/>
+                <port size="1" name="IO_L15N_0" standard="LVCMOS33" drive="12" position="B6" dir="inout"/>
+                <port size="1" name="IO_L16P_0" standard="LVCMOS33" drive="12" position="D7" dir="inout"/>
+                <port size="1" name="IO_L16N_0" standard="LVCMOS33" drive="12" position="C6" dir="inout"/>
+                <port size="1" name="IO_L17P_0" standard="LVCMOS33" drive="12" position="A5" dir="inout"/>
+                <port size="1" name="IO_L17N_0" standard="LVCMOS33" drive="12" position="C5" dir="inout"/>
+                <port size="1" name="IO_L18P_0" standard="LVCMOS33" drive="12" position="A4" dir="inout"/>
+                <port size="1" name="IO_L18N_0" standard="LVCMOS33" drive="12" position="B4" dir="inout"/>
+                <port size="1" name="IO_L19P_0" standard="LVCMOS33" drive="12" position="A3" dir="inout"/>
+                <port size="1" name="IO_L19N_0" standard="LVCMOS33" drive="12" position="B3" dir="inout"/>
+
+                <port size="1" name="IO_L01P_3" standard="LVCMOS33" drive="12" position="C2" dir="inout"/>
+                <port size="1" name="IO_L01N_3" standard="LVCMOS33" drive="12" position="C1" dir="inout"/>
+                <port size="1" name="IO_L02P_3" standard="LVCMOS33" drive="12" position="D4" dir="inout"/>
+                <port size="1" name="IO_L02N_3" standard="LVCMOS33" drive="12" position="D3" dir="inout"/>
+                <port size="1" name="IO_L03P_3" standard="LVCMOS33" drive="12" position="D1" dir="inout"/>
+                <port size="1" name="IO_L03N_3" standard="LVCMOS33" drive="12" position="E1" dir="inout"/>
+                <port size="1" name="IO_L08P_3" standard="LVCMOS33" drive="12" position="F1" dir="inout"/>
+                <port size="1" name="IO_L08N_3" standard="LVCMOS33" drive="12" position="G1" dir="inout"/>
+                <port size="1" name="IP_L04N_3" standard="LVCMOS33" drive="12" position="F4" dir="in"/>
+                <port size="1" name="IP_L25N_3" standard="LVCMOS33" drive="12" position="L6" dir="in"/>
+                <port size="1" name="IO_L11P_3" standard="LVCMOS33" drive="12" position="G2" dir="inout"/>
+                <port size="1" name="IO_L11N_3" standard="LVCMOS33" drive="12" position="H1" dir="inout"/>
+                <port size="1" name="IO_L12P_3" standard="LVCMOS33" drive="12" position="H3" dir="inout"/>
+                <port size="1" name="IO_L12N_3" standard="LVCMOS33" drive="12" position="J3" dir="inout"/>
+                <port size="1" name="IO_L14P_3" standard="LVCMOS33" drive="12" position="J2" dir="inout"/>
+                <port size="1" name="IO_L14N_3" standard="LVCMOS33" drive="12" position="J1" dir="inout"/>
+                <port size="1" name="IO_L15P_3" standard="LVCMOS33" drive="12" position="K3" dir="inout"/>
+                <port size="1" name="IO_L15N_3" standard="LVCMOS33" drive="12" position="K1" dir="inout"/>
+                <port size="1" name="IO_L20P_3" standard="LVCMOS33" drive="12" position="M1" dir="inout"/>
+                <port size="1" name="IO_L20N_3" standard="LVCMOS33" drive="12" position="N1" dir="inout"/>
+                <port size="1" name="IO_L22P_3" standard="LVCMOS33" drive="12" position="N2" dir="inout"/>
+                <port size="1" name="IO_L22N_3" standard="LVCMOS33" drive="12" position="P1" dir="inout"/>
+                <port size="1" name="IO_L23P_3" standard="LVCMOS33" drive="12" position="R1" dir="inout"/>
+                <port size="1" name="IO_L23N_3" standard="LVCMOS33" drive="12" position="P2" dir="inout"/>
+                <port size="1" name="IO_L24P_3" standard="LVCMOS33" drive="12" position="N3" dir="inout"/>
+                <port size="1" name="IO_L24N_3" standard="LVCMOS33" drive="12" position="M4" dir="inout"/>
+
+                <port size="1" name="IO_L20P_1" standard="LVCMOS33" drive="12" position="E14" dir="inout"/>
+                <port size="1" name="IO_L20N_1" standard="LVCMOS33" drive="12" position="F13" dir="inout"/>
+                <port size="1" name="IO_L22P_1" standard="LVCMOS33" drive="12" position="D16" dir="inout"/>
+                <port size="1" name="IO_L22N_1" standard="LVCMOS33" drive="12" position="D15" dir="inout"/>
+                <port size="1" name="IO_L23P_1" standard="LVCMOS33" drive="12" position="E13" dir="inout"/>
+                <port size="1" name="IO_L23N_1" standard="LVCMOS33" drive="12" position="D14" dir="inout"/>
+                <port size="1" name="IO_L24P_1" standard="LVCMOS33" drive="12" position="C16" dir="inout"/>
+                <port size="1" name="IO_L24N_1" standard="LVCMOS33" drive="12" position="C15" dir="inout"/>
+
+            </ports>
+        </interface>
+    </interfaces>
+
+</platform>

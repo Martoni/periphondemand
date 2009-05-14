@@ -1,0 +1,37 @@
+# -----------------------------------------------------
+# --  Test 12:
+# --  Generate a project to test i2c_ocore IP
+# -----------------------------------------------------
+!rm -rf i2ctest
+project.create i2ctest
+project.selectplatform apf9328
+project.addinstance components.i2cocore.wb16 i2c01
+project.addinstance components.i2cocore.wb16 i2c02
+
+# ds1621
+#project.connectpin i2c02.i2c.sda apf9328.fpga.IO_L20P_3
+#project.connectpin i2c02.i2c.scl apf9328.fpga.IO_L22P_3
+project.connectpin i2c02.i2c.sda apf9328.fpga.IO_L22N_2
+project.connectpin i2c02.i2c.scl apf9328.fpga.IO_L21N_2
+
+# accelero
+project.connectpin i2c01.i2c.sda apf9328.fpga.IO_L32N_0
+project.connectpin i2c01.i2c.scl apf9328.fpga.IO_L01P_0
+
+project.connectpin i2c01.irq.inta_o.0 irq_mngr00.irq.irqport.0
+project.connectpin i2c02.irq.inta_o.0 irq_mngr00.irq.irqport.1
+
+project.autoconnectbus
+project.intercon imx9328_wb16_wrapper00.mwb16
+project.top
+project.report
+
+project.synthesis.selecttoolchain ise
+project.synthesis.generateproject
+project.driver.selecttoolchain armadeus
+project.driver.selectprojecttree ~/armadeus/target/linux/modules/fpga/POD
+project.driver.generateproject
+project.driver.filltemplates
+project.driver.copydrivers
+
+exit

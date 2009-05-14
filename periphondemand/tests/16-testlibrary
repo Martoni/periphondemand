@@ -1,0 +1,120 @@
+!rm -rf ~/testlib
+!rm -rvf ~/podmylib/industrial_serial_input/
+!mkdir ~/testlib
+library.listlibrary
+library.addlibrary ~/testlib
+library.dellibrary test
+library.load test
+library.load podmylib
+library.listcomponents
+library.component.create industrial_serial_input.wb16
+library.component.addtophdlfile industrial_serial_input.vhd
+library.component.setgeneric id type=natural
+library.component.setgeneric id public=true 
+library.component.setgeneric id match=\d+
+library.component.setgeneric id destination=both
+
+library.component.setgeneric wb_size match=\d+
+library.component.setgeneric wb_size destination=fpga 
+library.component.setgeneric wb_size public=false
+
+library.component.setgeneric clk_freq match=\d+
+library.component.setgeneric clk_freq destination=both
+library.component.setgeneric clk_freq public=false
+
+library.component.addhdlfile industrial_serial_input.vhd
+library.component.addhdlfile tagadatzouintzouin.vhd
+library.component.listinterfaces
+
+library.component.addinterface candr
+library.component.setinterface candr class=CLK_RST
+
+library.component.addinterface wbs
+library.component.setinterface wbs class=SLAVE
+library.component.setinterface wbs clockandreset=candr
+library.component.setinterface wbs bus=wishbone16
+library.component.setinterface wbs class=plop
+
+#register
+library.component.addregister wbs data
+library.component.setregister wbs.data offset=0x0
+library.component.setregister wbs.data size=16
+library.component.setregister wbs.data rows=1
+
+library.component.addregister wbs read_per
+library.component.setregister wbs.read_per offset=0x1 
+library.component.setregister wbs.read_per size=16
+library.component.setregister wbs.read_per rows=1
+
+library.component.addregister wbs bus_per    
+library.component.setregister wbs.bus_per  offset=0x2 
+library.component.setregister wbs.bus_per  size=16
+library.component.setregister wbs.bus_per  rows=1
+
+library.component.addregister wbs id   
+library.component.setregister wbs.id offset=0x3 
+library.component.setregister wbs.id size=16
+library.component.setregister wbs.id rows=1
+
+library.component.addinterface interrupt
+library.component.setinterface interrupt class=GLS
+
+library.component.addinterface sn65hvs882
+library.component.setinterface sn65hvs882 class=GLS
+library.component.listinterfaces
+
+library.component.addport clk candr
+library.component.setport candrclk dir=in
+library.component.setport candr.clk dir=in
+library.component.setport candr.clk dir=plop
+library.component.setport candr.clk size=1
+library.component.setport candr.clk type=CLK
+
+library.component.addport reset candr
+library.component.setport candr.reset type=RST
+
+library.component.addport clk_titi plip
+
+library.component.addport wbs_add wbs
+library.component.setport wbs.wbs_add type=ADR
+
+library.component.addport wbs_writedata wbs
+library.component.setport wbs.wbs_writedata type=DAT_I
+
+library.component.addport wbs_readdata wbs
+library.component.setport wbs.wbs_readdata type=DAT_O
+
+library.component.addport wbs_strobe wbs
+library.component.setport wbs.wbs_strobe type=STB
+
+library.component.addport wbs_cycle wbs
+library.component.setport wbs.wbs_cycle type=CYC
+
+library.component.addport wbs_write wbs
+library.component.setport wbs.wbs_write type=WE
+
+library.component.addport wbs_ack wbs
+library.component.setport wbs.wbs_ack type=ACK
+
+library.component.addport interrupt interrupt
+library.component.setport interrupt.interrupt type=EXPORT 
+
+library.component.addport  spi_sip  sn65hvs882
+library.component.setport sn65hvs882.spi_sip type=EXPORT
+
+library.component.addport spi_ld_n sn65hvs882 
+library.component.setport sn65hvs882.spi_ld_n type=EXPORT 
+
+library.component.addport spi_clk  sn65hvs882
+library.component.setport sn65hvs882.spi_clk type=EXPORT
+
+library.component.addport spi_sop  sn65hvs882
+library.component.setport sn65hvs882.spi_sop type=EXPORT
+
+library.component.addport reset plop
+
+library.component.setdescription testing component
+library.component.help
+library.component.save
+
+exit

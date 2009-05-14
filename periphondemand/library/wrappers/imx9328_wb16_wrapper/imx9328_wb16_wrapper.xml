@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="imx9328_wb16_wrapper" version="1.0">
+  <description>
+    Convert EIM imx bus into a Wishbone 16bits master bus.
+  </description>
+
+  <hdl_files>
+    <hdl_file filename="hdl/imx9328_wb16_wrapper.vhd" scope="spartan3" istop="1"/>
+  </hdl_files>
+
+  <interfaces>
+    <interface name="eim" class="GLS">
+      <ports>
+        <port name="imx_address" type="EXPORT" size="12" dir="in">
+          <pin num="0"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="A1" pin_dest="0"/></pin>
+          <pin num="1"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="A2" pin_dest="0"/></pin>
+          <pin num="2"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="A3" pin_dest="0"/></pin>
+          <pin num="3"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="A4" pin_dest="0"/></pin>
+          <pin num="4"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="A5" pin_dest="0"/></pin>
+          <pin num="5"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="A6" pin_dest="0"/></pin>
+          <pin num="6"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="A7" pin_dest="0"/></pin>
+          <pin num="7"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="A8" pin_dest="0"/></pin>
+          <pin num="8"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="A9" pin_dest="0"/></pin>
+          <pin num="9"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="A10" pin_dest="0"/></pin>
+          <pin num="10"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="A11" pin_dest="0"/></pin>
+          <pin num="11"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="A12" pin_dest="0"/></pin>
+        </port>
+        <port name="imx_data" type="EXPORT" size="16" dir="inout">
+          <pin num="0"><connect instance_dest="apf9328"  interface_dest="fpga" port_dest="D0" pin_dest="0"/></pin>
+          <pin num="1"><connect instance_dest="apf9328"  interface_dest="fpga" port_dest="D1" pin_dest="0"/></pin>
+          <pin num="2"><connect instance_dest="apf9328"  interface_dest="fpga" port_dest="D2" pin_dest="0"/></pin>
+          <pin num="3"><connect instance_dest="apf9328"  interface_dest="fpga" port_dest="D3" pin_dest="0"/></pin>
+          <pin num="4"><connect instance_dest="apf9328"  interface_dest="fpga" port_dest="D4" pin_dest="0"/></pin>
+          <pin num="5"><connect instance_dest="apf9328"  interface_dest="fpga" port_dest="D5" pin_dest="0"/></pin>
+          <pin num="6"><connect instance_dest="apf9328"  interface_dest="fpga" port_dest="D6" pin_dest="0"/></pin>
+          <pin num="7"><connect instance_dest="apf9328"  interface_dest="fpga" port_dest="D7" pin_dest="0"/></pin>
+          <pin num="8"><connect instance_dest="apf9328"  interface_dest="fpga" port_dest="D8" pin_dest="0"/></pin>
+          <pin num="9"><connect instance_dest="apf9328"  interface_dest="fpga" port_dest="D9" pin_dest="0"/></pin>
+          <pin num="10"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="D10" pin_dest="0"/></pin>
+          <pin num="11"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="D11" pin_dest="0"/></pin>
+          <pin num="12"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="D12" pin_dest="0"/></pin>
+          <pin num="13"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="D13" pin_dest="0"/></pin>
+          <pin num="14"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="D14" pin_dest="0"/></pin>
+          <pin num="15"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="D15" pin_dest="0"/></pin>
+        </port>
+        <port name="imx_cs_n" type="EXPORT" size="1" dir="in">
+          <pin num="0"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="CTRL1" pin_dest="0"/></pin>
+        </port>
+        <port name="imx_oe_n" type="EXPORT" size="1" dir="in">
+          <pin num="0"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="CTRL10" pin_dest="0"/></pin>
+        </port>
+        <port name="imx_eb3_n" type="EXPORT" size="1" dir="in">
+          <pin num="0"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="CTRL9" pin_dest="0"/></pin>
+        </port>
+      </ports>
+    </interface>
+
+    <interface name="candr" class="CLK_RST">
+      <ports>
+        <port name="gls_reset" type="RST" size="1" dir="in"/>
+        <port name="gls_clk" type="CLK" size="1" dir="in"/>
+      </ports>
+    </interface>
+
+    <interface clockandreset="candr" name="mwb16" class="MASTER" bus="wishbone16">
+      <ports>
+        <port name="wbm_address" type="ADR" size="13" dir="out"/>
+        <port name="wbm_readdata" type="DAT_I" size="16" dir="in"/>
+        <port name="wbm_writedata" type="DAT_O" size="16" dir="out"/>
+        <port name="wbm_strobe" type="STB" size="1" dir="out"/>
+        <port name="wbm_write" type="WE" size="1" dir="out"/>
+        <port name="wbm_ack" type="ACK" size="1" dir="in"/>
+        <port name="wbm_cycle" type="CYC" size="1" dir="out"/>
+      </ports>
+    </interface>
+
+  </interfaces>
+
+</component>

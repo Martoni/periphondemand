@@ -1,0 +1,30 @@
+This is the POD installation instructions.
+
+From SVN :
+==========
+
+Checkout the source code with command (subversion is needed):
+
+$svn co https://periphondemand.svn.sourceforge.net/svnroot/periphondemand
+
+Make python POD distribution with command:
+
+$python setup.py sdist
+
+The POD package can be found in directory dist/
+
+From Package:
+=============
+Decompress the package PeriphOnDemand-X.X.tar.gz in install directory:
+$ tar -zxvf PeriphOnDemand-X.X.tar.gz
+
+Walk through periphondemand/ directory:
+$ cd periphondemand
+
+Then install POD with root privilege:
+root$> python setup.py install
+
+Enjoy:
+======
+To launch periphondemand just type «pod»:
+$ pod

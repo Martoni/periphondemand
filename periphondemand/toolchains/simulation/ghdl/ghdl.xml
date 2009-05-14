@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<toolchain name="ghdl" version="1.0" type="simulation" >
+    <description></description>
+    <langage name="VHDL" />
+    <library name="work" />
+</toolchain>

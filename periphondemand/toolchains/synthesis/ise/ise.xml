@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<toolchain name="ise" version="1.0" type="synthesis" >
+    <description>
+        ISE Webpack, provided freely from Xilinx.
+    </description>
+    <tool name="ise" command="xtclsh" />
+</toolchain>

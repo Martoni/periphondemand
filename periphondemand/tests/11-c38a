@@ -1,0 +1,46 @@
+# -----------------------------------------------------
+# --  Test 11:
+# --  Generate a project to manage camera c38a
+# -----------------------------------------------------
+!rm -rf c38atest
+project.create c38atest
+project.selectplatform apf9328
+project.addinstance components.c38a_control.wb16 camera
+project.addinstance components.i2cocore.wb16 i2c
+project.connectpin i2c.irq.inta_o.0 irq_mngr00.irq.irqport.0
+project.connectpin camera.irq.interrupt_o irq_mngr00.irq.irqport.1
+
+project.connectpin camera.data_stream.uv_i.7 apf9328.fpga.IO_L23P_3
+project.connectpin camera.data_stream.uv_i.6 apf9328.fpga.IO_L22N_3
+project.connectpin camera.data_stream.uv_i.5 apf9328.fpga.IO_L21P_3
+project.connectpin camera.data_stream.uv_i.4 apf9328.fpga.IO_L22P_3
+project.connectpin camera.data_stream.uv_i.3 apf9328.fpga.IO_L01N_3
+project.connectpin camera.data_stream.uv_i.2 apf9328.fpga.IO_L20P_3
+project.connectpin camera.data_stream.uv_i.1 apf9328.fpga.IO_L32P_5
+project.connectpin camera.data_stream.uv_i.0 apf9328.fpga.IO_L32N_4
+
+project.connectpin camera.data_stream.y_i.7 apf9328.fpga.IO_L31N_1
+project.connectpin camera.data_stream.y_i.6 apf9328.fpga.IO_L31P_1
+project.connectpin camera.data_stream.y_i.5 apf9328.fpga.IO_L32N_1
+project.connectpin camera.data_stream.y_i.4 apf9328.fpga.IO_L32P_1
+project.connectpin camera.data_stream.y_i.3 apf9328.fpga.IO_L32N_0
+project.connectpin camera.data_stream.y_i.2 apf9328.fpga.IO_L32P_0
+project.connectpin camera.data_stream.y_i.1 apf9328.fpga.IO_L01N_0
+project.connectpin camera.data_stream.y_i.0 apf9328.fpga.IO_L01P_0
+
+project.connectpin camera.control.npwd_o apf9328.fpga.IO_L28P_1
+project.connectpin camera.control.rst_o apf9328.fpga.IO_L28N_1
+project.connectpin camera.timing.fodd_i apf9328.fpga.IO_L01N_1
+project.connectpin camera.timing.href_i apf9328.fpga.IO_L31P_0
+project.connectpin camera.timing.vsyn_i apf9328.fpga.IO_L30P_0
+project.connectpin camera.timing.pclk_i apf9328.fpga.IO_L27P_0
+project.connectpin i2c.i2c.sda apf9328.fpga.IO_L01P_1
+project.connectpin i2c.i2c.scl apf9328.fpga.IO_L31N_0
+project.autoconnectbus
+project.intercon imx9328_wb16_wrapper00.mwb16
+project.top
+project.report
+project.synthesis.selecttoolchain ise
+project.synthesis.generateproject
+
+exit
