@@ -6,13 +6,13 @@
 [38;1m$ project.create ledbutton27[0m
 Project ledbutton27 created
 [38;1m$ project.selectplatform apf27[0m
+[34;7m[INFO][0m   : [34;1mNo platform in project[0m
 Component platform added as apf27
 Component imx27_wb16_wrapper added as imx27_wb16_wrapper00
 Component rstgen_syscon added as rstgen_syscon00
 Component irq_mngr added as irq_mngr00
 setting base address 0x0 for  irq_mngr00.swb16
 
-Platform apf27 selected
 [38;1m$ project.addinstance components.button[0m
 Component button added as button00
 
@@ -53,7 +53,7 @@ Make directory for button
 Make directory for led
 Make directory for imx27_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/periphondemand/tests/ledbutton27/synthesis/ledbutton27.ucf
+Constraint file generated with name :/home/fabien/periphondemand/src/tests/ledbutton27/synthesis/ledbutton27.ucf
 
 TCL script generated with name : ledbutton27.tcl
 
@@ -63,9 +63,9 @@ TCL script generated with name : ledbutton27.tcl
 [38;1m$ project.simulation.selecttoolchain ghdl[0m
 [38;1m$ project.simulation.generateproject[0m
 
-Testbench with name : /home/fabien/periphondemand/periphondemand/tests/ledbutton27/simulation/top_ledbutton27_tb.vhd Done
+Testbench with name : /home/fabien/periphondemand/src/tests/ledbutton27/simulation/top_ledbutton27_tb.vhd Done
 
-Makefile generated with name : /home/fabien/periphondemand/periphondemand/tests/ledbutton27/simulation/Makefile Done
+Makefile generated with name : /home/fabien/periphondemand/src/tests/ledbutton27/simulation/Makefile Done
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ [0m

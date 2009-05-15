@@ -1,17 +1,24 @@
 [38;1m$ !rm -rf ~/testlib[0m
+détruire le répertoire: `/home/fabien/podmylib/industrial_serial_input/drivers_templates'
+détruit `/home/fabien/podmylib/industrial_serial_input/hdl/industrial_serial_input.vhd'
+détruire le répertoire: `/home/fabien/podmylib/industrial_serial_input/hdl'
+détruit `/home/fabien/podmylib/industrial_serial_input/wb16.xml'
+détruire le répertoire: `/home/fabien/podmylib/industrial_serial_input/doc'
+détruire le répertoire: `/home/fabien/podmylib/industrial_serial_input'
+[38;1m$ !rm -rvf ~/podmylib/industrial_serial_input/[0m
 [38;1m$ !mkdir ~/testlib[0m
 [38;1m$ library.listlibrary[0m
-components  wrappers  test  syscons  podmylib  pod_library  testlib
+test  components  wrappers  syscons  podmylib  testlib
 [38;1m$ library.addlibrary ~/testlib[0m
 [31;7m[ERROR][0m  : [31;1mLibrary testlib already exist[0m
 [38;1m$ library.dellibrary test[0m
 [31;7m[ERROR][0m  : [31;1mCan't delete an official library[0m
 [38;1m$ library.load test[0m
 
-[38;1m$ library.load testlib[0m
+[38;1m$ library.load podmylib[0m
 
 [38;1m$ library.listcomponents[0m
-<empty>
+c38a_control  ledsensor  cc_bidir  adns6010
 [38;1m$ library.component.create industrial_serial_input.wb16[0m
 
 [38;1m$ library.component.addtophdlfile industrial_serial_input.vhd[0m
@@ -19,6 +26,29 @@ components  wrappers  test  syscons  podmylib  pod_library  testlib
 [34;7m[INFO][0m   : [34;1mGeneric wb_size added in component[0m
 [34;7m[INFO][0m   : [34;1mGeneric clk_freq added in component[0m
 
+[38;1m$ library.component.setgeneric id type=natural[0m
+
+[38;1m$ library.component.setgeneric id public=true [0m
+
+[38;1m$ library.component.setgeneric id match=\d+[0m
+
+[38;1m$ library.component.setgeneric id destination=both[0m
+
+[38;1m$ [0m
+[38;1m$ library.component.setgeneric wb_size match=\d+[0m
+
+[38;1m$ library.component.setgeneric wb_size destination=fpga [0m
+
+[38;1m$ library.component.setgeneric wb_size public=false[0m
+
+[38;1m$ [0m
+[38;1m$ library.component.setgeneric clk_freq match=\d+[0m
+
+[38;1m$ library.component.setgeneric clk_freq destination=both[0m
+
+[38;1m$ library.component.setgeneric clk_freq public=false[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addhdlfile industrial_serial_input.vhd[0m
 
 [31;7m[ERROR][0m  : [31;1mFile industrial_serial_input.vhd is already in component[0m
@@ -28,66 +58,180 @@ components  wrappers  test  syscons  podmylib  pod_library  testlib
 [38;1m$ library.component.listinterfaces[0m
 
 <empty>
-[38;1m$ library.component.addinterface syscon[0m
+[38;1m$ [0m
+[38;1m$ library.component.addinterface candr[0m
 
+[38;1m$ library.component.setinterface candr class=CLK_RST[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addinterface wbs[0m
 
+[38;1m$ library.component.setinterface wbs class=SLAVE[0m
+
+[38;1m$ library.component.setinterface wbs clockandreset=candr[0m
+
+[38;1m$ library.component.setinterface wbs bus=wishbone16[0m
+
+[38;1m$ library.component.setinterface wbs class=plop[0m
+
+[31;7m[ERROR][0m  : [31;1mclassname plop unknown[0m
+
+[38;1m$ [0m
+[38;1m$ [0m
+[38;1m$ library.component.addregister wbs data[0m
+
+[38;1m$ library.component.setregister wbs.data offset=0x0[0m
+
+[38;1m$ library.component.setregister wbs.data size=16[0m
+
+[38;1m$ library.component.setregister wbs.data rows=1[0m
+
+[38;1m$ [0m
+[38;1m$ library.component.addregister wbs read_per[0m
+
+[38;1m$ library.component.setregister wbs.read_per offset=0x1 [0m
+
+[38;1m$ library.component.setregister wbs.read_per size=16[0m
+
+[38;1m$ library.component.setregister wbs.read_per rows=1[0m
+
+[38;1m$ [0m
+[38;1m$ library.component.addregister wbs bus_per    [0m
+
+[38;1m$ library.component.setregister wbs.bus_per  offset=0x2 [0m
+
+[38;1m$ library.component.setregister wbs.bus_per  size=16[0m
+
+[38;1m$ library.component.setregister wbs.bus_per  rows=1[0m
+
+[38;1m$ [0m
+[38;1m$ library.component.addregister wbs id   [0m
+
+[38;1m$ library.component.setregister wbs.id offset=0x3 [0m
+
+[38;1m$ library.component.setregister wbs.id size=16[0m
+
+[38;1m$ library.component.setregister wbs.id rows=1[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addinterface interrupt[0m
 
+[38;1m$ library.component.setinterface interrupt class=GLS[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addinterface sn65hvs882[0m
+
+[38;1m$ library.component.setinterface sn65hvs882 class=GLS[0m
 
 [38;1m$ library.component.listinterfaces[0m
 
-syscon  wbs  interrupt  sn65hvs882
-[38;1m$ library.component.addport clk syscon[0m
+candr  wbs  interrupt  sn65hvs882
+[38;1m$ [0m
+[38;1m$ library.component.addport clk candr[0m
 
-[38;1m$ library.component.addport reset syscon[0m
+[38;1m$ library.component.setport candrclk dir=in[0m
 
+[31;7m[ERROR][0m  : [31;1mWrong subargument:
+candrclk
+instead of
+<interface_name>.<port_name>[0m
+
+[38;1m$ library.component.setport candr.clk dir=in[0m
+
+[38;1m$ library.component.setport candr.clk dir=plop[0m
+
+[31;7m[ERROR][0m  : [31;1mDirection wrong : plop[0m
+
+[38;1m$ library.component.setport candr.clk size=1[0m
+
+[38;1m$ library.component.setport candr.clk type=CLK[0m
+
+[38;1m$ [0m
+[38;1m$ library.component.addport reset candr[0m
+
+[38;1m$ library.component.setport candr.reset type=RST[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addport clk_titi plip[0m
 
 [31;7m[ERROR][0m  : [31;1mPort named clk_titi can't be found in industrial_serial_input.vhd[0m
+[38;1m$ [0m
 [38;1m$ library.component.addport wbs_add wbs[0m
 
+[38;1m$ library.component.setport wbs.wbs_add type=ADR[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addport wbs_writedata wbs[0m
 
+[38;1m$ library.component.setport wbs.wbs_writedata type=DAT_I[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addport wbs_readdata wbs[0m
 
+[38;1m$ library.component.setport wbs.wbs_readdata type=DAT_O[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addport wbs_strobe wbs[0m
 
+[38;1m$ library.component.setport wbs.wbs_strobe type=STB[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addport wbs_cycle wbs[0m
 
+[38;1m$ library.component.setport wbs.wbs_cycle type=CYC[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addport wbs_write wbs[0m
 
+[38;1m$ library.component.setport wbs.wbs_write type=WE[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addport wbs_ack wbs[0m
 
+[38;1m$ library.component.setport wbs.wbs_ack type=ACK[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addport interrupt interrupt[0m
 
+[38;1m$ library.component.setport interrupt.interrupt type=EXPORT [0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addport  spi_sip  sn65hvs882[0m
 
-[38;1m$ library.component.addport  spi_ld_n sn65hvs882 [0m
+[38;1m$ library.component.setport sn65hvs882.spi_sip type=EXPORT[0m
 
-[38;1m$ library.component.addport  spi_ce_n sn65hvs882 [0m
+[38;1m$ [0m
+[38;1m$ library.component.addport spi_ld_n sn65hvs882 [0m
 
-[38;1m$ library.component.addport  spi_clk  sn65hvs882[0m
+[38;1m$ library.component.setport sn65hvs882.spi_ld_n type=EXPORT [0m
 
-[38;1m$ library.component.addport  spi_sop  sn65hvs882[0m
+[38;1m$ [0m
+[38;1m$ library.component.addport spi_clk  sn65hvs882[0m
 
-[38;1m$ library.component.addport clk plop[0m
+[38;1m$ library.component.setport sn65hvs882.spi_clk type=EXPORT[0m
 
-[31;7m[ERROR][0m  : [31;1mPort named clk is already placed in syscon[0m
+[38;1m$ [0m
+[38;1m$ library.component.addport spi_sop  sn65hvs882[0m
+
+[38;1m$ library.component.setport sn65hvs882.spi_sop type=EXPORT[0m
+
+[38;1m$ [0m
 [38;1m$ library.component.addport reset plop[0m
 
-[31;7m[ERROR][0m  : [31;1mPort named reset is already placed in syscon[0m
+[31;7m[ERROR][0m  : [31;1mPort named reset is already placed in candr[0m
+[38;1m$ [0m
 [38;1m$ library.component.setdescription testing component[0m
 
 [38;1m$ library.component.help[0m
 
 Documented commands (type help <topic>):
 ========================================
-EOF           addtophdlfile  exit            listports  save          
-addhdlfile    create         help            load       savehistory   
-addinterface  editinterface  history         ls         setdescription
-addport       eof            listinterfaces  quit       shell         
+EOF           addtophdlfile  help            ls              setgeneric  
+addhdlfile    create         history         quit            setinterface
+addinterface  editinterface  listinterfaces  save            setport     
+addport       eof            listports       savehistory     setregister 
+addregister   exit           load            setdescription  shell       
 
 [38;1m$ library.component.save[0m
 
+[38;1m$ [0m

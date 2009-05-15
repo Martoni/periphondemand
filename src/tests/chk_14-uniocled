@@ -2,11 +2,11 @@
 [38;1m$ project.create uniocled[0m
 Project uniocled created
 [38;1m$ project.selectplatform unioc_v11[0m
+[34;7m[INFO][0m   : [34;1mNo platform in project[0m
 Component platform added as unioc_v11
 Component rstext_syscon added as rstext_syscon00
 Component atmega_wb8_wrapper added as atmega_wb8_wrapper00
 
-Platform unioc_v11 selected
 [38;1m$ project.addinstance components.led.wb8 led0[0m
 Component led added as led0
 
@@ -38,7 +38,7 @@ Make directory for atmega_wb8_wrapper
 Make directory for led
 Make directory for atmega_wb8_wrapper00_mwb8
 
-Constraint file generated with name :/home/fabien/periphondemand/periphondemand/tests/uniocled/synthesis/uniocled_pinout.tcl
+Constraint file generated with name :/home/fabien/periphondemand/src/tests/uniocled/synthesis/uniocled_pinout.tcl
 
 TODO: Generate tcl script for quartus
 
@@ -59,10 +59,10 @@ Component atmega_wb8_wrapper00_mwb8 added as atmega_wb8_wrapper00_mwb8_intercon
 Top generated with name : top_uniocled.vhd
 [38;1m$ project.synthesis.selecttoolchain quartus[0m
 [38;1m$ project.synthesis.generateproject[0m
-[31;7m[ERROR][0m  : [31;1mcan't make directory /home/fabien/periphondemand/periphondemand/tests/uniocled/synthesis/rstext_syscon[0m
+[31;7m[ERROR][0m  : [31;1mcan't make directory /home/fabien/periphondemand/src/tests/uniocled/synthesis/rstext_syscon[0m
 [38;1m$ project.simulation.selecttoolchain ghdl[0m
 [38;1m$ project.simulation.generateproject[0m
 
-Testbench with name : /home/fabien/periphondemand/periphondemand/tests/uniocled/simulation/top_uniocled_tb.vhd Done
+Testbench with name : /home/fabien/periphondemand/src/tests/uniocled/simulation/top_uniocled_tb.vhd Done
 
-Makefile generated with name : /home/fabien/periphondemand/periphondemand/tests/uniocled/simulation/Makefile Done
+Makefile generated with name : /home/fabien/periphondemand/src/tests/uniocled/simulation/Makefile Done

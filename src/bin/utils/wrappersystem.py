@@ -170,7 +170,7 @@ def delDirectory(dirpath):
     """ delete a directory
     """
     dirpath = os.path.expanduser(dirpath)
-    if os.path.exist(dirpath):
+    if os.path.exists(dirpath):
         return shutil.rmtree(dirpath)
     else:
         raise Error("Directory "+ dirpath + " doesn't exists can't be deleted",1)

@@ -61,6 +61,7 @@ package_files_list.extend(getTree("library"))
 package_files_list.extend(getTree("platforms"))
 package_files_list.extend(getTree("templates"))
 package_files_list.extend(getTree("busses"))
+package_files_list.extend(getTree("toolchains"))
 package_files_list.extend(getTree("tests"))
 
 datafiles=[ ('/usr/bin',['src/bin/pod']) ]
@@ -81,7 +82,8 @@ setup(  name='PeriphOnDemand',
         maintainer='Fabien Marteau',
         maintainer_email='fabien.marteau@armadeus.com',
         package_dir = {"periphondemand":"src"},
-        packages=['periphondemand.bin',
+        packages=['periphondemand',
+                  'periphondemand.bin',
                   'periphondemand.bin.code',
                   'periphondemand.bin.code.vhdl',
                   'periphondemand.bin.commandline',

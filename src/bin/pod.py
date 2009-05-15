@@ -81,7 +81,7 @@ def main(argv):
 
     CLI = Cli()
     SETTINGS = Settings()
-    SETTINGS.path = os.path.expanduser(POD_PATH)
+    SETTINGS.path = POD_PATH
     SETTINGS.projectpath = sy.pwd()
     SETTINGS.version = ver.getVersion()
 

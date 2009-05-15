@@ -6,13 +6,13 @@
 [38;1m$ project.create c38atest[0m
 Project c38atest created
 [38;1m$ project.selectplatform apf9328[0m
+[34;7m[INFO][0m   : [34;1mNo platform in project[0m
 Component platform added as apf9328
 Component imx9328_wb16_wrapper added as imx9328_wb16_wrapper00
 Component rstgen_syscon added as rstgen_syscon00
 Component irq_mngr added as irq_mngr00
 setting base address 0x0 for  irq_mngr00.swb16
 
-Platform apf9328 selected
 [38;1m$ project.addinstance components.c38a_control.wb16 camera[0m
 
 [31;7m[ERROR][0m  : [31;1mNo component with name components.c38a_control[0m
@@ -114,7 +114,7 @@ Make directory for irq_mngr
 Make directory for i2cocore
 Make directory for imx9328_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/periphondemand/tests/c38atest/synthesis/c38atest.ucf
+Constraint file generated with name :/home/fabien/periphondemand/src/tests/c38atest/synthesis/c38atest.ucf
 
 TCL script generated with name : c38atest.tcl
 

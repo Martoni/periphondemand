@@ -7,13 +7,13 @@
 [38;1m$ project.create biled[0m
 Project biled created
 [38;1m$ project.selectplatform apf9328[0m
+[34;7m[INFO][0m   : [34;1mNo platform in project[0m
 Component platform added as apf9328
 Component imx9328_wb16_wrapper added as imx9328_wb16_wrapper00
 Component rstgen_syscon added as rstgen_syscon00
 Component irq_mngr added as irq_mngr00
 setting base address 0x0 for  irq_mngr00.swb16
 
-Platform apf9328 selected
 [38;1m$ project.delinstance irq_mngr00[0m
 Component irq_mngr00 deleted
 
@@ -46,7 +46,7 @@ Make directory for rstgen_syscon
 Make directory for led
 Make directory for imx9328_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/periphondemand/tests/biled/synthesis/biled.ucf
+Constraint file generated with name :/home/fabien/periphondemand/src/tests/biled/synthesis/biled.ucf
 
 TCL script generated with name : biled.tcl
 

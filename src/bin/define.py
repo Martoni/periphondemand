@@ -5,7 +5,7 @@ import periphondemand
 
 #global
 POD_CONFIG="~/.podrc"
-POD_PATH = periphondemand.__path__
+POD_PATH = periphondemand.__path__[0]
 PLATFORMPATH = "/platforms"
 BUSPATH = "/busses/"
 TEMPLATESPATH = "/templates"
