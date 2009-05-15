@@ -32,8 +32,9 @@
 from distutils.core import setup
 import os,re
 
-REVISION = "$Revision:$"
-URL = "$HeadURL:$"
+REVISION = "$Revision$"
+URL = "$HeadURL$"
+
 
 def getVersion():
     if re.search(r"trunk",URL):
