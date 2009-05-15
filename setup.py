@@ -31,61 +31,47 @@
 
 from distutils.core import setup
 import os,re
+import sys
+sys.path.append("src/bin/")
+from version import *
 
-REVISION = "$Revision$"
-URL = "$HeadURL$"
-
-
-def getVersion():
-    if re.search(r"trunk",URL):
-        dir="trunk"
-        return "HEAD "+str(getRevision())
-    elif re.search(r"tags",URL):
-        dir="tags"
-        m = re.match(r".*tags\/(.*?)\/.*",url)
-        name=m.group(1)
-        return name
-    elif re.search(r"branches",URL):
-        dir="branches"
-        m = re.match(r".*branches\/(.*?)\/.*",url)
-        name=m.group(1)
-        return name+"-"+str(getRevision())
-
-def getRevision():
-    m = re.match(r"\$Revision:(.*?)\$",REVISION)
-    return m.group(1)
-
-
-def getTestFilesList():
-    """ return the list of testfile under tests/ directory """
-    dirlist = os.listdir("periphondemand/tests/")
-    testlist = ["periphondemand/tests/"+test for test in dirlist if re.match("\d\d*",test)]
-    return testlist
-
-libfile=[]
-def visit(arg,dirname,name):
+def visit(libfile,dirname,names):
     """ function used for getLibraryTree to walk throw library tree"""
-    print "visiting "+dirname
-    for file in name:
-        if not os.path.isdir(dirname+"/"+file):
-            libfile.append((dirname,[dirname+"/"+file]))
+    for file in names:
+        filepath = os.path.join(dirname,file)
+        if not os.path.isdir(filepath):
+            if not re.search(r".svn",filepath):
+                # FIXME:
+                # I can't find how to split with os.path !
+                # will be used when package_data work
+                #realpath = "/".join(filepath.split("/")[1:])
+                #libfile.append(realpath)
+                libfile.append(filepath)
 
 def getTree(directory):
     """ return a tuple list of files """
-    os.path.walk("periphondemand/"+directory+"/",visit,None)
+    libfile = []
+    os.path.walk(os.path.join("src",directory),visit,libfile)
     return libfile
 
-datafiles=[
-    ('/usr/bin',['periphondemand/bin/pod']),
-    ('periphondemand/tests',getTestFilesList()),
-    ('periphondemand/',['VERSION'])
-]
+# FIXME:
+# package_data doesn't work, replaced by datafiles
+package_files_list = []
+package_files_list.extend(getTree("library"))
+package_files_list.extend(getTree("platforms"))
+package_files_list.extend(getTree("templates"))
+package_files_list.extend(getTree("busses"))
+package_files_list.extend(getTree("tests"))
 
-datafiles.extend(getTree("library"))
-datafiles.extend(getTree("platforms"))
-datafiles.extend(getTree("templates"))
-datafiles.extend(getTree("busses"))
-datafiles.extend(getTree("toolchains"))
+datafiles=[ ('/usr/bin',['src/bin/pod']) ]
+#FIXME
+#To be removed when package_data will work:
+dest_dir = "/usr/lib/python2.5/site-packages/"
+for file in package_files_list:
+    dest = dest_dir + os.path.dirname(file).replace("src","periphondemand",1)
+    source = [file]
+    datafiles.append((dest,source))
+###
 
 setup(  name='PeriphOnDemand',
         version=getVersion(),
@@ -94,8 +80,8 @@ setup(  name='PeriphOnDemand',
         author_email='<fabien.marteau@armadeus.com>,<nicolas.colombain@armadeus.com>,',
         maintainer='Fabien Marteau',
         maintainer_email='fabien.marteau@armadeus.com',
-        packages=['periphondemand',
-                  'periphondemand.bin',
+        package_dir = {"periphondemand":"src"},
+        packages=['periphondemand.bin',
                   'periphondemand.bin.code',
                   'periphondemand.bin.code.vhdl',
                   'periphondemand.bin.commandline',
@@ -103,6 +89,7 @@ setup(  name='PeriphOnDemand',
                   'periphondemand.bin.toolchain',
                   'periphondemand.bin.utils',
                   ],
+#        package_data = {'periphondemand':package_files_list},
         data_files=datafiles,
         license='GPL',
 )

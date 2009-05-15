@@ -38,10 +38,11 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 from periphondemand.bin.commandline   import Cli
 from periphondemand.bin.utils         import Settings
 from periphondemand.bin.utils         import wrappersystem as sy
-from periphondemand.bin.define import POD_PATH
+from periphondemand.bin.define        import POD_PATH
+from periphondemand.bin               import version as ver
 import sys,os,getopt
 
-__version__ = open(POD_PATH+"/VERSION","r").read()
+__version__ = ver.getVersion() 
 
 TMPFILENAME = "podtmp"
 
@@ -75,14 +76,14 @@ def main(argv):
         sys.exit(2)
 
     if "version" in options or "-v" in options:
-        print "Peripherals On Demand version "+__version__
+        print "Peripherals On Demand version "+ ver.getVersion()
         sys.exit(2)
 
     CLI = Cli()
     SETTINGS = Settings()
     SETTINGS.path = os.path.expanduser(POD_PATH)
     SETTINGS.projectpath = sy.pwd()
-    SETTINGS.version = __version__
+    SETTINGS.version = ver.getVersion()
 
 
     # load command file if in command params

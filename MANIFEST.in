@@ -1,10 +1,10 @@
 include README
 include COPYING
-include periphondemand/bin/pod
-include periphondemand/tests *
-recursive-include periphondemand/library *
-recursive-include periphondemand/platforms *
-recursive-include periphondemand/templates *
-recursive-include periphondemand/busses *
-recursive-include periphondemand/toolchains *
-recursive-include periphondemand *.py
+include src/bin/pod
+recursive-include src/tests *
+recursive-include src/library *
+recursive-include src/platforms *
+recursive-include src/templates *
+recursive-include src/busses *
+recursive-include src/toolchains *
+recursive-include src/bin *

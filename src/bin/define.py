@@ -1,9 +1,11 @@
 """ Peripheral On Demand global define
 """
 
+import periphondemand
+
 #global
 POD_CONFIG="~/.podrc"
-POD_PATH = "/usr/periphondemand"
+POD_PATH = periphondemand.__path__
 PLATFORMPATH = "/platforms"
 BUSPATH = "/busses/"
 TEMPLATESPATH = "/templates"
