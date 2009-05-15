@@ -32,17 +32,28 @@
 from distutils.core import setup
 import os,re
 
-PRE_VERSION="0.0."
+REVISION = "$Revision:$"
+URL = "$HeadURL:$"
 
-def getSVNRevision():
-    try:
-        ret = os.popen("svn info -r HEAD").read()
-        num_version = PRE_VERSION+ret.split("\n")[4].split(" ")[-1]
-        file_version = open("VERSION","w")
-        file_version.write(str(num_version))
-        return num_version
-    except IndexError:
-        return open("VERSION").read()
+def getVersion():
+    if re.search(r"trunk",URL):
+        dir="trunk"
+        return "HEAD "+str(getRevision())
+    elif re.search(r"tags",URL):
+        dir="tags"
+        m = re.match(r".*tags\/(.*?)\/.*",url)
+        name=m.group(1)
+        return name
+    elif re.search(r"branches",URL):
+        dir="branches"
+        m = re.match(r".*branches\/(.*?)\/.*",url)
+        name=m.group(1)
+        return name+"-"+str(getRevision())
+
+def getRevision():
+    m = re.match(r"\$Revision:(.*?)\$",REVISION)
+    return m.group(1)
+
 
 def getTestFilesList():
     """ return the list of testfile under tests/ directory """
@@ -76,7 +87,7 @@ datafiles.extend(getTree("busses"))
 datafiles.extend(getTree("toolchains"))
 
 setup(  name='PeriphOnDemand',
-        version=getSVNRevision(),
+        version=getVersion(),
         url='https://sourceforge.net/projects/periphondemand',
         author='Fabien Marteau and Nicolas Colombain',
         author_email='<fabien.marteau@armadeus.com>,<nicolas.colombain@armadeus.com>,',
