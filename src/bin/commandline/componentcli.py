@@ -99,14 +99,19 @@ Create new component in current library
         print display
 
     def complete_load(self,text,line,begidx,endidx):
-        # TODO
-        pass
+        componentlist = []
+        try:
+            componentlist = self.completeargs(text,line,"<componentname>.[componentversion]")
+        except Exception,e:
+            print e
+        return componentlist
 
     def do_load(self,arg):
         """\
-Usage : load <componentname>
+Usage : load <componentname>.[version]
 Load component from current library
         """
+        #TODO manage version for load component
         library = settings.active_library
         try:
             if not self.componentLoaded():

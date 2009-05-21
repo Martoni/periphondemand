@@ -357,17 +357,29 @@ List platform available
         except AttributeError,e:
             print e
 
+    def complete_listinterfaces(self,text,line,begidx,endidx):
+        pinlist = []
+        try:
+            pinlist = self.completeargs(text,line,"<instancename>")
+        except Exception,e:
+            print e
+        return pinlist
+
+
     def do_listinterfaces(self,line=None):
         """\
 Usage : listinterfaces
 List instance interface
         """
         try:
+            self.checkargs(line,"<instancename>")
             self.isProjectOpen()
+            interfacelist= [interface.getName() for interface in settings.active_project.getInstance(line).getInterfacesList()]
         except Error,e:
+            print display
             print e
             return
-        interfacelist= [interface.getName() for interface in settings.active_project.getInstance(line).getInterfacesList()]
+        print display
         return self.columnize(interfacelist)
 
     def do_saveproject(self,line=None):
@@ -378,9 +390,10 @@ Save project in the curent directory
         try:
             self.isProjectOpen()
         except Error,e:
+            print display
             print e
             return
-
+        print display
         settings.active_project.saveProject()
 
     def complete_connectpin(self,text,line,begidx,endidx):
@@ -400,6 +413,7 @@ Connect pin between instances
             self.isProjectOpen()
             self.checkargs(line,"<instancename>.<interfacename>.<portname>.[pinnum] <instancename>.<interfacename>.<portname>.[pinnum]")
         except Error,e:
+            print display
             print e
             return
         arg = line.split(' ')
@@ -421,9 +435,10 @@ Connect pin between instances
                             dest [1]).getPort(dest[2]),\
                                     dest[3])
         except Error, e:
+            print display
             print e
             return
-        print "pin connected"
+        print display
 
     def complete_connectbus(self,text,line,begidx,endidx):
         buslist = []
@@ -442,6 +457,7 @@ Connect slave to master bus
             self.isProjectOpen()
             self.checkargs(line,"<masterinstancename>.<masterinterfacename> <slaveinstancename>.<slaveinterfacename>")
         except Exception,e:
+            print display
             print e
             return
         arg=line.split(' ')
@@ -453,9 +469,10 @@ Connect slave to master bus
         try:
             settings.active_project.connectBus(source[0],source[1],dest[0],dest[1])
         except Error, e:
+            print display
             print e
             return
-        print "Bus connected"
+        print display
 
     def do_autoconnectbus(self,line):
         """\
@@ -466,6 +483,7 @@ Autoconnect bus if only one master in project
             self.isProjectOpen()
             settings.active_project.autoConnectBus()
         except Error,e:
+            print display
             print e
             return
         print display
@@ -487,6 +505,7 @@ Specify the bus clock
             self.isProjectOpen()
             self.checkargs(line,"<instancesysconname>.<interfacename> <masterinstancename>.<masterinterfacename>")
         except Error,e:
+            print display
             print e
             return
         arg=line.split(' ')
@@ -498,9 +517,10 @@ Specify the bus clock
         try:
             settings.active_project.connectClkDomain(source[0],dest[0],source[1],dest[1])
         except Error, e:
+            print display
             print e
             return
-        print "Connected"
+        print display
 
     def complete_delconnection(self,text,line,begidx,endidx):
         connectlist = []
@@ -519,6 +539,7 @@ Suppress a pin connection
             self.isProjectOpen()
             self.checkargs(line,"<instancename>.<interfacename>.<portname>.[pinnum] [instancename].[interfacename].[portname].[pinnum]")
         except Error,e:
+            print display
             print e
             return
         # get arguments
@@ -541,6 +562,7 @@ Suppress a pin connection
             settings.active_project.deletePin(source[0],source[1],source[2],source[3],
                                               dest[0],dest[1],dest[2],dest[3])
         except Error, e:
+            print display
             print e
             return
         print display
@@ -563,11 +585,13 @@ Suppress a component from project
             self.isProjectOpen()
             self.checkargs(line,"<instancename>")
         except Error,e:
+            print display
             print e
             return
         try:
             settings.active_project.delProjectComponent(line)
         except Error,e:
+            print display
             print e
             return
         print display
@@ -581,6 +605,7 @@ Check the project before code generation
             self.isProjectOpen()
             settings.active_project.check()
         except Error,e:
+            print display
             print e
         print display
 
@@ -601,6 +626,7 @@ Set the base address of slave interface
             self.isProjectOpen()
             self.checkargs(line,"<slaveinstancename>.<slaveinterfacename> <addressinhexa>")
         except Error,e:
+            print display
             print e
             return
         arg = line.split(' ')
@@ -608,6 +634,7 @@ Set the base address of slave interface
         if len(names) < 2:
             masterinterface = settings.active_project.getInstance(names[0]).getSlaveInterfaceList()
             if len(masterinterface) != 1:
+                print display
                 print "Error, need a slave interface name"
                 return
             names.append(masterinterface[0].getName())
@@ -617,6 +644,7 @@ Set the base address of slave interface
             interfacemaster = interfaceslave.getMaster()
             interfacemaster.allocMem.setAddressSlave(interfaceslave,arg[1])
         except Error,e:
+            print display
             print e
             return
         print display
@@ -630,10 +658,12 @@ List master interface
         try:
             self.isProjectOpen()
         except Error,e:
+            print display
             print e
             return
         for master in settings.active_project.getInterfaceMaster():
             print master.parent.getInstanceName()+"."+master.getName()
+        print display
 
     def complete_getmapping(self,text,line,begidx,endidx):
         mappinglist = []
@@ -652,6 +682,7 @@ Return mapping for a master interface
             self.isProjectOpen()
             self.checkargs(line,"<masterinstancename>.<masterinterfacename>")
         except Error,e:
+            print display
             print e
             return
         arg = line.split(' ')
@@ -660,7 +691,9 @@ Return mapping for a master interface
             masterinterface = settings.active_project.getInstance(names[0]).getInterface(names[1])
             print masterinterface.allocMem
         except Error,e:
+            print display
             print e
+        print display
 
     def complete_printxml(self,text,line,begidx,endidx):
         printlist = []
@@ -679,9 +712,11 @@ Print instance in XML format
             self.isProjectOpen()
             self.checkargs(line,"<instancename>")
         except Error,e:
+            print display
             print e
             return
         print settings.active_project.getInstance(line)
+        print display
 
     def complete_info(self,text,line,begidx,endidx):
         infolist = []
@@ -701,6 +736,7 @@ Print instance information
             self.checkargs(line,"<instancename>")
             instance = settings.active_project.getInstance(line)
         except Error,e:
+            print display
             print e
             return
         print "Instance name :"+instance.getInstanceName()
@@ -753,6 +789,7 @@ Set generic parameter
             self.isProjectOpen()
             self.checkargs(line,"<instancename>.<genericname> <genericvalue>")
         except Error,e:
+            print display
             print e
             return
         args = line.split(" ")
@@ -765,8 +802,10 @@ Set generic parameter
             else:
                 raise Error("this generic can't be modified by user",0)
         except Error,e:
+            print display
             print e
             return
+        print display
         print "Done"
 
     def do_description(self,line):
@@ -775,6 +814,7 @@ Usage : description <some word for description>
 set the project description
         """
         settings.active_project.setDescription(line)
+        print display
         print "Description set : "+line
         return 
 
@@ -786,9 +826,11 @@ Close the project
         try:
             self.isProjectOpen()
         except Error,e:
+            print display
             print e
             return
         settings.active_project = None
+        print display
         print "Project closed"
 
     # Generate CODE
@@ -852,6 +894,7 @@ Generate a report of the project
             self.isProjectOpen()
             text = settings.active_project.generateReport()
         except Error,e:
+            print display
             print e
             return
         print display

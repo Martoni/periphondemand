@@ -8,6 +8,7 @@ project.create ledbutton
 project.selectplatform apf9328
 project.addinstance components.button
 project.addinstance components.led.wb16
+project.listinterfaces button00
 #project.connectpin led00.int_led.led apf9328.fpga.IO_1
 #project.connectpin button00.int_button.button.0 apf9328.fpga.IO_L01N_0
 project.connectpin button00.int_button.irq irq_mngr00.irq.irqport.0
