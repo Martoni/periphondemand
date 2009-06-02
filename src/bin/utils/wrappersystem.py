@@ -127,8 +127,8 @@ def makeDirectory(name):
     """
     try:
         return os.makedirs(name)
-    except OSError:
-        raise Error("can't make directory "+name)
+    except OSError,e:
+        raise Error("can't make directory "+name+" :\n"+str(e))
 
 def copyDirectory(source,target):
     """ Copy directory

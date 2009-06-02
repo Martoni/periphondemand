@@ -122,7 +122,10 @@ class Interface(WrapperXml):
             raise Error("classname "+classname+" unknown")
         self.setAttribute("class",classname)
     def getClockAndResetName(self):
-        return self.getAttribute("clockandreset")
+        value = self.getAttribute("clockandreset")
+        if value == None:
+            raise Error("No clock and reset name in '"+self.getName()+"' interface")
+        return value
     def getClockAndResetInterface(self):
         print "TODO getclockandresetinterface"
     def setClockAndReset(self,interfacename):

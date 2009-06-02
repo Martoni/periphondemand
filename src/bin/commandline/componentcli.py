@@ -425,6 +425,31 @@ Usage : addgeneric <generic_name> <attribute_name>=<attribute_value>
             return None
         return 1
 
+    def complete_printport(self,text,line,begidx,endidx):
+        #TODO
+        pass
+
+    def do_printport(self,arg):
+        """\
+Usage : printport <interfacename>.<portname>
+Print port informations
+        """
+        print "TODO"
+        #TODO
+        pass
+
+    def complete_printinterface(self,text,line,begidx,endidx):
+        #TODO
+        pass
+
+    def do_printinterface(self,arg):
+        """\
+Usage : printinterface <interfacename>
+Print interface informations
+        """
+        print "TODO"
+        #TODO
+        pass
 
 if __name__ == "__main__":
     print "componentcli class test\n"
