@@ -28,7 +28,6 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
-import sys
-sys.path.append("/home/fabien/periphondemand/trunk/")
+import sys,os
 import periphondemand.bin.pod
 periphondemand.bin.pod.main(sys.argv)
