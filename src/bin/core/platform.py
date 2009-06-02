@@ -68,8 +68,8 @@ class Platform(Component):
             for element in self.getNode("interfaces").getNodeList("interface"):
                 self.interfaceslist.append(Interface(self,node=element))
         self.librarieslist = []
-        if self.getNode("libraries") != None:
-            for library in self.getNode("libraries").getNodeList("library"):
+        if self.getNode("simulation") != None:
+            for library in self.getNode("simulation").getNodeList("simlib"):
                 self.librarieslist.append(SimulationLib(self,node=library))
 
 
@@ -147,8 +147,9 @@ class Platform(Component):
     def getLibrariesList(self):
         try:
             return self.librarieslist
-        except AttributeError:
+        except AttributeError,e:
             return []
+
     def getFamily(self):
         return self.getNode("fpga").getAttribute("family")
 

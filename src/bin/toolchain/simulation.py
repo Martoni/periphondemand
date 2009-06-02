@@ -89,3 +89,4 @@ class Simulation(WrapperXml):
 
     def save(self):
         self.saveXml(settings.projectpath+"/simulation/simulation"+XMLEXT)
+

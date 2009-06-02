@@ -81,9 +81,12 @@ ghdl-compil-pr :
 	@mv $(SIMTOP) simu/$(SIMTOP)
 
 ghdl-run :
-	@$(SIMDIR)/$(SIMTOP) $(GHDL_SIM_OPT) --vcdgz=$(SIMDIR)/$(SIMTOP).vcdgz
+	@$(SIMDIR)/$(SIMTOP) $(GHDL_SIM_OPT) --vcdgz=$(SIMDIR)/$(SIMTOP).vcdgz --wave=$(SIMDIR)/$(SIMTOP).ghw
 
 ghdl-view:
+	$(VIEW_CMD) $(SIMDIR)/$(SIMTOP).ghw
+
+ghdl-view-vcdgz:
 	gunzip --stdout $(SIMDIR)/$(SIMTOP).vcdgz | $(VIEW_CMD) --vcd
 
 clean :
