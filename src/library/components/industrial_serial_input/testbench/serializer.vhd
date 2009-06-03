@@ -33,7 +33,7 @@ end entity;
 ---------------------------------------------------------------------------
 Architecture serializer_1 of serializer is
 ---------------------------------------------------------------------------
-    signal int_register : std_logic_vector( 7 downto 0);
+    signal int_register : std_logic_vector( 7 downto 0):= x"00";
 begin
 
     sop <= int_register(7);

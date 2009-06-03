@@ -64,13 +64,16 @@ Architecture industrial_serial_input_1 of industrial_serial_input is
     constant REG_BUS_PER   : std_logic_vector( 1 downto 0) := "10"; -- bus period =  reg x clock period
     constant REG_ID        : std_logic_vector( 1 downto 0) := "11"; -- identification register 
 
+    constant BUS_PER_DFLT : std_logic_vector(15 downto 0) := x"010A";
+    constant READ_PER_DFLT: std_logic_vector(15 downto 0) := x"0000";  
+
     -- registers
-    signal data_reg : std_logic_vector( 7 downto 0);
+    signal data_reg : std_logic_vector( 7 downto 0):= x"00";
     signal int_en : std_logic ;
     signal read_per : std_logic_vector( wb_size-1 downto 0);
     signal bus_per  : std_logic_vector( wb_size-1 downto 0);
 
-    signal data   : std_logic_vector( 7 downto 0);
+    signal data   : std_logic_vector( 7 downto 0):= x"00";
 
     -- local clocks signals
     signal local_clk : std_logic ;
@@ -97,7 +100,13 @@ begin
                 read_ack <= '1';
                 case wbs_add is
                     when REG_DATA     => 
-                        wbs_readdata <=  ZERO(6 downto 0)&int_en&data_reg;
+                        -- change data_reg bits order to match card route
+                        wbs_readdata <=  
+                            ZERO(6 downto 0)&int_en&
+                            data_reg(5)&
+                            data_reg(6)&
+                            data_reg(7)&
+                            data_reg(4 downto 0);
                     when REG_READ_PER => 
                         wbs_readdata <= read_per;
                     when REG_BUS_PER  => 
@@ -120,8 +129,8 @@ begin
         if reset = '1' then
             int_en <= '0';
             -- defaut values
-            bus_per <= x"010A"; -- 266 x 3.759 = 1MHz
-            read_per <= (others => '0');
+            bus_per <= BUS_PER_DFLT; -- 266 x 3.759 = 1MHz
+            read_per <= READ_PER_DFLT;
         elsif rising_edge(clk) then
             if (wbs_strobe and wbs_write and wbs_cycle) = '1' then
                 case wbs_add is
@@ -202,7 +211,7 @@ begin
         if reset = '1' then
             interrupt <= '0';
         elsif rising_edge(clk) then
-            if data_reg /= data then
+            if data_reg /= data and (state_reg = spi_end_state) then
                 interrupt <= int_en; -- rise interrupt if data reg is changed 
             elsif (read_ack = '1') and (wbs_add = REG_DATA) then
                 interrupt <= '0'; -- reset interrupt when data register is read
