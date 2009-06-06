@@ -10,7 +10,7 @@
 
 
 	<hdl_files>
-		<hdl_file filename="hdl/rstgen_syscon.vhd" scope="spartan3" istop="1"/>
+		<hdl_file filename="rstgen_syscon.vhd" scope="spartan3" istop="1"/>
 	</hdl_files>
 
 	<interfaces>

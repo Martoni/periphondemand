@@ -85,19 +85,29 @@ def main(argv):
     SETTINGS.projectpath = sy.pwd()
     SETTINGS.version = ver.getVersion()
 
-
     # load command file if in command params
     if "--source" in options or "-s" in options:
         for opt,arg in opts:
             if opt=="--source" or opt=="-s":
                 argument = arg
                 break
+        if not os.path.exists(argument):
+            print "[ERROR] script "+str(argument)+\
+                " doesn't exist"
+            usage()
+            return
         CLI.do_source(argument)
     elif "--load" in options or "-l" in options:
         for opt,arg in opts:
             if opt=="--load" or opt=="-l":
                 argument = arg
                 break
+            if not os.path.exists(argument):
+                print "[ERROR] project "+str(argument)+\
+                    " doesn't exist"
+                usage()
+                return
+
         tmpfile = open(TMPFILENAME,"w")
         tmpfile.write("project.load "+argument)
         tmpfile.close()

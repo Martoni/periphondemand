@@ -76,11 +76,10 @@ class TopVHDL(TopGen):
         out = "entity "+entityname+" is\n"
         out = out +"\n"+ TAB+ "port\n"+TAB+"(\n"
         for port in portlist:
-            # TODO: display comment with instance-interface name
             portname = port.getName()
             interfacename = port.getParent().getName()
             instancename = port.getParent().getParent().getInstanceName()
-
+            out = out + TAB + "-- "+instancename+"-"+interfacename+"\n"
             if port.isCompletelyConnected():
                 # sig declaration
                 out = out + TAB +\

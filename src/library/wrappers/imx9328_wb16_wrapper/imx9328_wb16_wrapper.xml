@@ -5,7 +5,7 @@
   </description>
 
   <hdl_files>
-    <hdl_file filename="hdl/imx9328_wb16_wrapper.vhd" scope="spartan3" istop="1"/>
+    <hdl_file filename="imx9328_wb16_wrapper.vhd" scope="spartan3" istop="1"/>
   </hdl_files>
 
   <interfaces>

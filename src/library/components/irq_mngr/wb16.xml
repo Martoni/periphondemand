@@ -20,7 +20,7 @@
 
 
 	<hdl_files>
-		<hdl_file filename="hdl/irq_mngr.vhd" scope="all" istop="1" />
+		<hdl_file filename="irq_mngr.vhd" scope="all" istop="1" />
 	</hdl_files>
 
     <generics>

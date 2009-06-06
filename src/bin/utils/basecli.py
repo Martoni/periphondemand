@@ -362,6 +362,12 @@ class BaseCli(cmd.Cmd):
             else:
                 return []
 
+        # test if libraryname is defined, if not assign active library name
+        try:
+            libraryname.lower()
+        except NameError:
+            libraryname = settings.active_library.getLibName()
+
         # fill list
         if   subargt == "masterinstancename":
             return [interface.getParent().getInstanceName() for interface in settings.active_project.getInterfaceMaster()]
@@ -381,7 +387,6 @@ class BaseCli(cmd.Cmd):
             return [""+instancename+"."+interfacename+"."+port.getName() for port in interface.getPortsList()]
         elif subargt == "pinnum":
             return [""+instancename+"."+interfacename+"."+portname+"."+str(i) for i in range(int(port.getSize()))]
-
         elif subargt == "libraryname":
             arglist = settings.active_project.library.listLibraries()
             return arglist
@@ -390,6 +395,7 @@ class BaseCli(cmd.Cmd):
         elif subargt == "componentname":
             arglist = [libraryname+"."+componentname for 
                         componentname in settings.active_library.listComponents(libraryname)]
+            print str(arglist)+" debug"
             return arglist
         elif subargt == "componentversion":
             return [libraryname+"."+componentname+"."+comp for comp in settings.active_project.getComponentVersionList(libraryname,componentname)]

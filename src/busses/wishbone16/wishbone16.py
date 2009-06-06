@@ -388,21 +388,27 @@ def generateIntercon(masterinterface,intercon):
     #controls master
     VHDLcode = VHDLcode+controlmaster(masterinterface,intercon)
 
-
-
     ###########################
     #Foot
     VHDLcode = VHDLcode + architectureFoot(intercon)
    
     ###########################
     # saving
-    if not sy.dirExist(settings.projectpath +COMPONENTSPATH+"/"+intercon.getInstanceName()+"/"+HDLDIR):
-        sy.makeDirectory(settings.projectpath +COMPONENTSPATH+"/"+intercon.getInstanceName()+"/"+HDLDIR)
-    file = open(settings.projectpath +COMPONENTSPATH+"/"+intercon.getInstanceName()+"/"+HDLDIR+"/"+intercon.getInstanceName()+VHDLEXT,"w")
+    if not sy.dirExist(settings.projectpath +
+                       COMPONENTSPATH+"/"+
+                       intercon.getInstanceName()+"/"+HDLDIR):
+        sy.makeDirectory(settings.projectpath+
+                        COMPONENTSPATH+"/"+
+                        intercon.getInstanceName()+"/"+HDLDIR)
+    file = open(settings.projectpath +COMPONENTSPATH+"/"+
+            intercon.getInstanceName()+
+            "/"+HDLDIR+"/"+intercon.getInstanceName()+VHDLEXT,"w")
     file.write(VHDLcode)
     file.close()
     #hdl file path
-    hdl = Hdl_file(intercon,filename=HDLDIR+"/"+intercon.getInstanceName()+VHDLEXT,istop=1,scope="all")
+    hdl = Hdl_file(intercon,
+            filename=intercon.getInstanceName()+VHDLEXT,
+            istop=1,scope="all")
     intercon.addHdl_file(hdl)
     return VHDLcode
 

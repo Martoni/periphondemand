@@ -5,7 +5,7 @@
 	</description>
 
 	<hdl_files>
-		<hdl_file filename="hdl/dcm_syscon.vhd" scope="spartan3" istop="1"/>
+		<hdl_file filename="dcm_syscon.vhd" scope="spartan3" istop="1"/>
 	</hdl_files>
 
 	<interfaces>

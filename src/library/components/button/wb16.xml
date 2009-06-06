@@ -20,7 +20,7 @@
     </generics>
 
 	<hdl_files>
-		<hdl_file filename="hdl/button.vhd" scope="all" istop="1" />
+		<hdl_file filename="button.vhd" scope="all" istop="1" />
     </hdl_files>
 
 	<interrupts>

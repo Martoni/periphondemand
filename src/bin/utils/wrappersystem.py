@@ -269,7 +269,6 @@ def printDebug(message):
 
 if __name__=="__main__":
     print listDirectory("/home/fabien/podmylib")
-    print commandExist("plop")
     print commandExist("xtclsh")
     sys.exit(0)
     #test

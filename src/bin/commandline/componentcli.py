@@ -99,6 +99,7 @@ Create new component in current library
         print display
 
     def complete_load(self,text,line,begidx,endidx):
+        #TODO: make it working without library name libname.compname
         componentlist = []
         try:
             componentlist = self.completeargs(text,line,"<componentname>.[componentversion]")

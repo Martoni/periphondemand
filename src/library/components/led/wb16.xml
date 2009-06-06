@@ -23,7 +23,7 @@
     </driver_files>
 
     <hdl_files>
-        <hdl_file filename="hdl/led.vhd" scope="all" istop="1" />
+        <hdl_file filename="led.vhd" scope="all" istop="1" />
     </hdl_files>
 
     <interfaces>

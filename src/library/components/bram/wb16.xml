@@ -37,8 +37,8 @@
     </generics>
 
     <hdl_files>
-        <hdl_file filename="hdl/bram.vhd" scope="all" istop="1" />
-        <hdl_file filename="hdl/xilinx_one_port_ram_async.vhd" scope="all" istop="0" />
+        <hdl_file filename="bram.vhd" scope="all" istop="1" />
+        <hdl_file filename="xilinx_one_port_ram_async.vhd" scope="all" istop="0" />
     </hdl_files>
 
     <interfaces>

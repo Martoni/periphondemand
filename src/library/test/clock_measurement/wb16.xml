@@ -8,7 +8,7 @@
         <generic destination="fpga" match="\d+" name="wb_size" public="false" type="natural" value="16" />
     </generics>
     <hdl_files>
-        <hdl_file filename="hdl/clockmeasurement.vhd" istop="1" scope="all" />
+        <hdl_file filename="clockmeasurement.vhd" istop="1" scope="all" />
     </hdl_files>
     <interfaces>
         <interface class="GLS" name="clock">

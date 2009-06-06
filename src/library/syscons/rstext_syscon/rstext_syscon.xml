@@ -9,7 +9,7 @@
     </generics>
 
     <hdl_files>
-        <hdl_file filename="hdl/rstext_syscon.vhd" scope="spartan3" istop="1"/>
+        <hdl_file filename="rstext_syscon.vhd" scope="spartan3" istop="1"/>
     </hdl_files>
 
     <interfaces>

@@ -83,6 +83,9 @@ class Synthesis(WrapperXml):
                 # Make directory
                 compdir = settings.projectpath+SYNTHESISPATH+"/"+\
                           component.getName()
+                if sy.dirExist(compdir):
+                    display.msg("Directory "+compdir+" exist, will be deleted")
+                    sy.delDirectory(compdir)
                 sy.makeDirectory(compdir)
                 display.msg("Make directory for "+component.getName())
                 # copy hdl files
@@ -92,10 +95,11 @@ class Synthesis(WrapperXml):
                                 COMPONENTSPATH+\
                                 "/"+\
                                 component.getInstanceName()+\
-                                "/"+\
+                                "/hdl/"+\
                                 hdlfile.getFileName(),
                                 compdir+"/")
                     except IOError,e:
+                        print display
                         raise Error(str(e),0)
 
     def generateTCL(self,filename=None):

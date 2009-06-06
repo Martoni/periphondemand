@@ -15,8 +15,8 @@
 	</driver_files>
 
 	<hdl_files>
-		<hdl_file filename="hdl/i2c_ocore.vhd" scope="all" istop="0" />
-		<hdl_file filename="hdl/i2cocore_wb16.vhd" scope="all" istop="1" />
+		<hdl_file filename="i2c_ocore.vhd" scope="all" istop="0" />
+		<hdl_file filename="i2cocore_wb16.vhd" scope="all" istop="1" />
 	</hdl_files>
 
 	<interrupts>
