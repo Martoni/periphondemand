@@ -87,13 +87,17 @@ class Component(WrapperXml):
         self.saveComponent(os.path.join(componentpath,versionname))
         self.setVersionName(versionname)
 
-    def loadComponent(self,componentname,libraryname):
+    def loadComponent(self,componentname,libraryname,versionname=None):
         """ load a component in library to modify it
         """
         if not componentname in settings.active_library.listComponents(libraryname):
-            print Error("No component named "+str(arg)+" in "+libname,0)
+            raise Error("No component named "+str(componentname)+" in "+str(libraryname),0)
 
-        print "TODO: load "+componentname+" in "+libraryname
+        if versionname==None:
+            print "TODO: load "+componentname+" in "+libraryname
+        else:
+            print "TODO: load "+componentname+"."+versionname+" in "+libraryname
+
 
     def saveComponent(self,version=None):
         """ Save component in library

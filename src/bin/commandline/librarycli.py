@@ -80,6 +80,7 @@ Create, edit and manage components in library
                 raise Error("Library must be loaded before")
         except Error,e:
             print e
+            return
 
         cli = ComponentCli(self)
         cli.setPrompt("component")

@@ -716,6 +716,7 @@ class Project(WrapperXml):
         filelist = sy.listDirectory(settings.path + TOOLCHAINPATH +DRIVERSPATH)
         return filelist
 
+    # TODO: move it in library class
     def getComponentVersionList(self,libraryname,componentname):
         """ list component version name in archive
         """

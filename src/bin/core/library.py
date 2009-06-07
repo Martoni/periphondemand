@@ -79,9 +79,11 @@ class Library:
         else:
             raise Error("Library not found : "+str(libraryname),0)
 
-    def listComponents(self,libraryname):
+    def listComponents(self,libraryname=None):
         """ Return a list with all library components
         """
+        if libraryname==None:
+            libraryname = self.getLibName()
         official_component_type = self.getOfficialLibraries()
         componentlist = []
         if libraryname in official_component_type:

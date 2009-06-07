@@ -63,7 +63,8 @@ class BaseCli(cmd.Cmd):
             inp = self.pseudo_raw_input(self.continuation_prompt)
             statement = '%s\n%s' % (statement, inp)
         return statement
-        # assembling a list of lines and joining them at the end would be faster,
+        # assembling a list of lines and joining them at the end would be 
+        #faster,
         # but statementHasEnded needs a string arg; anyway, we're getting
         # user input and users are slow.
 
@@ -345,6 +346,8 @@ class BaseCli(cmd.Cmd):
                 instancename = instance.getInstanceName()
             elif listargs[0][0]=="libraryname":
                 libraryname = listargs[0][1]
+            elif listargs[0][0]=="componentname":
+                componentname = listargs[0][1]
             else:
                 return []
         if len(listargs) > 1:
@@ -353,6 +356,8 @@ class BaseCli(cmd.Cmd):
                 interfacename = interface.getName()
             elif listargs[1][0]=="componentname":
                 componentname = listargs[1][1]
+            elif listargs[1][0]=="componentversion":
+                componentversion = listargs[1][1]
             else:
                 return []
         if len(listargs) > 2:
@@ -361,13 +366,6 @@ class BaseCli(cmd.Cmd):
                 portname = port.getName()
             else:
                 return []
-
-        # test if libraryname is defined, if not assign active library name
-        try:
-            libraryname.lower()
-        except NameError:
-            libraryname = settings.active_library.getLibName()
-
         # fill list
         if   subargt == "masterinstancename":
             return [interface.getParent().getInstanceName() for interface in settings.active_project.getInterfaceMaster()]
@@ -393,11 +391,22 @@ class BaseCli(cmd.Cmd):
         elif subargt == "personallibraryname":
             arglist = settings.active_project.library.getPersonalLibName()
         elif subargt == "componentname":
+            # XXX: detect is libraryname defined with proper function
+            try:
+                libraryname.lower()
+            except:
+                return settings.active_library.listComponents()
             arglist = [libraryname+"."+componentname for 
-                        componentname in settings.active_library.listComponents(libraryname)]
-            print str(arglist)+" debug"
+                    componentname in settings.active_library.listComponents(libraryname)]
             return arglist
         elif subargt == "componentversion":
+            # XXX: beuhark!
+            try:
+                libraryname.lower()
+            except:
+                libraryname = settings.active_library.getLibName()
+                return [componentname+"."+version for
+                        version in settings.active_project.getComponentVersionList(libraryname,componentname)]
             return [libraryname+"."+componentname+"."+comp for comp in settings.active_project.getComponentVersionList(libraryname,componentname)]
 
         elif subargt == "platformname":

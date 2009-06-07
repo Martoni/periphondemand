@@ -99,7 +99,6 @@ Create new component in current library
         print display
 
     def complete_load(self,text,line,begidx,endidx):
-        #TODO: make it working without library name libname.compname
         componentlist = []
         try:
             componentlist = self.completeargs(text,line,"<componentname>.[componentversion]")
@@ -112,13 +111,18 @@ Create new component in current library
 Usage : load <componentname>.[version]
 Load component from current library
         """
-        #TODO manage version for load component
         library = settings.active_library
         try:
             if not self.componentLoaded():
                 settings.active_component = Component()
-            self.checkargs(arg,"<componentname>")
-            settings.active_component.loadComponent(arg,library.getLibName())
+            self.checkargs(arg,"<componentname>.[componentversion]")
+            arglist = arg.split(".")
+            componentname = arglist[0]
+            if len(arglist) > 1:
+                versionname = arglist[1]
+            else:
+                versionname = None
+            settings.active_component.loadComponent(componentname,library.getLibName(),versionname)
         except Error,e:
             print display
             print e
