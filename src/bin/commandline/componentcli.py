@@ -249,14 +249,14 @@ Add an interface in component
             return
         print display
 
-    def complete_editinterface(self,text,line,begidx,endidx):
+    def complete_setinterface(self,text,line,begidx,endidx):
         #TODO
         pass
 
-    def do_editinterface(self,arg):
+    def do_setinterface(self,arg):
         """\
-Usage : editinterface <interfacename> <attribute>=<value>
-Edit interface attributes
+Usage : setinterface <interfacename> <attribute>=<value>
+set interface attributes
         """
         if not self.componentLoaded():
             print Error("No component loaded")
@@ -264,7 +264,19 @@ Edit interface attributes
 
         #TODO
         pass
-    
+   
+    def complete_delport(self,text,line,begidx,endidx):
+        #TODO
+        pass
+
+    def do_delport(self,arg):
+        """\
+Usage : delport <portname> <interfacename>
+Suppress port from interface
+        """
+        print "TODO"
+        pass
+
     def complete_addport(self,text,line,begidx,endidx):
         #TODO
         pass

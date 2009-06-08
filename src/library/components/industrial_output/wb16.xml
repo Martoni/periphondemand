@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="industrial_output">
+
+    <generics>
+        <generic destination="both" match="\d+" name="id" public="true" type="natural" value="1">
+            <description />
+        </generic>
+        <generic destination="fpga" match="\d+" name="wb_size" public="false" type="natural" value="16">
+            <description />
+        </generic>
+        <generic name="serial_speed" type="natural" value="1000" destination="both" match="\d+" public="true" >
+            <description />
+        </generic>
+        <generic name="clk_freq" type="natural" value="133000" destination="both" match="\d+" public="true" >
+            <description />
+        </generic>
+    </generics>
+
+    <hdl_files>
+        <hdl_file filename="industrial_output.vhd" istop="1" scope="all" />
+    </hdl_files>
+    <interfaces>
+        <interface class="CLK_RST" name="syscon_entry">
+            <ports>
+                <port dir="in" name="reset" size="1" type="RST">
+                    <description />
+                </port>
+                <port dir="in" name="clk" size="1" type="CLK">
+                    <description />
+                </port>
+            </ports>
+        </interface>
+        <interface class="GLS" name="output">
+            <ports>
+                <port dir="out" name="rclk" size="1" type="EXPORT">
+                    <description />
+                </port>
+                <port dir="out" name="reset_n" size="1" type="EXPORT">
+                    <description />
+                </port>
+                <port dir="out" name="srclk" size="1" type="EXPORT">
+                    <description />
+                </port>
+                <port dir="out" name="ser" size="1" type="EXPORT">
+                    <description />
+                </port>
+                <port dir="in" name="qh" size="1" type="EXPORT">
+                    <description />
+                </port>
+            </ports>
+        </interface>
+        <interface bus="wishbone16" class="SLAVE" clockandreset="syscon_entry" name="swb16">
+            <registers>
+                <register name="ctrl_data" offset="0x0" rows="1" size="16" />
+                <register name="id" offset="0x1" rows="1" size="16" />
+            </registers>
+            <ports>
+                <port dir="in" name="wbs_add" size="1" type="ADR">
+                    <description />
+                </port>
+                <port dir="in" name="wbs_writedata" size="16" type="DAT_I">
+                    <description />
+                </port>
+                <port dir="out" name="wbs_readdata" size="16" type="DAT_O">
+                    <description />
+                </port>
+                <port dir="in" name="wbs_strobe" size="1" type="STB">
+                    <description />
+                </port>
+                <port dir="in" name="wbs_cycle" size="1" type="CYC">
+                    <description />
+                </port>
+                <port dir="in" name="wbs_write" size="1" type="WE">
+                    <description />
+                </port>
+                <port dir="out" name="wbs_ack" size="1" type="ACK">
+                    <description />
+                </port>
+            </ports>
+        </interface>
+    </interfaces>
+</component>

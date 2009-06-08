@@ -29,7 +29,7 @@ GHDL_SIMU_FLAGS      = --ieee=synopsys --warn-no-vital-generic
 GHDL_SYNTHESIS_FLAGS = --ieee=synopsys -P$$XILINX/ghdl/unisim  --warn-no-vital-generic
 GHDL_PANDR_FLAGS     = --ieee=synopsys -P$$XILINX/ghdl/simprim  --warn-no-vital-generic
 
-VIEW_CMD        = /usr/bin/gtkwave
+VIEW_CMD        = gtkwave
 
 OBJS_FILES      = $(patsubst %.vhd, %.o, $(notdir $(FILES)) )
 OBJS_SIMFILES   = $(patsubst %.vhd, %.o, $(notdir $(SIMFILES)) )
