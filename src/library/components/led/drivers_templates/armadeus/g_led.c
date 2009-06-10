@@ -238,14 +238,8 @@ static int led_probe(struct platform_device *pdev)
 	led_major = 252;	  
 	led_minor = dev->num ;/* num come from plat_led_port data structure */
 
-	PDEBUG("%s:Get the major and minor device numbers\n",dev->name);
-	if (led_major) {
-		sdev->devno = MKDEV(led_major, led_minor);
-		result = register_chrdev_region(sdev->devno, 1,dev->name);
-	} else {
-		result = alloc_chrdev_region(&sdev->devno, led_minor, 1, dev->name);
-		led_major = MAJOR(sdev->devno);
-	}
+	sdev->devno = MKDEV(led_major, led_minor);
+	result = alloc_chrdev_region(&(sdev->devno),led_minor, 1,dev->name);
 	if (result < 0) {
 		printk(KERN_WARNING "%s: can't get major %d\n",dev->name,led_major);
 		goto error_devno;
