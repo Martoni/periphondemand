@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="industrial_serial_input">
+    
+    <driver_files>
+        <driver_templates architecture="armadeus">
+            <support version="3" />
+            <file name="Makefile" />
+            <file name="Kconfig" />
+            <file name="board_input.c" />
+            <file name="input.h" />
+            <file name="ginput.c" />
+        </driver_templates>
+    </driver_files>
+
     <generics>
         <generic destination="both" match="\d+" name="id" public="true" type="natural" value="1">
             <description />
@@ -11,9 +23,15 @@
             <description />
         </generic>
     </generics>
+
     <hdl_files>
         <hdl_file filename="industrial_serial_input.vhd" istop="1" scope="all" />
     </hdl_files>
+
+    <interrupts>
+        <interrupt interface="interrupt" port="interrupt" />
+    </interrupts>
+
     <interfaces>
         <interface class="CLK_RST" name="candr">
             <ports>
@@ -80,6 +98,7 @@
             </ports>
         </interface>
     </interfaces>
+
     <description>testing component
     </description>
 </component>

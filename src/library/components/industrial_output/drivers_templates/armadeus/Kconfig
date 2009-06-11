@@ -1,0 +1,9 @@
+#
+#
+
+config OUTPUT_DRIVER
+        tristate "Output driver"
+        default m
+        depends on POD_DRIVERS
+        ---help---
+

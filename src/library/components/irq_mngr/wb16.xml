@@ -12,7 +12,6 @@
         <driver_templates architecture="armadeus">
             <support version="3" />
             <file name="main.c" />
-            <file name="test.c" />
             <file name="Makefile" />
             <file name="README" />
         </driver_templates>

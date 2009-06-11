@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="industrial_output">
 
+    <driver_files>
+        <driver_templates architecture="armadeus">
+            <support version="3" />
+            <file name="Makefile" />
+            <file name="output.h" />
+            <file name="board_output.c" />
+            <file name="goutput.c" />
+            <file name="Kconfig" />
+        </driver_templates>
+    </driver_files>
+
+
     <generics>
         <generic destination="both" match="\d+" name="id" public="true" type="natural" value="1">
             <description />
@@ -19,6 +31,7 @@
     <hdl_files>
         <hdl_file filename="industrial_output.vhd" istop="1" scope="all" />
     </hdl_files>
+
     <interfaces>
         <interface class="CLK_RST" name="syscon_entry">
             <ports>
