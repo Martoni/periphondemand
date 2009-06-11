@@ -1,1 +1,69 @@
-Ask fabien.marteau@armadeus.com to document this
+Serial input component
+======================
+
+This component is designed to drive input serializer based on sn65hvs882
+industrial serializer. 
+
+FPGA component
+--------------
+
+Input component is composed of four 16 bits registers:
+
+|   offset   | name        | description                     |
+|:-----------|:-----------:|:-------------------------------:|
+|    0x00    | DATA        | data and interrupt              |
+|    0x01    | READ_PER    | read period = reg x bus period  |
+|    0x02    | BUS_PER     | bus period = reg x clock period |
+|    0x03    | ID          | Identification register         | 
+
+* DATA : this register contain data value read on low byte and enable register on bit(8).
+
+| 15 downto 9 |  8     | 7 downto 0 |
+|:-----------:|:------:|:----------:|
+|    void     | int_en |  data      |
+
+* READ_PER : Indicating the period between to read. 
+* BUS_PER  : Period of bus
+* ID       : Identification register
+
+ARMadeus linux driver
+---------------------
+
+### mount modules
+
+Before using the driver be sure that irq_mngr driver is mounted:
+
+> modprobe irq_ocore
+
+To read value on input, two modules must be mounted :
+
+> modprobe ginput
+> modporbe board_input 
+
+### /dev
+
+Mounting the second module will indicate the major and minor number used for
+each devices:
+
+> input0: MAJOR: 251 MINOR: 0
+
+With these number it's easy to create the caractere file node :
+
+> mknod /dev/input0 c 251 0
+
+Read value on file can block while value is not changing. To do this, enable interruption in /sys :
+
+> echo "1" > /sys/bus/platform/devices/input.0/interrupt
+
+### /sys
+
+Read and bus period can be changed using /sys entry :
+
+> ls  /sys/bus/platform/devices/input.0/
+> bus_speed  interrupt read_per
+
+This can be changed using echo command. For example :
+
+> echo "200" > bus_speed
+
+

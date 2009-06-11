@@ -60,7 +60,7 @@ Architecture industrial_serial_input_1 of industrial_serial_input is
 
     -- registers addresses
     constant REG_DATA      : std_logic_vector( 1 downto 0) := "00"; -- |x[15:9]|int_en|data[7:0]
-    constant REG_READ_PER  : std_logic_vector( 1 downto 0) := "01"; -- read period = reg x read period
+    constant REG_READ_PER  : std_logic_vector( 1 downto 0) := "01"; -- read period = reg x bus period
     constant REG_BUS_PER   : std_logic_vector( 1 downto 0) := "10"; -- bus period =  reg x clock period
     constant REG_ID        : std_logic_vector( 1 downto 0) := "11"; -- identification register 
 
