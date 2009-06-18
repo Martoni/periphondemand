@@ -161,7 +161,7 @@ begin
 
     -- SPI clock generator
     clock_divider : process (clk,reset)
-        variable count : natural range 0 to (2**wb_size)-1;
+        variable count : natural range 0 to (2**14)-1;
     begin
         if reset = '1' then
             count := 0;
