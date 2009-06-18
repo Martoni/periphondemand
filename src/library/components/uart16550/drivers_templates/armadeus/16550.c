@@ -13,6 +13,11 @@
  * (at your option) any later version.
  */
 
+#include <linux/version.h>
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,20)
+#include <linux/config.h>
+#endif
+
 #include <linux/errno.h>
 #include <linux/init.h>
 #include <linux/interrupt.h>
@@ -24,14 +29,27 @@
 
 #include <asm/io.h> // readb()
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)
+/* hardware addresses */
+#	include <asm/hardware.h>
+#	include <asm/semaphore.h>
+#else
+#	include <mach/hardware.h>
+#	include <linux/semaphore.h>
+#endif
+
+#ifdef CONFIG_MACH_APF27 /* To remove when MX1 platform merged */
+#include <mach/fpga.h>
+#endif
+
 /* for debugging messages*/
-#define LED_DEBUG
+#define UART_DEBUG
 
 #undef PDEBUG
-#ifdef LED_DEBUG
+#ifdef UART_DEBUG
 # ifdef __KERNEL__
     /* for kernel spage */
-#   define PDEBUG(fmt,args...) printk(KERN_DEBUG "LED : " fmt, ##args)
+#   define PDEBUG(fmt,args...) printk(KERN_DEBUG "UART : " fmt, ##args)
 # else
     /* for user space */
 #   define PDEBUG(fmt,args...) printk(stderr, fmt, ##args)
@@ -39,8 +57,6 @@
 #else
 # define PDEBUG(fmt,args...) /* no debbuging message */
 #endif
-
-
 
 #define PORT(_base, _phys, _clock, _irq)   \
 	{	                                   \
@@ -52,9 +68,6 @@
 		.iotype   = UPIO_MEM,              \
 		.flags    = UPF_BOOT_AUTOCONF      \
 	}
-
-
-#define APF9328_FPGA_IRQ_MNGR (192)
 
 /*$foreach:instance$*/
 #define /*$instance_name$*/_INPUT_CLOCK   /*$generic:clock_speed$*/
@@ -69,8 +82,8 @@ void plat_uart_release(struct device *dev)
 
 /*$foreach:instance$*/
 static struct plat_serial8250_port ocore_16550_uart/*$instance_num$*/_data[] = {
-	PORT( APF9328_FPGA_VIRT+/*$instance_name$*/_BASE, 
-		  APF9328_FPGA_PHYS+/*$instance_name$*/_BASE, 
+	PORT( ARMADEUS_FPGA_BASE_ADDR_VIRT+/*$instance_name$*/_BASE, 
+		  ARMADEUS_FPGA_BASE_ADDR_PHYS+/*$instance_name$*/_BASE, 
 		  /*$instance_name$*/_INPUT_CLOCK, 
 		  /*$instance_name$*/_IRQ ),
 	{ },
