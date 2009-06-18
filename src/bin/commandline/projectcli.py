@@ -530,6 +530,7 @@ Specify the bus clock
             print e
         return connectlist
 
+    # TODO: change name to delpinconnection
     def do_delconnection(self,line):
         """\
 Usage : delconnection <instancename>.<interfacename>.<portname>.[pinnum] [instancename].[interfacename].[portname].[pinnum]
@@ -567,6 +568,23 @@ Suppress a pin connection
             return
         print display
         print "Connection deleted"
+
+    # TODO
+    def complete_delbusconnection(self,text,line,begidx,endidx):
+        connectlist = []
+        try:
+            connectlist = self.completeargs(text,line,"<instancename>.<interfacename>.<portname>")
+        except Exception,e:
+            print e
+        return connectlist
+
+    # TODO: change name to delpinconnection
+    def do_delbusconnection(self,line):
+        """\
+Usage : delconnection <instancename>.<interfacebusname>
+Suppress a pin connection
+        """
+        print "TODO"
 
     def complete_delinstance(self,text,line,begidx,endidx):
         componentlist = []
