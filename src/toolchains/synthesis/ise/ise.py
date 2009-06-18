@@ -75,12 +75,18 @@ def generatepinout(self,filename=None):
                     connect = pin.getConnections()
                     if len(connect) > 1:
                         display.msg("[WARNING] severals pin connected to "+\
-                                port.getName()+\
-                                ". Only "+connect[0]["instance_dest"]+"."+\
+                                port.getName())
+                        for connection in connect:
+                            display.msg("      -> "+connection["instance_dest"]+"."+\
+                                            connection["interface_dest"]+"."+\
+                                            connection["port_dest"]+"."+\
+                                            connection["pin_dest"])
+                        display.msg(" Only "+connect[0]["instance_dest"]+"."+\
                                           connect[0]["interface_dest"]+"."+\
                                           connect[0]["port_dest"]+"."+\
                                           connect[0]["pin_dest"]+\
                                           " will be branch",0)
+
                     instancedest = self.project.getInstance(connect[0]["instance_dest"])
                     interfacedest = instancedest.getInterface(connect[0]["interface_dest"])
                     portdest = interfacedest.getPort(connect[0]["port_dest"])
