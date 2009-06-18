@@ -451,7 +451,6 @@ Usage : addgeneric <generic_name> <attribute_name>=<attribute_value>
 Usage : printport <interfacename>.<portname>
 Print port informations
         """
-        print "TODO"
         #TODO
         pass
 
@@ -464,7 +463,6 @@ Print port informations
 Usage : printinterface <interfacename>
 Print interface informations
         """
-        print "TODO"
         #TODO
         pass
 

@@ -421,7 +421,7 @@ class Project(WrapperXml):
         except Error:
             raise Error("No platform in project",2)
         
-        self.delProjectComponent(platform.getInstanceName())
+        self.delProjectInstance(platform.getInstanceName())
         self.delNode("platform")
 
     def listAvailablePlatforms(self):
@@ -430,8 +430,7 @@ class Project(WrapperXml):
         platformlist = sy.listDirectory(settings.path+PLATFORMPATH)
         return platformlist
 
-    # TODO: rename in delProjectInstance
-    def delProjectComponent(self,instancename):
+    def delProjectInstance(self,instancename):
         """ Remove instance from project
         """
         instance = self.getInstance(instancename)
@@ -537,7 +536,7 @@ class Project(WrapperXml):
         else:
             print Error(instance_name+"_"+interface_name\
                     +" allready exists",INFO)
-            self.delProjectComponent(intercon.getInstanceName())
+            self.delProjectInstance(intercon.getInstanceName())
 
         intercon = Intercon(
                 self.getInstance(instance_name).getInterface(interface_name),self

@@ -15,7 +15,7 @@
 	</driver_files>
 
 	<hdl_files>
-		<hdl_file filename="simplegpio.vhd" scope="all" istop="1" />
+		<hdl_file filename="simplegpio.vhd" scope="both" istop="1" />
     </hdl_files>
 
     <generics>

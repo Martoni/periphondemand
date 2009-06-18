@@ -77,6 +77,7 @@ class Hdl_file(WrapperXml):
         return self.getAttribute("filename")
 
     def setFileName(self,filename):
+        # TODO: check if it's a HDL file
         self.setAttribute("filename",filename)
 
     def getFilePath(self):
@@ -100,7 +101,11 @@ class Hdl_file(WrapperXml):
     def getScope(self):
         return self.getAttribute("scope")
     def setScope(self,scope):
-        self.setAttribute("scope",scope)
+        SCOPE = ["both","fpga","driver"]
+        if scope.lower() in SCOPE:
+            self.setAttribute("scope",scope)
+        else:
+            raise Error("Unknown scope "+str(scope))
 
     def getGeneric(self,genericname):
         """ Get generic declared in HDL file"""

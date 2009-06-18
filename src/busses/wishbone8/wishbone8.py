@@ -428,7 +428,7 @@ def generateIntercon(masterinterface,intercon):
     #hdl file path
     hdl = Hdl_file(intercon,
             filename=intercon.getInstanceName()+\
-                    VHDLEXT,istop=1,scope="all")
+                    VHDLEXT,istop=1,scope="both")
     intercon.addHdl_file(hdl)
     return VHDLcode
 

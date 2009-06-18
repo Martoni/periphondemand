@@ -20,19 +20,19 @@
     </generics>
 
 	<hdl_files>
-        <hdl_file filename="uart16550_wb16.vhd" scope="all" istop="1" />
-		<hdl_file filename="raminfr.v" scope="all" istop="0" />
-		<hdl_file filename="timescale.v" scope="all" istop="0" />
-		<hdl_file filename="uart_debug_if.v" scope="all" istop="0" />
-		<hdl_file filename="uart_defines.v" scope="all" istop="0" />
-		<hdl_file filename="uart_receiver.v" scope="all" istop="0" />
-		<hdl_file filename="uart_regs.v" scope="all" istop="0" />
-		<hdl_file filename="uart_rfifo.v" scope="all" istop="0" />
-		<hdl_file filename="uart_sync_flops.v" scope="all" istop="0" />
-		<hdl_file filename="uart_tfifo.v" scope="all" istop="0" />
-		<hdl_file filename="uart_top.v" scope="all" istop="0" />
-		<hdl_file filename="uart_transmitter.v" scope="all" istop="0" />
-		<hdl_file filename="uart_wb.v" scope="all" istop="0" />
+        <hdl_file filename="uart16550_wb16.vhd" scope="both" istop="1" />
+		<hdl_file filename="raminfr.v" scope="both" istop="0" />
+		<hdl_file filename="timescale.v" scope="both" istop="0" />
+		<hdl_file filename="uart_debug_if.v" scope="both" istop="0" />
+		<hdl_file filename="uart_defines.v" scope="both" istop="0" />
+		<hdl_file filename="uart_receiver.v" scope="both" istop="0" />
+		<hdl_file filename="uart_regs.v" scope="both" istop="0" />
+		<hdl_file filename="uart_rfifo.v" scope="both" istop="0" />
+		<hdl_file filename="uart_sync_flops.v" scope="both" istop="0" />
+		<hdl_file filename="uart_tfifo.v" scope="both" istop="0" />
+		<hdl_file filename="uart_top.v" scope="both" istop="0" />
+		<hdl_file filename="uart_transmitter.v" scope="both" istop="0" />
+		<hdl_file filename="uart_wb.v" scope="both" istop="0" />
 	</hdl_files>
 
 	<interrupts>

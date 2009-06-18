@@ -607,7 +607,7 @@ Suppress a component from project
             print e
             return
         try:
-            settings.active_project.delProjectComponent(line)
+            settings.active_project.delProjectInstance(line)
         except Error,e:
             print display
             print e

@@ -25,7 +25,7 @@
     </generics>
 
     <hdl_files>
-        <hdl_file filename="industrial_serial_input.vhd" istop="1" scope="all" />
+        <hdl_file filename="industrial_serial_input.vhd" istop="1" scope="both" />
     </hdl_files>
 
     <interrupts>

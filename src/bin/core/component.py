@@ -212,16 +212,21 @@ class Component(WrapperXml):
                 return hdlfile
         return None
 
+    def getHDLFile(self,filename):
+        for hdlfile in self.getHdl_filesList():
+            if hdlfile.getFileName() == filename:
+                return hdlfile
+        raise Error("no hdl file named "+filename)
+
     # TODO: remove (used in intercon generator)##
     def addHdl_file(self,hdl_file):
         self.addSubNode(nodename="hdl_files",subnode=hdl_file)
         return self.hdl_fileslist.append(hdl_file)
     #############################################
 
-    def setHDLfile(self,hdlfilepath,istop=0,scope="all"):
+    def setHDLfile(self,hdlfilepath,istop=0,scope="both"):
         """ Add HDL file in library component
         """
-        # TODO: check if file is a HDL file
         if not sy.fileExist(hdlfilepath):
             raise Error("File "+hdlfilepath+" doesn't exist")
 
@@ -240,9 +245,11 @@ class Component(WrapperXml):
         hdlpath = os.path.join(self.getComponentPath(),"hdl")
         sy.copyFile(hdlfilepath,hdlpath)
         # create hdl_file node
-        hdl_file_object = Hdl_file(self,filename=hdl_file_name,istop=istop,scope=scope)
+        hdl_file_object = Hdl_file(self,
+                                   filename=hdl_file_name,
+                                   istop=istop,
+                                   scope=scope)
         if istop:
-            #TODO: check entity name, must be the same of component name
             if hdl_file_object.getEntityName() != self.getName():
                 raise Error("Entity name must be the same of component name")
             # automaticaly add generics
@@ -446,8 +453,6 @@ class Component(WrapperXml):
         port = hdltop.getPort(portname)
         # place port in interface
         interface.addPort(port)
-        #TODO
-        pass
 
     def portIsInFreeList(self,portname):
         """ If port named portname is not in interface, return 1
@@ -522,10 +527,20 @@ class Component(WrapperXml):
             raise Error("Unknown attribute "+str(attribute_name))
  
     def setHDL(self,file_name,attribute_name,attribute_value):
-        sy.printDebug("TODO set attribute for node "+str(file_name)+\
-                      " attribute "+str(attribute_name)+\
-                      " attributevalue "+str(attribute_value))
-        #TODO
+        HDL = self.getHDLFile(HDL_name)
+        if attribute_name=="filename":
+            HDL.setFileName(attribute_value)
+        elif attribute_name=="scope":
+            HDL.setScope(attribute_value)
+        elif attribute_name=="istop":
+            if attribute_value == "1":
+                HDL.setTop()
+            elif attribute_value == "0":
+                HDL.unsetTop()
+            else:
+                raise Error("Unknown top value "+str(attribute_value))
+        else:
+            raise Error("Unknown attribute "+str(attribute_name))
 
     def setInterface(self,interface_name,attribute_name,attribute_value):
         """Add or modify attribute value for a node
