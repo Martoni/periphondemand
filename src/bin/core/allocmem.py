@@ -111,6 +111,7 @@ class AllocMem:
         return mappinglist
 
     def __str__(self):
+        # TODO: adding ID for each instance
         out = "Address  | instance.interface             | size        \n"
         out = out+ "---------------------------------------------------------\n"
         for register in self.getMapping():

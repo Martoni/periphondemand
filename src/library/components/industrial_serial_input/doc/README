@@ -16,7 +16,8 @@ Input component is composed of four 16 bits registers:
 |    0x02    | BUS_PER     | bus period = reg x clock period |
 |    0x03    | ID          | Identification register         | 
 
-* DATA : this register contain data value read on low byte and enable register on bit(8).
+* DATA : this register contain data value read on low byte and enable 
+  register on bit(8).
 
 | 15 downto 9 |  8     | 7 downto 0 |
 |:-----------:|:------:|:----------:|
@@ -51,7 +52,8 @@ With these number it's easy to create the caractere file node :
 
 > mknod /dev/input0 c 251 0
 
-Read value on file can block while value is not changing. To do this, enable interruption in /sys :
+Read value on file can block while value is not changing. To do this, enable
+interruption in /sys :
 
 > echo "1" > /sys/bus/platform/devices/input.0/interrupt
 
