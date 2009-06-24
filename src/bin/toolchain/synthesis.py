@@ -113,7 +113,7 @@ class Synthesis(WrapperXml):
         sys.path.append(settings.path+TOOLCHAINPATH+\
                     SYNTHESISPATH+"/"+self.getName())
         filename = plugin.generateTCL(self)
-        self.setTCLScriptName(filename)
+        self.setTCLScriptName(str(filename))
         return None
 
     def setTCLScriptName(self,filename):
