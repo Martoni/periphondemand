@@ -30,6 +30,7 @@ __version__ = "1.0.0"
 __author__ = "Fabrice MOUSSET <fabrice.mousset@laposte.net> and Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import cmd, re, os, sys
+from periphondemand.bin.define import *
 from periphondemand.bin.utils.error import Error
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils import wrappersystem as sy
@@ -495,6 +496,7 @@ class BaseCli(cmd.Cmd):
             return
         # Create the file
         filename = line.split(" ")[-1]
+        filename = filename + PODSCRIPTEXT
         try:
             historyfile = open(filename,"w")
         except IOError,e:

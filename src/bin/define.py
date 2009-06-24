@@ -22,6 +22,7 @@ XMLEXT = ".xml"
 VHDLEXT = ".vhd"
 UCFEXT = ".ucf"
 BITSTREAMEXT = ".bit"
+PODSCRIPTEXT = ".pod"
 
 #for components
 LIBRARYPATH = "/library"

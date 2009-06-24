@@ -35,6 +35,8 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import cmd,os
 #import readline
+
+from periphondemand.bin.define   import *
 from periphondemand.bin.utils.basecli  import BaseCli
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.basecli  import Statekeeper
@@ -104,9 +106,10 @@ Library management commands
             path = "/".join(path)+"/"
         else: # sub/sub
             path = "/".join(path.split("/")[0:-1]) + "/"
-        listfile = sy.listFiles(path)
+        listdir  = sy.listDirectory(path)
+        listfile = sy.listFileType(path, PODSCRIPTEXT[1:])
+        listfile.extend(listdir)
         return self.completelist(line,text,listfile)
-
 
     def do_source(self, fname=None):
         """\

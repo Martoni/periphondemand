@@ -188,7 +188,7 @@ create new project
         else: # sub/sub
             path = "/".join(path.split("/")[0:-1]) + "/"
         listdir = sy.listDirectory(path)
-        listfile = sy.listFileType(path,"xml")
+        listfile = sy.listFileType(path,XMLEXT[1:])
         listfile.extend(listdir)
         return self.completelist(line,text,listfile)
 
