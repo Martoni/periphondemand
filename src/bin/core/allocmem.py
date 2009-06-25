@@ -89,9 +89,9 @@ class AllocMem:
 
     def getMapping(self):
         """ return a list mapping
-            list = [[baseaddress,instancename,size],
-                    [baseaddress,   "void"   ,size],
-                    [baseaddress,instancename,size],
+            list = [[baseaddress, instancename, size, id],
+                    [baseaddress,    "void"   , size, "void" ],
+                    [baseaddress, instancename, size, id],
                                  ...               ]
         """
         mappinglist = []
@@ -102,21 +102,21 @@ class AllocMem:
         for interface in self.listinterfaceslave:
             if baseaddress < interface.getBaseInt():
                 size = interface.getBaseInt() - baseaddress
-                mappinglist.append(["0x%02x"%baseaddress,"--void--",str(size)])
+                mappinglist.append(["0x%02x"%baseaddress,"--void--",str(size),"void"])
                 baseaddress = baseaddress + size
             mappinglist.append([interface.getBase(),
                     interface.getParent().getInstanceName()+\
-                    "."+interface.getName(),interface.getMemorySize()])
+                    "."+interface.getName(),interface.getMemorySize(),interface.getID()])
             baseaddress = baseaddress + interface.getMemorySize()
         return mappinglist
 
     def __str__(self):
         # TODO: adding ID for each instance
-        out = "Address  | instance.interface             | size        \n"
-        out = out+ "---------------------------------------------------------\n"
+        out = "Address  |     instance.interface         |  size  |   ID   |\n"
+        out = out+ "-------------------------------------------------------------\n"
         for register in self.getMapping():
-            out=out+"%8s"%register[0]+" | "+"%30s"%register[1]+" | "+"%10s"%register[2]+"\n"
-        out = out+ "---------------------------------------------------------\n"
+            out=out+"%8s"%register[0]+" | "+"%30s"%register[1]+" | "+"%4s  "%register[2]+" | "+"%4s   "%register[3]+"|\n"
+        out = out+ "-------------------------------------------------------------\n"
         return out
   
 

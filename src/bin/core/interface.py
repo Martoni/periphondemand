@@ -70,6 +70,7 @@ class Interface(WrapperXml):
         self.registerslist = []
         self.portslist     = []
         self.slaveslist    = []
+        self.id = None # each slave bus has unique identifiant num
 
         if self.getClass()=="MASTER":
             self.allocMem = AllocMem(self)
@@ -243,9 +244,9 @@ class Interface(WrapperXml):
         raise Error("Bus connection "+str(self.getName())+" -> "+str(instanceslavename)+"."+str(interfaceslavename) +" doesn't exist",0)
 
     def connectBus(self,instanceslave,interfaceslavename):
-        """ Connect an interface bus master to slave
+        """ Connect an interfaceslave to an interface bus master
         """
-        interface = instanceslave.getInterface(interfaceslavename)
+        interfaceslave = instanceslave.getInterface(interfaceslavename)
         for slave in self.getSlavesList():
             if slave.getInstanceName()==instanceslave.getInstanceName()\
                     and slave.getInterfaceName()==interfaceslavename:
@@ -255,19 +256,19 @@ class Interface(WrapperXml):
                                 " already exists",1)
         if self.getBusName() == None:
             raise Error("Interface "+self.getName()+" must be a bus ",0)
-        if interface.getBusName() == None:
-            raise Error("Interface "+interface.getName()+" must be a bus ",0)
-        if self.getBusName() != interface.getBusName():
+        if interfaceslave.getBusName() == None:
+            raise Error("Interface "+interfaceslave.getName()+" must be a bus ",0)
+        if self.getBusName() != interfaceslave.getBusName():
             raise Error("Can't connect "+self.getBusName()+\
-                        " on "+interface.getBusName(),1)
+                        " on "+interfaceslave.getBusName(),1)
         if self.getClass() != "MASTER":
             raise Error(self.getName() + " is not a MASTER",0)
-        if interface.getBusName() == None :
+        if interfaceslave.getBusName() == None :
             raise Error(instanceslave.getInstanceName()+\
-                    "."+interface.getName()+" is not a bus",1)
-        if interface.getClass() != "SLAVE":
+                    "."+interfaceslave.getName()+" is not a bus",1)
+        if interfaceslave.getClass() != "SLAVE":
             raise Error(instanceslave.getInstanceName()+\
-                    "."+interface.getName()+" is not a slave",1)
+                    "."+interfaceslave.getName()+" is not a slave",1)
         self.addSubNode(nodename="slaves",\
                         subnodename="slave",\
                         attributedict=
@@ -276,11 +277,17 @@ class Interface(WrapperXml):
         self.slaveslist.append(Slave(self,\
                              instancename=instanceslave.getInstanceName(),\
                              interfacename=interfaceslavename))
-        self.allocMem.addInterfaceSlave(interface)
-        interface.setMaster(self)
+        self.allocMem.addInterfaceSlave(interfaceslave)
+        interfaceslave.setMaster(self)
+        interfaceslave.setID(self.allocMem.getID())
         instanceslave.getGeneric(genericname="id").setValue(
-                        str(self.allocMem.getID()))
-    
+                        str(interfaceslave.getID()))
+   
+    def setID(self,id):
+        self.id = id
+    def getID(self):
+        return self.id
+
     def autoconnectPin(self):
         for port in self.getPortsList():
             port.autoconnectPin()
