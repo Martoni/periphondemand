@@ -281,7 +281,7 @@ class Project(WrapperXml):
         interfacelist = []
         for instance in self.getInstancesList():
             for interface in instance.getInterfacesList():
-                if interface.getClass() == "MASTER":
+                if interface.getClass() == "master":
                     interfacelist.append(interface)
         return interfacelist
 
@@ -291,7 +291,7 @@ class Project(WrapperXml):
         interfacelist = []
         for instance in self.getInstancesList():
             for interface in instance.getInterfacesList():
-                if interface.getClass() == "SLAVE":
+                if interface.getClass() == "slave":
                     interfacelist.append(interface)
         return interfacelist
 
@@ -301,7 +301,7 @@ class Project(WrapperXml):
         sysconlist = []
         for instance in self.getInstancesList():
             for interface in instance.getInterfacesList():
-                if interface.getClass() == "CLK_RST":
+                if interface.getClass() == "clk_rst":
                     if len(interface.getPortsList()) == 2:
                         direction = "ok"
                         for port in interface.getPortsList():
@@ -558,8 +558,8 @@ class Project(WrapperXml):
         """
         instancesource = self.getInstance(instancesourcename)
         # check if it's clock&rst generator
-        if instancesource.getInterface(interfacesourcename).getClass() != "CLK_RST":
-            raise Error("Interface "+interfacesourcename+" must be 'CLK_RST' ",0)
+        if instancesource.getInterface(interfacesourcename).getClass() != "clk_rst":
+            raise Error("Interface "+interfacesourcename+" must be 'clk_rst' ",0)
 
         # Check pin direction
         for port in instancesource.getInterface(interfacesourcename).getPortsList():
@@ -568,10 +568,10 @@ class Project(WrapperXml):
 
         instancedest = self.getInstance(instancedestname)
         # check if iterface dest is clk&rst
-        if instancedest.getInterface(interfacesourcename).getClass() != "CLK_RST":
+        if instancedest.getInterface(interfacesourcename).getClass() != "clk_rst":
             raise Error("Interface "+\
                     instancedest.getInterface(interfacesourcename).getClass()+\
-                    " must be 'CLK_RST'",0)
+                    " must be 'clk_rst'",0)
         # clk&rst dest must be slave (pin direction 'in')
         for port in instancedest.getInterface(interfacesourcename).getPortsList():
             if port.getDir() != "in":

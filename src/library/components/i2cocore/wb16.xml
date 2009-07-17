@@ -30,27 +30,27 @@
 
 	<interfaces>
 
-		<interface name="irq" class="GLS">
+		<interface name="irq" class="gls">
 			<ports>
 				<port name="inta_o" type="EXPORT" size="1" dir="out" />
 			</ports>
 		</interface>
 
-		<interface name="candr" class="CLK_RST" >
+		<interface name="candr" class="clk_rst" >
 			<ports>
 				<port name="rst_i" type="RST" size="1" dir="in"/>
 				<port name="clk_i" type="CLK" size="1" dir="in"/>
 			</ports>
 		</interface>
 
-		<interface name="i2c" class="GLS">
+		<interface name="i2c" class="gls">
 			<ports>
 				<port name="scl" type="EXPORT" size="1" dir="inout"/>
 				<port name="sda" type="EXPORT" size="1" dir="inout"/>
 			</ports>
 		</interface>
 
-		<interface clockandreset="candr" name="swb16" class="SLAVE" bus="wishbone16" >
+		<interface clockandreset="candr" name="swb16" class="slave" bus="wishbone16" >
 			<registers>
 				<register name="presclo" offset="0x00" size="16" rows="1" />
 				<register name="preschi" offset="0x01" size="16" rows="1" />

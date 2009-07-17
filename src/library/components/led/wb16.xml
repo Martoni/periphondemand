@@ -27,18 +27,18 @@
     </hdl_files>
 
     <interfaces>
-        <interface name="int_led" class="GLS" >
+        <interface name="int_led" class="gls" >
             <ports>
                 <port name="led" type="EXPORT" size="1" dir="out" />
             </ports>
         </interface>
-        <interface name="candr" class="CLK_RST">
+        <interface name="candr" class="clk_rst">
             <ports>
                 <port name="gls_reset" type="RST" size="1" dir="in"/>
                 <port name="gls_clk" type="CLK" size="1" dir="in"/>
             </ports>
         </interface>
-    <interface clockandreset="candr" name="swb16" class="SLAVE" bus="wishbone16" >
+    <interface clockandreset="candr" name="swb16" class="slave" bus="wishbone16" >
         <registers>
             <register name="reg_led" offset="0x00" size="16" rows="1" />
             <register name="id" offset="0x01" size="16" rows="1" />

@@ -28,21 +28,21 @@
 	</interrupts>
 
     <interfaces>
-		<interface name="int_button" class="GLS" >
+		<interface name="int_button" class="gls" >
             <ports>
 				<port name="button" type="EXPORT" size="1" dir="in" />
 				<port name="irq" type="EXPORT" size="1" dir="out" />
 			</ports>
 		</interface>
 
-		<interface name="candr" class="CLK_RST">
+		<interface name="candr" class="clk_rst">
 			<ports>
 				<port name="gls_reset" type="RST" size="1" dir="in" />
 				<port name="gls_clk" type="CLK" size="1" dir="in" />
 			</ports>
 		</interface>
 
-		<interface clockandreset="candr" name="swb16" class="SLAVE" bus="wishbone16" >
+		<interface clockandreset="candr" name="swb16" class="slave" bus="wishbone16" >
             <registers>
                 <register name="id" offset="0x00" size="16" rows="1" />
 				<register name="reg_button" offset="0x01" size="16" rows="1" />

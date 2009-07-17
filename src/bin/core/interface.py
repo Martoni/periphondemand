@@ -38,7 +38,7 @@ from periphondemand.bin.core.allocmem  import AllocMem
 settings = Settings()
 
 #Class of interface supported:
-INTERFACE_CLASS = ["MASTER","SLAVE","CLK_RST","GLS","intercon"] #TODO: all class in lower case
+INTERFACE_CLASS = ["master","slave","clk_rst","gls","intercon"]
 
 class Interface(WrapperXml):
     """ Manage components interfaces
@@ -72,9 +72,9 @@ class Interface(WrapperXml):
         self.slaveslist    = []
         self.id = None # each slave bus has unique identifiant num
 
-        if self.getClass()=="MASTER":
+        if self.getClass()=="master":
             self.allocMem = AllocMem(self)
-        if self.getClass()=="SLAVE":
+        if self.getClass()=="slave":
             self.interfacemaster = None
 
         if self.getNode("slaves") != None:
@@ -103,15 +103,15 @@ class Interface(WrapperXml):
         WrapperXml.__init__(self,nodestring=nodestring)
 
     def setMaster(self,masterinterface):
-        if self.getClass() != "SLAVE":
-            raise Error("interface "+self.getName()+" must be SLAVE",0)
-        elif masterinterface.getClass() != "MASTER":
-            raise Error("interface "+masterinterface.getClass()+" must be MASTER",0)
+        if self.getClass() != "slave":
+            raise Error("interface "+self.getName()+" must be slave",0)
+        elif masterinterface.getClass() != "master":
+            raise Error("interface "+masterinterface.getClass()+" must be master",0)
         self.interfacemaster = masterinterface
 
     def getMaster(self):
-        if self.getClass() != "SLAVE":
-            raise Error("Only SLAVE interface could have a master",0)
+        if self.getClass() != "slave":
+            raise Error("Only slave interface could have a master",0)
         if self.interfacemaster==None:
             raise Error("Interface "+self.getName()+" is not connected on a master",0)
         return self.interfacemaster
@@ -155,7 +155,7 @@ class Interface(WrapperXml):
         try:
             return int(
                 self.getPortByType(
-                  self.bus.getSignalName("SLAVE","address")).getSize())
+                  self.bus.getSignalName("slave","address")).getSize())
         except Error:
             return 0
 
@@ -165,12 +165,12 @@ class Interface(WrapperXml):
     def setBase(self,baseoffset):
         """ Set the base offset for this interface
             baseoffset is an hexadecimal string
-            the interface must be a SLAVE bus
+            the interface must be a slave bus
         """
         if self.getBusName() == None:
             raise Error("Interface is not a bus",1)
-        if self.getClass() != "SLAVE":
-            raise Error("Bus must be SLAVE",1)
+        if self.getClass() != "slave":
+            raise Error("Bus must be slave",1)
         size = self.getMemorySize()
         if int(baseoffset,16)%(size)!=0:
             raise Error("Offset must be a multiple of " + hex(size),1)
@@ -261,12 +261,12 @@ class Interface(WrapperXml):
         if self.getBusName() != interfaceslave.getBusName():
             raise Error("Can't connect "+self.getBusName()+\
                         " on "+interfaceslave.getBusName(),1)
-        if self.getClass() != "MASTER":
-            raise Error(self.getName() + " is not a MASTER",0)
+        if self.getClass() != "master":
+            raise Error(self.getName() + " is not a master",0)
         if interfaceslave.getBusName() == None :
             raise Error(instanceslave.getInstanceName()+\
                     "."+interfaceslave.getName()+" is not a bus",1)
-        if interfaceslave.getClass() != "SLAVE":
+        if interfaceslave.getClass() != "slave":
             raise Error(instanceslave.getInstanceName()+\
                     "."+interfaceslave.getName()+" is not a slave",1)
         self.addSubNode(nodename="slaves",\
@@ -344,7 +344,7 @@ class Interface(WrapperXml):
         """
         for instance in self.getParent().getParent().getInstancesList():
             for interface in instance.getInterfacesList():
-                if interface.getClass() == "CLK_RST":
+                if interface.getClass() == "clk_rst":
                     for slave in interface.getSlavesList():
                         if slave.getInstanceName() == self.getParent().getInstanceName() and slave.getInterfaceName() == self.getName():
                             return instance
@@ -353,8 +353,8 @@ class Interface(WrapperXml):
     def addRegister(self,register_name):
         if self.getBusName() == None:
             raise Error("Interface must be a bus")
-        elif self.getClass() != "SLAVE":
-            raise Error("Bus must be a SLAVE")
+        elif self.getClass() != "slave":
+            raise Error("Bus must be a slave")
         #TODO: check if enough space in memory mapping to add register
         register = Register(self,register_name=register_name)
         self.registerslist.append(register)

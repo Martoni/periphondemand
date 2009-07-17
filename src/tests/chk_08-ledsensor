@@ -23,10 +23,13 @@ Bus connected
 
 [38;1m$ [0m
 [38;1m$ project.connectpin sensor.int_led.anode apf9328.fpga.IO_L31P_1[0m
+
 [35;7m[WARNING][0m: [35;1mInstance sensor doesn't exists[0m
 [38;1m$ project.connectpin sensor.int_led.cathode apf9328.fpga.IO_L31N_1[0m
+
 [35;7m[WARNING][0m: [35;1mInstance sensor doesn't exists[0m
 [38;1m$ project.connectpin sensor.interrupt.interrupt irq_mngr00.irq.irqport.0[0m
+
 [35;7m[WARNING][0m: [35;1mInstance sensor doesn't exists[0m
 [38;1m$ [0m
 [38;1m$ project.intercon imx9328_wb16_wrapper00.mwb16[0m
@@ -56,7 +59,7 @@ Make directory for rstgen_syscon
 Make directory for irq_mngr
 Make directory for imx9328_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/src/tests/ledsensor/synthesis/ledsensor.ucf
+Constraint file generated with name :/home/fabien/periphondemand/trunk/src/tests/ledsensor/synthesis/ledsensor.ucf
 
 TCL script generated with name : ledsensor.tcl
 

@@ -20,60 +20,83 @@ setting base address 0x0 for  irq_mngr00.swb16
 Component i2cocore added as i2c
 
 [38;1m$ project.connectpin i2c.irq.inta_o.0 irq_mngr00.irq.irqport.0[0m
-pin connected
+
 [38;1m$ project.connectpin camera.irq.interrupt_o irq_mngr00.irq.irqport.1[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ [0m
 [38;1m$ project.connectpin camera.data_stream.uv_i.7 apf9328.fpga.IO_L23P_3[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.uv_i.6 apf9328.fpga.IO_L22N_3[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.uv_i.5 apf9328.fpga.IO_L21P_3[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.uv_i.4 apf9328.fpga.IO_L22P_3[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.uv_i.3 apf9328.fpga.IO_L01N_3[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.uv_i.2 apf9328.fpga.IO_L20P_3[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.uv_i.1 apf9328.fpga.IO_L32P_5[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.uv_i.0 apf9328.fpga.IO_L32N_4[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ [0m
 [38;1m$ project.connectpin camera.data_stream.y_i.7 apf9328.fpga.IO_L31N_1[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.y_i.6 apf9328.fpga.IO_L31P_1[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.y_i.5 apf9328.fpga.IO_L32N_1[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.y_i.4 apf9328.fpga.IO_L32P_1[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.y_i.3 apf9328.fpga.IO_L32N_0[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.y_i.2 apf9328.fpga.IO_L32P_0[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.y_i.1 apf9328.fpga.IO_L01N_0[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.data_stream.y_i.0 apf9328.fpga.IO_L01P_0[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ [0m
 [38;1m$ project.connectpin camera.control.npwd_o apf9328.fpga.IO_L28P_1[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.control.rst_o apf9328.fpga.IO_L28N_1[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.timing.fodd_i apf9328.fpga.IO_L01N_1[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.timing.href_i apf9328.fpga.IO_L31P_0[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.timing.vsyn_i apf9328.fpga.IO_L30P_0[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin camera.timing.pclk_i apf9328.fpga.IO_L27P_0[0m
+
 [35;7m[WARNING][0m: [35;1mInstance camera doesn't exists[0m
 [38;1m$ project.connectpin i2c.i2c.sda apf9328.fpga.IO_L01P_1[0m
-pin connected
+
 [38;1m$ project.connectpin i2c.i2c.scl apf9328.fpga.IO_L31N_0[0m
-pin connected
+
 [38;1m$ project.autoconnectbus[0m
 [34;7m[INFO][0m   : [34;1mBus connection for irq_mngr00.swb16 already exists[0m
 setting base address 0x20 for  i2c.swb16
@@ -114,7 +137,7 @@ Make directory for irq_mngr
 Make directory for i2cocore
 Make directory for imx9328_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/src/tests/c38atest/synthesis/c38atest.ucf
+Constraint file generated with name :/home/fabien/periphondemand/trunk/src/tests/c38atest/synthesis/c38atest.ucf
 
 TCL script generated with name : c38atest.tcl
 

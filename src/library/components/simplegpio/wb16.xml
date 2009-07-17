@@ -25,14 +25,14 @@
 
 	<interfaces>
 
-		<interface name="candr" class="CLK_RST" >
+		<interface name="candr" class="clk_rst" >
 			<ports>
 				<port name="clk_i" type="CLK" size="1" dir="in"/>
 				<port name="rst_i" type="RST" size="1" dir="in"/>
 			</ports>
 		</interface>
 
-		<interface clockandreset="candr" name="swb16" class="SLAVE" bus="wishbone16" >
+		<interface clockandreset="candr" name="swb16" class="slave" bus="wishbone16" >
 			<registers>
 				<register name="rw"   offset="0x00" size="16" rows="1" />
                 <register name="ctrl" offset="0x01" size="16" rows="1" />
@@ -49,7 +49,7 @@
             </ports>
         </interface>
 
-        <interface name="gpio_int" class="GLS" >
+        <interface name="gpio_int" class="gls" >
             <ports>
                 <port name="gpio" type="EXPORT" size="16" dir="inout" />
             </ports>

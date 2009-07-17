@@ -305,7 +305,7 @@ class Component(WrapperXml):
         """
         interfacelist = []
         for interface in self.getInterfacesList():
-            if interface.getClass() == "MASTER":
+            if interface.getClass() == "master":
                 interfacelist.append(interface)
         return interfacelist
 
@@ -314,13 +314,13 @@ class Component(WrapperXml):
         """
         interfacelist = []
         for interface in self.getInterfacesList():
-            if interface.getClass() == "SLAVE":
+            if interface.getClass() == "slave":
                 interfacelist.append(interface)
         return interfacelist
 
     def getSysconInterface(self):
         for interface in self.getInterfacesList():
-            if interface.getClass()=="CLK_RST": break
+            if interface.getClass()=="clk_rst": break
         return interface
 
     def createInterface(self,interfacename):

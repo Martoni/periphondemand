@@ -4,7 +4,7 @@
 [38;1m$ [0m
 [38;1m$ !rm -rf ledbutton[0m
 [38;1m$ project.listcomponents[0m
-test  components  wrappers  syscons  podmylib  testlib
+components  test  wrappers  syscons  podmylib  pod_library  testlib
 [38;1m$ project.create ledbutton[0m
 Project ledbutton created
 [38;1m$ project.selectplatform apf9328[0m
@@ -21,10 +21,13 @@ Component button added as button00
 [38;1m$ project.addinstance components.led.wb16[0m
 Component led added as led00
 
+[38;1m$ project.listinterfaces button00[0m
+
+int_button  candr  swb16
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.connectpin button00.int_button.irq irq_mngr00.irq.irqport.0[0m
-pin connected
+
 [38;1m$ project.autoconnectbus[0m
 [34;7m[INFO][0m   : [34;1mBus connection for irq_mngr00.swb16 already exists[0m
 setting base address 0x8 for  button00.swb16
@@ -54,20 +57,21 @@ Make directory for button
 Make directory for led
 Make directory for imx9328_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/src/tests/ledbutton/synthesis/ledbutton.ucf
+Constraint file generated with name :/home/fabien/periphondemand/trunk/src/tests/ledbutton/synthesis/ledbutton.ucf
 
 TCL script generated with name : ledbutton.tcl
 
 [38;1m$ project.saveproject[0m
+
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.simulation.selecttoolchain ghdl[0m
 [38;1m$ project.simulation.generateproject[0m
 
-Testbench with name : /home/fabien/periphondemand/src/tests/ledbutton/simulation/top_ledbutton_tb.vhd Done
+Testbench with name : /home/fabien/periphondemand/trunk/src/tests/ledbutton/simulation/top_ledbutton_tb.vhd Done
 
-Makefile generated with name : /home/fabien/periphondemand/src/tests/ledbutton/simulation/Makefile Done
+Makefile generated with name : /home/fabien/periphondemand/trunk/src/tests/ledbutton/simulation/Makefile Done
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ [0m
@@ -86,19 +90,23 @@ Copy and fill template for led
 
 [38;1m$ project.driver.selectprojecttree ~/virgin-apf9328/target/linux/modules/fpga/POD[0m
 
+[31;7m[ERROR][0m  : [31;1mDirectory ~/virgin-apf9328/target/linux/modules/fpga/POD does not exist[0m
 [38;1m$ project.driver.copydrivers[0m
 
+[31;7m[ERROR][0m  : [31;1mSet directory before[0m
 [38;1m$ project.saveproject[0m
+
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.getmapping imx9328_wb16_wrapper00.mwb16[0m
-Address  | instance.interface             | size        
----------------------------------------------------------
-     0x0 |               irq_mngr00.swb16 |          8
-     0x8 |                 button00.swb16 |          4
-     0xc |                    led00.swb16 |          4
----------------------------------------------------------
+Address  |     instance.interface         |  size  |   ID   |
+-------------------------------------------------------------
+     0x0 |               irq_mngr00.swb16 |    8   |    1   |
+     0x8 |                 button00.swb16 |    4   |    2   |
+     0xc |                    led00.swb16 |    4   |    3   |
+-------------------------------------------------------------
+
 
 [38;1m$ project.report[0m
 

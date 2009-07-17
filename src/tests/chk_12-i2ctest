@@ -24,20 +24,20 @@ Component i2cocore added as i2c02
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.connectpin i2c02.i2c.sda apf9328.fpga.IO_L22N_2[0m
-pin connected
+
 [38;1m$ project.connectpin i2c02.i2c.scl apf9328.fpga.IO_L21N_2[0m
-pin connected
+
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.connectpin i2c01.i2c.sda apf9328.fpga.IO_L32N_0[0m
-pin connected
+
 [38;1m$ project.connectpin i2c01.i2c.scl apf9328.fpga.IO_L01P_0[0m
-pin connected
+
 [38;1m$ [0m
 [38;1m$ project.connectpin i2c01.irq.inta_o.0 irq_mngr00.irq.irqport.0[0m
-pin connected
+
 [38;1m$ project.connectpin i2c02.irq.inta_o.0 irq_mngr00.irq.irqport.1[0m
-pin connected
+
 [38;1m$ [0m
 [38;1m$ project.autoconnectbus[0m
 [34;7m[INFO][0m   : [34;1mBus connection for irq_mngr00.swb16 already exists[0m
@@ -90,7 +90,7 @@ Make directory for irq_mngr
 Make directory for i2cocore
 Make directory for imx9328_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/src/tests/i2ctest/synthesis/i2ctest.ucf
+Constraint file generated with name :/home/fabien/periphondemand/trunk/src/tests/i2ctest/synthesis/i2ctest.ucf
 
 TCL script generated with name : i2ctest.tcl
 

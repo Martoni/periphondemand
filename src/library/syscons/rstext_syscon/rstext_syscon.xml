@@ -13,14 +13,14 @@
     </hdl_files>
 
     <interfaces>
-        <interface name="candr" class="CLK_RST">
+        <interface name="candr" class="clk_rst">
             <ports>
                 <port name="gls_clk" type="CLK" size="1" dir="out"/>
                 <port name="gls_reset" type="RST" size="1" dir="out"/>
             </ports>
         </interface>
 
-        <interface name="ext" class="GLS">
+        <interface name="ext" class="gls">
             <ports>
                 <port name="ext_clk" type="CLK" size="1" dir="in">
                     <pin num="0">

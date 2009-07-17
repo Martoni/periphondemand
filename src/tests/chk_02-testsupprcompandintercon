@@ -18,9 +18,9 @@ setting base address 0x0 for  irq_mngr00.swb16
 Component button added as bouton
 
 [38;1m$ project.connectpin bouton.int_button.button apf9328.fpga.IO_L01N_0[0m
-pin connected
+
 [38;1m$ project.connectpin bouton.int_button.irq irq_mngr00.irq.irqport.0[0m
-pin connected
+
 [38;1m$ project.delinstance bouton[0m
 Component bouton deleted
 
@@ -28,9 +28,9 @@ Component bouton deleted
 Component button added as bouton
 
 [38;1m$ project.connectpin bouton.int_button.button apf9328.fpga.IO_L01N_0[0m
-pin connected
+
 [38;1m$ project.connectpin bouton.int_button.irq irq_mngr00.irq.irqport.0[0m
-pin connected
+
 [38;1m$ project.autoconnectbus[0m
 [34;7m[INFO][0m   : [34;1mBus connection for irq_mngr00.swb16 already exists[0m
 setting base address 0x8 for  bouton.swb16
@@ -55,11 +55,12 @@ Component imx9328_wb16_wrapper00_mwb16 added as imx9328_wb16_wrapper00_mwb16_int
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.getmapping imx9328_wb16_wrapper00.mwb16[0m
-Address  | instance.interface             | size        
----------------------------------------------------------
-     0x0 |               irq_mngr00.swb16 |          8
-     0x8 |                   bouton.swb16 |          4
----------------------------------------------------------
+Address  |     instance.interface         |  size  |   ID   |
+-------------------------------------------------------------
+     0x0 |               irq_mngr00.swb16 |    8   |    1   |
+     0x8 |                   bouton.swb16 |    4   |    2   |
+-------------------------------------------------------------
+
 
 [38;1m$ project.report[0m
 

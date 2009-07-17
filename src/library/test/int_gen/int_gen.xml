@@ -15,14 +15,14 @@
     </generics>
 
 	<interfaces>
-		<interface name="candr" class="CLK_RST">
+		<interface name="candr" class="clk_rst">
 			<ports>
 				<port name="clk" type="CLK" size="1" dir="in"/>
 				<port name="reset" type="RST" size="1" dir="in"/>
 			</ports>
 		</interface>
 
-		<interface name="wb16" class="SLAVE" bus="wishbone16" clockandreset="candr">
+		<interface name="wb16" class="slave" bus="wishbone16" clockandreset="candr">
 			<registers>
 				<register name="startreg" offset="0x00" size="16" rows="1" />
 			</registers>
@@ -36,7 +36,7 @@
 			</ports>
 		</interface>
 
-		<interface name="irq" class="GLS" >
+		<interface name="irq" class="gls" >
 			<ports>
 				<port name="interrupts" type="EXPORT" size="16" dir="out"/>
 			</ports>

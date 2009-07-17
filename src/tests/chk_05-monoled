@@ -21,7 +21,7 @@ Component irq_mngr00 deleted
 Component led added as led00
 
 [38;1m$ project.connectpin led00.int_led.led.0 apf9328.fpga.IO_1[0m
-pin connected
+
 [38;1m$ project.autoconnectbus[0m
 setting base address 0x8 for  led00.swb16
 Bus connected
@@ -40,7 +40,7 @@ Make directory for rstgen_syscon
 Make directory for led
 Make directory for imx9328_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/src/tests/monoled/synthesis/monoled.ucf
+Constraint file generated with name :/home/fabien/periphondemand/trunk/src/tests/monoled/synthesis/monoled.ucf
 
 TCL script generated with name : monoled.tcl
 
@@ -49,11 +49,12 @@ TCL script generated with name : monoled.tcl
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.getmapping imx9328_wb16_wrapper00.mwb16[0m
-Address  | instance.interface             | size        
----------------------------------------------------------
-    0x00 |                       --void-- |          8
-     0x8 |                    led00.swb16 |          4
----------------------------------------------------------
+Address  |     instance.interface         |  size  |   ID   |
+-------------------------------------------------------------
+    0x00 |                       --void-- |    8   | void   |
+     0x8 |                    led00.swb16 |    4   |    2   |
+-------------------------------------------------------------
+
 
 [38;1m$ project.report[0m
 

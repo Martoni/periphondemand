@@ -766,9 +766,9 @@ Print instance information
         print "->Interfaces"
         for interface in instance.getInterfacesList():
             if interface.getBusName() != None:
-                if interface.getClass() == "SLAVE":
+                if interface.getClass() == "slave":
                     print "%-15s "%interface.getName()+" Base address:"+hex(interface.getBaseInt())
-                elif interface.getClass() == "MASTER":
+                elif interface.getClass() == "master":
                     print "%-15s :"%interface.getName()
                     for slave in interface.getSlavesList():
                         print " "*10 + "slave -> "+slave.getInstanceName()+"."+slave.getInterfaceName()

@@ -42,13 +42,13 @@
     </hdl_files>
 
     <interfaces>
-        <interface name="candr" class="CLK_RST">
+        <interface name="candr" class="clk_rst">
             <ports>
                 <port name="gls_reset" type="RST" size="1" dir="in"/>
                 <port name="gls_clk" type="CLK" size="1" dir="in"/>
             </ports>
         </interface>
-    <interface clockandreset="candr" name="swb16" class="SLAVE" bus="wishbone16" >
+    <interface clockandreset="candr" name="swb16" class="slave" bus="wishbone16" >
         <registers>
             <register name="ram" offset="0x00" size="16" rows="1024" />
         </registers>

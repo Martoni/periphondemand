@@ -11,18 +11,18 @@
         <hdl_file filename="clockmeasurement.vhd" istop="1" scope="both" />
     </hdl_files>
     <interfaces>
-        <interface class="GLS" name="clock">
+        <interface class="gls" name="clock">
             <ports>
                 <port dir="in" name="low_clock" size="1" type="EXPORT"/>
             </ports>
         </interface>
-        <interface class="CLK_RST" name="candr">
+        <interface class="clk_rst" name="candr">
             <ports>
                 <port dir="in" name="gls_reset" size="1" type="RST"/>
                 <port dir="in" name="gls_clk" size="1" type="CLK"/>
             </ports>
         </interface>
-        <interface bus="wishbone16" class="SLAVE" clockandreset="candr" name="swb16">
+        <interface bus="wishbone16" class="slave" clockandreset="candr" name="swb16">
             <registers base="0x0">
                 <register name="id" offset="0x00" rows="1" size="16" />
                 <register name="wb_reg" offset="0x01" rows="1" size="16" />

@@ -25,15 +25,15 @@ Component i2cocore added as i2c00
 
 [38;1m$ [0m
 [38;1m$ project.connectpin led00.int_led.led apf9328.fpga.IO_1[0m
-pin connected
+
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.connectpin button00.int_button.button.0 apf9328.fpga.IO_1[0m
-pin connected
+
 [38;1m$ project.connectpin i2c00.i2c.sda apf9328.fpga.IO_1[0m
-pin connected
+
 [38;1m$ project.connectpin i2c00.i2c.scl apf9328.fpga.IO_1[0m
-pin connected
+
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.delconnection button00.int_button.button.0 apf9328.fpga.IO_1[0m
@@ -48,16 +48,16 @@ Connection deleted
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.connectpin button00.int_button.button.0 apf9328.fpga.IO_L01N_0[0m
-pin connected
+
 [38;1m$ project.connectpin i2c00.i2c.sda apf9328.fpga.IO_L32N_0[0m
-pin connected
+
 [38;1m$ project.connectpin i2c00.i2c.scl apf9328.fpga.IO_L01P_0[0m
-pin connected
+
 [38;1m$ [0m
 [38;1m$ project.connectpin button00.int_button.irq irq_mngr00.irq.irqport.0[0m
-pin connected
+
 [38;1m$ project.connectpin i2c00.irq.inta_o irq_mngr00.irq.irqport.1[0m
-pin connected
+
 [38;1m$ [0m
 [38;1m$ project.autoconnectbus[0m
 [34;7m[INFO][0m   : [34;1mBus connection for irq_mngr00.swb16 already exists[0m
@@ -89,7 +89,7 @@ Make directory for led
 Make directory for i2cocore
 Make directory for imx9328_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/src/tests/i2cledbutton/synthesis/i2cledbutton.ucf
+Constraint file generated with name :/home/fabien/periphondemand/trunk/src/tests/i2cledbutton/synthesis/i2cledbutton.ucf
 
 TCL script generated with name : i2cledbutton.tcl
 
@@ -99,9 +99,9 @@ TCL script generated with name : i2cledbutton.tcl
 [38;1m$ project.simulation.selecttoolchain ghdl[0m
 [38;1m$ project.simulation.generateproject[0m
 
-Testbench with name : /home/fabien/periphondemand/src/tests/i2cledbutton/simulation/top_i2cledbutton_tb.vhd Done
+Testbench with name : /home/fabien/periphondemand/trunk/src/tests/i2cledbutton/simulation/top_i2cledbutton_tb.vhd Done
 
-Makefile generated with name : /home/fabien/periphondemand/src/tests/i2cledbutton/simulation/Makefile Done
+Makefile generated with name : /home/fabien/periphondemand/trunk/src/tests/i2cledbutton/simulation/Makefile Done
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ [0m
@@ -129,14 +129,15 @@ Copy and fill template for i2cocore
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.getmapping imx9328_wb16_wrapper00.mwb16[0m
-Address  | instance.interface             | size        
----------------------------------------------------------
-     0x0 |               irq_mngr00.swb16 |          8
-     0x8 |                 button00.swb16 |          4
-     0xc |                    led00.swb16 |          4
-    0x10 |                       --void-- |         16
-    0x20 |                    i2c00.swb16 |         32
----------------------------------------------------------
+Address  |     instance.interface         |  size  |   ID   |
+-------------------------------------------------------------
+     0x0 |               irq_mngr00.swb16 |    8   |    1   |
+     0x8 |                 button00.swb16 |    4   |    2   |
+     0xc |                    led00.swb16 |    4   |    3   |
+    0x10 |                       --void-- |   16   | void   |
+    0x20 |                    i2c00.swb16 |   32   |    4   |
+-------------------------------------------------------------
+
 
 [38;1m$ project.report[0m
 
@@ -165,3 +166,4 @@ report :
       0x30 : id
 
 [38;1m$ project.saveproject[0m
+

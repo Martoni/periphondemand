@@ -41,14 +41,14 @@
 
 	<interfaces>
 
-		<interface name="clock" class="CLK_RST">
+		<interface name="clock" class="clk_rst">
 			<ports>
 				<port name="wb_clk_i" type="CLK" size="1" dir="in"/>
 				<port name="wb_rst_i" type="RST" size="1" dir="in"/>
 			</ports>
 		</interface>
 
-        <interface name="swb16" class="SLAVE" bus="wishbone16" clockandreset="clock">
+        <interface name="swb16" class="slave" bus="wishbone16" clockandreset="clock">
             <registers>
                 <description>
                     For more information about register see the opencores documentation
@@ -75,7 +75,7 @@
 			</ports>
 		</interface>
 
-		<interface name="interrupt" class="GLS">
+		<interface name="interrupt" class="gls">
 			<ports>
 				<port name="int_o" type="EXPORT" size="1" dir="out"/>
 			</ports>

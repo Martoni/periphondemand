@@ -131,7 +131,7 @@ class Intercon(Component):
                 port.connectAllPin(newport)
 
             #########
-            # CLK_RST
+            # clk_rst
             clkint = Interface(self,
                                name=instance.getInstanceName()\
                                        +"_"+interface.getClockAndResetName())

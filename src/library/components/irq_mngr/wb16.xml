@@ -29,14 +29,14 @@
 	</generics>
 
 	<interfaces>
-		<interface name="candr" class="CLK_RST">
+		<interface name="candr" class="clk_rst">
 			<ports>
 				<port name="gls_clk" type="CLK" size="1" dir="in"/>
 				<port name="gls_reset" type="RST" size="1" dir="in"/>
 			</ports>
 		</interface>
 
-		<interface name="swb16" class="SLAVE" bus="wishbone16" clockandreset="candr">
+		<interface name="swb16" class="slave" bus="wishbone16" clockandreset="candr">
             <registers>
 				<register name="irq_mngr_mask" offset="0x00" size="16" rows="1" />
                 <register name="irq_mngr_pending_ack" offset="0x01" size="16" rows="1" />
@@ -53,13 +53,13 @@
 			</ports>
 		</interface>
 
-		<interface name="irq" class="GLS" >
+		<interface name="irq" class="gls" >
 			<ports>
 				<port name="irqport" type="EXPORT" size="16" dir="in" variable_size="1" />
 			</ports>
 		</interface>
 
-		<interface name="ext_irq" class="GLS" >
+		<interface name="ext_irq" class="gls" >
 			<ports>
 				<port name="gls_irq" type="EXPORT" size="1" dir="out">
                     <pin num="0">

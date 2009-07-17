@@ -17,35 +17,35 @@ setting base address 0x0 for  irq_mngr00.swb16
 Component simplegpio added as onegpio
 
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.0 apf9328.fpga.IO_L01N_0[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.1 apf9328.fpga.IO_L32N_0[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.2 apf9328.fpga.IO_L32N_1[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.3 apf9328.fpga.IO_L31N_1[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.4 apf9328.fpga.IO_L28N_1[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.5 apf9328.fpga.IO_L01N_1[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.6 apf9328.fpga.IO_L31P_0[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.7 apf9328.fpga.IO_L30P_0[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.8  apf9328.fpga.IO_L01P_0[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.9  apf9328.fpga.IO_L32P_0[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.10 apf9328.fpga.IO_L32P_1[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.11 apf9328.fpga.IO_L31P_1[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.12 apf9328.fpga.IO_L28P_1[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.13 apf9328.fpga.IO_L01P_1[0m
-pin connected
+
 [38;1m$ project.connectpin onegpio.gpio_int.gpio.14 apf9328.fpga.IO_L31N_0[0m
-pin connected
+
 [38;1m$ [0m
 [38;1m$ project.delinstance irq_mngr00[0m
 Component irq_mngr00 deleted
@@ -68,7 +68,7 @@ Make directory for rstgen_syscon
 Make directory for simplegpio
 Make directory for imx9328_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/src/tests/gpio/synthesis/gpio.ucf
+Constraint file generated with name :/home/fabien/periphondemand/trunk/src/tests/gpio/synthesis/gpio.ucf
 
 TCL script generated with name : gpio.tcl
 
@@ -76,11 +76,12 @@ TCL script generated with name : gpio.tcl
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.getmapping imx9328_wb16_wrapper00.mwb16[0m
-Address  | instance.interface             | size        
----------------------------------------------------------
-    0x00 |                       --void-- |          8
-     0x8 |                  onegpio.swb16 |          8
----------------------------------------------------------
+Address  |     instance.interface         |  size  |   ID   |
+-------------------------------------------------------------
+    0x00 |                       --void-- |    8   | void   |
+     0x8 |                  onegpio.swb16 |    8   |    2   |
+-------------------------------------------------------------
+
 
 [38;1m$ project.report[0m
 

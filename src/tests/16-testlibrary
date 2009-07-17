@@ -27,10 +27,10 @@ library.component.addhdlfile tagadatzouintzouin.vhd
 library.component.listinterfaces
 
 library.component.addinterface candr
-library.component.setinterface candr class=CLK_RST
+library.component.setinterface candr class=clk_rst
 
 library.component.addinterface wbs
-library.component.setinterface wbs class=SLAVE
+library.component.setinterface wbs class=slave
 library.component.setinterface wbs clockandreset=candr
 library.component.setinterface wbs bus=wishbone16
 library.component.setinterface wbs class=plop
@@ -57,10 +57,10 @@ library.component.setregister wbs.id size=16
 library.component.setregister wbs.id rows=1
 
 library.component.addinterface interrupt
-library.component.setinterface interrupt class=GLS
+library.component.setinterface interrupt class=gls
 
 library.component.addinterface sn65hvs882
-library.component.setinterface sn65hvs882 class=GLS
+library.component.setinterface sn65hvs882 class=gls
 library.component.listinterfaces
 
 library.component.addport clk candr

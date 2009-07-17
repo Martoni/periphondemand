@@ -23,17 +23,17 @@ Component simplegpio added as gpio
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.connectpin uart.uart.stx_pad_o apf9328.fpga.IO_L21N_2[0m
-pin connected
+
 [38;1m$ project.connectpin uart.uart.srx_pad_i apf9328.fpga.IO_L21P_2[0m
-pin connected
+
 [38;1m$ [0m
 [38;1m$ project.connectpin uart.interrupt.int_o.0 irq_mngr00.irq.irqport.0[0m
-pin connected
+
 [38;1m$ [0m
 [38;1m$ project.connectpin gpio.gpio_int.gpio.0 apf9328.fpga.IO_L22N_2[0m
-pin connected
+
 [38;1m$ project.connectpin gpio.gpio_int.gpio.1 apf9328.fpga.IO_1[0m
-pin connected
+
 [38;1m$ [0m
 [38;1m$ project.autoconnectbus[0m
 [34;7m[INFO][0m   : [34;1mBus connection for irq_mngr00.swb16 already exists[0m
@@ -88,7 +88,7 @@ Make directory for uart16550
 Make directory for simplegpio
 Make directory for imx9328_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/src/tests/uartgpio/synthesis/uartgpio.ucf
+Constraint file generated with name :/home/fabien/periphondemand/trunk/src/tests/uartgpio/synthesis/uartgpio.ucf
 
 TCL script generated with name : uartgpio.tcl
 

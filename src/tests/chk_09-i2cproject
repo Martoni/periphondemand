@@ -17,11 +17,11 @@ setting base address 0x0 for  irq_mngr00.swb16
 Component i2cocore added as i2c
 
 [38;1m$ project.connectpin i2c.i2c.sda apf9328.fpga.IO_L32N_0[0m
-pin connected
+
 [38;1m$ project.connectpin i2c.i2c.scl apf9328.fpga.IO_L01P_0[0m
-pin connected
+
 [38;1m$ project.connectpin i2c.irq.inta_o.0 irq_mngr00.irq.irqport.0[0m
-pin connected
+
 [38;1m$ project.autoconnectbus[0m
 [34;7m[INFO][0m   : [34;1mBus connection for irq_mngr00.swb16 already exists[0m
 setting base address 0x20 for  i2c.swb16
@@ -62,7 +62,7 @@ Make directory for irq_mngr
 Make directory for i2cocore
 Make directory for imx9328_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/src/tests/i2cproject/synthesis/i2cproject.ucf
+Constraint file generated with name :/home/fabien/periphondemand/trunk/src/tests/i2cproject/synthesis/i2cproject.ucf
 
 TCL script generated with name : i2cproject.tcl
 

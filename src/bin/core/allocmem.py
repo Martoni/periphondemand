@@ -54,7 +54,7 @@ class AllocMem:
         return self.instancescount - 1
 
     def addInterfaceSlave(self,interface):
-        if interface.getClass() != "SLAVE":
+        if interface.getClass() != "slave":
             raise Error(interface.getName() + " is not a slave",0)
 
         # add slave interface to list

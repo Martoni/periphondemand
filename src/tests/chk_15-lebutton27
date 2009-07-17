@@ -20,11 +20,11 @@ Component button added as button00
 Component led added as led00
 
 [38;1m$ project.connectpin led00.int_led.led apf27.fpga.IO_L24P_1[0m
-pin connected
+
 [38;1m$ project.connectpin button00.int_button.button.0 apf27.fpga.IO_L24N_1[0m
-pin connected
+
 [38;1m$ project.connectpin button00.int_button.irq irq_mngr00.irq.irqport.0[0m
-pin connected
+
 [38;1m$ project.autoconnectbus[0m
 [34;7m[INFO][0m   : [34;1mBus connection for irq_mngr00.swb16 already exists[0m
 setting base address 0x8 for  button00.swb16
@@ -53,7 +53,7 @@ Make directory for button
 Make directory for led
 Make directory for imx27_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/src/tests/ledbutton27/synthesis/ledbutton27.ucf
+Constraint file generated with name :/home/fabien/periphondemand/trunk/src/tests/ledbutton27/synthesis/ledbutton27.ucf
 
 TCL script generated with name : ledbutton27.tcl
 
@@ -63,20 +63,21 @@ TCL script generated with name : ledbutton27.tcl
 [38;1m$ project.simulation.selecttoolchain ghdl[0m
 [38;1m$ project.simulation.generateproject[0m
 
-Testbench with name : /home/fabien/periphondemand/src/tests/ledbutton27/simulation/top_ledbutton27_tb.vhd Done
+Testbench with name : /home/fabien/periphondemand/trunk/src/tests/ledbutton27/simulation/top_ledbutton27_tb.vhd Done
 
-Makefile generated with name : /home/fabien/periphondemand/src/tests/ledbutton27/simulation/Makefile Done
+Makefile generated with name : /home/fabien/periphondemand/trunk/src/tests/ledbutton27/simulation/Makefile Done
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ [0m
 [38;1m$ project.getmapping imx27_wb16_wrapper00.mwb16[0m
-Address  | instance.interface             | size        
----------------------------------------------------------
-     0x0 |               irq_mngr00.swb16 |          8
-     0x8 |                 button00.swb16 |          4
-     0xc |                    led00.swb16 |          4
----------------------------------------------------------
+Address  |     instance.interface         |  size  |   ID   |
+-------------------------------------------------------------
+     0x0 |               irq_mngr00.swb16 |    8   |    1   |
+     0x8 |                 button00.swb16 |    4   |    2   |
+     0xc |                    led00.swb16 |    4   |    3   |
+-------------------------------------------------------------
+
 
 [38;1m$ project.report[0m
 

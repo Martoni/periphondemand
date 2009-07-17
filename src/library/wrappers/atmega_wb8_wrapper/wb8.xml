@@ -9,7 +9,7 @@
     </hdl_files>
 
     <interfaces>
-        <interface name="emi" class="GLS">
+        <interface name="emi" class="gls">
             <ports>
                 <port name="Address_H" type="EXPORT" size="7" dir="in">
                     <pin num="0"><connect instance_dest="unioc_v11" interface_dest="fpga" port_dest="data_fpga_8" pin_dest="0"/></pin>
@@ -45,14 +45,14 @@
             </ports>
         </interface>
 
-        <interface name="candr" class="CLK_RST">
+        <interface name="candr" class="clk_rst">
             <ports>
                 <port name="reset" type="RST" size="1" dir="in"/>
                 <port name="clk" type="CLK" size="1" dir="in"/>
             </ports>
         </interface>
 
-        <interface clockandreset="candr" name="mwb8" class="MASTER" bus="wishbone8">
+        <interface clockandreset="candr" name="mwb8" class="master" bus="wishbone8">
             <ports>
                 <port name="wbm_address" type="ADR" size="15" dir="out"/>
                 <port name="wbm_readdata" type="DAT_I" size="8" dir="in"/>

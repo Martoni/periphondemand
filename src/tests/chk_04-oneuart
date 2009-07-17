@@ -17,23 +17,23 @@ setting base address 0x0 for  irq_mngr00.swb16
 Component uart16550 added as uart
 
 [38;1m$ project.connectpin uart.uart.srx_pad_i apf9328.fpga.IO_L21N_2[0m
-pin connected
+
 [38;1m$ project.connectpin uart.uart.stx_pad_o apf9328.fpga.IO_L21P_2[0m
-pin connected
+
 [38;1m$ project.connectpin uart.uart.ri_pad_i apf9328.fpga.IO_L22N_2[0m
-pin connected
+
 [38;1m$ project.connectpin uart.uart.rts_pad_o apf9328.fpga.IO_L22P_2[0m
-pin connected
+
 [38;1m$ project.connectpin uart.uart.dsr_pad_i apf9328.fpga.IO_L23N_2[0m
-pin connected
+
 [38;1m$ project.connectpin uart.uart.dtr_pad_o apf9328.fpga.IO_L23P_2[0m
-pin connected
+
 [38;1m$ project.connectpin uart.uart.cts_pad_i apf9328.fpga.IO_L24N_2[0m
-pin connected
+
 [38;1m$ project.connectpin uart.uart.dcd_pad_i apf9328.fpga.IO_L24P_2[0m
-pin connected
+
 [38;1m$ project.connectpin uart.interrupt.int_o irq_mngr00.irq.irqport.0[0m
-pin connected
+
 [38;1m$ project.autoconnectbus[0m
 [34;7m[INFO][0m   : [34;1mBus connection for irq_mngr00.swb16 already exists[0m
 setting base address 0x20 for  uart.swb16
@@ -54,7 +54,7 @@ Make directory for irq_mngr
 Make directory for uart16550
 Make directory for imx9328_wb16_wrapper00_mwb16
 
-Constraint file generated with name :/home/fabien/periphondemand/src/tests/oneuart/synthesis/oneuart.ucf
+Constraint file generated with name :/home/fabien/periphondemand/trunk/src/tests/oneuart/synthesis/oneuart.ucf
 
 TCL script generated with name : oneuart.tcl
 
@@ -73,12 +73,13 @@ Copy and fill template for uart16550
 [38;1m$ project.driver.copydrivers[0m
 
 [38;1m$ project.getmapping imx9328_wb16_wrapper00.mwb16[0m
-Address  | instance.interface             | size        
----------------------------------------------------------
-     0x0 |               irq_mngr00.swb16 |          8
-    0x08 |                       --void-- |         24
-    0x20 |                     uart.swb16 |         32
----------------------------------------------------------
+Address  |     instance.interface         |  size  |   ID   |
+-------------------------------------------------------------
+     0x0 |               irq_mngr00.swb16 |    8   |    1   |
+    0x08 |                       --void-- |   24   | void   |
+    0x20 |                     uart.swb16 |   32   |    2   |
+-------------------------------------------------------------
+
 
 [38;1m$ project.report[0m
 

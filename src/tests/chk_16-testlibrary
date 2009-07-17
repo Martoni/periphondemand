@@ -1,14 +1,14 @@
 [38;1m$ !rm -rf ~/testlib[0m
-détruire le répertoire: `/home/fabien/podmylib/industrial_serial_input/drivers_templates'
 détruit `/home/fabien/podmylib/industrial_serial_input/hdl/industrial_serial_input.vhd'
 détruire le répertoire: `/home/fabien/podmylib/industrial_serial_input/hdl'
 détruit `/home/fabien/podmylib/industrial_serial_input/wb16.xml'
+détruire le répertoire: `/home/fabien/podmylib/industrial_serial_input/drivers_templates'
 détruire le répertoire: `/home/fabien/podmylib/industrial_serial_input/doc'
 détruire le répertoire: `/home/fabien/podmylib/industrial_serial_input'
 [38;1m$ !rm -rvf ~/podmylib/industrial_serial_input/[0m
 [38;1m$ !mkdir ~/testlib[0m
 [38;1m$ library.listlibrary[0m
-test  components  wrappers  syscons  podmylib  testlib
+components  test  wrappers  syscons  podmylib  pod_library  testlib
 [38;1m$ library.addlibrary ~/testlib[0m
 [31;7m[ERROR][0m  : [31;1mLibrary testlib already exist[0m
 [38;1m$ library.dellibrary test[0m
@@ -18,7 +18,7 @@ test  components  wrappers  syscons  podmylib  testlib
 [38;1m$ library.load podmylib[0m
 
 [38;1m$ library.listcomponents[0m
-c38a_control  ledsensor  cc_bidir  adns6010
+plop
 [38;1m$ library.component.create industrial_serial_input.wb16[0m
 
 [38;1m$ library.component.addtophdlfile industrial_serial_input.vhd[0m
@@ -61,12 +61,12 @@ c38a_control  ledsensor  cc_bidir  adns6010
 [38;1m$ [0m
 [38;1m$ library.component.addinterface candr[0m
 
-[38;1m$ library.component.setinterface candr class=CLK_RST[0m
+[38;1m$ library.component.setinterface candr class=clk_rst[0m
 
 [38;1m$ [0m
 [38;1m$ library.component.addinterface wbs[0m
 
-[38;1m$ library.component.setinterface wbs class=SLAVE[0m
+[38;1m$ library.component.setinterface wbs class=slave[0m
 
 [38;1m$ library.component.setinterface wbs clockandreset=candr[0m
 
@@ -116,12 +116,12 @@ c38a_control  ledsensor  cc_bidir  adns6010
 [38;1m$ [0m
 [38;1m$ library.component.addinterface interrupt[0m
 
-[38;1m$ library.component.setinterface interrupt class=GLS[0m
+[38;1m$ library.component.setinterface interrupt class=gls[0m
 
 [38;1m$ [0m
 [38;1m$ library.component.addinterface sn65hvs882[0m
 
-[38;1m$ library.component.setinterface sn65hvs882 class=GLS[0m
+[38;1m$ library.component.setinterface sn65hvs882 class=gls[0m
 
 [38;1m$ library.component.listinterfaces[0m
 
@@ -226,11 +226,12 @@ instead of
 
 Documented commands (type help <topic>):
 ========================================
-EOF           addtophdlfile  help            ls              setgeneric  
-addhdlfile    create         history         quit            setinterface
-addinterface  editinterface  listinterfaces  save            setport     
-addport       eof            listports       savehistory     setregister 
-addregister   exit           load            setdescription  shell       
+EOF            create   listinterfaces  quit            setport    
+addhdlfile     delport  listports       save            setregister
+addinterface   eof      load            savehistory     shell      
+addport        exit     ls              setdescription
+addregister    help     printinterface  setgeneric    
+addtophdlfile  history  printport       setinterface  
 
 [38;1m$ library.component.save[0m
 

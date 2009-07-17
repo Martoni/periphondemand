@@ -132,10 +132,10 @@ def addressdecoding(masterinterface,sysconinterface,intercon):
             sysconinterface.getPortByType("RST").getName()
     masteraddressname = masterinstance.getInstanceName()+"_"+\
                       masterinterface.getPortByType(
-                              bus.getSignalName("MASTER","address")).getName()
+                              bus.getSignalName("master","address")).getName()
     masterstrobename = masterinstancename+"_"+\
             masterinterface.getPortByType(
-                    bus.getSignalName("MASTER","strobe")).getName()
+                    bus.getSignalName("master","strobe")).getName()
     mastersizeaddr = masterinterface.getAddressSize()
 
     out =TAB +       "-----------------------\n"
@@ -148,7 +148,7 @@ def addressdecoding(masterinterface,sysconinterface,intercon):
         slavebase_address   = slaveinterface.getBaseInt()
         if slavesizeaddr > 0 :
             slaveaddressport = slave.getInterface().getPortByType(
-                    bus.getSignalName("SLAVE","address"))
+                    bus.getSignalName("slave","address"))
             slavename_addr = slaveinstance.getInstanceName() + "_" +\
                     slaveaddressport.getName()
         if slavesizeaddr == 1:
@@ -182,7 +182,7 @@ def addressdecoding(masterinterface,sysconinterface,intercon):
         slavebase_address   = slaveinterface.getBaseInt()
         if slavesizeaddr > 0 :
             slaveaddressport = slave.getInterface().getPortByType(
-                    bus.getSignalName("SLAVE","address"))
+                    bus.getSignalName("slave","address"))
             slavename_addr = slaveinstance.getInstanceName() + "_" +\
                     slaveaddressport.getName()
 
@@ -210,8 +210,8 @@ def controlslave(masterinterface,intercon):
     masterinstance = masterinterface.getParent()
     masterinstancename = masterinstance.getInstanceName()
     masterinterfacename = masterinterface.getName()
-    masterstrobename = masterinstancename+"_"+masterinterface.getPortByType(bus.getSignalName("MASTER","strobe")).getName()
-    mastercyclename  = masterinstancename+"_"+masterinterface.getPortByType(bus.getSignalName("MASTER","cycle")).getName()
+    masterstrobename = masterinstancename+"_"+masterinterface.getPortByType(bus.getSignalName("master","strobe")).getName()
+    mastercyclename  = masterinstancename+"_"+masterinterface.getPortByType(bus.getSignalName("master","cycle")).getName()
 
     out =TAB+         "-----------------------------\n"
     out = out + TAB + "-- Control signals to slave\n"
@@ -221,8 +221,8 @@ def controlslave(masterinterface,intercon):
         slaveinstance = slave.getInstance()
         slaveinterface = slave.getInterface()
         slaveinstancename = slave.getInstanceName()
-        slavestrobename = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("SLAVE","strobe")).getName()
-        slavecyclename  = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("SLAVE","cycle")).getName()
+        slavestrobename = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("slave","strobe")).getName()
+        slavecyclename  = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("slave","cycle")).getName()
 
         chipselectname = slaveinstancename+"_"+slaveinterface.getName()+"_cs"
 
@@ -246,12 +246,12 @@ def controlslave(masterinterface,intercon):
 
         #write connection if read/write, read or write
         try: 
-            datainname = slaveinstancename +"_"+ slaveinterface.getPortByType(bus.getSignalName("SLAVE","datain")).getName()
+            datainname = slaveinstancename +"_"+ slaveinterface.getPortByType(bus.getSignalName("slave","datain")).getName()
         except Error:
             datainname = None
 
         try:
-            dataoutname = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("SLAVE","dataout")).getName()
+            dataoutname = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("slave","dataout")).getName()
         except Error,e:
             dataoutname = None
 
@@ -259,10 +259,10 @@ def controlslave(masterinterface,intercon):
             #write
             out=out+TAB\
                 +slaveinstancename+"_"\
-                +slaveinterface.getPortByType(bus.getSignalName("SLAVE","write")).getName()\
+                +slaveinterface.getPortByType(bus.getSignalName("slave","write")).getName()\
                 +" <= ("\
                 +masterinstancename+"_"\
-                +masterinterface.getPortByType(bus.getSignalName("MASTER","write")).getName()\
+                +masterinterface.getPortByType(bus.getSignalName("master","write")).getName()\
                 +" and "\
                 +chipselectname +" );"\
                 +"\n"
@@ -270,24 +270,24 @@ def controlslave(masterinterface,intercon):
             #write
             out=out+TAB\
                 +slaveinstancename+"_"\
-                +slaveinterface.getPortByType(bus.getSignalName("SLAVE","write")).getName()\
+                +slaveinterface.getPortByType(bus.getSignalName("slave","write")).getName()\
                 +" <= '1';\n"
         elif dataoutname:
             #write
             out=out+TAB\
                 +slaveinstancename+"_"\
-                +slaveinterface.getPortByType(bus.getSignalName("SLAVE","write")).getName()\
+                +slaveinterface.getPortByType(bus.getSignalName("slave","write")).getName()\
                 +" <= '0';\n"
         if datainname:
                 out=out+TAB\
                 +slaveinstancename+"_"\
-                +slaveinterface.getPortByType(bus.getSignalName("SLAVE","datain")).getName()\
+                +slaveinterface.getPortByType(bus.getSignalName("slave","datain")).getName()\
                 +" <= "\
                 +masterinstancename+"_"\
-                +masterinterface.getPortByType(bus.getSignalName("MASTER","dataout")).getName()\
+                +masterinterface.getPortByType(bus.getSignalName("master","dataout")).getName()\
                 +" when ("\
                 +masterinstancename+"_"\
-                +masterinterface.getPortByType(bus.getSignalName("MASTER","write")).getName()\
+                +masterinterface.getPortByType(bus.getSignalName("master","write")).getName()\
                 +" and "\
                 +chipselectname+" ) = '1' else (others => '0');"\
                 +"\n"
@@ -304,7 +304,7 @@ def controlmaster(masterinterface,intercon):
     out = out   + TAB + "-------------------------------\n"
 
     out = out + TAB + masterinstance.getInstanceName() + "_"
-    out = out +masterinterface.getPortByType(bus.getSignalName("MASTER","datain")).getName()
+    out = out +masterinterface.getPortByType(bus.getSignalName("master","datain")).getName()
     out = out + " <= "
     #READDATA
     for slave in masterinterface.getSlavesList():
@@ -313,7 +313,7 @@ def controlmaster(masterinterface,intercon):
         slaveinterfacename = slaveinterface.getName()
         slaveinstancename = slave.getInstanceName()
         try:
-            dataoutname = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("SLAVE","dataout")).getName()
+            dataoutname = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("slave","dataout")).getName()
             out = out +" "+dataoutname
             out = out + " when "+slaveinstancename+"_"+slaveinterfacename+"_cs='1' else\n"
             out = out +TAB*9+"  "
@@ -323,7 +323,7 @@ def controlmaster(masterinterface,intercon):
 
     #ACK
     out = out + TAB + masterinstance.getInstanceName() + "_"
-    out = out + masterinterface.getPortByType(bus.getSignalName("MASTER","ack")).getName()
+    out = out + masterinterface.getPortByType(bus.getSignalName("master","ack")).getName()
     out = out + " <= "
     count = 0
     for slave in masterinterface.getSlavesList():
@@ -338,7 +338,7 @@ def controlmaster(masterinterface,intercon):
             out = out+"\n"+TAB*9+"or \n"
             out = out+TAB*8
         out = out +"("+slaveinstancename+"_"\
-            +slaveinterface.getPortByType(bus.getSignalName("SLAVE","ack")).getName()\
+            +slaveinterface.getPortByType(bus.getSignalName("slave","ack")).getName()\
             +" and "\
             +slaveinstancename+"_"+slaveinterfacename+"_cs)"
     out = out+";\n"
