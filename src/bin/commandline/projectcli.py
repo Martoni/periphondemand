@@ -530,8 +530,7 @@ Specify the bus clock
             print e
         return connectlist
 
-    # TODO: change name to delpinconnection
-    def do_delconnection(self,line):
+    def do_delpinconnection(self,line):
         """\
 Usage : delconnection <instancename>.<interfacename>.<portname>.[pinnum] [instancename].[interfacename].[portname].[pinnum]
 Suppress a pin connection
@@ -578,10 +577,10 @@ Suppress a pin connection
             print e
         return connectlist
 
-    # TODO: change name to delpinconnection
+    # TODO
     def do_delbusconnection(self,line):
         """\
-Usage : delconnection <instancename>.<interfacebusname>
+Usage : delbusconnection <instancename>.<interfacebusname>
 Suppress a pin connection
         """
         print "TODO"
