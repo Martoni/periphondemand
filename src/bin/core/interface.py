@@ -133,7 +133,9 @@ class Interface(WrapperXml):
         print "TODO getclockandresetinterface"
 
     def setClockAndReset(self,interfacename):
-        #TODO: check if interfacename exist
+        #check if interfacename exist
+        self.getParent().getInterface(interfacename)
+        #TODO: check if interfacename is a clockandreset
         self.setAttribute("clockandreset",interfacename)
     def getBase(self):
         try:
