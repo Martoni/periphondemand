@@ -67,6 +67,8 @@ Architecture industrial_serial_input_1 of industrial_serial_input is
     constant BUS_PER_DFLT : std_logic_vector(15 downto 0) := x"010A";
     constant READ_PER_DFLT: std_logic_vector(15 downto 0) := x"0000";  
 
+    constant COUNT_SIZE : natural := 13;
+
     -- registers
     signal data_reg : std_logic_vector( 7 downto 0):= x"00";
     signal int_en : std_logic ;
@@ -161,7 +163,7 @@ begin
 
     -- SPI clock generator
     clock_divider : process (clk,reset)
-        variable count : natural range 0 to (2**13)-1;
+        variable count : natural range 0 to (2**COUNT_SIZE)-1;
     begin
         if reset = '1' then
             count := 0;
@@ -185,7 +187,7 @@ begin
 
     -- read_pulse generator
     read_pulse_p : process (clk,reset)
-        variable count : natural range 0 to (2**wb_size)-1;
+        variable count : natural range 0 to (2**COUNT_SIZE)-1;
     begin
         if reset = '1' then
             count := 0;

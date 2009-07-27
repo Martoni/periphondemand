@@ -23,7 +23,7 @@ Input component is composed of four 16 bits registers:
 |:-----------:|:------:|:----------:|
 |    void     | int_en |  data      |
 
-* READ_PER : Indicating the period between to read. 
+* READ_PER : Indicating the period between two read. 
 * BUS_PER  : Period of bus
 * ID       : Identification register
 
@@ -59,7 +59,7 @@ interruption in /sys :
 
 ### /sys
 
-Read and bus period can be changed using /sys entry :
+Read bus speed period can be changed using /sys entry :
 
 > ls  /sys/bus/platform/devices/input.0/
 > bus_speed  interrupt read_per
