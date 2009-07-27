@@ -97,6 +97,24 @@ Library management commands
             cli.cmdloop()
             self.stdout.write("\n")
 
+    def do_platform(self,arg):
+        """\
+Usage : platform
+Platform management commands
+        """
+        print "TODO"
+        return
+        cli = LibraryCli(self)
+        cli.setPrompt("platform")
+        arg = str(arg)
+        if len(arg) > 0:
+            line = cli.precmd(arg)
+            cli.onecmd(line)
+            cli.postcmd(True, line)
+        else:
+            cli.cmdloop()
+            self.stdout.write("\n")
+
     def complete_source(self,text,line,begidx,endidx):
         """ complete load command with files under directory """
         path = line.split(" ")[1]
@@ -114,7 +132,7 @@ Library management commands
     def do_source(self, fname=None):
         """\
 Usage : source <filename>
-used <filename> as standard input execute commands stored in.
+use <filename> as standard input execute commands stored in.
 Runs command(s) from a file.
         """
         keepstate = Statekeeper(self, 

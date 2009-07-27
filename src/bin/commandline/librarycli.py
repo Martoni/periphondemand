@@ -53,7 +53,7 @@ settings = Settings()
 display  = Display()
 
 class LibraryCli(BaseCli):
-    """
+    """ Managing library, made new library, create or modify component
     """
     def __init__(self,parent=None):
         BaseCli.__init__(self,parent)
