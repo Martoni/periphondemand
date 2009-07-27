@@ -304,7 +304,8 @@ class Interface(WrapperXml):
            if slave.getInstanceName()==instancedestname \
                    and slave.getInterfaceName()==interfacedestname:
 
-                       raise Error("Clock connection "+instancedestname+"."+interfacedestname+" exists",1)
+                       raise Error("Clock connection "+instancedestname+\
+                               "."+interfacedestname+" exists",1)
        
         self.addSubNode(nodename="slaves",subnodename="slave",
                         attributedict={"instancename":instancedestname,
@@ -334,7 +335,7 @@ class Interface(WrapperXml):
             for register in self.registerslist:
                listreg.append({"offset":int(register.getOffset(),16)*self.regStep()+\
                                  int(self.getBase(),16),\
-                            "name":register.getName()})
+                                "name":register.getName()})
             return listreg
         else:
             return [{"offset":int(self.getBase(),16),"name":self.getName()}]
@@ -351,9 +352,12 @@ class Interface(WrapperXml):
             for interface in instance.getInterfacesList():
                 if interface.getClass() == "clk_rst":
                     for slave in interface.getSlavesList():
-                        if slave.getInstanceName() == self.getParent().getInstanceName() and slave.getInterfaceName() == self.getName():
+                        if slave.getInstanceName() == \
+                            self.getParent().getInstanceName() and \
+                                    slave.getInterfaceName() == self.getName():
                             return instance
-        raise Error("No syscon for interface "+self.getName()+" of instance "+self.getParent().getInstanceName(),0)
+        raise Error("No syscon for interface "+self.getName()+\
+                    " of instance "+self.getParent().getInstanceName(),0)
 
     def addRegister(self,register_name):
         if self.getBusName() == None:
