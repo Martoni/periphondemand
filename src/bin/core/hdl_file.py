@@ -35,6 +35,9 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import os
 
+import periphondemand.bin.define
+from   periphondemand.bin.define import *
+
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings   import Settings
@@ -77,7 +80,7 @@ class Hdl_file(WrapperXml):
         return self.getAttribute("filename")
 
     def setFileName(self,filename):
-        if vhdl.split(".")[-1] not in HDLEXT:
+        if filename.split(".")[-1] not in HDLEXT:
             raise Error("File "+str(filename)+" is not an HDL file")
         self.setAttribute("filename",filename)
 

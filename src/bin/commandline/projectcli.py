@@ -862,6 +862,7 @@ Close the project
 
 
     ############# FIXME: Move it in synthesiscli ? ######################-
+    #TODO: change name to generateintercon
     def do_intercon(self,line=None):
         """\
 Usage : intercon <masterinstancename>.<masterinterfacename>
@@ -885,6 +886,7 @@ Generate intercon for master given in argument
             return
         print display
 
+    #TODO : change name to generatetop
     def do_top(self,line):
         """\
 Usage : top
