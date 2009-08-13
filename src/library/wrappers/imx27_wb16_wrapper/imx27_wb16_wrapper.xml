@@ -49,7 +49,7 @@
 				<port name="imx_oe_n" type="EXPORT" size="1" dir="in">
 					<pin num="0"><connect instance_dest="apf27" interface_dest="fpga" port_dest="OEN" pin_dest="0"/></pin>
 				</port>
-				<port name="imx_eb3_n" type="EXPORT" size="1" dir="in">
+				<port name="imx_eb0_n" type="EXPORT" size="1" dir="in">
 					<pin num="0"><connect instance_dest="apf27" interface_dest="fpga" port_dest="EB0N" pin_dest="0"/></pin>
 				</port>
 			</ports>
