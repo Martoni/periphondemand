@@ -26,6 +26,12 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 package apf27_test_pkg is
+
+    CONSTANT CS_MIN : time := 13.6 ns;
+    CONSTANT CLOCK_PERIOD : time := 7.5188 ns;
+    CONSTANT WE3 : time := 2.25 ns;
+    CONSTANT WE4 : time := 2.25 ns;
+
     -- write procedures
     -- Params :
     --    address      : Write address 
@@ -130,23 +136,22 @@ procedure imx_read(
 begin
     -- Read value
     wait until falling_edge(gls_clk);
-    wait for 4 ns;
+    wait for WE3;
     imx_address <= address(12 downto 1);
     imx_cs_n <= '0';
     imx_oe_n <= '0';
-    if WSC <= 1 then
-        wait until falling_edge(gls_clk);
-    else
-        for n in 1 to WSC loop
+    wait for CS_MIN; -- minimum chip select time
+    if WSC > 1 then
+        for n in 2 to WSC loop
             wait until falling_edge(gls_clk); 
         end loop;
+        --wait for CLOCK_PERIOD*(WSC-1);
     end if;
-    wait until falling_edge(gls_clk);
+    wait for WE4;
     value <= imx_data;
     imx_cs_n <= '1';
     imx_oe_n <= '1';
     imx_address <= (others => 'Z');
-    wait for 20 ns;
 end procedure imx_read;
 
 end package body apf27_test_pkg;
