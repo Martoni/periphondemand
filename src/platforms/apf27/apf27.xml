@@ -4,7 +4,7 @@
         Armadeus apf27 card
     </description>
 
-    <fpga family="spartan3a" device="XC3S200A" speed="-4" package="FT256" main_clock="133000"/>
+    <fpga family="spartan3a" device="XC3S200A" speed="-4" package="FT256" main_clock="100000"/>
 
     <simulation>
         <simlib filename="apf27_test_pkg.vhd">
