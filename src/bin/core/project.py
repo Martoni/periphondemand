@@ -544,6 +544,22 @@ class Project(WrapperXml):
         self.addinstance(component=intercon)
         self.saveProject()
 
+    def connectPort(self, 
+            instance_source_name, interface_source_name, port_source_name, 
+            instance_dest_name,interface_dest_name, port_dest_name):
+        """ Connect all pin of a port source on all pin of 
+            port dest
+        """
+        instance_source = self.getInstance(instance_source_name)
+        interface_source = instance_source.getInterface(interface_source_name)
+        port_source = interface_source.getPort(port_source_name)
+
+        instance_dest = self.getInstance(instance_dest_name)
+        interface_dest = instance_dest.getInterface(interface_dest_name)
+        port_dest = interface_dest.getPort(port_dest_name)
+
+        port_source.connectPort(port_dest)
+
     def connectBus(self,instancemaster,interfacemaster,instanceslave,interfaceslave):
         """ Connect a master bus to a slave bus
         """

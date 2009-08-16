@@ -18,7 +18,7 @@ components  test  wrappers  syscons  podmylib  pod_library  testlib
 [38;1m$ library.load podmylib[0m
 
 [38;1m$ library.listcomponents[0m
-plop
+toto  plop
 [38;1m$ library.component.create industrial_serial_input.wb16[0m
 
 [38;1m$ library.component.addtophdlfile industrial_serial_input.vhd[0m

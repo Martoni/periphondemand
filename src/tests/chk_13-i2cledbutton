@@ -36,13 +36,13 @@ Component i2cocore added as i2c00
 
 [38;1m$ [0m
 [38;1m$ [0m
-[38;1m$ project.delconnection button00.int_button.button.0 apf9328.fpga.IO_1[0m
+[38;1m$ project.delpinconnection button00.int_button.button.0 apf9328.fpga.IO_1[0m
 
 Connection deleted
-[38;1m$ project.delconnection i2c00.i2c.sda apf9328.fpga.IO_1[0m
+[38;1m$ project.delpinconnection i2c00.i2c.sda apf9328.fpga.IO_1[0m
 
 Connection deleted
-[38;1m$ project.delconnection i2c00.i2c.scl apf9328.fpga.IO_1[0m
+[38;1m$ project.delpinconnection i2c00.i2c.scl apf9328.fpga.IO_1[0m
 
 Connection deleted
 [38;1m$ [0m

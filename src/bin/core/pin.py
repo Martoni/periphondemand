@@ -112,9 +112,19 @@ class Pin(WrapperXml):
                             connect["pin_dest"]))
         return pinlist
 
+    # TODO: addConnection(self,pin_dest)
+    def addConnection(self,pin_dest):
+        port_dest = pin_dest.getParent()
+        interface_dest = port_dest.getParent()
+        instance_dest = interface_dest.getParent()
+        self.addConnection(instance_dest.getInstanceName(),
+                           interface_dest.getName(),
+                           port_dest.getName(),
+                           pin_dest.getNum())
+
     def addConnection(self,instance_destname,interface_destname,
                            port_destname,pin_destnum=None):
-        """ add pin connection and check direction compatibility                
+        """ add pin connection and check direction compatibility 
         """
         if pin_destnum!=None:
             attributes = {"instance_dest":str(instance_destname),

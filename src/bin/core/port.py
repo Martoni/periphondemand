@@ -200,6 +200,19 @@ class Port(WrapperXml):
         if checktab[listdir.index(self.getDir())][listdir.index(portdest.getDir())] == 0:
             raise Error("incompatible pin : " + self.getDir() + " => " + portdest.getDir(),0)
 
+    def connectPort(self,port_dest):
+        """ Connect all pins of a port on all pin on same size port dest
+        """
+        size = self.getSize()
+        if size != port_dest.getSize():
+            raise Error("The two ports have differents size")
+        if self.getListOfPin() != []:
+            raise Error("Port connection " + self.getName() + " is not void")
+        if port_dest.getListOfPin() != []:
+            raise Error("Port connection "+port_dest.getName()+" is not void")
+
+        self.connectAllPin(port_dest)
+
     def connectPin(self,pinsourcenum,portdest,pindest):
         """ connect a pin to a destination instance
         """

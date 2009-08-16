@@ -440,6 +440,46 @@ Connect pin between instances
             return
         print display
 
+    def complete_connectport():
+        portlist = []
+        try:
+            portlist = self.completeargs(text,line,"<instancename>.<interfacename>.<portname> <instancename>.<interfacename>.<portname>")
+        except Exception,e:
+            print e
+        return portlist
+
+    def do_connectport(self,line):
+        """
+Usage : connectport <instancename>.<interfacename>.<portname> <instancename>.<interfacename>.<portname>
+Connect all pins of two same size ports.
+        """
+        try:
+            self.isProjectOpen()
+            self.checkargs(line,"<instancename>.<interfacename>.<portname> <instancename>.<interfacename>.<portname>")
+        except Exception,e:
+            print display
+            print e
+            return
+        arg=line.split(' ')
+        source = arg[0].split('.')
+        dest   = arg[-1].split('.')
+
+        if len(source) != 3:
+            print "source arguments error"
+            return
+        if len(dest) != 3:
+            print "Argument error"
+            return
+        try:
+            settings.active_project.connectPort(source[0],source[1],source[2],
+                                                dest[0],dest[1],dest[2])
+        except Error, e:
+            print display
+            print e
+            return
+        print display
+
+
     def complete_connectbus(self,text,line,begidx,endidx):
         buslist = []
         try:
@@ -522,7 +562,7 @@ Specify the bus clock
             return
         print display
 
-    def complete_delconnection(self,text,line,begidx,endidx):
+    def complete_delpinconnection(self,text,line,begidx,endidx):
         connectlist = []
         try:
             connectlist = self.completeargs(text,line,"<instancename>.<interfacename>.<portname>.<pinnum> <instancename>.<interfacename>.<portname>.<pinnum>")
@@ -532,7 +572,7 @@ Specify the bus clock
 
     def do_delpinconnection(self,line):
         """\
-Usage : delconnection <instancename>.<interfacename>.<portname>.[pinnum] [instancename].[interfacename].[portname].[pinnum]
+Usage : delpinconnection <instancename>.<interfacename>.<portname>.[pinnum] [instancename].[interfacename].[portname].[pinnum]
 Suppress a pin connection
         """
         try:

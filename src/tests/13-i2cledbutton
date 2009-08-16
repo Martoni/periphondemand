@@ -17,10 +17,10 @@ project.connectpin button00.int_button.button.0 apf9328.fpga.IO_1
 project.connectpin i2c00.i2c.sda apf9328.fpga.IO_1
 project.connectpin i2c00.i2c.scl apf9328.fpga.IO_1
 # -- delete wrong connections
-# project.delconnection button00.int_button.button.0 apf9328.fpga.IO_1
-project.delconnection button00.int_button.button.0 apf9328.fpga.IO_1
-project.delconnection i2c00.i2c.sda apf9328.fpga.IO_1
-project.delconnection i2c00.i2c.scl apf9328.fpga.IO_1
+# project.delpinconnection button00.int_button.button.0 apf9328.fpga.IO_1
+project.delpinconnection button00.int_button.button.0 apf9328.fpga.IO_1
+project.delpinconnection i2c00.i2c.sda apf9328.fpga.IO_1
+project.delpinconnection i2c00.i2c.scl apf9328.fpga.IO_1
 
 # -- connect right pin
 project.connectpin button00.int_button.button.0 apf9328.fpga.IO_L01N_0
