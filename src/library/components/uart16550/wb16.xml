@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component name="uart16550" version="1.0">
+<component name="uart16550" version="2.0">
 	<description>
-		Complete uart device from opencores (8bits mode), based on 16550 component 
+		Complete uart device from opencores (8bits mode), based on 16750 component 
 	</description>
 
     <driver_files>
@@ -21,18 +21,19 @@
 
 	<hdl_files>
         <hdl_file filename="uart16550_wb16.vhd" scope="both" istop="1" />
-		<hdl_file filename="raminfr.v" scope="both" istop="0" />
-		<hdl_file filename="timescale.v" scope="both" istop="0" />
-		<hdl_file filename="uart_debug_if.v" scope="both" istop="0" />
-		<hdl_file filename="uart_defines.v" scope="both" istop="0" />
-		<hdl_file filename="uart_receiver.v" scope="both" istop="0" />
-		<hdl_file filename="uart_regs.v" scope="both" istop="0" />
-		<hdl_file filename="uart_rfifo.v" scope="both" istop="0" />
-		<hdl_file filename="uart_sync_flops.v" scope="both" istop="0" />
-		<hdl_file filename="uart_tfifo.v" scope="both" istop="0" />
-		<hdl_file filename="uart_top.v" scope="both" istop="0" />
-		<hdl_file filename="uart_transmitter.v" scope="both" istop="0" />
-		<hdl_file filename="uart_wb.v" scope="both" istop="0" />
+		<hdl_file filename="uart_16750.vhd" scope="both" istop="0" />
+		<hdl_file filename="uart_baudgen.vhd" scope="both" istop="0" />
+		<hdl_file filename="uart_interrupt.vhd" scope="both" istop="0" />
+		<hdl_file filename="uart_receiver.vhd" scope="both" istop="0" />
+		<hdl_file filename="uart_transmitter.vhd" scope="both" istop="0" />
+		<hdl_file filename="slib_clock_div.vhd" scope="both" istop="0" />
+		<hdl_file filename="slib_counter.vhd" scope="both" istop="0" />
+		<hdl_file filename="slib_edge_detect.vhd" scope="both" istop="0" />
+		<hdl_file filename="slib_fifo.vhd" scope="both" istop="0" />
+		<hdl_file filename="slib_fifo_cyclone2.vhd" scope="both" istop="0" />
+		<hdl_file filename="slib_input_filter.vhd" scope="both" istop="0" />
+		<hdl_file filename="slib_input_sync.vhd" scope="both" istop="0" />
+		<hdl_file filename="slib_mv_filter.vhd" scope="both" istop="0" />
 	</hdl_files>
 
 	<interrupts>
