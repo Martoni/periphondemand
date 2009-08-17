@@ -62,7 +62,7 @@
                 <port size="1" name="DATA5"      standard="LVCMOS18" drive="8" position="T13" dir="inout"/>
                 <port size="1" name="DATA6"      standard="LVCMOS18" drive="8" position="R13" dir="inout"/>
                 <port size="1" name="DATA7"      standard="LVCMOS18" drive="8" position="T14" dir="inout"/>
-                <port size="1" name="CLK0"       standard="LVCMOS18"           position="N9" dir="inout" freq="133"/>
+                <port size="1" name="CLK0"       standard="LVCMOS18"           position="N9" dir="inout" freq="100"/>
                 <port size="1" name="EB0N"       standard="LVCMOS18"           position="P9" dir="inout"/>
                 <port size="1" name="OEN"        standard="LVCMOS18"           position="R9" dir="inout"/>
                 <port size="1" name="ADDR1"      standard="LVCMOS18"           position="N5"  dir="in"/>
