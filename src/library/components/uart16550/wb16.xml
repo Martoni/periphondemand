@@ -30,7 +30,6 @@
 		<hdl_file filename="slib_counter.vhd" scope="both" istop="0" />
 		<hdl_file filename="slib_edge_detect.vhd" scope="both" istop="0" />
 		<hdl_file filename="slib_fifo.vhd" scope="both" istop="0" />
-		<hdl_file filename="slib_fifo_cyclone2.vhd" scope="both" istop="0" />
 		<hdl_file filename="slib_input_filter.vhd" scope="both" istop="0" />
 		<hdl_file filename="slib_input_sync.vhd" scope="both" istop="0" />
 		<hdl_file filename="slib_mv_filter.vhd" scope="both" istop="0" />
