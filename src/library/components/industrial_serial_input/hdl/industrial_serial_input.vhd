@@ -54,7 +54,7 @@ Architecture industrial_serial_input_1 of industrial_serial_input is
     constant ZERO : std_logic_vector( 31 downto 0) := (others => '0');
 
     -- states type
-    type state is (spi_init_state,spi_read7_state,spi_read_state,spi_end_state);
+    type state is (spi_init_state,spi_load_state,spi_read7_state,spi_read_state,spi_end_state);
     signal state_reg      : state;
     signal next_state_reg : state;
 
@@ -65,7 +65,7 @@ Architecture industrial_serial_input_1 of industrial_serial_input is
     constant REG_ID        : std_logic_vector( 1 downto 0) := "11"; -- identification register 
 
     constant BUS_PER_DFLT : std_logic_vector(15 downto 0) := x"010A";
-    constant READ_PER_DFLT: std_logic_vector(15 downto 0) := x"0000";  
+    constant READ_PER_DFLT: std_logic_vector(15 downto 0) := x"0020";  
 
     constant COUNT_SIZE : natural := 13;
 
@@ -241,18 +241,24 @@ begin
         case state_reg is
             when spi_init_state  => 
                 if spi_read_pulse = '1' then
-                    next_state_reg <= spi_read7_state;
+                    next_state_reg <= spi_load_state;
                 else
                     next_state_reg <= spi_init_state;
                 end if;
-            when spi_read7_state => 
+            when spi_load_state => 
                 if spi_read_pulse = '0' and clock_rise_pulse = '1' then
+                    next_state_reg <= spi_read7_state;
+                else
+                    next_state_reg <= spi_load_state;
+                end if;
+            when spi_read7_state => 
+                if clock_rise_pulse = '1' then
                     next_state_reg <= spi_read_state;
                 else
                     next_state_reg <= spi_read7_state;
                 end if;
             when spi_read_state  =>
-                if spi_read_count > 7  then
+                if spi_read_count > 6  then
                     next_state_reg <= spi_end_state;
                 else
                     next_state_reg <= spi_read_state;
@@ -276,8 +282,10 @@ begin
                 when spi_init_state  => 
                     data <= (others => '0');
                     spi_clk <= '0';
-                when spi_read7_state =>
-                    spi_clk <= local_clk; 
+                when spi_load_state =>
+                    spi_clk <= '0'; 
+                when spi_read7_state => 
+                    spi_clk <= '0';
                     data(0) <= spi_sop;
                 when spi_read_state  =>
                     spi_clk <= local_clk;
@@ -286,13 +294,14 @@ begin
                     end if;
                 when spi_end_state => 
                         data_reg <= data;
+                        spi_clk <= '0';
                 when others => 
                     spi_clk <= local_clk;
             end case;
         end if;
     end process output_p;
 
-    spi_ld_n <= '0' when state_reg = spi_read7_state else '1' ;
+    spi_ld_n <= '0' when state_reg = spi_load_state else '1' ;
     spi_sip  <= '1';
 
     -- read count
