@@ -54,6 +54,7 @@ library IEEE;
 -- ----------------------------------------------------------------------------
 
 signal write      : std_logic;
+signal read       : std_logic;
 signal strobe     : std_logic;
 signal writedata  : std_logic_vector(15 downto 0);
 signal address    : std_logic_vector(12 downto 0);
@@ -67,12 +68,14 @@ begin
     begin
       if(gls_reset='1') then
         write   <= '0';
+        read    <= '0';
         strobe  <= '0';
         writedata <= (others => '0');
         address   <= (others => '0');
       elsif(rising_edge(gls_clk)) then
         strobe  <= not (imx_cs_n) and not(imx_oe_n and imx_eb0_n);
         write   <= not (imx_cs_n or imx_eb0_n);
+        read    <= not (imx_cs_n or imx_oe_n);
         address <= imx_address & '0';
         writedata <= imx_data;
       end if;
@@ -84,17 +87,6 @@ begin
     wbm_write      <= write;
     wbm_cycle      <= strobe;
 
-    read_sync : process(gls_clk, gls_reset)
-    begin
-        if gls_reset = '1' then
-            imx_data <= (others => 'Z');
-        elsif rising_edge(gls_clk) then
-            if imx_cs_n = '0' and imx_oe_n = '0' then
-                imx_data <= wbm_readdata;
-            else
-                imx_data <= (others => 'Z');
-            end if;
-        end if;
-    end process read_sync;
+    imx_data <= wbm_readdata when (read = '1') else (others => 'Z');
 
 end architecture RTL;
