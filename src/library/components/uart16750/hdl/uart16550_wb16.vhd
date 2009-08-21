@@ -5,7 +5,7 @@
 -- Creation Date : 25/06/2008
 -- File          : uart_top_vhdl.vhd
 --
--- Abstract : wrapper for uart16550 from opencores to VHDL-Wishbone16 bus
+-- Abstract : wrapper for uar16750 from opencores to VHDL-Wishbone16 bus
 --
 ---------------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity uart16550 is 
+Entity uart16750 is 
 ---------------------------------------------------------------------------
     generic(
         id : natural := 1;
@@ -51,7 +51,7 @@ end entity;
 
 
 ---------------------------------------------------------------------------
-Architecture uart_top_vhdl_1 of uart16550 is
+Architecture uart_top_vhdl_1 of uart16750 is
 ---------------------------------------------------------------------------
 
     component uart_16750

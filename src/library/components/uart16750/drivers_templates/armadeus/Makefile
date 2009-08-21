@@ -1,14 +1,14 @@
 #
-# Makefile for the Armadeus FPGA serial "driver" (compatible with 16550/8250 OpenCore IP)
+# Makefile for the Armadeus FPGA serial "driver" (compatible with 16750/8250 OpenCore IP)
 #
 
 ifneq ($(KERNELRELEASE),)
 
 # Part executed when called from kernel build system:
 
-obj-$(CONFIG_POD_DRIVERS)	+= 16550_ocore.o
+obj-$(CONFIG_POD_DRIVERS)	+= 16750_ocore.o
 
-16550_ocore-objs	:= 16550.o
+16750_ocore-objs	:= 16750.o
 
 else
 

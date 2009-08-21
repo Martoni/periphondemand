@@ -1,5 +1,5 @@
 /*
- * Initialisation Driver for OpenCore 16550 serial IP
+ * Initialisation Driver for OpenCore 16750 serial IP
  *   loaded in FPGA of the Armadeus boards.
  *
  * (C) Copyright 2008 Armadeus Systems
@@ -81,7 +81,7 @@ void plat_uart_release(struct device *dev)
 }
 
 /*$foreach:instance$*/
-static struct plat_serial8250_port ocore_16550_uart/*$instance_num$*/_data[] = {
+static struct plat_serial8250_port ocore_16750_uart/*$instance_num$*/_data[] = {
 	PORT( ARMADEUS_FPGA_BASE_ADDR_VIRT+/*$instance_name$*/_BASE, 
 		  ARMADEUS_FPGA_BASE_ADDR_PHYS+/*$instance_name$*/_BASE, 
 		  /*$instance_name$*/_INPUT_CLOCK, 
@@ -91,17 +91,17 @@ static struct plat_serial8250_port ocore_16550_uart/*$instance_num$*/_data[] = {
 /*$foreach:instance:end$*/
 
 /*$foreach:instance$*/
-static struct platform_device ocore_16550_uart/*$instance_num$*/_device = {
+static struct platform_device ocore_16750_uart/*$instance_num$*/_device = {
 	.name = "serial8250",
 	.id=/*$instance_num$*/,
 	.dev={
 		.release=plat_uart_release,
-		.platform_data = ocore_16550_uart/*$instance_num$*/_data,
+		.platform_data = ocore_16750_uart/*$instance_num$*/_data,
 	},
 };
 /*$foreach:instance:end$*/
 
-static int __init ocore_16550_init(void)
+static int __init ocore_16750_init(void)
 {
     int ret = -ENODEV;
 	u16 data;
@@ -119,22 +119,22 @@ static int __init ocore_16550_init(void)
 /*$foreach:instance:end$*/
 
 /*$foreach:instance$*/  
-	ret =	platform_device_register( &ocore_16550_uart/*$instance_num$*/_device ); 
+	ret =	platform_device_register( &ocore_16750_uart/*$instance_num$*/_device ); 
 	if(ret<0)return ret;
 /*$foreach:instance:end$*/
     return ret;
 }
 
-static void __exit ocore_16550_exit(void)
+static void __exit ocore_16750_exit(void)
 {
 /*$foreach:instance$*/	
-	platform_device_unregister( &ocore_16550_uart/*$instance_num$*/_device );
+	platform_device_unregister( &ocore_16750_uart/*$instance_num$*/_device );
 /*$foreach:instance:end$*/
 }
 
-module_init(ocore_16550_init);
-module_exit(ocore_16550_exit);
+module_init(ocore_16750_init);
+module_exit(ocore_16750_exit);
 
 MODULE_AUTHOR("Julien Boibessot, <julien.boibessot@armadeus.com>");
-MODULE_DESCRIPTION("8250 Linux layer registration module for 16550 OpenCore IP in Armadeus FPGA");
+MODULE_DESCRIPTION("8250 Linux layer registration module for 16750 OpenCore IP in Armadeus FPGA");
 MODULE_LICENSE("GPL");

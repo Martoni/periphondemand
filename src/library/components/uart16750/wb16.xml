@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component name="uart16550" version="2.0">
+<component name="uart16750" version="1.0">
 	<description>
 		Complete uart device from opencores (8bits mode), based on 16750 component 
 	</description>
@@ -7,7 +7,7 @@
     <driver_files>
         <driver_templates architecture="armadeus">
             <support version="3" />
-            <file name="16550.c" />
+            <file name="16750.c" />
             <file name="Makefile" />
             <file name="README" />
         </driver_templates>
@@ -20,7 +20,7 @@
     </generics>
 
 	<hdl_files>
-        <hdl_file filename="uart16550_wb16.vhd" scope="both" istop="1" />
+        <hdl_file filename="uart16750_wb16.vhd" scope="both" istop="1" />
 		<hdl_file filename="uart_16750.vhd" scope="both" istop="0" />
 		<hdl_file filename="uart_baudgen.vhd" scope="both" istop="0" />
 		<hdl_file filename="uart_interrupt.vhd" scope="both" istop="0" />
