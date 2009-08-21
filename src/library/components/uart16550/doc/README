@@ -1,0 +1,24 @@
+UART 16550
+==========
+
+This component come from opencores (http://www.opencores.org/?do=project&who=uart16550).
+
+FPGA Component
+--------------
+
+The documentation of UART IP can be found on opencores :
+http://www.opencores.org/websvn/filedetails.php?repname=uart16550&path=%2Fuart16550%2Ftrunk%2Fdoc%2FUART_spec.pdf
+
+ARMadeus linux driver
+---------------------
+
+To use uart in linux (armadeus) the generic serial driver 8250 must be use. Then before compiling the kernel, select it in make linux26-menuconfig :
+> device drivers -> Character devices -> Serial drivers ->  <M> 8250/16550 and compatible serial support
+
+Once system compiled and flashed on board, mount module in this order :
+
+> modprobe irq_ocore
+> modprobe 8250
+> modprobe 16550_ocore
+
+A message will appear with ttyS* used. Typicaly when one uart it's ttyS0.
