@@ -161,8 +161,8 @@ Add the top HDL file in component, the file will be copied in component director
             return
         print display
 
-    def complete_addphdlfile(self,text,line,begidx,endidx):
-        return self.complete_addtophdlfile(self,text,line,begidx,endidx)
+    def complete_addhdlfile(self,text,line,begidx,endidx):
+        return self.complete_addtophdlfile(text,line,begidx,endidx)
 
     def do_addhdlfile(self,arg):
         """\
