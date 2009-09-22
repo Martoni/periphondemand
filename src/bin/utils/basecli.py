@@ -182,7 +182,6 @@ class BaseCli(cmd.Cmd):
         see the precmd() and postcmd() methods for useful execution hooks.
         The return value is a flag indicating whether interpretation of
         commands by the interpreter should stop.
-
         """
         try:
             (command, args) = line.split(None,1)
@@ -202,6 +201,7 @@ class BaseCli(cmd.Cmd):
         if command in self.multiline_commands:
             statement = self.finishStatement(statement)
         return cmd.Cmd.onecmd(self, statement)
+
     ## Override methods in Cmd object ##
     def preloop(self):
         """Initialization before prompting user for commands.

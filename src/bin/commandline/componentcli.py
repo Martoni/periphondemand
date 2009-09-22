@@ -129,7 +129,7 @@ Load component from current library
             return
         print display
 
-    def complete_addhdlfile(self,text,line,begidx,endidx):
+    def complete_addtophdlfile(self,text,line,begidx,endidx):
         path = line.split(" ")[1]
         if path.find("/") == -1: # sub
             path = ""
@@ -160,6 +160,9 @@ Add the top HDL file in component, the file will be copied in component director
             print e
             return
         print display
+
+    def complete_addphdlfile(self,text,line,begidx,endidx):
+        return self.complete_addtophdlfile(self,text,line,begidx,endidx)
 
     def do_addhdlfile(self,arg):
         """\
