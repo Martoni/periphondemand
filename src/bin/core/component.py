@@ -437,6 +437,8 @@ class Component(WrapperXml):
         """ Add port named portname in interface named interfacename """
         # verify if portname exist in vhdl file
         hdltop = self.getHDLTop()
+        if not hdltop:
+            raise Error("No HDL top file in component "+str(self.getName()))
         portlist = hdltop.getPortsList()
         if not portname in [port.getName() for port in portlist]:
             raise Error("Port named "+portname+" can't be found in "+\

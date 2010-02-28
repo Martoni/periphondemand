@@ -78,6 +78,17 @@ class Platform(Component):
     def __initfile(self,file):
         WrapperXml.__init__(self,file=file)
 
+    def getForcesList(self):
+        forcelist = []
+        interfaces_list = self.getInterfacesList()
+        if len(interfaces_list) != 1:
+            raise Error("I found "+str(len(interfaces_list))+\
+            " FPGAs ("+str(interfaces_list)+") and multiple FPGA project is not implemented yet.")
+        for port in interfaces_list[0].getPortsList():
+            if port.forceDefined():
+                forcelist.append(port)
+        return forcelist
+
     def getComponentsList(self):
         """ Return platform dependent components list
         """
@@ -122,17 +133,21 @@ class Platform(Component):
         # loop for each connection in platform interface
         for interface in self.getInterfacesList():
             for port in interface.getPortsList():
-                for pin in port.getListOfPin():
-                    for connect in pin.getConnections():
-                        instancedest = project.getInstance(
-                                                        connect["instance_dest"])
-                        interfacedest = instancedest.getInterface(
-                                                        connect["interface_dest"])
-                        portdest = interfacedest.getPort(connect["port_dest"])
-                        try:
-                            portlist.index(portdest)
-                        except ValueError:
-                            portlist.append(portdest)
+                # add forced port in list
+                if port.forceDefined():
+                    portlist.append(port)
+                else:
+                    for pin in port.getListOfPin():
+                        for connect in pin.getConnections():
+                            instancedest = project.getInstance(
+                                                            connect["instance_dest"])
+                            interfacedest = instancedest.getInterface(
+                                                            connect["interface_dest"])
+                            portdest = interfacedest.getPort(connect["port_dest"])
+                            try:
+                                portlist.index(portdest)
+                            except ValueError:
+                                portlist.append(portdest)
         return portlist
    
     def getIncompleteExternalPortsList(self):

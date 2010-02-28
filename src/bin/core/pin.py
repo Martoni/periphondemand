@@ -114,7 +114,11 @@ class Pin(WrapperXml):
 
     # TODO: addConnection(self,pin_dest)
     def addConnection(self,pin_dest):
+        if self.getParent().forceDefined():
+            raise Error("Port "+str(self.getParent().getName())+" is forced, can't be connected")
         port_dest = pin_dest.getParent()
+        if port_dest.forceDefined():
+            raise Error("Port "+str(port_dest.getName())+" is forced, can't be connected")
         interface_dest = port_dest.getParent()
         instance_dest = interface_dest.getParent()
         self.addConnection(instance_dest.getInstanceName(),

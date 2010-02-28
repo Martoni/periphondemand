@@ -967,3 +967,51 @@ Generate a report of the project
             raise Error("No project open",0)
 
 
+    def do_listforce(self, line):
+        """\
+Usage : listforce
+List all force configured for this project
+        """
+        try:
+            for port in settings.active_project.getForcesList():
+                print "port "+str(port.getName())+" is forced to "+str(port.getForce())
+        except Error, e:
+            print display
+            print e
+            return
+
+
+# TODO
+#    def complete_setforce(self,text,line,begidx,endidx):
+#      pinlist = []
+#      try:
+#        pinlist = self.completeargs(text,line,"<portname> <state>")
+#      except Exception,e:
+#        print e
+#      return pinlist
+
+    def do_setforce(self, line):
+      """\
+Usage : setpin <pinname> <state>      
+Set fpga pin state in 'gnd', 'vcc'. To unset use 'undef' value
+      """
+
+      try:
+        self.isProjectOpen()
+        #XXX
+        #self.checkargs(line,"<portname> <state>")
+      except Error,e:
+        print display
+        print e
+        return
+
+      arg = line.split(' ')
+      portname = arg[-2]
+      state = arg[-1]
+
+      try:
+        settings.active_project.setForce(portname, state)
+      except Error, e:
+        print display
+        print e
+        return

@@ -183,6 +183,13 @@ Add an HDL file in component, the file will be copied in component directory.
             return
         print display
 
+    def do_delhdlfile(self,arg):
+        """\
+Usage : delhdlfile <hdlfilename>
+Suppress a HDL file from component
+        """
+        print "TODO"
+
     def do_save(self,arg):
         """\
 Usage : save

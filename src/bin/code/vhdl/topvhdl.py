@@ -76,27 +76,31 @@ class TopVHDL(TopGen):
         out = "entity "+entityname+" is\n"
         out = out +"\n"+ TAB+ "port\n"+TAB+"(\n"
         for port in portlist:
-            portname = port.getName()
-            interfacename = port.getParent().getName()
-            instancename = port.getParent().getParent().getInstanceName()
-            out = out + TAB + "-- "+instancename+"-"+interfacename+"\n"
-            if port.isCompletelyConnected():
-                # sig declaration
-                out = out + TAB +\
-                        instancename+"_"+portname+\
-                        " : " + port.getDir()
-                if port.getMSBConnected() < 1:
-                    out = out + " std_logic;"
-                else:
-                    out = out + " std_logic_vector("+str(port.getMSBConnected())\
-                            +" downto 0);"
-                out = out + "\n"
+            if port.forceDefined():
+                portname = "force_"+port.getName()
+                out = out + TAB*2 + portname + " : out std_logic;\n" 
             else:
-                for pin in port.getListOfPin():
-                    if pin.isConnected():
-                        out = out + TAB + \
-                            instancename+"_"+portname+"_pin"+str(pin.getNum())+\
-                            " : "+port.getDir()+" std_logic;\n"
+                portname = port.getName()
+                interfacename = port.getParent().getName()
+                instancename = port.getParent().getParent().getInstanceName()
+                out = out + TAB + "-- "+instancename+"-"+interfacename+"\n"
+                if port.isCompletelyConnected():
+                    # sig declaration
+                    out = out + TAB*2 +\
+                            instancename+"_"+portname+\
+                            " : " + port.getDir()
+                    if port.getMSBConnected() < 1:
+                        out = out + " std_logic;"
+                    else:
+                        out = out + " std_logic_vector("+str(port.getMSBConnected())\
+                                +" downto 0);"
+                    out = out + "\n"
+                else:
+                    for pin in port.getListOfPin():
+                        if pin.isConnected():
+                            out = out + TAB + \
+                                instancename+"_"+portname+"_pin"+str(pin.getNum())+\
+                                " : "+port.getDir()+" std_logic;\n"
        # Suppress the #!@ last semicolon
         out = out[:-2]
 
@@ -236,9 +240,6 @@ class TopVHDL(TopGen):
                     out = out[:-2]+"\n"
                     out = out + TAB*2 + ")\n"
     
-    
-    
-    
                 out = out + TAB + "port map (\n"
                 for interface in component.getInterfacesList():
                     out = out + TAB*3 + "-- " + interface.getName()+"\n"
@@ -271,8 +272,20 @@ class TopVHDL(TopGen):
                 out = out + TAB*3 + ");\n"
         out = out + "\n"
         return out
+    def connectForces(self, portlist):
+        out = "\n"
+        out = out + TAB + "-------------------\n"
+        out = out + TAB + "--  Set forces   --\n"
+        out = out + TAB + "-------------------\n"
+        for port in portlist:
+            if port.forceDefined():
+                if port.getForce() == "gnd":
+                    out = out + TAB + "force_"+port.getName()+" <= '0';\n"
+                else:
+                    out = out + TAB + "force_"+port.getName()+" <= '1';\n"
+        return out+"\n"
 
-    def connectInstance(self,incomplete_external_ports_list):
+    def connectInstance(self, incomplete_external_ports_list):
         """ Connect instances
         """
         out =       TAB  + "---------------------------\n"

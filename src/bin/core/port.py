@@ -128,10 +128,34 @@ class Port(WrapperXml):
         return self.getAttribute("standard")
     def setStandard(self,standard):
         self.setAttribute("standard",standard)
-    def setDrive(self,drive):
-        self.setAttribute("drive",drive)
+    def setDrive(self, drive):
+        self.setAttribute("drive", drive)
     def getDrive(self):
         return self.getAttribute("drive")
+    def getForce(self):
+        return self.getAttribute("force")
+    def setForce(self, force):
+        listofpins = self.getListOfPin()
+        if len(listofpins) > 1:
+            raise Error("Force multiple pin port is not implemented")
+        if len(listofpins) == 1:
+            raise Error("This pin is already connected")
+
+        forcevalues = ["gnd", "vcc", "undef"]
+        if force in forcevalues:
+            self.setAttribute("force", force);
+        else:
+            raise Error("force value must be in "+str(forcevalues))
+    def forceDefined(self):
+        try:
+            force = self.getForce()
+        except Error:
+            return False
+        forcevalues = ["gnd", "vcc"]
+        if force in forcevalues:
+            return True
+        return False
+
     def getPosition(self):
         return self.getAttribute("position")
     def setPosition(self,position):

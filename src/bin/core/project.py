@@ -214,6 +214,22 @@ class Project(WrapperXml):
     def setLanguage(self,language):
         self.setAttribute("name",language,"language")
 
+    def setForce(self, portname, state):
+        platform = self.getPlatform()
+        interfaces_list = platform.getInterfacesList()
+        if len(interfaces_list) != 1:
+            raise Error("I found "+str(len(interfaces_list))+\
+            " FPGAs ("+str(interfaces_list)+") and multiple FPGA project is not implemented yet.")
+        port = interfaces_list[0].getPort(portname)
+        if port.getDir() == "in":
+            raise Error("The value of this port can't be set because of it's direction (in)")
+        port.setForce(state)
+
+    def getForcesList(self):
+        """ List FPGA forced FPGA pin """
+        platform = self.getPlatform()
+        return platform.getForcesList()
+
     def addinstance(self,**keys):
         """ Add a component in project
             addinstance(self,component)

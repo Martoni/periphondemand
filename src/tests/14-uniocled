@@ -1,6 +1,8 @@
 !rm -rf uniocled
 project.create uniocled
 project.selectplatform unioc_v11
+project.setforce 26 gnd
+project.setforce 27 vcc
 project.addinstance components.led.wb8 led0
 project.autoconnectbus
 project.setaddr led0.swb8 0x1100

@@ -6,6 +6,8 @@
 project.listcomponents
 project.create ledbutton
 project.selectplatform apf9328
+project.setforce IO_L01N_3 gnd
+project.setforce IO_L23N_2 vcc
 project.addinstance components.button
 project.addinstance components.led.wb16
 project.listinterfaces button00

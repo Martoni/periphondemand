@@ -85,6 +85,9 @@ class TopGen:
         # begin
         out = out + self.architectureBegin()
         ########################
+        # Connect forces
+        out = out + self.connectForces(portlist)
+        ########################
         # declare Instance
         out =out+ self.declareInstance()
         #######################
