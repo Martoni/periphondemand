@@ -982,13 +982,13 @@ List all force configured for this project
 
 
 # TODO
-#    def complete_setforce(self,text,line,begidx,endidx):
-#      pinlist = []
-#      try:
-#        pinlist = self.completeargs(text,line,"<portname> <state>")
-#      except Exception,e:
-#        print e
-#      return pinlist
+    def complete_setforce(self,text,line,begidx,endidx):
+      pinlist = []
+      try:
+        pinlist = self.completeargs(text,line,"<forcename> <forcestate>")
+      except Exception,e:
+        print e
+      return pinlist
 
     def do_setforce(self, line):
       """\
@@ -998,8 +998,7 @@ Set fpga pin state in 'gnd', 'vcc'. To unset use 'undef' value
 
       try:
         self.isProjectOpen()
-        #XXX
-        #self.checkargs(line,"<portname> <state>")
+        self.checkargs(line,"<forcename> <forcestate>")
       except Error,e:
         print display
         print e

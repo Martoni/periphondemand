@@ -182,5 +182,13 @@ class Platform(Component):
 
     def isPlatform(self):
         return 1
+
+    def getPlatformPortsList(self):
+        """ Get all port in platform """
+        portslist = []
+        for interface in self.getInterfacesList():
+            for port in interface.getPortsList():
+                portslist.append(port)
+        return portslist
     
 

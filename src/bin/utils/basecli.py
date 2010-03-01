@@ -319,7 +319,7 @@ class BaseCli(cmd.Cmd):
     def listcompletion(self,listargs,subargl,subargt):
         """ return a list of possibility using template:
             [] mandatory argument
-            <> optional arguments
+            <> optional arguments 
             masterinstancename : give list of instances with master bus interface
             slaveinstancename  : give list of instances with slave  bus interface
             instancesysconname : give list of syscon instance in project
@@ -336,6 +336,7 @@ class BaseCli(cmd.Cmd):
             simulationtoolchain: give list of toolchain available for simulation
             drivertoolchain    : give list of toolchain available for driver
             synthesistoolchain : give list of toolchain available for synthesis
+            forcename          : give list of pin where value can be forced
         """
         # read listargs (come from template)
         if len(listargs) > 0:
@@ -389,6 +390,11 @@ class BaseCli(cmd.Cmd):
         elif subargt == "libraryname":
             arglist = settings.active_project.library.listLibraries()
             return arglist
+        elif subargt == "forcename":
+            arglist = [""+port.getName() for port in settings.active_project.getPlatform().getPlatformPortsList()]
+            return arglist
+        elif subargt == "forcestate":
+            return ["gnd", "vcc", "undef"]
         elif subargt == "personallibraryname":
             arglist = settings.active_project.library.getPersonalLibName()
         elif subargt == "componentname":
