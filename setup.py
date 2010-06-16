@@ -67,7 +67,7 @@ package_files_list.extend(getTree("tests"))
 datafiles=[ ('/usr/bin',['src/bin/pod']) ]
 #FIXME
 #To be removed when package_data will work:
-dest_dir = "/usr/lib/python2.5/site-packages/"
+dest_dir = "/usr/local/lib/python2."+str(sys.version_info[1])+"/dist-packages/"
 for file in package_files_list:
     dest = dest_dir + os.path.dirname(file).replace("src","periphondemand",1)
     source = [file]
