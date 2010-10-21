@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="spartan_select_map">
+    <generics>
+        <generic destination="both" match="\d+" name="id" public="true" type="natural" value="1">
+            <description />
+        </generic>
+        <generic destination="fpga" match="\d+" name="wb_size" public="false" type="natural" value="16">
+            <description />
+        </generic>
+        <generic destination="both" match="\d+" name="clk_freq" public="false" type="natural" value="100000">
+            <description />
+        </generic>
+    </generics>
+    <hdl_files>
+        <hdl_file filename="spartan_selectmap.vhd" istop="1" scope="both" />
+    </hdl_files>
+    <interfaces>
+        <interface class="clk_rst" name="candr">
+            <ports>
+                <port dir="in" name="clk" size="1" type="CLK">
+                    <description />
+                </port>
+                <port dir="in" name="reset" size="1" type="RST">
+                    <description />
+                </port>
+            </ports>
+        </interface>
+        <interface bus="wishbone16" class="slave" clockandreset="candr" name="wbs">
+            <registers>
+                <register name="id" offset="0x0" rows="1" size="16" />
+                <register name="config" offset="0x1" rows="1" size="16" />
+                <register name="status" offset="0x2" rows="1" size="16" />
+                <register name="data" offset="0x3" rows="1" size="16" />
+            </registers>
+            <ports>
+                <port dir="in" name="wbs_add" size="2" type="ADR">
+                    <description />
+                </port>
+                <port dir="in" name="wbs_writedata" size="16" type="DAT_I">
+                    <description />
+                </port>
+                <port dir="out" name="wbs_readdata" size="16" type="DAT_O">
+                    <description />
+                </port>
+                <port dir="in" name="wbs_strobe" size="1" type="STB">
+                    <description />
+                </port>
+                <port dir="in" name="wbs_cycle" size="1" type="CYC">
+                    <description />
+                </port>
+                <port dir="in" name="wbs_write" size="1" type="WE">
+                    <description />
+                </port>
+                <port dir="out" name="wbs_ack" size="1" type="ACK">
+                    <description />
+                </port>
+            </ports>
+        </interface>
+        <interface class="gls" name="selectmap">
+            <ports>
+                <port dir="out" name="selectmap_data" size="16" type="EXPORT">
+                    <description />
+								</port>
+                <port dir="out" name="selectmap_csi_n" size="1" type="EXPORT">
+                    <description />
+                </port>
+                <port dir="out" name="selectmap_rdwr_n" size="1" type="EXPORT">
+                    <description />
+                </port>
+                <port dir="out" name="selectmap_cclk" size="1" type="EXPORT">
+                    <description />
+                </port>
+                <port dir="out" name="selectmap_program_n" size="1" type="EXPORT">
+                    <description />
+                </port>
+                <port dir="in" name="selectmap_init_n" size="1" type="EXPORT">
+                    <description />
+                </port>
+                <port dir="in" name="selectmap_busy" size="1" type="EXPORT">
+                    <description />
+                </port>
+                <port dir="in" name="selectmap_done" size="1" type="EXPORT">
+                    <description />
+                </port>
+            </ports>
+        </interface>
+    </interfaces>
+		<description>
+			Configure a SPARTAN6 FPGA with SelectMap interface
+    </description>
+</component>
