@@ -2,11 +2,11 @@
 -- Company     : ARMades Systems
 -- Author(s)   : Fabien Marteau <fabien.marteau@armadeus.com>
 -- 
--- Creation Date : 30/04/2009
--- File          : spartan_select_map.vhd
+-- Creation Date : 21/10/2010
+-- File          : spartan_selectmap.vhd
 --
--- Abstract : This IP manage input serialized by the 
--- industrial 8-digital-input serializer : SN65HVS882
+-- This component is designed to configure a spartan6 with SelectMap Slave
+-- protocol.
 --
 ---------------------------------------------------------------------------
 
