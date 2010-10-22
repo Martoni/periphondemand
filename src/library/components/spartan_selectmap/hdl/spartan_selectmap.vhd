@@ -36,11 +36,11 @@ Entity spartan_select_map is
         wbs_write     : in std_logic ;
         wbs_ack       : out std_logic;
         -- selectMap port
-        selectmap_data      : out std_logic_vector( wb_size-1 downto 0);
-        selectmap_csi_n     : out std_logic ;
-        selectmap_rdwr_n    : out std_logic ;
-        selectmap_cclk      : out std_logic ;
-        selectmap_program_n : out std_logic ;
+        selectmap_data      : inout std_logic_vector( wb_size-1 downto 0);
+        selectmap_csi_n     : inout std_logic ;
+        selectmap_rdwr_n    : inout std_logic ;
+        selectmap_cclk      : inout std_logic ;
+        selectmap_program_n : inout std_logic ;
         selectmap_init_n    : in std_logic ;
         selectmap_busy      : in std_logic ;
         selectmap_done      : in std_logic

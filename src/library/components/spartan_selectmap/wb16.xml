@@ -58,19 +58,19 @@
         </interface>
         <interface class="gls" name="selectmap">
             <ports>
-                <port dir="out" name="selectmap_data" size="16" type="EXPORT">
+                <port dir="inout" name="selectmap_data" size="16" type="EXPORT">
                     <description />
 								</port>
-                <port dir="out" name="selectmap_csi_n" size="1" type="EXPORT">
+                <port dir="inout" name="selectmap_csi_n" size="1" type="EXPORT">
                     <description />
                 </port>
-                <port dir="out" name="selectmap_rdwr_n" size="1" type="EXPORT">
+                <port dir="inout" name="selectmap_rdwr_n" size="1" type="EXPORT">
                     <description />
                 </port>
-                <port dir="out" name="selectmap_cclk" size="1" type="EXPORT">
+                <port dir="inout" name="selectmap_cclk" size="1" type="EXPORT">
                     <description />
                 </port>
-                <port dir="out" name="selectmap_program_n" size="1" type="EXPORT">
+                <port dir="inout" name="selectmap_program_n" size="1" type="EXPORT">
                     <description />
                 </port>
                 <port dir="in" name="selectmap_init_n" size="1" type="EXPORT">
