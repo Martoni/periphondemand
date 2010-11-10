@@ -98,7 +98,7 @@ class TopVHDL(TopGen):
                 else:
                     for pin in port.getListOfPin():
                         if pin.isConnected():
-                            out = out + TAB + \
+                            out = out + TAB*2 + \
                                 instancename+"_"+portname+"_pin"+str(pin.getNum())+\
                                 " : "+port.getDir()+" std_logic;\n"
        # Suppress the #!@ last semicolon
@@ -175,9 +175,9 @@ class TopVHDL(TopGen):
         """ Declare signals ports
         """
         platformname = self.project.getPlatform().getInstanceName()
-        out = TAB + "-------------------------\n"
-        out = out+TAB + "-- Signals declaration\n"
-        out = out +TAB + "-------------------------\n"
+        out =      TAB + "-------------------------\n"
+        out = out+ TAB + "-- Signals declaration\n"
+        out = out+ TAB + "-------------------------\n"
         for component in componentslist:
             if component.getName() != "platform":
                 out = out +"\n" + TAB + "-- " +component.getInstanceName()+"\n"
@@ -210,13 +210,6 @@ class TopVHDL(TopGen):
             instancename = port.getParent().getParent().getInstanceName()
             out = out +"\n"+TAB+"signal "+instancename+"_"+portname+": std_logic_vector("+\
                             str(int(port.getRealSize())-1)+" downto 0);\n" 
-            for pinnum in range(int(port.getSize())):
-                try:
-                    if len(port.getPin(pinnum).getConnections()) == 0:
-                        raise Error("",0)
-                except Error:
-                    out = out + TAB+ "signal "+instancename+"_"+portname+"_pin"+\
-                            str(pinnum)+" : std_logic;\n"
         return out
 
     def declareInstance(self):
@@ -299,17 +292,17 @@ class TopVHDL(TopGen):
             interfacename = port.getParent().getName()
             instancename = port.getParent().getParent().getInstanceName()
             out = out+"\n"+TAB+"-- connect incomplete port\n"
-            for pinnum in range(int(port.getSize())):
-                out = out+TAB+instancename+"_"+portname+"_pin"+\
-                        str(pinnum)+" <= "+instancename+"_"+portname+"("+\
-                        str(pinnum)+");\n"
-                try:
-                    if len(port.getPin(pinnum).getConnections()) == 0:
-                        raise Error("",0)
-                except Error:
+            for pinnum in range(int(port.getRealSize())):
+                if port.getDir() == "in":
+                    out = out+TAB+instancename+"_"+portname+"("+\
+                            str(pinnum)+") <= "+instancename+"_"+portname+"_pin"+\
+                            str(pinnum)+";\n"
+                else:
                     out = out+TAB+instancename+"_"+portname+"_pin"+\
-                            str(pinnum)+" <= '0';\n"
-            
+                            str(pinnum)+" <= "+instancename+"_"+portname+"("+\
+                            str(pinnum)+");\n"
+
+
         # connect all "in" ports pin
         for component in self.project.getInstancesList():
             if component.getInstanceName() != platformname:
