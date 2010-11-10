@@ -17,17 +17,15 @@
 
 __doc__ = ""
 __version__ = "1.0.0"
-__versionTime__ = "24/04/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import os,re
-import periphondemand.bin.define
 from   periphondemand.bin.define import *
 
-from   periphondemand.bin.utils.error         import *
 from   periphondemand.bin.utils.wrapperxml    import WrapperXml
 from   periphondemand.bin.utils.settings      import Settings
 from   periphondemand.bin.utils.display       import Display
+from   periphondemand.bin.utils.error         import *
 from   periphondemand.bin.utils               import wrappersystem as sy
 
 from   periphondemand.bin.core.component      import Component
@@ -38,9 +36,6 @@ from   periphondemand.bin.toolchain.simulation import Simulation
 from   periphondemand.bin.toolchain.synthesis  import Synthesis
 from   periphondemand.bin.toolchain.driver     import Driver
 
-from   periphondemand.bin.utils.wrapperxml    import WrapperXml
-from   periphondemand.bin.utils.settings      import Settings
-from   periphondemand.bin.utils.error         import Error
 
 settings = Settings()
 display  = Display()
@@ -337,7 +332,23 @@ class Project(WrapperXml):
 
     def getInstancesList(self):
         return self.instanceslist
-
+    def getVariablePortsList(self):
+        """ Get list of all variable ports available in project
+        """
+        variable_ports_list = []
+        for port in self.getPortsList():
+            if port.isvariable():
+                variable_ports_list.append(port)
+        return variable_ports_list
+    def getPortsList(self):
+        """ Get list of all ports available in project
+        """
+        ports_list = []
+        for instance in self.getInstancesList():
+            for interface in instance.getInterfacesList():
+                for port in interface.getPortsList():
+                    ports_list.append(port)
+        return ports_list
     def getInstanceListofComponent(self,componentname):
         """ return a list of instances for a componentname """
         listinstance = []
@@ -680,6 +691,17 @@ class Project(WrapperXml):
     def check(self):
         """ This function check all the project wiring
         """
+
+        ##########################################
+        # Check connections on variable ports
+        for port in self.getVariablePortsList():
+            if port.checkVariablePort() is False:
+                raise Error("Pin connections on port "+\
+                        str(port.getParent().getParent().getInstanceName())+"."+\
+                        str(port.getParent().getName())+"."+\
+                        str(port.getName())+\
+                        "is wrong, pin number must be followed.")
+
         ###########################################
         #check Busses, all slaves bus need a master
         listmaster = self.getInterfaceMaster()

@@ -35,14 +35,12 @@ __versionTime__ = "23/05/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import cmd,os
-#import readline
-import periphondemand.bin.define
 
-from   periphondemand.bin.utils import wrapperxml,settings,error,basecli,wrappersystem
+from periphondemand.bin.define import *
+
+from   periphondemand.bin.utils import wrapperxml, settings, error, basecli
 from   periphondemand.bin.utils import wrappersystem as sy
 from   periphondemand.bin.utils.display  import Display
-
-from   periphondemand.bin.code.vhdl.topvhdl      import TopVHDL
 
 from   periphondemand.bin.commandline               import *
 from   periphondemand.bin.commandline.synthesiscli  import SynthesisCli
@@ -934,6 +932,7 @@ Generate top component
         """
         try:
             self.isProjectOpen()
+            settings.active_project.check()
             top = TopVHDL(settings.active_project)
             top.generate()
         except Error,e:

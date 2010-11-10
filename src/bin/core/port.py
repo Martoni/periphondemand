@@ -73,7 +73,6 @@ class Port(WrapperXml):
 
     def getListOfPin(self):
         return self.pinlist
-
     def addPin(self,pin):
         """ Connect an object Pin in Port
             attributes:
@@ -173,6 +172,27 @@ class Port(WrapperXml):
                 return 0
         except AttributeError:
             return 0
+    def checkVariablePort(self):
+        """ check if variable port is correctly connected.
+            Connections on variable port must begin at pin 0
+            and must be followed.
+            ex: 0, 1, 2, 3, …
+        """
+        if self.isvariable():
+            num = "0"
+            listofpin = self.getListOfPin()
+            if listofpin == []:
+                return True
+            tab = []
+            for pin in listofpin:
+                if pin.getNum() != None:
+                    tab.append(int(pin.getNum()))
+            tab.sort()
+            if (len(tab)-1) != tab[-1]:
+                return False
+            return True
+        else:
+            return True
     def getRealSize(self):
         """ if port is variable, return the size set by generic"""
         if self.isvariable():
@@ -186,7 +206,7 @@ class Port(WrapperXml):
         listofpin = self.getListOfPin()
         if listofpin == []:
             return str(int(self.getSize())-1)
-        for pin in self.getListOfPin():
+        for pin in listofpin:
             if pin.getNum() == None:
                 return str(int(self.getSize())-1)
             if int(pin.getNum()) > int(num):
