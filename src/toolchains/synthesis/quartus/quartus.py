@@ -69,7 +69,7 @@ def generatepinout(self,filename=None):
                out = out+TAB+'set_location_assignment '+str(port.getPosition())+\
                         ' -to force_'+str(port.getName())+";\n"
             else:
-                for pin in port.getListOfPin():
+                for pin in port.getPinsList():
                     if pin.getConnections() != []:
                         connect = pin.getConnections()
                         out = out+TAB+'set_location_assignment '+\

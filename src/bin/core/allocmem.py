@@ -63,7 +63,7 @@ class AllocMem:
         size = interface.getMemorySize()
         try:
             base = int(interface.getBase(),16)
-        except Error,e:
+        except Error:
             base = self.lastaddress/size
             if self.lastaddress % size != 0:
                 base = base+1

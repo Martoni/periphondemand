@@ -31,11 +31,9 @@
 
 __doc__ = ""
 __version__ = "1.0.0"
-__versionTime__ = "28/04/2009"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
-import os,re
-import periphondemand.bin.define
+import os
 from   periphondemand.bin.define import *
 
 from   periphondemand.bin.utils.error         import *
@@ -43,9 +41,6 @@ from   periphondemand.bin.utils.wrapperxml    import WrapperXml
 from   periphondemand.bin.utils.settings      import Settings
 from   periphondemand.bin.utils.display       import Display
 from   periphondemand.bin.utils               import wrappersystem as sy
-
-from   periphondemand.bin.utils.settings      import Settings
-from   periphondemand.bin.utils.error         import Error
 
 settings = Settings()
 display  = Display()
@@ -137,8 +132,4 @@ class Library:
 
     def getLibName(self):
         return self.libname
-
-if __name__ == "__main__":
-    print "library class test\n"
-    print library.__doc__
 

@@ -1,5 +1,6 @@
-#! /usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 #-----------------------------------------------------------------------------
 # Name:     Project.py
 # Purpose:  
@@ -237,10 +238,9 @@ class Project(WrapperXml):
         if "component" in keys:
             comp=keys["component"]
             instancename = comp.getInstanceName()
-        elif "componentname" in keys and "libraryname" in keys:
+        elif ("componentname" in keys) and ("libraryname" in keys):
             componentname = keys["componentname"]
             libraryname = keys["libraryname"]
-
             if "instancename" in keys:
                 instancename = keys["instancename"]
                 # check if instancename is not <componentname><number><number>
@@ -252,10 +252,8 @@ class Project(WrapperXml):
                     if instance.getName() == instancename:
                         raise Error("This instance name already exists",0)
             else:
-                instancename =\
-                        componentname+\
+                instancename = componentname+\
                         "%02d"%self.getInstanceAvailability(componentname)
-
             if "componentversion" in keys:
                 componentversion = keys["componentversion"]
             else:
@@ -328,7 +326,7 @@ class Project(WrapperXml):
         for instance in self.getInstancesList():
             if instance.getInstanceName() == instancename:
                 return instance
-        raise Error("Instance " + instancename + " doesn't exists",1)
+        raise Error("Instance " + instancename + " doesn't exists")
 
     def getInstancesList(self):
         return self.instanceslist
@@ -392,7 +390,7 @@ class Project(WrapperXml):
                         if (port.getDir() == "in") and \
                                 (port.getSize() == "1") and \
                                         (port.getType()=="CLK"):
-                            for pin in port.getListOfPin():
+                            for pin in port.getPinsList():
                                 if len(pin.getConnections()) == 1:
                                     connection = pin.getConnections()[0]
                                     if connection["instance_dest"] == platformname:
@@ -411,6 +409,7 @@ class Project(WrapperXml):
             print e
 
         if platformname in self.listAvailablePlatforms():
+            #XXX: todo, improve it to add personnal platform library
             platformdir = settings.path+PLATFORMPATH+"/"+platformname+"/"
             platform = Platform(self,file=platformdir+platformname+XMLEXT)
 
@@ -423,21 +422,8 @@ class Project(WrapperXml):
             for component in platform.getComponentsList():
                 self.addinstance(libraryname=component["type"],
                                   componentname=component["name"])
-            # Connect slaves and clock if just one master is present
-            if len(self.getInterfaceMaster()) == 1:
-                interfacemaster = self.getInterfaceMaster()[0]
-                # autoconnect slaves
-                for interface in self.getInterfaceSlave():
-                    interfacemaster.connectBus(interface.getParent(),
-                                               interface.getName())
-                # autoconnect syscon
-                if len(self.getSysconsList()) == 1:
-                    syscon = self.getInstancesList()[0]
-                    syscon.getSysconInterface().connectClkDomain(
-                            interfacemaster.getParent().getName(),
-                            interfacemaster.getName())
         else:
-            raise Error("This platform is not available",0)
+            raise Error("This platform is not available")
 
     def delPlatform(self):
         """ Suppress platform from project
@@ -462,8 +448,10 @@ class Project(WrapperXml):
         """
         instance = self.getInstance(instancename)
         #remove pins connections from project instances to this instancename
-        for comp in self.getInstancesList():
-            comp.deletePin(instancedest=instancename)
+        for interface in instance.getInterfacesList():
+            for port in interface.getPortsList():
+                for pin in port.getPinsList():
+                    pin.delAllConnections()
         #remove busses connections from project instances to this instancename
         for comp in self.getInstancesList():
             if comp.getName() != "platform":
@@ -487,68 +475,47 @@ class Project(WrapperXml):
             self.simulation.save()
         self.saveXml(settings.projectpath + "/" + self.getName() + XMLEXT)
 
-    def connectPin(self,portsource,pinsourcenum,portdest,pindestnum):
+    def connectPin_cmd(self, pin_source, pin_dest):
         """ connect pin between two instances 
         """
-        #source connection
-        portsource.connectPin(pinsourcenum,portdest,pindestnum)
-        #destination connection
-        portdest.connectPin(pindestnum,portsource,pinsourcenum)
+        pin_source.connectPin(pin_dest)
 
-    def deletePin(self,instancesourcename,interfacesourcename,
-                        portsourcename,pinsourcenum,instancedestname,
-                        interfacedestname,portdestname,pindestnum):
+    def deletePinConnection_cmd(self,
+                            instance_source_name, interface_source_name,
+                            port_source_name, pin_source_num,
+                            instance_dest_name, interface_dest_name,
+                            port_dest_name,pin_dest_num):
         """ delete pin between two instances 
         """
-        source = self.getInstance(instancesourcename)
-        interfacesource = source.getInterface(interfacesourcename)
-        portsource = interfacesource.getPort(portsourcename)
+        instance_source = self.getInstance(instance_source_name)
+        interface_source = instance_source.getInterface(interface_source_name)
+        port_source = interface_source.getPort(port_source_name)
+        if pin_source_num is None:
+            if(port_source.getSize())==1:
+                pin_source_num = "0"
+            else:
+               raise Error("Source pin number not given, and port size > 1")
+        pin_source = port_source.getPin(pin_source_num)
 
         # test if destination given
-        if (instancedestname!=None) and (interfacedestname!=None) \
-            and (portdestname != None) and (pindestnum!=None):
-            dest = self.getInstance(instancedestname)
-            #source connection
-            source.deletePin(dest,
-                             interfacedestname,
-                             portdestname,
-                             pindestnum,
-                             interfacesourcename,
-                             portsourcename,
-                             pinsourcenum)
-            #destination connection
-            dest.deletePin(source,
-                           interfacesourcename,
-                           portsourcename,
-                           pinsourcenum,
-                           interfacedestname,
-                           portdestname,
-                           pindestnum)
-        else: # if only source given, delete all connection from this source
-            if pinsourcenum != None:
-                pinsource = portsource.getPin(pinsourcenum)
-            elif int(portsource.getSize()) == 1: # if source num not given, 
-                                                # test if port 1-sized
-                    pinsourcenum = "0"
-                    pinsource = portsource.getPin("0")
-            else:
-               raise Error,("Source pin number not given, and port size > 1",0)
-            for connection in pinsource.getConnections():
-                dest = self.getInstance(connection["instance_dest"])
-                source.deletePin(dest,
-                                 connection["interface_dest"],
-                                 connection["port_dest"],
-                                 connection["pin_dest"],
-                                 interfacesourcename,
-                                 portsourcename,
-                                 pinsourcenum)
-                dest.deletePin(source,
-                               interfacesourcename,
-                               portsourcename,
-                               pinsourcenum,
-                               connection["interface_dest"],
-                               connection["port_dest"],
-                               connection["pin_dest"])  
+        if (instance_dest_name!=None) and (interface_dest_name!=None) \
+            and (port_dest_name != None) and (pin_dest_num!=None):
+            instance_dest  = self.getInstance(instance_dest_name)
+            interface_dest = instance_dest.getInterface(interface_dest_name)
+            port_dest      = interface_dest.getPort(port_dest_name)
+            pin_dest       = port_dest.getPin(pin_dest_num)
+
+            pin_source.delConnection(pin_dest)
+            pin_dest.delConnection(pin_source)
+        else: # if only instance_source given, delete all connection from this instance_source
+            for connection in pin_source.getConnections():
+                instance_dest  = self.getInstance(connection["instance_dest"])
+                interface_dest = instance_dest.getInterface(connection["interface_dest"])
+                port_dest      = interface_dest.getPort(connection["port_dest"])
+                pin_dest       = port_dest.getPin(connection["pin_dest"])
+
+                pin_source.delConnection(pin_dest)
+                pin_dest.delConnection(pin_source)
 
     def generateIntercon(self,instance_name,interface_name):
         """ generate intercon for interface interface_name """
@@ -566,8 +533,7 @@ class Project(WrapperXml):
             self.delProjectInstance(intercon.getInstanceName())
 
         intercon = Intercon(
-                self.getInstance(instance_name).getInterface(interface_name),self
-                )
+                self.getInstance(instance_name).getInterface(interface_name),self)
         self.addinstance(component=intercon)
         self.saveProject()
 

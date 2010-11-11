@@ -31,7 +31,6 @@
 
 __doc__ = ""
 __version__ = "1.0.0"
-__versionTime__ = "23/05/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import cmd,os
@@ -277,7 +276,7 @@ Add component in project
         componentlist = []
         try:
             componentlist = self.completeargs(text,line,"[libraryname]")
-        except Exception,e:
+        except Exception:
             pass
         return componentlist
 
@@ -301,7 +300,7 @@ List components available in the library
             print e
             return
 
-    def do_listinstances(self,line=None):
+    def do_listinstances(self,line):
         """\
 Usage : listinstances
 List all project instances
@@ -333,14 +332,15 @@ Select the platform to use
             print e
             return
         try:
-           settings.active_project.selectPlatform(line)
-           settings.active_project.saveProject()
+            settings.active_project.selectPlatform(line)
+            settings.active_project.saveProject()
         except Error,e:
+            print display
             print e
             return
         print display
         
-    def do_listplatforms(self,line=None):
+    def do_listplatforms(self,line):
         """\
 Usage : listplatforms
 List platform available
@@ -380,7 +380,7 @@ List instance interface
         print display
         return self.columnize(interfacelist)
 
-    def do_saveproject(self,line=None):
+    def do_saveproject(self,line):
         """\
 Usage : saveproject
 Save project in the curent directory
@@ -418,27 +418,25 @@ Connect pin between instances
         source = arg[0].split('.')
         dest   = arg[-1].split('.')
         if len(source) == 3:
-            source.append(None)
+            source.append(0)
         if len(dest) == 3:
-            dest.append(None)
+            dest.append(0)
         try:
-            settings.active_project.connectPin(\
+            settings.active_project.connectPin_cmd(\
                     settings.active_project.getInstance(
                         source[0]).getInterface(
                             source[1]).getPort(
-                                source[2]),\
-                                 source[3],\
+                                source[2]).getPin(source[3]),\
                     settings.active_project.getInstance(
                         dest[0]  ).getInterface(
-                            dest [1]).getPort(dest[2]),\
-                                    dest[3])
+                            dest [1]).getPort(dest[2]).getPin(dest[3]))
         except Error, e:
             print display
             print e
             return
         print display
 
-    def complete_connectport():
+    def complete_connectport(self,text,line,begidx,endidx):
         portlist = []
         try:
             portlist = self.completeargs(text,line,"<instancename>.<interfacename>.<portname> <instancename>.<interfacename>.<portname>")
@@ -597,7 +595,7 @@ Suppress a pin connection
         if len(dest) == 3 :
             dest.append(None)
         try:
-            settings.active_project.deletePin(source[0],source[1],source[2],source[3],
+            settings.active_project.deletePinConnection_cmd(source[0],source[1],source[2],source[3],
                                               dest[0],dest[1],dest[2],dest[3])
         except Error, e:
             print display
@@ -651,7 +649,7 @@ Suppress a component from project
             return
         print display
 
-    def do_check(self,line=None):
+    def do_check(self,line):
         """\
 Usage : check
 Check the project before code generation
@@ -705,7 +703,7 @@ Set the base address of slave interface
         print display
         print "Base address "+arg[1]+" set"
 
-    def do_listmasters(self,line=None):
+    def do_listmasters(self,line):
         """\
 Usage : listmaster
 List master interface
@@ -814,7 +812,7 @@ Print instance information
 
             for port in interface.getPortsList():
                 print " "*5+"%-15s"%port.getName()+" s"+port.getSize()
-                for pin in port.getListOfPin():
+                for pin in port.getPinsList():
                     print " "*8+"pin",
                     if pin.getNum()!= None:
                         print pin.getNum()+":",
@@ -966,7 +964,7 @@ Generate a report of the project
             raise Error("No project open",0)
 
 
-    def do_listforce(self, line):
+    def do_listforce(self,line):
         """\
 Usage : listforce
 List all force configured for this project

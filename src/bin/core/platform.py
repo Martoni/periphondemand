@@ -137,7 +137,7 @@ class Platform(Component):
                 if port.forceDefined():
                     portlist.append(port)
                 else:
-                    for pin in port.getListOfPin():
+                    for pin in port.getPinsList():
                         for connect in pin.getConnections():
                             instancedest = project.getInstance(
                                                             connect["instance_dest"])

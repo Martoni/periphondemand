@@ -17,7 +17,6 @@
 
 __doc__ = ""
 __version__ = "1.0.0"
-__versionTime__ = "24/04/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import os
@@ -151,7 +150,7 @@ class Interface(WrapperXml):
     def getBaseInt(self):
         try:
             return int(self.getBase(),16)
-        except Error,e:
+        except Error:
             return 0
 
     def getAddressSize(self):

@@ -69,8 +69,8 @@ def generatepinout(self,filename=None):
                 if port.getDrive() != None:
                     out = out + " | DRIVE="+str(port.getDrive())
                 out = out+';'+r'# '+str(port.getName())+'\n'
-            elif port.getListOfPin() != []:
-                pin = port.getListOfPin()
+            elif port.getPinsList() != []:
+                pin = port.getPinsList()
                 # Platform ports are all 1-sized, raise error if not
                 if len(pin) != 1:
                     raise Error("Platform port "+port.getName()+\

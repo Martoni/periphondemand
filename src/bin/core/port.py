@@ -31,9 +31,7 @@
 
 __doc__ = ""
 __version__ = "1.0.0"
-__versionTime__ = "30/04/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
-
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils            import wrappersystem as sy
@@ -71,7 +69,7 @@ class Port(WrapperXml):
     def __initnode(self,node):
         WrapperXml.__init__(self,node=node)
 
-    def getListOfPin(self):
+    def getPinsList(self):
         return self.pinlist
     def addPin(self,pin):
         """ Connect an object Pin in Port
@@ -89,29 +87,31 @@ class Port(WrapperXml):
         self.addNode(node=pin)
         return pin
         
-    def delPin(self,arg):
-        """ delete pin
-            delPin(self,number)
-            delPin(self,node)
+    def delPin(self, pin_num):
+        """ delete a pin 
         """
-        if type(arg) == str or type(arg) == int:
-            number = arg
-            for pin in self.getListOfPin():
-               if pin.getAttribute("num") == str(number):
-                    self.delNode("pin","num",str(number))
-                    self.pinlist.remove(pin)
-        else:
-            pin = arg
-            self.pinlist.remove(pin)
-            self.delNode(pin)
+        pin = self.getPin(pin_num)
+        if pin.getConnections() != []:
+            raise Error("Pin "+\
+                        str(self.getParent().getParent().getInstanceName())+"."+\
+                        str(self.getParent().getName())+"."+\
+                        str(self.getName())+"."+str(pin_num)+
+                        " can't be deleted, connections exists")
+        self.pinlist.remove(pin)
+        self.delNode(pin)
  
     def getPin(self,num):
-        """ return pin with num
+        """ return pin node 
         """
-        for pin in self.getListOfPin():
+        if int(num) >= self.getSize():
+            raise Error("Pin number "+str(num)+" not in port size")
+        for pin in self.getPinsList():
             if pin.getNum() == str(num):
                 return pin
-        raise Error("No pin with num "+str(num)+" in port "+str(self.getName()),0)
+        pin = Pin(self, num=str(num))
+        self.pinlist.append(pin)
+        return pin
+
     def getType(self):
         return self.getAttribute("type")
     def setType(self,type):
@@ -134,7 +134,7 @@ class Port(WrapperXml):
     def getForce(self):
         return self.getAttribute("force")
     def setForce(self, force):
-        listofpins = self.getListOfPin()
+        listofpins = self.getPinsList()
         if len(listofpins) > 1:
             raise Error("Force multiple pin port is not implemented")
         if len(listofpins) == 1:
@@ -179,8 +179,7 @@ class Port(WrapperXml):
             ex: 0, 1, 2, 3, …
         """
         if self.isvariable():
-            num = "0"
-            listofpin = self.getListOfPin()
+            listofpin = self.getPinsList()
             if listofpin == []:
                 return True
             tab = []
@@ -203,7 +202,7 @@ class Port(WrapperXml):
         """ return the max num pin value
         """
         num="0"
-        listofpin = self.getListOfPin()
+        listofpin = self.getPinsList()
         if listofpin == []:
             return str(int(self.getSize())-1)
         for pin in listofpin:
@@ -216,10 +215,10 @@ class Port(WrapperXml):
         """ return the min pin value
         """
         num = self.getSize()
-        listofpin = self.getListOfPin()
+        listofpin = self.getPinsList()
         if listofpin == []:
             return "0"
-        for pin in self.getListOfPin():
+        for pin in self.getPinsList():
            if pin.getNum() == None:
                return "0"
            if int(pin.getNum()) < int(num):
@@ -250,117 +249,56 @@ class Port(WrapperXml):
         size = self.getSize()
         if size != port_dest.getSize():
             raise Error("The two ports have differents size")
-        if self.getListOfPin() != []:
+        if self.getPinsList() != []:
             raise Error("Port connection " + self.getName() + " is not void")
-        if port_dest.getListOfPin() != []:
+        if port_dest.getPinsList() != []:
             raise Error("Port connection "+port_dest.getName()+" is not void")
 
         self.connectAllPin(port_dest)
 
-    def connectPin(self,pinsourcenum,portdest,pindest):
-        """ connect a pin to a destination instance
-        """
-        if (pinsourcenum is not None):
-            # if non void port
-            if self.getListOfPin() != []:
-                for pin in self.getListOfPin():
-                    if int(pin.getNum()) == int(pinsourcenum):
-                        #check pin compatibility
-                        self.checkConnection(portdest)
-                        if pindest is not None:
-                            pin.connectPin(portdest,pindest)
-                        else:
-                            pin.connectPin(portdest,"0")
-                        return
-            # check port size
-            if int(self.getSize()) >= int(pinsourcenum):
-                #check pin compatibility 
-                self.checkConnection(portdest)
-                pin = self.addPin(Pin(self,num=int(pinsourcenum)))
-                if pindest is not None:
-                    pin.connectPin(portdest,pindest)
-                else:
-                    pin.connectPin(portdest,"0")
-            else:
-                raise Error("Port size is too small",0)
-        # if port size is just 1
-        elif int(self.getSize())==1:
-            #check pin compatibility 
-            self.checkConnection(portdest)
-            if self.getListOfPin() != []:
-                pin = self.getListOfPin()[0]
-            else:
-                pin = self.addPin(Pin(self,num=0))
-            if pindest is not None:
-                pin.connectPin(portdest,pindest)
-            else:
-                pin.connectPin(portdest,"0")
-            return
-        else:
-            raise Error("Pin source number must be entered",0)
-
-    def connectAllPin(self,portdest):
+    def connectAllPin(self,port_dest):
         """ Connect all port pin to a destination instance
         """
-        for pinnum in range(int(self.getSize())):
-            self.connectPin(pinnum,portdest,pinnum)
-
-    def deletePin(self,instancedest,interfacedest=None,portdest=None,
-                       pindest=None,pinsource=None):
-        """ delete a pin to a destination instance
-        """
-        if pinsource == None:
-            pinlist = self.getListOfPin()
-            for pin in pinlist:
-                try:
-                    pin.delConnection(instance_dest=instancedest)
-                except Error:
-                    pass
- 
-        else:
-            if self.getListOfPin() != []:
-                for pin in self.getListOfPin():
-                    if int(pin.getNum()) == int(pinsource):
-                        pin.delConnection(instancedest.getInstanceName(),
-                                          interfacedest,portdest,pindest)
-                        if pin.isEmpty():
-                            self.delPin(pin)
-                        return
-            raise Error("Pin "+pinsource+" doesn't exists",0)
+        for pin_num in range(int(self.getSize())):
+            pin_source = self.getPin(pin_num)
+            pin_dest   = port_dest.getPin(pin_num)
+            pin_source.connectPin(pin_dest)
 
     def autoconnectPin(self):
-        for pin in self.getListOfPin():
+        """ If there are platform defaut connection 
+            in this port, autoconnect it
+        """
+        for pin in self.getPinsList():
             pin.autoconnectPin()
 
     def getDestinationPort(self):
         """ get destination port connected to this port 
-        if only one port connected
+            if only one port connected
         """
-        # check if port is connected to only one other port
-        portdest = None
-        for pin in self.getListOfPin():
+        port_dest = None
+        for pin in self.getPinsList():
             if len(pin.getConnectedPinList())!= 1:
                 return None
-            portconnect = pin.getConnectedPinList()[0].getParent()
+            port_connect = pin.getConnectedPinList()[0].getParent()
 
             instanceconnect = \
-                portconnect.getParent().getParent()
-            if (portdest != None):
-                if(portdest.getName() != portconnect.getName()\
+                port_connect.getParent().getParent()
+            if (port_dest != None):
+                if(port_dest.getName() != port_connect.getName()\
                         or \
-                   portdest.getParent().getParent().getInstanceName() \
+                   port_dest.getParent().getParent().getInstanceName() \
                         != instanceconnect.getInstanceName()\
                         ):
                     return None
             else:
-                portdest = portconnect
-        return portdest
+                port_dest = port_connect
+        return port_dest
     
     def getMSBConnected(self):
         """Return the MSB that is connected to an another pin
         """
         num = -1
-        for pin in self.getListOfPin():
+        for pin in self.getPinsList():
             if pin.isConnected():
                 if int(pin.getNum()) > num:
                     num = int(pin.getNum())
@@ -368,9 +306,9 @@ class Port(WrapperXml):
     
     def isCompletelyConnected(self):
         """ return 1 if all pin has connection"""
-        if len(self.getListOfPin()) != int(self.getSize()):
+        if len(self.getPinsList()) != int(self.getSize()):
             return 0
-        for pin in self.getListOfPin():
+        for pin in self.getPinsList():
             if not pin.isConnected():
                 return 0
         return 1

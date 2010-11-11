@@ -90,12 +90,12 @@ class Generic(WrapperXml):
         self.setAttribute("public",public)
 
     def getType(self):
-        type = self.getAttribute("type")
-        if type == None:
+        the_type = self.getAttribute("type")
+        if the_type == None:
             raise Error("Generic "+self.getName()+\
                     " description malformed, type must be defined",0)
         else:
-            return type
+            return the_type
     def setType(self,type):
         self.setAttribute("type",type)
 

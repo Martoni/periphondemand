@@ -35,7 +35,6 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import os
 
-import periphondemand.bin.define
 from   periphondemand.bin.define import *
 
 from periphondemand.bin.utils import wrappersystem as sy

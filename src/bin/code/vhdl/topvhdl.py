@@ -96,7 +96,7 @@ class TopVHDL(TopGen):
                                 +" downto 0);"
                     out = out + "\n"
                 else:
-                    for pin in port.getListOfPin():
+                    for pin in port.getPinsList():
                         if pin.isConnected():
                             out = out + TAB*2 + \
                                 instancename+"_"+portname+"_pin"+str(pin.getNum())+\
@@ -187,9 +187,9 @@ class TopVHDL(TopGen):
 
                     for port in interface.getPortsList():
                         
-                        if len(port.getListOfPin())!=0:
-                          if len(port.getListOfPin()[0].getConnections())!=0:
-                            if port.getListOfPin()[0].getConnections()[0]["instance_dest"]\
+                        if len(port.getPinsList())!=0:
+                          if len(port.getPinsList()[0].getConnections())!=0:
+                            if port.getPinsList()[0].getConnections()[0]["instance_dest"]\
                                                     !=platformname:
                                 out=out+TAB+"signal "+component.getInstanceName()\
                                         +"_"+port.getName()\
@@ -237,7 +237,7 @@ class TopVHDL(TopGen):
                 for interface in component.getInterfacesList():
                     out = out + TAB*3 + "-- " + interface.getName()+"\n"
                     for port in interface.getPortsList():
-                        if len(port.getListOfPin())!=0:
+                        if len(port.getPinsList())!=0:
                             out=out+TAB*3\
                                     +port.getName()\
                                     +" => "
@@ -313,13 +313,13 @@ class TopVHDL(TopGen):
                     for port in interface.getPortsList():
                         if port.getDir() == "in":
                             # Connect all pins port
-                            if len(port.getListOfPin())!=0:
+                            if len(port.getPinsList())!=0:
                                 portdest = port.getDestinationPort()
                                 if portdest != None and\
                                        (portdest.getSize() == port.getSize()):
                                     # If port is completely connected to one 
                                     # and only one other port 
-                                    pin = port.getListOfPin()[0]
+                                    pin = port.getPinsList()[0]
                                     connect =  pin.getConnections()[0]
                                     if connect["instance_dest"] != platformname:
                                         out = out + TAB*2\
@@ -329,7 +329,7 @@ class TopVHDL(TopGen):
                                             + ";\n"
                                 else:
                                     # If pins port are connected individualy to several other ports
-                                    for pin in port.getListOfPin():
+                                    for pin in port.getPinsList():
                                         # Connect pin individualy
                                         if pin.getNum() != None and len(pin.getConnections())!= 0:
                                             connect = pin.getConnections()[0]

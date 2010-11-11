@@ -31,7 +31,6 @@
 
 __doc__ = ""
 __version__ = "1.0.0"
-__versionTime__ = "30/04/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml 
@@ -82,5 +81,6 @@ class Register(WrapperXml):
         elif int(self.getSize()) == 32:
             return "%08x"%(baseaddr+offset*4)
         else:
-            return "%x"%absaddr
+            raise Error("Register size not supported for reg "+\
+                    str(self.getName())+" in component "+str(self.getParent().getParent().getName()))
 

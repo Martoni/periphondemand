@@ -127,7 +127,6 @@ class Intercon(Component):
                 # adding port on bus interface
                 bus.addPort(newport)
                 #connect port new port on instance interface
-                newport.connectAllPin(port) 
                 port.connectAllPin(newport)
 
             #########
@@ -149,7 +148,6 @@ class Intercon(Component):
                 # Adding newport on clkint interface
                 clkint.addPort(newport)
                 #connect port
-                newport.connectAllPin(port)
                 port.connectAllPin(newport)
 
 
@@ -174,7 +172,6 @@ class Intercon(Component):
             # adding newport
             bus.addPort(newport)
             #connect port
-            newport.connectAllPin(port)
             port.connectAllPin(newport)
 
        

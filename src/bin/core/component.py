@@ -231,8 +231,8 @@ class Component(WrapperXml):
             raise Error("File "+hdlfilepath+" doesn't exist")
 
         hdl_file_name = os.path.basename(hdlfilepath)
-        if hdl_file_name in [file.getFileName() 
-                    for file in self.getHdl_filesList()]:
+        if hdl_file_name in [hdlfile.getFileName() 
+                    for hdlfile in self.getHdl_filesList()]:
             raise Error("File "+hdlfilepath+" is already in component")
 
         if istop:
@@ -475,7 +475,7 @@ class Component(WrapperXml):
         for port in ports_list:
             if self.portIsInFreeList(port.getName()):
                 freeportlist.append(port)
-        return freeportslist
+        return freeportlist
 
     def getPortsList(self):
         """ return list of ports in component 
@@ -487,14 +487,13 @@ class Component(WrapperXml):
         notassignedports = [port.getName() for port in tophdlfile.getPortsList()]
         interfacelist = self.getInterfacesList()
         for interface in interfacelist:
-            interface_name = interface.getName()
             key = interface.getName()
             display_port[key] = []
             port_name_list = [port.getName() for port in interface.getPortsList()]
             for port_name in port_name_list:
                 try:
                     notassignedports.remove(port_name)
-                except ValueError,e:
+                except ValueError:
                     raise Error("HDL top file and XML component description are "+\
                                 "not consistant. Port "+port_name+" in component"+\
                                 " description is not present in HDL file ")
@@ -527,9 +526,9 @@ class Component(WrapperXml):
             generic.setDestination(attribute_value)
         else:
             raise Error("Unknown attribute "+str(attribute_name))
- 
+
     def setHDL(self,file_name,attribute_name,attribute_value):
-        HDL = self.getHDLFile(HDL_name)
+        HDL = self.getHDLFile(file_name)
         if attribute_name=="filename":
             HDL.setFileName(attribute_value)
         elif attribute_name=="scope":
