@@ -89,7 +89,7 @@ def main():
     
     for i in range(number_of_tests):
         print " Test number "+str(i+1)+" : "+testlist[i][3:],
-        out = os.popen("./pod -s "+testlist[i]).read()
+        out = os.popen("pod -s "+testlist[i]).read()
         # if -r, create output files
         if reset :
             file_chk = open("chk_"+testlist[i],"w")
