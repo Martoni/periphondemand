@@ -205,11 +205,12 @@ class TopVHDL(TopGen):
         out = out +"\n"+ TAB + "-- void pins\n"
 
         for port in incomplete_external_ports_list:
-            portname = port.getName()
-            interfacename = port.getParent().getName()
-            instancename = port.getParent().getParent().getInstanceName()
-            out = out +"\n"+TAB+"signal "+instancename+"_"+portname+": std_logic_vector("+\
-                            str(int(port.getRealSize())-1)+" downto 0);\n" 
+            if not port.forceDefined():
+                portname = port.getName()
+                interfacename = port.getParent().getName()
+                instancename = port.getParent().getParent().getInstanceName()
+                out = out +"\n"+TAB+"signal "+instancename+"_"+portname+": std_logic_vector("+\
+                                str(int(port.getRealSize())-1)+" downto 0);\n" 
         return out
 
     def declareInstance(self):
@@ -288,19 +289,20 @@ class TopVHDL(TopGen):
         platformname = self.project.getPlatform().getInstanceName()
         # connect incomplete_external_ports_list
         for port in incomplete_external_ports_list:
-            portname = port.getName()
-            interfacename = port.getParent().getName()
-            instancename = port.getParent().getParent().getInstanceName()
-            out = out+"\n"+TAB+"-- connect incomplete port\n"
-            for pinnum in range(int(port.getRealSize())):
-                if port.getDir() == "in":
-                    out = out+TAB+instancename+"_"+portname+"("+\
-                            str(pinnum)+") <= "+instancename+"_"+portname+"_pin"+\
-                            str(pinnum)+";\n"
-                else:
-                    out = out+TAB+instancename+"_"+portname+"_pin"+\
-                            str(pinnum)+" <= "+instancename+"_"+portname+"("+\
-                            str(pinnum)+");\n"
+            if not port.forceDefined():
+                portname = port.getName()
+                interfacename = port.getParent().getName()
+                instancename = port.getParent().getParent().getInstanceName()
+                out = out+"\n"+TAB+"-- connect incomplete port "+str(portname)+"\n"
+                for pinnum in range(int(port.getRealSize())):
+                    if port.getDir() == "in":
+                        out = out+TAB+instancename+"_"+portname+"("+\
+                                str(pinnum)+") <= "+instancename+"_"+portname+"_pin"+\
+                                str(pinnum)+";\n"
+                    else:
+                        out = out+TAB+instancename+"_"+portname+"_pin"+\
+                                str(pinnum)+" <= "+instancename+"_"+portname+"("+\
+                                str(pinnum)+");\n"
 
 
         # connect all "in" ports pin
