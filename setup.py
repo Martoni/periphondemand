@@ -52,10 +52,12 @@ def getTree(directory):
     """ return a tuple list of files """
     libfile = []
     os.path.walk(os.path.join("src",directory),visit,libfile)
-    return libfile
+    new_libfile = []
+    for path_file in libfile:
+        new_libfile.append('/'.join(path_file.split('/')[1:]))
+    return new_libfile
 
-# FIXME:
-# package_data doesn't work, replaced by datafiles
+# Package files
 package_files_list = []
 package_files_list.extend(getTree("library"))
 package_files_list.extend(getTree("platforms"))
@@ -65,14 +67,6 @@ package_files_list.extend(getTree("toolchains"))
 package_files_list.extend(getTree("tests"))
 
 datafiles=[ ('/usr/bin',['src/bin/pod']) ]
-#FIXME
-#To be removed when package_data will work:
-dest_dir = "/usr/local/lib/python2."+str(sys.version_info[1])+"/dist-packages/"
-for file in package_files_list:
-    dest = dest_dir + os.path.dirname(file).replace("src","periphondemand",1)
-    source = [file]
-    datafiles.append((dest,source))
-###
 
 setup(  name='PeriphOnDemand',
         version=getVersion(),
@@ -91,7 +85,7 @@ setup(  name='PeriphOnDemand',
                   'periphondemand.bin.toolchain',
                   'periphondemand.bin.utils',
                   ],
-#        package_data = {'periphondemand':package_files_list},
+        package_data = {'periphondemand':package_files_list},
         data_files=datafiles,
         license='GPL',
 )
