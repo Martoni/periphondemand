@@ -2,11 +2,11 @@
 -- Company     : ARMades Systems
 -- Author(s)   : Fabien Marteau <fabien.marteau@armadeus.com>
 -- 
--- Creation Date : 21/10/2010
--- File          : spartan_selectmap.vhd
+-- Creation Date : 30/04/2009
+-- File          : spartan_select_map.vhd
 --
--- This component is designed to configure a spartan6 with SelectMap Slave
--- protocol.
+-- Abstract : This IP manage input serialized by the 
+-- industrial 8-digital-input serializer : SN65HVS882
 --
 ---------------------------------------------------------------------------
 
@@ -36,11 +36,11 @@ Entity spartan_select_map is
         wbs_write     : in std_logic ;
         wbs_ack       : out std_logic;
         -- selectMap port
-        selectmap_data      : inout std_logic_vector( wb_size-1 downto 0);
-        selectmap_csi_n     : inout std_logic ;
-        selectmap_rdwr_n    : inout std_logic ;
-        selectmap_cclk      : inout std_logic ;
-        selectmap_program_n : inout std_logic ;
+        selectmap_data      : out std_logic_vector( wb_size-1 downto 0);
+        selectmap_csi_n     : out std_logic ;
+        selectmap_rdwr_n    : out std_logic ;
+        selectmap_cclk      : out std_logic ;
+        selectmap_program_n : out std_logic ;
         selectmap_init_n    : in std_logic ;
         selectmap_busy      : in std_logic ;
         selectmap_done      : in std_logic
@@ -52,6 +52,7 @@ Architecture spartan_select_map_1 of spartan_select_map is
 ---------------------------------------------------------------------------
     -- usefull constant
     constant ZERO : std_logic_vector(15 downto 0) := x"0000";
+    constant CLK_PULSE_LENGHT : natural := 200;
 
     -- Registers addresses
     constant ID_REG_ADDR     : std_logic_vector( 1 downto 0) := "00";
@@ -68,6 +69,9 @@ Architecture spartan_select_map_1 of spartan_select_map is
     signal write_ack: std_logic ;
 
     signal cclk_sig : std_logic ;
+    signal cclk_trig : std_logic ;
+
+    signal data_inverter : std_logic_vector( wb_size-1 downto 0);
 
 begin
 
@@ -80,7 +84,25 @@ begin
     selectmap_program_n <= config_reg(1) when config_reg(4) = '0' else 'Z';
     selectmap_csi_n     <= config_reg(2) when config_reg(4) = '0' else 'Z';
     selectmap_cclk      <= cclk_sig when config_reg(4) = '0' else clk;
-    selectmap_data      <= data_reg when config_reg(4) = '0' else (others => 'Z');
+    data_inverter      <= data_reg when config_reg(4) = '0' else (others => 'Z');
+
+    selectmap_data(0)  <= data_inverter(7);
+    selectmap_data(1)  <= data_inverter(6);
+    selectmap_data(2)  <= data_inverter(5);
+    selectmap_data(3)  <= data_inverter(4);
+    selectmap_data(4)  <= data_inverter(3);
+    selectmap_data(5)  <= data_inverter(2);
+    selectmap_data(6)  <= data_inverter(1);
+    selectmap_data(7)  <= data_inverter(0);
+
+    selectmap_data(8)  <= data_inverter(15);
+    selectmap_data(9)  <= data_inverter(14);
+    selectmap_data(10) <= data_inverter(13);
+    selectmap_data(11) <= data_inverter(12);
+    selectmap_data(12) <= data_inverter(11);
+    selectmap_data(13) <= data_inverter(10);
+    selectmap_data(14) <= data_inverter(9);
+    selectmap_data(15) <= data_inverter(8);
 
     -- Status register
     -- |15|14|13|12|11|10|9|8|7|6|5|4|3|   2  |  1 | 0  |
@@ -139,19 +161,43 @@ begin
         end if;
     end process write_p;
 
-    -- CCLK driver
+    -- CCLK trigger generator
     cclk_p : process (clk, reset)
     begin
         if reset = '1' then
-            cclk_sig <= '0';
+            cclk_trig <= '0';
         elsif rising_edge(clk) then
             if wbs_add = DATA_REG_ADDR then
-                cclk_sig <= write_ack;
+                cclk_trig <= '1';
+            else
+                cclk_trig <= '0';
+            end if;
+        end if;
+    end process cclk_p;
+
+    cclk_gen : process (clk, reset)
+        variable counter : natural range 0 to (CLK_PULSE_LENGHT+1);
+    begin
+        if reset = '1' then
+            cclk_sig <= '0';
+            counter := 0;
+        elsif rising_edge(clk) then
+            if cclk_trig = '1' then
+                counter := 0;
+                cclk_sig <= '0';
+            elsif counter < (CLK_PULSE_LENGHT/2) then
+                counter := counter +1;
+                cclk_sig <= '0';
+            elsif counter < (CLK_PULSE_LENGHT) then
+                counter := counter +1;
+                cclk_sig <= '1';
             else
                 cclk_sig <= '0';
             end if;
         end if;
-    end process cclk_p;
+    end process cclk_gen;
+
+
     
     wbs_ack <= read_ack or write_ack;
 
