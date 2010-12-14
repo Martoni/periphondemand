@@ -4,7 +4,7 @@
 			ARMadeus SP_VISION card
   </description>
 
-    <fpga family="spartan6" device="XC6SLX45" speed="-4" package="FG484" main_clock="100000"/>
+    <fpga family="spartan6" device="XC6SLX45" speed="-2" package="FG484" main_clock="100000"/>
 
     <interfaces>
         <interface name="fpga">
