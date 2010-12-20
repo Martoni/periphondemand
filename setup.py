@@ -55,6 +55,8 @@ def getTree(directory):
     new_libfile = []
     for path_file in libfile:
         new_libfile.append('/'.join(path_file.split('/')[1:]))
+    if (directory == "platforms"):
+        print str(new_libfile)
     return new_libfile
 
 # Package files

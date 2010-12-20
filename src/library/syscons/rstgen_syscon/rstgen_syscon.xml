@@ -27,6 +27,7 @@
                     <pin num="0">
                         <connect instance_dest="apf9328" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/>
                         <connect instance_dest="apf27" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="EIM_BCLK" pin_dest="0"/>
                     </pin>
 				</port>
 			</ports>

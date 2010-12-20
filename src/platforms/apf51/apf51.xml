@@ -4,9 +4,14 @@
         Armadeus apf51 card
     </description>
 
-    <fpga family="spartan6" device="XC6SLX9" speed="-2" package="CSG324" main_clock="100000"/>
+    <fpga family="spartan6" device="XC6SLX9" speed="-2" package="CSG225" main_clock="83333"/>
 
-    <simulation>
+		<simulation>
+			<simlib filename="apf51_test_pkg.vhd">
+            <description>
+                Defines communication functions between imx51 and spartan6:
+						</description>
+      </simlib>
     </simulation>
 
     <components>
@@ -77,7 +82,6 @@
 							<port size="1" standard="LVCMOS18" position="F3"	name="IO_L46P_M3CLK_3"               dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="F1"	name="IO_L46N_M3CLKN_3"              dir="inout"/>
 
-
 							<port size="1" standard="LVCMOS18" position="E2"	name="IO_L52P_M3A8_3"    dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="E1"	name="IO_L52N_M3A9_3"    dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="D4"	name="IO_L53P_M3CKE_3"   dir="inout"/>
@@ -87,17 +91,17 @@
 							<port size="1" standard="LVCMOS18" position="C2"	name="IO_L83P_3"         dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="C1"	name="IO_L83N_VREF_3"    dir="inout"/>
 
-							<port size="1" standard="LVCMOS18" position="N12"	name="EIM_BCLK" dir="inout"/>
+							<port size="1" standard="LVCMOS18" position="N12"	name="EIM_BCLK" dir="inout" freq="83"/>
 							<port size="1" standard="LVCMOS18" position="P13"	name="EIM_EB1"  dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="P11"	name="EIM_DA7"  dir="inout"/>
-							<port size="1" standard="LVCMOS18" position="R11"	name="EIM_LBA"  dir="inout"/>
+							<port size="1" standard="LVCMOS18" position="R9"	name="EIM_LBA"  dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="M11"	name="EIM_DA6"  dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="N11"	name="EIM_DA5"  dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="R10"	name="EIM_DA13" dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="L9"	name="EIM_DA12" dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="M10"	name="EIM_DA11" dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="P9"	name="EIM_CS1"  dir="inout"/>
-							<port size="1" standard="LVCMOS18" position="R9"	name="EIM_RW"   dir="inout"/>
+							<port size="1" standard="LVCMOS18" position="R6"	name="EIM_RW"   dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="M8"	name="EIM_DA10" dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="N7"	name="CLKO"     dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="K8"	name="EIM_DA9"  dir="inout"/>
@@ -106,7 +110,7 @@
 							<port size="1" standard="LVCMOS18" position="P7"	name="EIM_EB0"      dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="R7"	name="EIM_OE"       dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="N6"	name="EIM_DA0"      dir="inout"/>
-							<port size="1" standard="LVCMOS18" position="R6"	name="EIM_CS0"      dir="inout"/>
+							<port size="1" standard="LVCMOS18" position="R11"	name="EIM_CS0"      dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="P5"	name="EIM_DA4"      dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="R5"	name="EIM_DA3"      dir="inout"/>
 							<port size="1" standard="LVCMOS18" position="L6"	name="EIM_DA2"      dir="inout"/>

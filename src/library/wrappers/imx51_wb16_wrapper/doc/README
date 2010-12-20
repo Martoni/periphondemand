@@ -1,0 +1,15 @@
+imx51_wb16_wrapper component
+============================
+
+This component is designed to convert WEIM bus from i.MX51
+to Wisbone 16 bits bus.
+
+FPGA component
+--------------
+
+No registers
+
+ARMadeus linux driver
+---------------------
+
+TODO
