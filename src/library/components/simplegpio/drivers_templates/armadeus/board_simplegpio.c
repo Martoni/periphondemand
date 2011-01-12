@@ -32,6 +32,11 @@
 
 /* for platform device */
 #include <linux/platform_device.h>
+#include <mach/hardware.h>
+#ifdef CONFIG_MACH_APF27 /* To remove when MX1 platform merged */
+#include <mach/fpga.h>
+#endif
+
 
 #include"simplegpio.h"
 
