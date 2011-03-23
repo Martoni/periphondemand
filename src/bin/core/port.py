@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     Port.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  30/04/2008
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -86,9 +86,9 @@ class Port(WrapperXml):
         self.pinlist.append(pin)
         self.addNode(node=pin)
         return pin
-        
+
     def delPin(self, pin_num):
-        """ delete a pin 
+        """ delete a pin
         """
         pin = self.getPin(pin_num)
         if pin.getConnections() != []:
@@ -99,9 +99,9 @@ class Port(WrapperXml):
                         " can't be deleted, connections exists")
         self.pinlist.remove(pin)
         self.delNode(pin)
- 
+
     def getPin(self,num):
-        """ return pin node 
+        """ return pin node
         """
         if int(num) >= self.getSize():
             raise Error("Pin number "+str(num)+" not in port size")
@@ -265,14 +265,14 @@ class Port(WrapperXml):
             pin_source.connectPin(pin_dest)
 
     def autoconnectPin(self):
-        """ If there are platform defaut connection 
+        """ If there are platform defaut connection
             in this port, autoconnect it
         """
         for pin in self.getPinsList():
             pin.autoconnectPin()
 
     def getDestinationPort(self):
-        """ get destination port connected to this port 
+        """ get destination port connected to this port
             if only one port connected
         """
         port_dest = None
@@ -293,7 +293,7 @@ class Port(WrapperXml):
             else:
                 port_dest = port_connect
         return port_dest
-    
+
     def getMSBConnected(self):
         """Return the MSB that is connected to an another pin
         """
