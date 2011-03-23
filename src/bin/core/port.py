@@ -304,14 +304,14 @@ class Port(WrapperXml):
                     num = int(pin.getNum())
         return num
 
-    def hasConnection(self):
-        """ Return True if at less one pin is connected
+    def isVoid(self):
+        """ Return False if at less one pin is connected
         on another pin
         """
         for pin in self.getPinsList():
             if pin.isConnected():
-                return True
-        return False
+                return False
+        return True
 
     def isCompletelyConnected(self):
         """ return 1 if all pin has connection"""
