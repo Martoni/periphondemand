@@ -553,6 +553,15 @@ class Project(WrapperXml):
 
         port_source.connectPort(port_dest)
 
+    def connectInterface(self,instance_name1,interface_name1,instance_name2,interface_name2):
+        """ Connect an interface between to components
+        """
+        instance_src = self.getInstance(instance_name1)
+        interface_src = instance_src.getInterface(interface_name1)
+        instance_dest = self.getInstance(instance_name2)
+        interface_dest = instance_dest.getInterface(interface_name2)
+        interface_src.connectInterface(interface_dest)
+
     def connectBus(self,instancemaster,interfacemaster,instanceslave,interfaceslave):
         """ Connect a master bus to a slave bus
         """

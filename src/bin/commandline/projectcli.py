@@ -475,9 +475,43 @@ Connect all pins of two same size ports.
             return
         print display
 
-
-    def complete_connectbus(self,text,line,begidx,endidx):
+    def complete_connectinterface(self, text, line, begidx, endix):
         buslist = []
+        try:
+            buslist = self.completeargs(text,line,"<instancename>.<interfacename> <instancename>.<interfacename>")
+        except Exception,e:
+            print e
+        return buslist
+
+    def do_connectinterface(self,line):
+        """\
+Usage : connectinterface <instancename>.<interfacename> <instancename>.<interfacename>
+Connect interface between two components
+        """
+        try:
+            self.isProjectOpen()
+            self.checkargs(line,"<instancename>.<interfacename> <instancename>.<interfacename>")
+        except Exception,e:
+            print display
+            print e
+            return
+        arg=line.split(' ')
+        source = arg[0].split('.')
+        dest   = arg[-1].split('.')
+        if len(source) != 2 or len(dest) != 2:
+            print "Argument error"
+            return
+        try:
+            settings.active_project.connectInterface(source[0],source[1],dest[0],dest[1])
+        except Error, e:
+            print "<<interface "+source[1]+" and interface "+dest[1]+" are not compatible>>"
+            print display
+            print e
+            return
+        print display
+
+        def complete_connectbus(self,text,line,begidx,endidx):
+            buslist = []
         try:
             buslist = self.completeargs(text,line,"<masterinstancename>.<masterinterfacename> <slaveinstancename>.<slaveinterfacename>")
         except Exception,e:
