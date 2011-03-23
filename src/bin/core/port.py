@@ -303,7 +303,16 @@ class Port(WrapperXml):
                 if int(pin.getNum()) > num:
                     num = int(pin.getNum())
         return num
-    
+
+    def hasConnection(self):
+        """ Return True if at less one pin is connected
+        on another pin
+        """
+        for pin in self.getPinsList():
+            if pin.isConnected():
+                return True
+        return False
+
     def isCompletelyConnected(self):
         """ return 1 if all pin has connection"""
         if len(self.getPinsList()) != int(self.getSize()):
