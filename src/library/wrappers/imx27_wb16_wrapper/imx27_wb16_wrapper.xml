@@ -12,45 +12,137 @@
 		<interface name="eim" class="gls">
 			<ports>
 				<port name="imx_address" type="EXPORT" size="12" dir="in">
-					<pin num="0"> <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR1" pin_dest="0"/></pin>
-					<pin num="1"> <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR2" pin_dest="0"/></pin>
-					<pin num="2"> <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR3" pin_dest="0"/></pin>
-					<pin num="3"> <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR4" pin_dest="0"/></pin>
-					<pin num="4"> <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR5" pin_dest="0"/></pin>
-					<pin num="5"> <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR6" pin_dest="0"/></pin>
-					<pin num="6"> <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR7" pin_dest="0"/></pin>
-					<pin num="7"> <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR8" pin_dest="0"/></pin>
-					<pin num="8"> <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR9" pin_dest="0"/></pin>
-					<pin num="9"><connect instance_dest="apf27" interface_dest="fpga"  port_dest="ADDR10" pin_dest="0"/></pin>
-					<pin num="10"><connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR11" pin_dest="0"/></pin>
-					<pin num="11"><connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR12" pin_dest="0"/></pin>
+					<pin num="0">
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR1" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR0" pin_dest="0"/>
+					</pin>
+					<pin num="1">
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR2" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR1" pin_dest="0"/>
+					</pin>
+					<pin num="2"> 
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR3" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR2" pin_dest="0"/>
+					</pin>
+					<pin num="3"> 
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR4" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR3" pin_dest="0"/>
+					</pin>
+					<pin num="4">
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR5" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR4" pin_dest="0"/>
+					</pin>
+					<pin num="5">
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR6" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR5" pin_dest="0"/>
+					</pin>
+					<pin num="6">
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR7" pin_dest="0"/>
+				 	    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR6" pin_dest="0"/>
+				 	</pin>
+					<pin num="7">
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR8" pin_dest="0"/>
+				 	    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR7" pin_dest="0"/>
+				 	</pin>
+					<pin num="8">
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR9" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR8" pin_dest="0"/>
+					</pin>
+					<pin num="9">
+					    <connect instance_dest="apf27" interface_dest="fpga"  port_dest="ADDR10" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga"  port_dest="ADDR9" pin_dest="0"/>
+					</pin>
+					<pin num="10">
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR11" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR10" pin_dest="0"/>
+					</pin>
+					<pin num="11">
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR12" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR11" pin_dest="0"/>
+					</pin>
 				</port>
 				<port name="imx_data" type="EXPORT" size="16" dir="inout">
-					<pin num="0"> <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA0" pin_dest="0"/></pin>
-					<pin num="1"> <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA1" pin_dest="0"/></pin>
-					<pin num="2"> <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA2" pin_dest="0"/></pin>
-					<pin num="3"> <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA3" pin_dest="0"/></pin>
-					<pin num="4"> <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA4" pin_dest="0"/></pin>
-					<pin num="5"> <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA5" pin_dest="0"/></pin>
-					<pin num="6"> <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA6" pin_dest="0"/></pin>
-					<pin num="7"> <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA7" pin_dest="0"/></pin>
-					<pin num="8"> <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA8" pin_dest="0"/></pin>
-					<pin num="9"> <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA9" pin_dest="0"/></pin>
-					<pin num="10"><connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA10" pin_dest="0"/></pin>
-					<pin num="11"><connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA11" pin_dest="0"/></pin>
-					<pin num="12"><connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA12" pin_dest="0"/></pin>
-					<pin num="13"><connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA13" pin_dest="0"/></pin>
-					<pin num="14"><connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA14" pin_dest="0"/></pin>
-					<pin num="15"><connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA15" pin_dest="0"/></pin>
+					<pin num="0"> <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA0" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA0" pin_dest="0"/>
+					</pin>
+					<pin num="1">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA1" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA1" pin_dest="0"/>
+					</pin>
+					<pin num="2">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA2" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA2" pin_dest="0"/>
+					</pin>
+					<pin num="3">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA3" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA3" pin_dest="0"/>
+					</pin>
+					<pin num="4">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA4" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA4" pin_dest="0"/>
+					</pin>
+					<pin num="5">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA5" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA5" pin_dest="0"/>
+					</pin>
+					<pin num="6">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA6" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA6" pin_dest="0"/>
+					</pin>
+					<pin num="7">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA7" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA7" pin_dest="0"/>
+					</pin>
+					<pin num="8">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA8" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA8" pin_dest="0"/>
+					</pin>
+					<pin num="9">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA9" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA9" pin_dest="0"/>
+					</pin>
+					<pin num="10">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA10" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA10" pin_dest="0"/>
+					</pin>
+					<pin num="11">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA11" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA11" pin_dest="0"/>
+					</pin>
+					<pin num="12">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA12" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA12" pin_dest="0"/>
+					</pin>
+					<pin num="13">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA13" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA13" pin_dest="0"/>
+					</pin>
+					<pin num="14">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA14" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA14" pin_dest="0"/>
+					</pin>
+					<pin num="15">
+					    <connect instance_dest="apf27"  interface_dest="fpga" port_dest="DATA15" pin_dest="0"/>
+					    <connect instance_dest="sp_vision"  interface_dest="fpga" port_dest="IMX_DATA15" pin_dest="0"/>
+					</pin>
 				</port>
 				<port name="imx_cs_n" type="EXPORT" size="1" dir="in">
-					<pin num="0"><connect instance_dest="apf27" interface_dest="fpga" port_dest="CS5N" pin_dest="0"/></pin>
+					<pin num="0">
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="CS5N" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="CSN" pin_dest="0"/>
+					</pin>
 				</port>
 				<port name="imx_oe_n" type="EXPORT" size="1" dir="in">
-					<pin num="0"><connect instance_dest="apf27" interface_dest="fpga" port_dest="OEN" pin_dest="0"/></pin>
+					<pin num="0">
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="OEN" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="OEN" pin_dest="0"/>
+					</pin>
 				</port>
 				<port name="imx_eb0_n" type="EXPORT" size="1" dir="in">
-					<pin num="0"><connect instance_dest="apf27" interface_dest="fpga" port_dest="EB0N" pin_dest="0"/></pin>
+					<pin num="0">
+					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="EB0N" pin_dest="0"/>
+					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="EBN" pin_dest="0"/>
+					</pin>
 				</port>
 			</ports>
 		</interface>

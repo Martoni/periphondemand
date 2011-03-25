@@ -68,54 +68,54 @@
                                 <port size="1" standard="LVCMOS18" position="B22"    name="IO_L19N_1" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="A20"    name="IO_L20P_1" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="A21"    name="IO_L20N_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="D19"    name="IO_L29P_A23_M1A13_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="D20"    name="IO_L29N_A22_M1A14_1" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="D19"    name="BANK1_ADDR13" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="D20"    name="BANK1_ADDR14" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="F18"    name="IO_L30P_A21_M1RESET_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="F19"    name="IO_L30N_A20_M1A11_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="D21"    name="IO_L31P_A19_M1CKE_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="D22"    name="IO_L31N_A18_M1A12_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="C20"    name="IO_L32P_A17_M1A8_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="C22"    name="IO_L32N_A16_M1A9_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="G19"    name="IO_L33P_A15_M1A10_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="F20"    name="IO_L33N_A14_M1A4_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="H19"    name="IO_L34P_A13_M1WE_1" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="F19"    name="BANK1_ADDR11" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="D21"    name="BANK1_CKE" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="D22"    name="BANK1_ADDR12" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="C20"    name="BANK1_ADDR8" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="C22"    name="BANK1_ADDR9" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="G19"    name="BANK1_ADDR10" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="F20"    name="BANK1_ADDR4" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="H19"    name="BANK1_WEN" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="H18"    name="IO_L34N_A12_M1BA2_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="E20"    name="IO_L35P_A11_M1A7_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="E22"    name="IO_L35N_A10_M1A2_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="J17"    name="IO_L36P_A9_M1BA0_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="K17"    name="IO_L36N_A8_M1BA1_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="F21"    name="IO_L37P_A7_M1A0_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="F22"    name="IO_L37N_A6_M1A1_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="H20"    name="IO_L38P_A5_M1CLK_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="J19"    name="IO_L38N_A4_M1CLKN_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="G20"    name="IO_L39P_M1A3_1" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="E20"    name="BANK1_ADDR7" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="E22"    name="BANK1_ADDR2" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="J17"    name="BANK1_BA0" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="K17"    name="BANK1_BA1" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="F21"    name="BANK1_ADDR0" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="F22"    name="BANK1_ADDR1" dir="inout"/>
+                                <port size="1" standard="DIFF_MOBILE_DDR" position="H20"    name="BANK1_CLK" dir="inout"/>
+                                <port size="1" standard="DIFF_MOBILE_DDR" position="J19"    name="BANK1_CLKN" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="G20"    name="BANK1_ADDR3" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="G22"    name="IO_L39N_M1ODT_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="K20"    name="IO_L40P_GCLK11_M1A5_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="K19"    name="IO_L40N_GCLK10_M1A6_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="H21"    name="IO_L41P_GCLK9_IRDY1_M1RASN_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="H22"    name="IO_L41N_GCLK8_M1CASN_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="M20"    name="IO_L42P_GCLK7_M1UDM_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="L19"    name="IO_L42N_GCLK6_TRDY1_M1LDM_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="J20"    name="IO_L43P_GCLK5_M1DQ4_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="J22"    name="IO_L43N_GCLK4_M1DQ5_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="K21"    name="IO_L44P_A3_M1DQ6_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="K22"    name="IO_L44N_A2_M1DQ7_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="L20"    name="IO_L45P_A1_M1LDQS_1" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="K20"    name="BANK1_ADDR5" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="K19"    name="BANK1_ADDR6" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="H21"    name="BANK1_RASN" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="H22"    name="BANK1_CASN" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="M20"    name="BANK1_UDM" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="L19"    name="BANK1_LDM" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="J20"    name="BANK1_DQ4" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="J22"    name="BANK1_DQ5" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="K21"    name="BANK1_DQ6" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="K22"    name="BANK1_DQ7" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="L20"    name="BANK1_DQS" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="L22"    name="IO_L45N_A0_M1LDQSN_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="M21"    name="IO_L46P_FCS_B_M1DQ2_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="M22"    name="IO_L46N_FOE_B_M1DQ3_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="N20"    name="IO_L47P_FWE_B_M1DQ0_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="N22"    name="IO_L47N_LDC_M1DQ1_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="P21"    name="IO_L48P_HDC_M1DQ8_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="P22"    name="IO_L48N_M1DQ9_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="R20"    name="IO_L49P_M1DQ10_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="R22"    name="IO_L49N_M1DQ11_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="T21"    name="IO_L50P_M1UDQS_1" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="M21"    name="BANK1_DQ2" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="M22"    name="BANK1_DQ3" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="N20"    name="BANK1_DQ0" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="N22"    name="BANK1_DQ1" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="P21"    name="BANK1_DQ8" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="P22"    name="BANK1_DQ9" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="R20"    name="BANK1_DQ10" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="R22"    name="BANK1_DQ11" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="T21"    name="BANK1_UDQS" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="T22"    name="IO_L50N_M1UDQSN_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="U20"    name="IO_L51P_M1DQ12_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="U22"    name="IO_L51N_M1DQ13_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="V21"    name="IO_L52P_M1DQ14_1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="V22"    name="IO_L52N_M1DQ15_1" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="U20"    name="BANK1_DQ12" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="U22"    name="BANK1_DQ13" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="V21"    name="BANK1_DQ14" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="V22"    name="BANK1_DQ15" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="M19"    name="IO_L53P_1" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="N19"    name="IO_L53N_VREF_1" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="P19"    name="IO_L59P_1" dir="inout"/>
@@ -132,18 +132,18 @@
                                 <port size="1" standard="LVCMOS18" position="AA22"    name="IO_L1N_M0_CMPMISO_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="AA21"    name="EBN" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="AB21"    name="OEN" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="AA20"    name="DATA0" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="AA20"    name="IMX_DATA0" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="AB20"    name="CSN" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="Y19"        name="IO_L5P_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="AB19"    name="IO_L5N_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="W18"        name="IO_L6P_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="Y18"        name="IO_L6N_2" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="U14"        name="DATA1" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="U13"        name="DATA2" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="U14"        name="IMX_DATA1" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="U13"        name="IMX_DATA2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="U15"        name="IO_L13P_M1_2" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="V15"        name="DATA10" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="AA18"    name="DATA11" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="AB18"    name="DATA12" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="V15"        name="IMX_DATA10" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="AA18"    name="IMX_DATA11" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="AB18"    name="IMX_DATA12" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="Y17"        name="ADDR0" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="AB17"    name="ADDR1" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="AA14"    name="ADDR2" dir="inout"/>
@@ -158,10 +158,10 @@
                                 <port size="1" standard="LVCMOS18" position="AB15"    name="ADDR11" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="W12"        name="IO_L29P_GCLK3_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="Y12"        name="IO_L29N_GCLK2_2" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="Y13"        name="DATA13" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="Y13"        name="IMX_DATA13" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="AB13"    name="CLK0" dir="inout" freq="100"/>
-                                <port size="1" standard="LVCMOS18" position="AA12"    name="DATA14" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="AB12"    name="DATA15" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="AA12"    name="IMX_DATA14" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="AB12"    name="IMX_DATA15" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="Y11"        name="IO_L32P_GCLK29_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="AB11"    name="IO_L32N_GCLK28_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="R11"        name="IO_L40P_2" dir="inout"/>
@@ -180,10 +180,10 @@
                                 <port size="1" standard="LVCMOS18" position="V7"    name="IO_L46N_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="W9"    name="IO_L47P_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="Y8"    name="IO_L47N_2" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="Y7"    name="DATA7" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="Y7"    name="IMX_DATA7" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="AB7"    name="IO_L48N_RDWR_B_VREF_2" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="AA6"    name="DATA3" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="AB6"    name="DATA4" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="AA6"    name="IMX_DATA3" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="AB6"    name="IMX_DATA4" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="U9"    name="IO_L50P_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="V9"    name="IO_L50N_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="AA4"    name="IO_L57P_2" dir="inout"/>
@@ -194,12 +194,12 @@
                                 <port size="1" standard="LVCMOS18" position="R8"    name="IO_L59N_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="T7"    name="IO_L60P_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="R7"    name="IO_L60N_2" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="W4"    name="DATA5" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="Y4"    name="DATA6" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="W4"    name="IMX_DATA5" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="Y4"    name="IMX_DATA6" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="U6"    name="IO_L63P_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="V5"    name="IO_L63N_2" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="AA2"    name="DATA8" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="AB2"    name="DATA9" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="AA2"    name="IMX_DATA8" dir="inout"/>
+                                <port size="1" standard="LVCMOS18" position="AB2"    name="IMX_DATA9" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="T6"    name="IO_L65P_INIT_B_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="T5"    name="IO_L65N_CSO_B_2" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="AA1"    name="PROGRAM_B_2" dir="inout"/>

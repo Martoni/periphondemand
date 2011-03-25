@@ -247,6 +247,44 @@ class Interface(WrapperXml):
                     return
         raise Error("Bus connection "+str(self.getName())+" -> "+str(instanceslavename)+"."+str(interfaceslavename) +" doesn't exist",0)
 
+    def connectInterface(self,interface_dest):
+        """ Connect an interface between to components
+        """
+        if len(interface_dest.getPortsList()) != len(self.getPortsList()):
+            raise Error(self.getParent().getName()+"."+self.getName()
+                        +" and "
+                        +interface_dest.getParent().getName()+"."+interface_dest.getName()
+                        +"are not the same number of ports")
+        for port in self.getPortsList():
+            if port.getType() == None:
+                raise Error(self.getParent().getName()+"."+self.getName()+"."
+                            +port.getName()+" has no type")
+            try:
+                port_dst = interface_dest.getPortByType(port.getType())
+            except Error,e:
+                raise Error(interface_dest.getParent().getName()+"."+interface_dest.getName()
+                            +" have no "
+                            +port.getType()+" port")
+            if port_dst.getDir() == port.getDir():
+                raise Error("Ports "+self.getParent().getName()+"."+self.getName()
+                            +"."+port.getName()
+                            +" and "
+                            +interface_dest.getParent().getName()+"."
+                            +interface_dest.getName()+"."+port_dst.getName()
+                            +" are the same direction")
+            if port_dst.getDir() == "in" and port_dst.isVoid()!=True:
+                raise Error("Ports "+interface_dest.getParent().getName()+"."
+                            +interface_dest.getName()+"."+port_dst.getName()
+                            +" is already connected")
+            if port.getDir() == "in" and port.isVoid()!=True:
+                raise Error("Ports "+self.getParent().getName()+"."+self.getName()
+                            +"."+port.getName()
+                            +" is already connected")
+
+        for port in self.getPortsList():
+            port_dst = interface_dest.getPortByType(port.getType())
+            port.connectPort(port_dst)
+
     def connectBus(self,instanceslave,interfaceslavename):
         """ Connect an interfaceslave to an interface bus master
         """
