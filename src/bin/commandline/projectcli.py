@@ -510,8 +510,8 @@ Connect interface between two components
             return
         print display
 
-        def complete_connectbus(self,text,line,begidx,endidx):
-            buslist = []
+    def complete_connectbus(self,text,line,begidx,endidx):
+        buslist = []
         try:
             buslist = self.completeargs(text,line,"<masterinstancename>.<masterinterfacename> <slaveinstancename>.<slaveinterfacename>")
         except Exception,e:
