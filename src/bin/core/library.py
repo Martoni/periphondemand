@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     library.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  28/04/2009
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -108,9 +108,9 @@ class Library:
         if libname in self.listLibraries():
             raise Error("Library "+libname+" already exist",0)
         # check if components under library are new
-        componentlist = sy.listDirectory(path) 
+        componentlist = sy.listDirectory(path)
         for component in componentlist:
-            for libraryname in self.listLibraries(): 
+            for libraryname in self.listLibraries():
                 if component in self.listComponents(libraryname):
                     raise Error("Library "+libname+\
                             " contain a component that exist in '"+\

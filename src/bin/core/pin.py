@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     Pin.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  05/05/2008
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -42,9 +42,9 @@ settings = Settings()
 class Pin(WrapperXml):
     """ Manage Pin
         attributes:
-            
+
     """
-    
+
     def __init__(self,parent,**keys):
         """ init Pin,
             __init__(self,parent,node)
@@ -65,7 +65,7 @@ class Pin(WrapperXml):
         self.setNum(num)
 
     def getConnections(self):
-        """ return a list of pin connection 
+        """ return a list of pin connection
             return ("instance_dest":string,"interface_dest":string,"port_dest":string,"pin_dest":string)
         """
         connectionslist =[]
@@ -82,7 +82,7 @@ class Pin(WrapperXml):
         """
         for connection in self.getConnections():
             self.delNode("connect",
-                {"instance_dest" :connection["instance_dest"], 
+                {"instance_dest" :connection["instance_dest"],
                  "interface_dest":connection["interface_dest"],
                  "port_dest"     :connection["port_dest"],
                  "pin_dest"      :connection["pin_dest"]})
@@ -171,7 +171,7 @@ class Pin(WrapperXml):
         self.setAttribute("all","true")
 
     def connectPin(self, pin_dest):
-        """ Make connection between two pin 
+        """ Make connection between two pin
         """
         if self.getParent().forceDefined():
             raise Error("Port "+str(self.getParent().getName())+" is forced, can't be connected")
@@ -206,7 +206,7 @@ class Pin(WrapperXml):
 
     def __addConnection(self,instance_destname,interface_destname,
                            port_destname,pin_destnum=None):
-        """ add pin connection and check direction compatibility 
+        """ add pin connection and check direction compatibility
         """
         if pin_destnum!=None:
             attributes = {"instance_dest":str(instance_destname),
@@ -221,7 +221,7 @@ class Pin(WrapperXml):
 
 
     def autoconnectPin(self):
-        """ connect all platform connection, if connection is not for this platform, delete it 
+        """ connect all platform connection, if connection is not for this platform, delete it
         """
         project = self.getParent().getParent().getParent().getParent()
         pindest_list = []
@@ -238,7 +238,7 @@ class Pin(WrapperXml):
 
         for pin_dest in pindest_list:
             self.connectPin(pin_dest)
-         
+
 
     def isConnected(self):
         """ Return 1 if pin is connected to something, else return 0 """

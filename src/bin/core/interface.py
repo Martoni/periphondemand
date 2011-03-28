@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     Interface.py
-# Purpose:  
+# Purpose:
 #
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 #
@@ -146,7 +146,7 @@ class Interface(WrapperXml):
             raise Error("Base address register not set",0)
         else:
             return base
-    
+
     def getBaseInt(self):
         try:
             return int(self.getBase(),16)
@@ -324,7 +324,7 @@ class Interface(WrapperXml):
         interfaceslave.setID(self.allocMem.getID())
         instanceslave.getGeneric(genericname="id").setValue(
                         str(interfaceslave.getID()))
-   
+
     def setID(self,id):
         self.id = id
     def getID(self):
@@ -343,7 +343,7 @@ class Interface(WrapperXml):
 
                        raise Error("Clock connection "+instancedestname+\
                                "."+interfacedestname+" exists",1)
-       
+
         self.addSubNode(nodename="slaves",subnodename="slave",
                         attributedict={"instancename":instancedestname,
                                        "interfacename":interfacedestname})
@@ -368,7 +368,7 @@ class Interface(WrapperXml):
             # sort registers dict by offset order
             self.registerslist.sort(lambda x, y:cmp(int(x.getOffset(),16),
                                     int(y.getOffset(),16)))
-            #display each register 
+            #display each register
             for register in self.registerslist:
                listreg.append({"offset":int(register.getOffset(),16)*self.regStep()+\
                                  int(self.getBase(),16),\

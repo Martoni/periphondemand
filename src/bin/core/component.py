@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     Component.py
-# Purpose:  
+# Purpose:
 #
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 #
@@ -46,7 +46,7 @@ class Component(WrapperXml):
             interfaceslist -- list of interfaces
             genericslist   -- list of generics
     """
-    
+
     def __init__(self,parent=None,void=0):
         """ Init Component,
             __init__(self,parent)
@@ -56,15 +56,15 @@ class Component(WrapperXml):
         self.parent = parent
         # Port found in top HDL file that is not assignated in interface
         self.freeportslist = []
-        
+
         self.interfaceslist = []
         self.genericslist = []
         self.hdl_fileslist = []
         self.driver_templateslist = []
         self.interruptslist = []
-    
+
     def createComponent(self,componentname,libraryname,versionname):
-        """ Creating new component 'componentname' for 
+        """ Creating new component 'componentname' for
             library 'libraryname'
         """
         librarypath = settings.active_library.getLibraryPath(libraryname)
@@ -80,7 +80,7 @@ class Component(WrapperXml):
             sy.makeDirectory(os.path.join(componentpath,"hdl"))
             sy.makeDirectory(os.path.join(componentpath,"doc"))
             sy.makeDirectory(os.path.join(componentpath,"drivers_templates"))
-        
+
         # create xml file
         WrapperXml.__init__(self,nodename="component")
         self.setName(componentname)
@@ -113,7 +113,7 @@ class Component(WrapperXml):
 
     def loadNewInstance(self,libraryname,componentname,
                          componentversion,instancename):
-        """ Load a new component from library 
+        """ Load a new component from library
         """
         project = self.getParent()
         # verify component name
@@ -194,7 +194,7 @@ class Component(WrapperXml):
                         self.getInterface(
                             element.getAttribute("interface")).getPort(
                                 element.getAttribute("port")))
-            
+
         self.setInstanceName(instancename)
 
     def autoconnectPin(self):
@@ -231,7 +231,7 @@ class Component(WrapperXml):
             raise Error("File "+hdlfilepath+" doesn't exist")
 
         hdl_file_name = os.path.basename(hdlfilepath)
-        if hdl_file_name in [hdlfile.getFileName() 
+        if hdl_file_name in [hdlfile.getFileName()
                     for hdlfile in self.getHdl_filesList()]:
             raise Error("File "+hdlfilepath+" is already in component")
 
@@ -349,7 +349,7 @@ class Component(WrapperXml):
             if driverT.getArchitecture() == architecture:
                 return driverT
         return None
-    
+
     def saveInstance(self):
         """ Save component in project directory files
         """
@@ -389,7 +389,7 @@ class Component(WrapperXml):
     def deletePin(self,\
             instancedest,interfacedest=None,portdest=None,pindest=None,\
             interfacesource=None,portsource=None,pinsource=None):
-        """ Delete component pin connection, if only instancedest given, 
+        """ Delete component pin connection, if only instancedest given,
             all connection towards this instance are removed
         """
         if interfacesource == None:
@@ -458,7 +458,7 @@ class Component(WrapperXml):
 
     def portIsInFreeList(self,portname):
         """ If port named portname is not in interface, return 1
-            else return 0 and interface 
+            else return 0 and interface
         """
         interfaceslist = self.getInterfacesList()
         for interface in interfaceslist:
@@ -478,7 +478,7 @@ class Component(WrapperXml):
         return freeportlist
 
     def getPortsList(self):
-        """ return list of ports in component 
+        """ return list of ports in component
             display_port = list of:
                 {"interfacename":[portname1,portname2]}
         """
@@ -557,7 +557,7 @@ class Component(WrapperXml):
             interface.setClockAndReset(attribute_value)
         else:
             raise Error("Unknown attribute "+str(attribute_name))
- 
+
     def setPort(self,interface_name,port_name,attribute_name,attribute_value):
         interface = self.getInterface(interface_name)
         port = interface.getPort(port_name)

@@ -3,7 +3,7 @@
 
 #-----------------------------------------------------------------------------
 # Name:     Project.py
-# Purpose:  
+# Purpose:
 #
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 #
@@ -48,7 +48,7 @@ class Project(WrapperXml):
             settings       -- Settings object containing system parameters
             platform       -- platform oblect containing platform dependances
     """
-   
+
     def __init__(self,projectpathname,void=0,
                  description="insert a description here"):
         """ create project if doesn't exist
@@ -75,13 +75,13 @@ class Project(WrapperXml):
             else:
                 settings.projectpath = projectpathname
             settings.author = ""
-            name =os.path.basename(projectpathname) 
+            name =os.path.basename(projectpathname)
             if sy.fileExist(projectpathname):
                 self.loadProject(projectpathname)
             else:
                 self.createProject(name)
             self.setDescription(description)
-            
+
             settings.active_project = self
 
     def createProject(self,name):
@@ -144,7 +144,7 @@ class Project(WrapperXml):
             self.simulation = Simulation(self)
         except Error,e:
             display.msg(str(e))
-         
+
 
         # Set bus master-slave
         for masterinterface in self.getInterfaceMaster():
@@ -168,7 +168,7 @@ class Project(WrapperXml):
         sy.renameFile(settings.projectpath+SYNTHESISPATH+"/"+toolchainname+XMLEXT,
                       settings.projectpath+SYNTHESISPATH+"/synthesis"+XMLEXT)
         self.synthesis = Synthesis(self)
- 
+
     def getSynthesisToolChain(self):
         try:
             return self.synthesis
@@ -184,7 +184,7 @@ class Project(WrapperXml):
         sy.renameFile(settings.projectpath+SIMULATIONPATH+"/"+toolchainname+XMLEXT,
                       settings.projectpath+SIMULATIONPATH+"/simulation"+XMLEXT)
         self.simulation = Simulation(self)
-  
+
     def getSimulationToolChain(self):
         try:
             return self.simulation
@@ -433,7 +433,7 @@ class Project(WrapperXml):
             platform = self.getPlatform()
         except Error:
             raise Error("No platform in project",2)
-        
+
         self.delProjectInstance(platform.getInstanceName())
         self.delNode("platform")
 
@@ -476,7 +476,7 @@ class Project(WrapperXml):
         self.saveXml(settings.projectpath + "/" + self.getName() + XMLEXT)
 
     def connectPin_cmd(self, pin_source, pin_dest):
-        """ connect pin between two instances 
+        """ connect pin between two instances
         """
         pin_source.connectPin(pin_dest)
 
@@ -485,7 +485,7 @@ class Project(WrapperXml):
                             port_source_name, pin_source_num,
                             instance_dest_name, interface_dest_name,
                             port_dest_name,pin_dest_num):
-        """ delete pin between two instances 
+        """ delete pin between two instances
         """
         instance_source = self.getInstance(instance_source_name)
         interface_source = instance_source.getInterface(interface_source_name)
@@ -537,10 +537,10 @@ class Project(WrapperXml):
         self.addinstance(component=intercon)
         self.saveProject()
 
-    def connectPort(self, 
-            instance_source_name, interface_source_name, port_source_name, 
+    def connectPort(self,
+            instance_source_name, interface_source_name, port_source_name,
             instance_dest_name,interface_dest_name, port_dest_name):
-        """ Connect all pin of a port source on all pin of 
+        """ Connect all pin of a port source on all pin of
             port dest
         """
         instance_source = self.getInstance(instance_source_name)
@@ -644,7 +644,7 @@ class Project(WrapperXml):
                             "bus connection must be made by hand",0)
 
         syscon = syscon[0]
-        
+
         # connect each slave with the same bus name than master
         for interfaceslave in slaves:
             if interfaceslave.getBusName() == master.getBusName():
@@ -662,7 +662,7 @@ class Project(WrapperXml):
                               syscon.getName(),\
                               master.getName())
         display.msg("Bus connected")
-             
+
     def check(self):
         """ This function check all the project wiring
         """
@@ -682,7 +682,7 @@ class Project(WrapperXml):
         listmaster = self.getInterfaceMaster()
         listslave  = self.getInterfaceSlave()
 
-        #Delete all slaves component from listslave 
+        #Delete all slaves component from listslave
         for master in listmaster:
             for slave in master.getSlavesList():
                 for slave2 in listslave:
@@ -755,7 +755,7 @@ class Project(WrapperXml):
             # take only xml file
             ext = XMLEXT[1:] # suppress dot
             pattern = ".*%s"%ext+"$"
-            if re.match(pattern,name):                
+            if re.match(pattern,name):
                 # Suppress extension
                 name = name.split(".")[0]
                 outlist.append(name)
