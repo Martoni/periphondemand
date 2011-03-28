@@ -68,18 +68,20 @@ begin
         writedata <= (others => '0');
         address   <= (others => '0');
       elsif(rising_edge(gls_clk)) then
+        if (imx_adv = '0') then 
+            address <= imx_da;
+            writedata <= (others => '0');
+        else
+            address <= address;
+            writedata <= imx_da;
+        end if;
         strobe  <= not (imx_cs_n);
         write   <= (not (imx_cs_n)) or (not(imx_rw));
         read    <= (not (imx_cs_n)) and imx_rw;
-        if (imx_adv = '0') then 
-            address <= imx_da;
-        else
-            writedata <= imx_da;
-        end if;
       end if;
     end process;
     
-    wbm_address    <= address when (strobe = '1') else (others => '0');
+    wbm_address    <= address;
     wbm_writedata  <= writedata when (write = '1') else (others => '0');
     wbm_strobe     <= strobe;
     wbm_write      <= write;
