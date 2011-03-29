@@ -4,7 +4,7 @@
         Armadeus apf51 card
     </description>
 
-    <fpga family="spartan6" device="XC6SLX9" speed="-2" package="CSG225" main_clock="83333"/>
+    <fpga family="spartan6" device="XC6SLX16" speed="-2" package="CSG225" main_clock="95000"/>
 
     <simulation>
          <simlib filename="apf51_test_pkg.vhd">
@@ -104,7 +104,7 @@
                 <port size="1" standard="LVCMOS33" position="P9"  name="EIM_CS1"                     dir="inout"/>
                 <port size="1" standard="LVCMOS33" position="R6"  name="EIM_RW"                      dir="inout"/>
                 <port size="1" standard="LVCMOS33" position="M8"  name="EIM_DA10"                    dir="inout"/>
-                <port size="1" standard="LVCMOS33" position="N7"  name="CLKO"                        dir="inout"/>
+                <port size="1" standard="LVCMOS33" position="N7"  name="CLKO"                        dir="inout" freq="95"/>
                 <port size="1" standard="LVCMOS33" position="K8"  name="EIM_DA9"                     dir="inout"/>
                 <port size="1" standard="LVCMOS33" position="L8"  name="EIM_DA8"                     dir="inout"/>
 
