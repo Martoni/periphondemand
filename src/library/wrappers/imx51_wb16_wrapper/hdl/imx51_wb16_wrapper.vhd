@@ -10,7 +10,7 @@
 --
 --  Description   :  This is the top file of the IP
 -------------------------------------------------------------------------------
---  Modifications : 
+--  Modifications :
 --
 -------------------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ port
     imx_cs_n  : in std_logic;
     imx_rw    : in std_logic ;
     imx_adv   : in std_logic ;
-    
+
     -- Global Signals
     gls_reset : in std_logic;
     gls_clk   : in std_logic;
@@ -62,25 +62,20 @@ begin
     process(gls_clk, gls_reset)
     begin
       if(gls_reset='1') then
-        write   <= '0';
-        read    <= '0';
-        strobe  <= '0';
         writedata <= (others => '0');
         address   <= (others => '0');
       elsif(rising_edge(gls_clk)) then
-        if (imx_adv = '0') then 
+        if (imx_adv = '0') then
             address <= imx_da;
-            writedata <= (others => '0');
         else
-            address <= address;
             writedata <= imx_da;
         end if;
-        strobe  <= not (imx_cs_n);
-        write   <= (not (imx_cs_n)) or (not(imx_rw));
-        read    <= (not (imx_cs_n)) and imx_rw;
       end if;
     end process;
-    
+    strobe  <= not (imx_cs_n);
+    write   <= (not (imx_cs_n)) and (not(imx_rw));
+    read    <= (not (imx_cs_n)) and imx_rw;
+
     wbm_address    <= address;
     wbm_writedata  <= writedata when (write = '1') else (others => '0');
     wbm_strobe     <= strobe;
