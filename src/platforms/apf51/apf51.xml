@@ -91,11 +91,11 @@
                 <port size="1" standard="LVCMOS33" position="C2"  name="IO_L83P_3"                   dir="inout"/>
                 <port size="1" standard="LVCMOS33" position="C1"  name="IO_L83N_VREF_3"              dir="inout"/>
 
-                <port size="1" standard="LVCMOS33" position="N12" name="EIM_BCLK"          dir="inout" freq="83"/>
+                <port size="1" standard="LVCMOS33" position="N12" name="EIM_BCLK"                    dir="inout"/>
                 <port size="1" standard="LVCMOS33" position="P13" name="EIM_EB1"                     dir="inout"/>
                 <port size="1" standard="LVCMOS33" position="P11" name="EIM_DA7"                     dir="inout"/>
                 <port size="1" standard="LVCMOS33" position="R9"  name="EIM_LBA"                     dir="inout"/>
-                <port size="1" standard="LVCMOS33" position="N8"  name="IO_L29P_GCLK3_2"             dir="inout"/>
+                <port size="1" standard="LVCMOS33" position="N8"  name="IO_L29P_GCLK3_2"             dir="inout" freq="95"/>
                 <port size="1" standard="LVCMOS33" position="M11" name="EIM_DA6"                     dir="inout"/>
                 <port size="1" standard="LVCMOS33" position="N11" name="EIM_DA5"                     dir="inout"/>
                 <port size="1" standard="LVCMOS33" position="R10" name="EIM_DA13"                    dir="inout"/>
