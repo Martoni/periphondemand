@@ -295,14 +295,19 @@ class TopVHDL(TopGen):
                 instancename = port.getParent().getParent().getInstanceName()
                 out = out+"\n"+TAB+"-- connect incomplete port "+str(portname)+"\n"
                 for pinnum in range(int(port.getRealSize())):
-                    if port.getDir() == "in":
-                        out = out+TAB+instancename+"_"+portname+"("+\
-                                str(pinnum)+") <= "+instancename+"_"+portname+"_pin"+\
-                                str(pinnum)+";\n"
-                    else:
-                        out = out+TAB+instancename+"_"+portname+"_pin"+\
-                                str(pinnum)+" <= "+instancename+"_"+portname+"("+\
-                                str(pinnum)+");\n"
+                    try:
+                        pin = port.getPin(pinnum)
+                        if pin.isConnected():
+                            if port.getDir() == "in":
+                                out = out+TAB+instancename+"_"+portname+"("+\
+                                        str(pinnum)+") <= "+instancename+"_"+portname+"_pin"+\
+                                        str(pinnum)+";\n"
+                            else:
+                                out = out+TAB+instancename+"_"+portname+"_pin"+\
+                                        str(pinnum)+" <= "+instancename+"_"+portname+"("+\
+                                        str(pinnum)+");\n"
+                    except:
+                        pass
 
 
         # connect all "in" ports pin
