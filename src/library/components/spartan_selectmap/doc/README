@@ -22,12 +22,15 @@ Output component is composed of four 16 bits registers:
 
 | 15 downto 5 |  4  |  3   |  2  |    1    |   0   |
 |:-----------:|:---:|:----:|:---:|:-------:|:-----:|
-|     void    | CLK | void |CSI_n|PROGRAM_n|RDWR_n |
+|     void    | CLK | OS   |CSI_n|PROGRAM_n|RDWR_n |
 
 CLK flag is used to switch composant in configuration mode :
 - When CLK=1, component is in idle mode, CCLK output drive general clock and
 	all other output signals are High impedance.
 - When CLK=0, the component is in fpga configuration mode.
+
+OS bit is used to change timing of cclk generation. If OS is 0 uboot timing
+are used, if OS is 1 linux timings.
 
 * STATUS : read input signal from fpga
 

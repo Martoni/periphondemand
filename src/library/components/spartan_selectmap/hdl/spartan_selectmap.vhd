@@ -1,11 +1,11 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMades Systems
 -- Author(s)   : Fabien Marteau <fabien.marteau@armadeus.com>
--- 
+--
 -- Creation Date : 30/04/2009
 -- File          : spartan_select_map.vhd
 --
--- Abstract : This IP manage input serialized by the 
+-- Abstract : This IP manage input serialized by the
 -- industrial 8-digital-input serializer : SN65HVS882
 --
 ---------------------------------------------------------------------------
@@ -15,14 +15,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity spartan_select_map is 
+Entity spartan_select_map is
 ---------------------------------------------------------------------------
     generic(
         id       : natural := 1;    -- identification register value
         wb_size  : natural := 16;   -- Data port size for wishbone
         clk_freq : natural := 100000 -- fpga clock speed
     );
-    port 
+    port
     (
         -- Syscon signals
         reset    : in std_logic ; -- reset
@@ -52,7 +52,13 @@ Architecture spartan_select_map_1 of spartan_select_map is
 ---------------------------------------------------------------------------
     -- usefull constant
     constant ZERO : std_logic_vector(15 downto 0) := x"0000";
-    constant CLK_PULSE_LENGHT : natural := 200;
+    constant UBOOT_CLK_PULSE_LENGHT : natural := 200; -- clk pulse lenght for
+                                                      -- uboot. Must be upper
+                                                      -- than linux pulse
+    constant LINUX_CLK_PULSE_LENGHT : natural := 100; -- clk pulse lenght for
+                                                      -- linux.
+
+    signal clk_pulse_lenght : natural;
 
     -- Registers addresses
     constant ID_REG_ADDR     : std_logic_vector( 1 downto 0) := "00";
@@ -76,10 +82,11 @@ Architecture spartan_select_map_1 of spartan_select_map is
 begin
 
     -- config_reg :
-    -- |15|14|13|12|11|10|9|8|7|6|5| 4 |3|  2  |    1    |  0   |
-    -- |X |X |X |X |X |X |X|X|X|X|X|CLK|X|CSI_n|PROGRAM_n|RDWR_n|
+    -- |15|14|13|12|11|10|9|8|7|6|5| 4 |3 |  2  |    1    |  0   |
+    -- |X |X |X |X |X |X |X|X|X|X|X|CLK|OS|CSI_n|PROGRAM_n|RDWR_n|
     -- If CLK=1, system clock is routed on CCLK and all configuration output
     -- are high Z
+
     selectmap_rdwr_n    <= config_reg(0) when config_reg(4) = '0' else 'Z';
     selectmap_program_n <= config_reg(1) when config_reg(4) = '0' else 'Z';
     selectmap_csi_n     <= config_reg(2) when config_reg(4) = '0' else 'Z';
@@ -118,15 +125,15 @@ begin
             if ( wbs_strobe and (not wbs_write) and wbs_cycle) = '1' then
                 read_ack <= '1';
                 case wbs_add is
-                    when ID_REG_ADDR => 
-                        wbs_readdata <= std_logic_vector(to_unsigned(id,wb_size)); 
-                    when CONFIG_REG_ADDR => 
+                    when ID_REG_ADDR =>
+                        wbs_readdata <= std_logic_vector(to_unsigned(id,wb_size));
+                    when CONFIG_REG_ADDR =>
                         wbs_readdata <= config_reg;
-                    when STATUS_REG_ADDR => 
+                    when STATUS_REG_ADDR =>
                         wbs_readdata <= status_reg;
-                    when DATA_REG_ADDR => 
+                    when DATA_REG_ADDR =>
                         wbs_readdata <= data_reg;
-                    when others => 
+                    when others =>
                         wbs_readdata <= ZERO;
                 end case;
             else
@@ -147,13 +154,13 @@ begin
             if (wbs_strobe and wbs_write and wbs_cycle) = '1' then
                 write_ack <= '1';
                 case wbs_add is
-                    when CONFIG_REG_ADDR => 
+                    when CONFIG_REG_ADDR =>
                         config_reg <= wbs_writedata;
                         data_reg <= data_reg;
-                    when DATA_REG_ADDR => 
+                    when DATA_REG_ADDR =>
                         config_reg <= config_reg;
                         data_reg <= wbs_writedata;
-                    when others => 
+                    when others =>
                         config_reg <= config_reg;
                         data_reg <= data_reg;
                 end case;
@@ -167,16 +174,21 @@ begin
         if reset = '1' then
             cclk_trig <= '0';
         elsif rising_edge(clk) then
-            if wbs_add = DATA_REG_ADDR then
-                cclk_trig <= '1';
-            else
-                cclk_trig <= '0';
+            if (wbs_strobe and wbs_write and wbs_cycle) = '1' then
+                if wbs_add = DATA_REG_ADDR then
+                    cclk_trig <= '1';
+                else
+                    cclk_trig <= '0';
+                end if;
             end if;
         end if;
     end process cclk_p;
 
+    clk_pulse_lenght <= LINUX_CLK_PULSE_LENGHT when config_reg(3) = '1' else
+                        UBOOT_CLK_PULSE_LENGHT;
+
     cclk_gen : process (clk, reset)
-        variable counter : natural range 0 to (CLK_PULSE_LENGHT+1);
+        variable counter : natural range 0 to (UBOOT_CLK_PULSE_LENGHT+1);
     begin
         if reset = '1' then
             cclk_sig <= '0';
@@ -185,10 +197,10 @@ begin
             if cclk_trig = '1' then
                 counter := 0;
                 cclk_sig <= '0';
-            elsif counter < (CLK_PULSE_LENGHT/2) then
+            elsif counter < (clk_pulse_lenght/2) then
                 counter := counter +1;
                 cclk_sig <= '0';
-            elsif counter < (CLK_PULSE_LENGHT) then
+            elsif counter < (clk_pulse_lenght) then
                 counter := counter +1;
                 cclk_sig <= '1';
             else
@@ -198,7 +210,7 @@ begin
     end process cclk_gen;
 
 
-    
+
     wbs_ack <= read_ack or write_ack;
 
 end architecture spartan_select_map_1;
