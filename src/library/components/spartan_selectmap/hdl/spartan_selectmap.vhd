@@ -55,7 +55,7 @@ Architecture spartan_select_map_1 of spartan_select_map is
     constant UBOOT_CLK_PULSE_LENGHT : natural := 200; -- clk pulse lenght for
                                                       -- uboot. Must be upper
                                                       -- than linux pulse
-    constant LINUX_CLK_PULSE_LENGHT : natural := 100; -- clk pulse lenght for
+    constant LINUX_CLK_PULSE_LENGHT : natural := 2; -- clk pulse lenght for
                                                       -- linux.
 
     signal clk_pulse_lenght : natural;
