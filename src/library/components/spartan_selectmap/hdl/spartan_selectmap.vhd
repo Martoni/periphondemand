@@ -174,13 +174,11 @@ begin
         if reset = '1' then
             cclk_trig <= '0';
         elsif rising_edge(clk) then
-            if (wbs_strobe and wbs_write and wbs_cycle) = '1' then
                 if wbs_add = DATA_REG_ADDR then
                     cclk_trig <= '1';
                 else
                     cclk_trig <= '0';
                 end if;
-            end if;
         end if;
     end process cclk_p;
 
