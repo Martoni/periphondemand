@@ -52,14 +52,7 @@ Architecture spartan_select_map_1 of spartan_select_map is
 ---------------------------------------------------------------------------
     -- usefull constant
     constant ZERO : std_logic_vector(15 downto 0) := x"0000";
-    constant UBOOT_CLK_PULSE_LENGHT : natural := 200; -- clk pulse lenght for
-                                                      -- uboot. Must be upper
-                                                      -- than linux pulse
-    constant LINUX_CLK_PULSE_LENGHT : natural := 2; -- clk pulse lenght for
-                                                      -- linux.
-
-    signal clk_pulse_lenght : natural;
-
+    constant CLK_PULSE_LENGHT : natural := 2; -- clk pulse lenght
     -- Registers addresses
     constant ID_REG_ADDR     : std_logic_vector( 1 downto 0) := "00";
     constant CONFIG_REG_ADDR : std_logic_vector( 1 downto 0) := "01";
@@ -83,7 +76,7 @@ begin
 
     -- config_reg :
     -- |15|14|13|12|11|10|9|8|7|6|5| 4 |3 |  2  |    1    |  0   |
-    -- |X |X |X |X |X |X |X|X|X|X|X|CLK|OS|CSI_n|PROGRAM_n|RDWR_n|
+    -- |X |X |X |X |X |X |X|X|X|X|X|CLK|X|CSI_n|PROGRAM_n|RDWR_n|
     -- If CLK=1, system clock is routed on CCLK and all configuration output
     -- are high Z
 
@@ -182,11 +175,8 @@ begin
         end if;
     end process cclk_p;
 
-    clk_pulse_lenght <= LINUX_CLK_PULSE_LENGHT when config_reg(3) = '1' else
-                        UBOOT_CLK_PULSE_LENGHT;
-
     cclk_gen : process (clk, reset)
-        variable counter : natural range 0 to (UBOOT_CLK_PULSE_LENGHT+1);
+        variable counter : natural range 0 to (CLK_PULSE_LENGHT+1);
     begin
         if reset = '1' then
             cclk_sig <= '0';
@@ -195,10 +185,10 @@ begin
             if cclk_trig = '1' then
                 counter := 0;
                 cclk_sig <= '0';
-            elsif counter < (clk_pulse_lenght/2) then
+            elsif counter < (CLK_PULSE_LENGHT/2) then
                 counter := counter +1;
                 cclk_sig <= '0';
-            elsif counter < (clk_pulse_lenght) then
+            elsif counter < (CLK_PULSE_LENGHT) then
                 counter := counter +1;
                 cclk_sig <= '1';
             else
@@ -206,8 +196,6 @@ begin
             end if;
         end if;
     end process cclk_gen;
-
-
 
     wbs_ack <= read_ack or write_ack;
 
