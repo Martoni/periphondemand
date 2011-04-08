@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     vhdlentityparser.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com> and
 #           Fabrice Mousset <fabrice.mousset@laposte.net>
 # Created:  06/05/2009
@@ -13,14 +13,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -72,16 +72,16 @@ comment = Literal("--").suppress() + Optional(restOfLine)
 
 # Nested operation parser
 expression = Forward()
-parenthical = Literal("(") + Group(expression) + Literal(")") 
+parenthical = Literal("(") + Group(expression) + Literal(")")
 operand = Word(nums) | identifier  | parenthical
 expression << operand + ZeroOrMore(arithOp + operand)
-   
+
 staticExpression = (integer | identifier | hexaValue | vectorValue | bitValue)
 
 # Type information parser
-subtypeIndication = Group(identifier + 
-                          Optional(LPAR + Combine(expression) + 
-                                   oneOf("TO DOWNTO", caseless=True) + 
+subtypeIndication = Group(identifier +
+                          Optional(LPAR + Combine(expression) +
+                                   oneOf("TO DOWNTO", caseless=True) +
                                    Combine(expression) + RPAR
                                    )
                           )
@@ -91,25 +91,25 @@ portDecl = Group(identifier + COLON + mode + subtypeIndication)
 portList = delimitedList(portDecl, delim=";").setResultsName("ports")
 
 # Generic declaration parser
-genericDecl = Group(identifier + COLON + subtypeIndication + 
+genericDecl = Group(identifier + COLON + subtypeIndication +
                     Optional(EQUAL + staticExpression)
                     )
 genericList = delimitedList(genericDecl, delim=";").setResultsName("generics")
 
 # VHDL Entity declaration decoder
-entityHeader = (CaselessLiteral("ENTITY").suppress() + entityIdent + 
+entityHeader = (CaselessLiteral("ENTITY").suppress() + entityIdent +
     CaselessLiteral("IS").suppress()
     )
 
 # Full VHDL Entity decoder
 entityDecl = (SkipTo(entityHeader) + entityHeader +
-              Optional(CaselessLiteral("GENERIC").suppress() + LPAR + 
+              Optional(CaselessLiteral("GENERIC").suppress() + LPAR +
                        genericList + RPAR + SEMI
                        ) +
-              Optional(CaselessLiteral("PORT").suppress() + LPAR + 
+              Optional(CaselessLiteral("PORT").suppress() + LPAR +
                        portList + RPAR + SEMI
                        ) +
-              CaselessLiteral("END").suppress() + 
+              CaselessLiteral("END").suppress() +
               Optional(CaselessLiteral("ENTITY").suppress()) +
               Optional(matchPreviousLiteral(entityIdent).suppress()) + SEMI
               ).ignore(comment) + SkipTo(StringEnd()).suppress()
@@ -184,7 +184,7 @@ class VHDLEntityParser:
         return parsed_port_list
 
     def getEntityName(self):
-        return self.parsed_entity.identifier 
+        return self.parsed_entity.identifier
 
 if __name__ == "__main__":
     print "vhdlentityparser class test\n"

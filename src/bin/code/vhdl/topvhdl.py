@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     TopVHDL.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  15/05/2008
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -55,12 +55,12 @@ class TopVHDL(TopGen):
     """
 
     def __init__(self,project):
-        TopGen.__init__(self,project) 
+        TopGen.__init__(self,project)
 
     def header(self):
-        """ return vhdl header 
+        """ return vhdl header
         """
-        header = open(settings.path + TEMPLATESPATH+ "/"+HEADERTPL,"r").read() 
+        header = open(settings.path + TEMPLATESPATH+ "/"+HEADERTPL,"r").read()
         header = header.replace("$tpl:author$",settings.author)
         header = header.replace("$tpl:date$",str(datetime.date.today()))
         header = header.replace("$tpl:filename$","Top_"\
@@ -78,7 +78,7 @@ class TopVHDL(TopGen):
         for port in portlist:
             if port.forceDefined():
                 portname = "force_"+port.getName()
-                out = out + TAB*2 + portname + " : out std_logic;\n" 
+                out = out + TAB*2 + portname + " : out std_logic;\n"
             else:
                 portname = port.getName()
                 interfacename = port.getParent().getName()
@@ -132,7 +132,7 @@ class TopVHDL(TopGen):
                 component.append(comp.getName())
 
         # if multiple instance of the same component
-        component = set(component) 
+        component = set(component)
 
         for compname in component:
             for component in self.project.getInstancesList():
@@ -186,7 +186,6 @@ class TopVHDL(TopGen):
                     out = out + TAB + "-- " + interface.getName()+"\n"
 
                     for port in interface.getPortsList():
-                        
                         if len(port.getPinsList())!=0:
                           if len(port.getPinsList()[0].getConnections())!=0:
                             if port.getPinsList()[0].getConnections()[0]["instance_dest"]\
@@ -210,7 +209,7 @@ class TopVHDL(TopGen):
                 interfacename = port.getParent().getName()
                 instancename = port.getParent().getParent().getInstanceName()
                 out = out +"\n"+TAB+"signal "+instancename+"_"+portname+": std_logic_vector("+\
-                                str(int(port.getRealSize())-1)+" downto 0);\n" 
+                                str(int(port.getRealSize())-1)+" downto 0);\n"
         return out
 
     def declareInstance(self):
@@ -233,7 +232,7 @@ class TopVHDL(TopGen):
                     # suppress comma
                     out = out[:-2]+"\n"
                     out = out + TAB*2 + ")\n"
-    
+
                 out = out + TAB + "port map (\n"
                 for interface in component.getInterfacesList():
                     out = out + TAB*3 + "-- " + interface.getName()+"\n"
@@ -324,8 +323,8 @@ class TopVHDL(TopGen):
                                 portdest = port.getDestinationPort()
                                 if portdest != None and\
                                        (portdest.getSize() == port.getSize()):
-                                    # If port is completely connected to one 
-                                    # and only one other port 
+                                    # If port is completely connected to one
+                                    # and only one other port
                                     pin = port.getPinsList()[0]
                                     connect =  pin.getConnections()[0]
                                     if connect["instance_dest"] != platformname:
@@ -343,7 +342,7 @@ class TopVHDL(TopGen):
                                             if connect["instance_dest"] != platformname:
                                                 out = out + TAB*2\
                                                     + component.getInstanceName()+"_"+port.getName()
-                                                if port.getSize() != "1": 
+                                                if port.getSize() != "1":
                                                     out = out + "("+ pin.getNum() +")"
                                                 out = out + " <= "+ connect["instance_dest"]+\
                                                         "_"+connect["port_dest"]
@@ -362,7 +361,7 @@ class TopVHDL(TopGen):
                                  display.msg("port "+ component.getInstanceName()\
                                                     +"."+interface.getName()+"."\
                                                     +port.getName()+" is void",1)
-                    
+
         return out
 
     def architectureBegin(self):
