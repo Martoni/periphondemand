@@ -45,8 +45,8 @@ COLOR_DEBUG="\033[32;7m"   # White on green
 
 COLOR_ERROR="\033[31;7m"           # white on red
 COLOR_ERROR_MESSAGE="\033[31;1m"   # red on white
-COLOR_WARNING="\033[35;7m"         # white on purple 
-COLOR_WARNING_MESSAGE="\033[35;1m" # purple on white 
+COLOR_WARNING="\033[35;7m"         # white on purple
+COLOR_WARNING_MESSAGE="\033[35;1m" # purple on white
 COLOR_INFO="\033[34;7m"            # white on blue
 COLOR_INFO_MESSAGE="\033[34;1m"    # blue on white
 COLOR_SHELL="\033[33;3m"              # green on black

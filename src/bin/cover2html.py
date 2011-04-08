@@ -12,14 +12,14 @@ def cover2html(directory=''):
             tracer.run('main()')
             r = tracer.results()
             r.write_results(show_missing=True, coverdir=r'./coverage_dir')
-       
+
         Input:
             directory (string): The directory where the *.cover files are located.
-           
+
         Output:
             None
             The html files are written in the input directory.
-       
+
         Example:
             cover2html('coverage_dir')
     '''
@@ -46,9 +46,9 @@ table { border-collapse: collapse; }
     ''')
     file.close()
 
-   
+
     indexHtml = ""  # Index html table.
-   
+
     # Convert each .cover file to html.
     for filename in glob.glob(os.path.join(directory,'*.cover')):
         print "Processing %s" % filename
@@ -86,8 +86,8 @@ table { border-collapse: collapse; }
     file.write('''<html><head><link rel="stylesheet" href="style.css" type="text/css"></head>
 <body><table><thead><th>File</th><th>Coverage</th></thead><tbody>%s</tbody></table></body></html>''' % indexHtml)
     file.close()
-   
+
     print "Done."
 
-       
+
 cover2html()
