@@ -65,7 +65,7 @@ Architecture industrial_serial_input_1 of industrial_serial_input is
     constant REG_ID        : std_logic_vector( 1 downto 0) := "11"; -- identification register
 
     constant BUS_PER_DFLT : std_logic_vector(15 downto 0) := x"010A";
-    constant READ_PER_DFLT: std_logic_vector(15 downto 0) := x"0020"; 
+    constant READ_PER_DFLT: std_logic_vector(15 downto 0) := x"0020";
 
     constant COUNT_SIZE : natural := 13;
 
