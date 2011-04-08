@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     ghdl.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  24/07/2008
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -52,9 +52,9 @@ settings = Settings()
 display  = Display()
 
 def header():
-    """ return vhdl header 
+    """ return vhdl header
     """
-    header = open(settings.path + TEMPLATESPATH+ "/"+HEADERTPL,"r").read() 
+    header = open(settings.path + TEMPLATESPATH+ "/"+HEADERTPL,"r").read()
     header = header.replace("$tpl:author$",settings.author)
     header = header.replace("$tpl:date$",str(datetime.date.today()))
     header = header.replace("$tpl:filename$","Top_"+settings.active_project.getName()+"_tb.vhd")
@@ -108,14 +108,14 @@ def signals(portlist):
     out = ""
     for port in portlist:
         # TODO: comment with instancename-interfacename
-        
+
         portname = port.getName()
         interfacename = port.getParent().getName()
         instancename = port.getParent().getParent().getInstanceName()
 
         out = out + TAB +"signal  "+\
                 instancename+"_"+portname +\
-                " : " 
+                " : "
         if port.getMSBConnected() <1:
             out = out + " std_logic;"
         else:
@@ -127,7 +127,7 @@ def signals(portlist):
 def declareTop(portlist):
     """ declare top component
     """
-    
+
     out = "\n"+TAB+"component top_"+settings.active_project.getName()
     out = out + "\n" + TAB + "port ("
 
@@ -172,7 +172,7 @@ def connectTop(portlist):
                 ",\n"
     # Suppress the #!@ last comma
     out = out[:-2]
-    out = out + "\n"+TAB + ");\n" 
+    out = out + "\n"+TAB + ");\n"
     return out
 
 def clock(clockname):
@@ -245,11 +245,11 @@ def generateTemplate():
         raise e
     file.write(out)
     file.close()
-    return filename 
+    return filename
 
 def generateMakefile():
     """ generate makefile for ghdl
-    """ 
+    """
     # include file list:
     srclist =[]
     platform = settings.active_project.getPlatform()
@@ -265,7 +265,7 @@ def generateMakefile():
     for library in platform.getLibrariesList():
         srclist.append(library.getFileName())
         librarylist.append(library.getFileName())
-    
+
     makefile = open(settings.path + TEMPLATESPATH+ "/"+MAKEFILETEMPLATE,"r").read()
     makefile = makefile.replace(r'$tpl:projectname$',projectname)
     makefile = makefile.replace(r'$tpl:files$'," ".join(srclist))
@@ -276,8 +276,4 @@ def generateMakefile():
     file.write(makefile)
     file.close()
     return makefilename
-    
 
-
-
-    

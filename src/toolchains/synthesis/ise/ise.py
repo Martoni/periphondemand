@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     ise.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  21/07/2008
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -76,7 +76,7 @@ def generatepinout(self,filename=None):
                     raise Error("Platform port "+port.getName()+\
                             " has size different of 1",0)
                 pin = pin[0]
-                # Only one connection per platform pin can be branched. 
+                # Only one connection per platform pin can be branched.
                 # If several connections found, only first is used
                 if pin.getConnections() != []:
                     connect = pin.getConnections()
@@ -135,7 +135,7 @@ def generatepinout(self,filename=None):
                                 " ns HIGH 50 %;\n"
                     except:
                         pass
-                    
+
     out = out + "#end\n"
     try:
         file = open(filename,"w")
@@ -156,7 +156,7 @@ def generateTCL(self,filename=None):
     tclfile.write("cd .."+OBJSPATH+"\n")
     # create project
     tclfile.write("project new "+settings.active_project.getName()+".ise\n")
-    
+
     # Configuration
     tclfile.write("# configure platform params\n")
     platform = settings.active_project.getPlatform()
