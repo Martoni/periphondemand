@@ -10,12 +10,12 @@ library.listcomponents
 library.component.create industrial_serial_input.wb16
 library.component.addtophdlfile industrial_serial_input.vhd
 library.component.setgeneric id type=natural
-library.component.setgeneric id public=true 
+library.component.setgeneric id public=true
 library.component.setgeneric id match=\d+
 library.component.setgeneric id destination=both
 
 library.component.setgeneric wb_size match=\d+
-library.component.setgeneric wb_size destination=fpga 
+library.component.setgeneric wb_size destination=fpga
 library.component.setgeneric wb_size public=false
 
 library.component.setgeneric clk_freq match=\d+
@@ -42,17 +42,17 @@ library.component.setregister wbs.data size=16
 library.component.setregister wbs.data rows=1
 
 library.component.addregister wbs read_per
-library.component.setregister wbs.read_per offset=0x1 
+library.component.setregister wbs.read_per offset=0x1
 library.component.setregister wbs.read_per size=16
 library.component.setregister wbs.read_per rows=1
 
-library.component.addregister wbs bus_per    
-library.component.setregister wbs.bus_per  offset=0x2 
+library.component.addregister wbs bus_per
+library.component.setregister wbs.bus_per  offset=0x2
 library.component.setregister wbs.bus_per  size=16
 library.component.setregister wbs.bus_per  rows=1
 
-library.component.addregister wbs id   
-library.component.setregister wbs.id offset=0x3 
+library.component.addregister wbs id
+library.component.setregister wbs.id offset=0x3
 library.component.setregister wbs.id size=16
 library.component.setregister wbs.id rows=1
 
@@ -97,13 +97,13 @@ library.component.addport wbs_ack wbs
 library.component.setport wbs.wbs_ack type=ACK
 
 library.component.addport interrupt interrupt
-library.component.setport interrupt.interrupt type=EXPORT 
+library.component.setport interrupt.interrupt type=EXPORT
 
 library.component.addport  spi_sip  sn65hvs882
 library.component.setport sn65hvs882.spi_sip type=EXPORT
 
-library.component.addport spi_ld_n sn65hvs882 
-library.component.setport sn65hvs882.spi_ld_n type=EXPORT 
+library.component.addport spi_ld_n sn65hvs882
+library.component.setport sn65hvs882.spi_ld_n type=EXPORT
 
 library.component.addport spi_clk  sn65hvs882
 library.component.setport sn65hvs882.spi_clk type=EXPORT

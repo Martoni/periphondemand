@@ -1,11 +1,11 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMades Systems
 -- Author(s)   : Fabien Marteau <fabien.marteau@armadeus.com>
--- 
+--
 -- Creation Date : 30/04/2009
 -- File          : industrial_serial_input.vhd
 --
--- Abstract : This IP manage input serialized by the 
+-- Abstract : This IP manage input serialized by the
 -- industrial 8-digital-input serializer : SN65HVS882
 --
 ---------------------------------------------------------------------------
@@ -15,14 +15,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity industrial_serial_input is 
+Entity industrial_serial_input is
 ---------------------------------------------------------------------------
     generic(
         id       : natural := 1;    -- identification register value
         wb_size  : natural := 16;   -- Data port size for wishbone
         clk_freq : natural := 133000 -- fpga clock speed
     );
-    port 
+    port
     (
         -- Syscon signals
         reset    : in std_logic ; -- reset
@@ -41,7 +41,7 @@ Entity industrial_serial_input is
         spi_sip  : out std_logic ;
         spi_ld_n : out std_logic ;
         spi_clk  : out std_logic ; -- SPI clock
-        spi_sop  : in  std_logic 
+        spi_sop  : in  std_logic
     );
 end entity;
 
@@ -62,7 +62,7 @@ Architecture industrial_serial_input_1 of industrial_serial_input is
     constant REG_DATA      : std_logic_vector( 1 downto 0) := "00"; -- |x[15:9]|int_en|data[7:0]
     constant REG_READ_PER  : std_logic_vector( 1 downto 0) := "01"; -- read period = reg x read period
     constant REG_BUS_PER   : std_logic_vector( 1 downto 0) := "10"; -- register period =  reg x clock period
-    constant REG_ID        : std_logic_vector( 1 downto 0) := "11"; -- identification register 
+    constant REG_ID        : std_logic_vector( 1 downto 0) := "11"; -- identification register
 
     -- registers
     signal data   : std_logic_vector( 7 downto 0);
@@ -95,15 +95,15 @@ begin
             if (wbs_strobe and (not wbs_write) and wbs_cycle) = '1' then
                 read_ack <= '1';
                 case wbs_add is
-                    when REG_DATA     => 
+                    when REG_DATA     =>
                         wbs_readdata <=  ZERO(6 downto 0)&int_en&data;
-                    when REG_READ_PER => 
+                    when REG_READ_PER =>
                         wbs_readdata <= read_per;
-                    when REG_BUS_PER  => 
-                        wbs_readdata <= bus_per; 
-                    when REG_ID       => 
+                    when REG_BUS_PER  =>
+                        wbs_readdata <= bus_per;
+                    when REG_ID       =>
                         wbs_readdata <=  std_logic_vector(to_unsigned(id,wb_size));
-                    when others       => 
+                    when others       =>
                         wbs_readdata <= (others => '0');
                 end case;
             else
@@ -121,7 +121,7 @@ begin
         elsif rising_edge(clk) then
             if (wbs_strobe and (not wbs_write) and wbs_cycle) = '1' then
                 case wbs_add is
-                    when REG_DATA     => 
+                    when REG_DATA     =>
                         int_en <= wbs_writedata(8);
                         write_ack <= '1';
                     when REG_READ_PER =>
@@ -130,20 +130,19 @@ begin
                     when REG_BUS_PER  =>
                         bus_per   <= wbs_writedata;
                         write_ack <= '1';
-                    when others => 
+                    when others =>
                         write_ack <= '1';
                 end case;
             else
                 write_ack <= '0';
             end if;
-             
         end if;
     end process write_p;
 
     wbs_ack <= read_ack or write_ack;
 
     -- SPI clock generator
-    local_clk <= clk when bus_per = x"0000" else div_clk; 
+    local_clk <= clk when bus_per = x"0000" else div_clk;
     clock_divider : process (clk,reset)
         variable count : natural range 0 to (2**wb_size)-1;
     begin
@@ -158,7 +157,7 @@ begin
                 div_clk <= div_clk;
                 clock_rise_pulse <= '0';
                 clock_fall_pulse <= '0';
-            else 
+            else
                 clock_fall_pulse <= div_clk;
                 clock_rise_pulse <= not div_clk;
                 div_clk <= not div_clk;
@@ -196,7 +195,7 @@ begin
             interrupt <= '0';
         elsif rising_edge(clk) then
             if state_reg = spi_end_state then
-                interrupt <= int_en; 
+                interrupt <= int_en;
             elsif (read_ack = '1') and (wbs_add = REG_DATA) then
                 interrupt <= '0'; -- reset interrupt when data register is read
             end if;
@@ -211,7 +210,7 @@ begin
     spi_state_register_p : process (clk,reset)
     begin
         if reset = '1' then
-            state_reg <= spi_init_state; 
+            state_reg <= spi_init_state;
         elsif rising_edge(clk) then
             state_reg <= next_state_reg;
         end if;
@@ -221,13 +220,13 @@ begin
     nstate_p : process (state_reg,spi_read_pulse,clock_rise_pulse,spi_read_count)
     begin
         case state_reg is
-            when spi_init_state  => 
+            when spi_init_state  =>
                 if spi_read_pulse = '1' then
                     next_state_reg <= spi_read7_state;
                 else
                     next_state_reg <= spi_init_state;
                 end if;
-            when spi_read7_state => 
+            when spi_read7_state =>
                 if spi_read_pulse = '0' and clock_rise_pulse = '1' then
                     next_state_reg <= spi_read_state;
                 else
@@ -241,7 +240,7 @@ begin
                 end if;
             when spi_end_state   =>
                     next_state_reg <= spi_init_state;
-            when others => 
+            when others =>
                 next_state_reg <= spi_init_state;
         end case;
     end process nstate_p;
@@ -250,21 +249,21 @@ begin
     --output_p : process (state_reg,spi_sop,data,local_clk)
     output_p : process (clk,reset)
     begin
-        if reset = '1' then 
+        if reset = '1' then
             data <= (others => '0');
             spi_clk <= '0';
         elsif rising_edge(clk) then
             case state_reg is
-                when spi_init_state  => 
+                when spi_init_state  =>
                     data <= (others => '0');
                     spi_clk <= '0';
                 when spi_read7_state =>
-                    spi_clk <= local_clk; 
+                    spi_clk <= local_clk;
                     data <= ZERO(7 downto 1)&spi_sop;
                 when spi_read_state  =>
-                    spi_clk <= local_clk; 
+                    spi_clk <= local_clk;
                     data <= data(6 downto 0)&spi_sop;
-                when others => 
+                when others =>
                     spi_clk <= local_clk;
             end case;
         end if;

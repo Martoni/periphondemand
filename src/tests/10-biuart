@@ -8,7 +8,7 @@ project.selectplatform apf9328
 project.addinstance components.uart16550.wb16 uart00
 project.addinstance components.uart16550.wb16 uart01
 
-project.connectpin uart00.uart.srx_pad_i uart01.uart.stx_pad_o 
+project.connectpin uart00.uart.srx_pad_i uart01.uart.stx_pad_o
 project.connectpin uart00.uart.stx_pad_o uart01.uart.srx_pad_i
 
 project.connectpin uart00.uart.ri_pad_i  apf9328.fpga.IO_L22N_2

@@ -7,8 +7,8 @@
 project.create biled
 project.selectplatform apf9328
 project.delinstance irq_mngr00
-project.addinstance components.led.wb16 
-project.addinstance components.led.wb16 
+project.addinstance components.led.wb16
+project.addinstance components.led.wb16
 project.connectpin led00.int_led.led.0 apf9328.fpga.IO_1
 project.connectpin led01.int_led.led.0 apf9328.fpga.IO_L21N_2
 project.autoconnectbus

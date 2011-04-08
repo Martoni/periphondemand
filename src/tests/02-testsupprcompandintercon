@@ -20,7 +20,7 @@ project.delinstance imx9328_wb16_wrapper00_mwb16_intercon
 project.intercon imx9328_wb16_wrapper00.mwb16
 
 # ---------------------
-# -- mapping 
+# -- mapping
 # ---------------------
 project.getmapping imx9328_wb16_wrapper00.mwb16
 project.report
