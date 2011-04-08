@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     Driver.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  16/07/2008
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -131,10 +131,10 @@ class Driver(WrapperXml):
                 iterator = exp.finditer(writeline)
                 for match in iterator:
                     attributevalue = instance.getInterface(
-                            match.group(1)).getRegister( 
-                                    match.group(2)).getAttribute( 
+                            match.group(1)).getRegister(
+                                    match.group(2)).getAttribute(
                                             match.group(3))
-                    if not attributevalue : 
+                    if not attributevalue :
                         raise Error("Wrong register value -> "+\
                                 match.group(1)+":"+match.group(2)+\
                                 ":"+match.group(3)+"\n",0)
@@ -215,7 +215,7 @@ class Driver(WrapperXml):
             raise Error("Set directory before",0)
         # deleting all directory in POD dir
         sy.deleteAllDir(bspdir)
-        for directory in sy.listDirectory(settings.projectpath+DRIVERSPATH+"/"): 
+        for directory in sy.listDirectory(settings.projectpath+DRIVERSPATH+"/"):
             sy.copyDirectory(settings.projectpath+DRIVERSPATH+"/"+directory,
                              self.getBSPDirectory())
 
@@ -254,4 +254,4 @@ class Driver(WrapperXml):
         else:
             self.addNode(nodename="bsp",attributename="os",value=operatingsystem)
         self.bspos = operatingsystem
- 
+
