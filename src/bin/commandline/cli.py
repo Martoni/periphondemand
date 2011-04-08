@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     Cli.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  22/05/2008
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ settings = Settings()
 display  = Display()
 
 class Cli(BaseCli):
-    """ 
+    """
     ---------------------------------
      Command line interpreter for POD
     ---------------------------------
@@ -135,7 +135,7 @@ Usage : source <filename>
 use <filename> as standard input execute commands stored in.
 Runs command(s) from a file.
         """
-        keepstate = Statekeeper(self, 
+        keepstate = Statekeeper(self,
             ('stdin','use_rawinput','prompt','base_prompt','continuation_prompt'))
         try:
             self.stdin = open(fname, 'r')
@@ -167,6 +167,6 @@ if __name__ == "__main__":
     cli = Cli()
     settings = Settings()
     settings.path = "/home/fabien/POD/trunk/pod/"
-    settings.projectpath = sy.pwd() 
+    settings.projectpath = sy.pwd()
     cli.cmdloop()
 

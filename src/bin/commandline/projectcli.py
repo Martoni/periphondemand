@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     ProjectCli.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  23/05/2008
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -74,7 +74,7 @@ class ProjectCli(BaseCli):
             settings.active_project = Project("",void=1)
         if settings.active_library is None:
             settings.active_library = Library()
-    
+
     def do_synthesis(self,arg):
         """\
 Usage : synthesis
@@ -109,7 +109,7 @@ Simulation generation environment
         except Error,e:
             print e
             return
-   
+
         # test if only one toolchain for simulation in library
         cli = SimulationCli(self)
         cli.setPrompt("simulation")
@@ -133,7 +133,7 @@ Driver generation environment
         except Error,e:
             print e
             return
-   
+
         # test if only one toolchain for simulation in library
         cli = DriverCli(self)
         cli.setPrompt("driver")
@@ -236,7 +236,7 @@ Add component in project
         except Error,e:
             print display
             print e
-            return 
+            return
         arg = line.split(' ')
         subarg = arg[0].split(".")
         try:
@@ -271,7 +271,7 @@ Add component in project
             print e
             return
         print display
-    
+
     def complete_listcomponents(self,text,line,begidx,endidx):
         componentlist = []
         try:
@@ -309,7 +309,7 @@ List all project instances
             self.isProjectOpen()
         except Error,e:
             print e
-            return 
+            return
         return self.columnize(self.listinstances())
 
     def complete_selectplatform(self,text,line,begidx,endidx):
@@ -339,7 +339,7 @@ Select the platform to use
             print e
             return
         print display
-        
+
     def do_listplatforms(self,line):
         """\
 Usage : listplatforms
@@ -401,7 +401,7 @@ Save project in the curent directory
         except Exception,e:
             print e
         return pinlist
-    
+
     def do_connectpin(self,line):
         """\
 Usage : connectpin <instancename>.<interfacename>.<portname>.[pinnum] <instancename>.<interfacename>.<portname>.[pinnum]
@@ -725,7 +725,7 @@ Set the base address of slave interface
                 print "Error, need a slave interface name"
                 return
             names.append(masterinterface[0].getName())
-            
+
         try:
             interfaceslave = settings.active_project.getInstance(names[0]).getInterface(names[1])
             interfacemaster = interfaceslave.getMaster()
@@ -903,7 +903,7 @@ set the project description
         settings.active_project.setDescription(line)
         print display
         print "Description set : "+line
-        return 
+        return
 
     def do_closeproject(self,line):
         """\
@@ -921,7 +921,7 @@ Close the project
         print "Project closed"
 
     # Generate CODE
-    
+
     def complete_intercon(self,text,line,begidx,endidx):
         interconlist = []
         try:
@@ -1023,7 +1023,7 @@ List all force configured for this project
 
     def do_setforce(self, line):
       """\
-Usage : setpin <pinname> <state>      
+Usage : setpin <pinname> <state>
 Set fpga pin state in 'gnd', 'vcc'. To unset use 'undef' value
       """
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     componentcli.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  29/04/2009
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ settings = Settings()
 display  = Display()
 
 class ComponentCli(BaseCli):
-    """ Component management command line interface 
+    """ Component management command line interface
     """
     def __init__(self,parent=None):
         BaseCli.__init__(self,parent)
@@ -154,7 +154,7 @@ Add the top HDL file in component, the file will be copied in component director
             self.checkargs(arg,"<hdlfilepath>.vhd")
             if not self.componentLoaded():
                 raise Error("Load/Create a component before")
-            settings.active_component.setHDLfile(arg,istop=1) 
+            settings.active_component.setHDLfile(arg,istop=1)
         except Error,e:
             print display
             print e
@@ -176,7 +176,7 @@ Add an HDL file in component, the file will be copied in component directory.
             self.checkargs(arg,"<hdlfilepath>.vhd")
             if not self.componentLoaded():
                 raise Error("Load/Create a component before")
-            settings.active_component.setHDLfile(arg) 
+            settings.active_component.setHDLfile(arg)
         except Error,e:
             print display
             print e
@@ -274,7 +274,7 @@ set interface attributes
 
         #TODO
         pass
-   
+
     def complete_delport(self,text,line,begidx,endidx):
         #TODO
         pass
@@ -383,7 +383,7 @@ Add or modify attribute value for a port
             print display
             print e
         print display
-   
+
     def do_setregister(self,arg):
         """\
 Usage : setregister <interface_name>.<register_name> <attribute_name>=<attribute_value>
@@ -405,7 +405,7 @@ Add or modify attribute value for a register
             print display
             print e
         print display
-   
+
     def do_addregister(self,arg):
         """\
 Usage : addregister <interface_name> <register_name>
@@ -418,7 +418,7 @@ Add register in interface, interface must be a bus slave
             self.checkargs(arg,"<interface_name> <register_name>")
             interface_name = arg.split()[0]
             register_name = arg.split()[1]
-            settings.active_component.addRegister(interface_name,register_name) 
+            settings.active_component.addRegister(interface_name,register_name)
         except Error,e:
             print display
             print e
@@ -441,7 +441,7 @@ Usage : addgeneric <generic_name> <attribute_name>=<attribute_value>
             generic_name = arg.split()[0]
             attribute_name = arg.split()[1].split("=")[0]
             attribute_value = arg.split()[1].split("=")[1]
-            settings.active_component.setGeneric(generic_name,attribute_name,attribute_value) 
+            settings.active_component.setGeneric(generic_name,attribute_name,attribute_value)
         except Error,e:
             print display
             print e
