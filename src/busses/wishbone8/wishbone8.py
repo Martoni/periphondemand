@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     wishbone8.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  13/05/2008
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -51,9 +51,9 @@ settings = Settings()
 TAB = "    "
 
 def header(author,intercon):
-    """ return vhdl header 
+    """ return vhdl header
     """
-    header = open(settings.path + TEMPLATESPATH+"/"+HEADERTPL,"r").read() 
+    header = open(settings.path + TEMPLATESPATH+"/"+HEADERTPL,"r").read()
     header = header.replace("$tpl:author$",author)
     header = header.replace("$tpl:date$",str(datetime.date.today()))
     header = header.replace("$tpl:filename$",intercon.getName()+VHDLEXT)
@@ -79,7 +79,7 @@ def entity(intercon):
     entity = entity[:-2]
     entity = entity + "\n"
 
-    entity = entity + TAB + ");\n" + "end entity;\n\n" 
+    entity = entity + TAB + ");\n" + "end entity;\n\n"
     return entity
 
 def architectureHead(masterinterface,intercon):
@@ -250,7 +250,7 @@ def controlslave(masterinterface,intercon):
                 +"\n"
 
         #write connection if read/write, read or write
-        try: 
+        try:
             datainname = slaveinstancename +"_"+\
                     slaveinterface.getPortByType(
                             bus.getSignalName("slave","datain")).getName()
