@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------
 -- Company     : Vim Inc
 -- Author(s)   : Fabien Marteau
--- 
+--
 -- Creation Date : 23/04/2008
 -- File          : atmega_pkg.vhd
 --
@@ -27,7 +27,7 @@ package atmega_emi_pkg is
         signal DIR_buffer : in std_logic ;
         wait_states : natural
         );
-        
+
     procedure atmega_read(
         Address : in std_logic_vector( 15 downto 0);
         signal value : out std_logic_vector( 7 downto 0);

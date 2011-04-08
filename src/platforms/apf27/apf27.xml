@@ -14,10 +14,10 @@
                 write procedures
                 procedure imx_write
                 Params :
-                address      : Write address 
-                value        : value to write 
+                address      : Write address
+                value        : value to write
                 gls_clk      : clock signal
-                imx_cs_n     : Chip select 
+                imx_cs_n     : Chip select
                 imx_oe_n     : Read signal
                 imx_eb3_n    : Write signal
                 imx_address  : Address signal
@@ -27,10 +27,10 @@
                 read procedures
                 procedure imx_read
                 Params :
-                address      : Write address 
+                address      : Write address
                 value        : value returned
                 gls_clk      : clock signal
-                imx_cs_n     : Chip select 
+                imx_cs_n     : Chip select
                 imx_oe_n     : Read signal
                 imx_eb3_n    : Write signal
                 imx_address  : Address signal

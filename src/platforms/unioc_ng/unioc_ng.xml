@@ -4,12 +4,12 @@
         UNIOC-NG Rob'Otter version card
     </description>
 
-	  <fpga family="cyclone" device="ep2C5T144C8N" speed="C8" package="TQFP144" main_clock="50000"/>
+      <fpga family="cyclone" device="ep2C5T144C8N" speed="C8" package="TQFP144" main_clock="50000"/>
 
-		<components>
+        <components>
             <component name="syscons/rstext_syscon" />
             <component name="wrappers/atmega_wb8_wrapper" />
-		</components>
+        </components>
 
     <simulation>
         <simlib filename="atmega_emi_pkg.vhd" />
@@ -30,18 +30,18 @@
                     <port size="1" name="90" position="PIN_90" dir="inout"/>
                     <port size="1" name="89" position="PIN_89" dir="inout"/>
                     <port size="1" name="88" position="PIN_88" dir="inout"/>
-    
+
                     <port size="1" name="SCL_fpga" position="PIN_24" dir="inout"/>
                     <port size="1" name="SDA_fpga" position="PIN_25" dir="inout"/>
 
                     <port size="1" name="nRST_fpga" position="PIN_28" dir="inout"/>
 
                     <port size="1" name="INT1_fpga" position="PIN_30" dir="inout"/>
-                    <port size="1" name="INT0_fpga" position="PIN_32" dir="inout"/>                   
+                    <port size="1" name="INT0_fpga" position="PIN_32" dir="inout"/>
 
                     <port size="1" name="TX_fpga" position="PIN_40" dir="inout"/>
                     <port size="1" name="RX_fpga" position="PIN_41" dir="inout"/>
- 
+
                     <port size="1" name="AD_fpga_0" position="PIN_42" dir="inout"/>
                     <port size="1" name="AD_fpga_1" position="PIN_43" dir="inout"/>
                     <port size="1" name="AD_fpga_2" position="PIN_44" dir="inout"/>
@@ -65,7 +65,7 @@
 
                     <port size="1" name="RD_fpga"     position="PIN_67" dir="inout"/>
                     <port size="1" name="WR_fpga"     position="PIN_69" dir="inout"/>
-                    
+
                     <port size="1" name="IRQ_fpga"     position="PIN_70" dir="inout"/>
 
                     <port size="1" name="CLK0" position="PIN_71" dir="inout" freq="50"/>
@@ -109,7 +109,7 @@
 
                     <port size="1" name="TLED" position="PIN_72" dir="inout"/>
 
-    
+
             </ports>
         </interface>
     </interfaces>

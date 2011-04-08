@@ -19,7 +19,7 @@
 -- File          : apf51_test_pkg.vhd
 -- Created on    : 20/12/2010
 -- Author        : Fabien Marteau <fabien.marteau@armadeus.com>
--- 
+--
 --*********************************************************************
 
 library IEEE;
@@ -35,15 +35,15 @@ package apf51_test_pkg is
 
     -- write procedures
     -- Params :
-    --    address      : Write address 
-    --    value        : value to write 
+    --    address      : Write address
+    --    value        : value to write
     --    gls_clk      : clock signal
-    --    imx_cs_n     : Chip select 
+    --    imx_cs_n     : Chip select
     --    imx_rw       : Read/Write signal
     --    imx_adv      : address/data mux signal
     --    imx_da       : Data/Address signal
-    --    WWSC         : Value of imx WWSC 
- 
+    --    WWSC         : Value of imx WWSC
+
     procedure imx_write(
     address     : in std_logic_vector (15 downto 0);
     value       : in std_logic_vector (15 downto 0);
@@ -56,17 +56,17 @@ package apf51_test_pkg is
 );
     -- read procedures
     -- Params :
-    --    address      : Write address 
+    --    address      : Write address
     --    value        : value returned
     --    gls_clk      : clock signal
-    --    imx_cs_n     : Chip select 
+    --    imx_cs_n     : Chip select
     --    imx_rw       : Read/Write signal
     --    imx_adv      : address/data mux signal
     --    imx_da       : Data/Address signal
     --    RWSC          : Value of imx WSC (see MC9328MXLRM.pdf p169) for sync=0
- 
+
 procedure imx_read(
-    address : in std_logic_vector( 15 downto 0); 
+    address : in std_logic_vector( 15 downto 0);
     signal value   : out std_logic_vector( 15 downto 0);
     signal gls_clk : in std_logic ;
     signal imx_cs_n: out std_logic ;
@@ -79,7 +79,7 @@ procedure imx_read(
 end package apf51_test_pkg;
 
 package body apf51_test_pkg is
-    
+
     -- Write value from imx
     procedure imx_write(
     address     : in std_logic_vector (15 downto 0);
@@ -117,7 +117,7 @@ end procedure imx_write;
 
 -- Read a value from imx
     procedure imx_read(
-    address : in std_logic_vector( 15 downto 0); 
+    address : in std_logic_vector( 15 downto 0);
     signal value   : out std_logic_vector( 15 downto 0);
     signal gls_clk : in std_logic ;
     signal imx_cs_n: out std_logic ;
@@ -139,7 +139,7 @@ begin
     imx_adv <= '1';
     if RWSC > 1 then
         for n in 2 to RWSC loop
-            wait until rising_edge(gls_clk); 
+            wait until rising_edge(gls_clk);
         end loop;
     end if;
     value <= imx_da;
