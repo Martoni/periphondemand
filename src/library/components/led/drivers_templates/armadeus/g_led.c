@@ -120,7 +120,7 @@ ssize_t led_read(struct file *fildes, char __user *buff,
 
 	PDEBUG("count %d\n",count);
 	if(count > 2){ /* 16bits max*/
-		count = 2; 
+		count = 2;
 	}
 
 	data = ioread16(sdev->membase+LED_REG_OFFSET);
@@ -220,7 +220,7 @@ static int led_probe(struct platform_device *pdev)
 	}
 	dev->sdev = sdev;
 	sdev->membase = dev->membase;
-	sdev->name = (char *)kmalloc((1+strlen(dev->name))*sizeof(char), 
+	sdev->name = (char *)kmalloc((1+strlen(dev->name))*sizeof(char),
 								 GFP_KERNEL);
 	if (sdev->name == NULL) {
 		printk("Kmalloc name space error\n");
@@ -235,7 +235,7 @@ static int led_probe(struct platform_device *pdev)
 	/* Get the major and minor device numbers */
 	/******************************************/
 
-	led_major = 252;	  
+	led_major = 252;
 	led_minor = dev->num ;/* num come from plat_led_port data structure */
 
 	sdev->devno = MKDEV(led_major, led_minor);

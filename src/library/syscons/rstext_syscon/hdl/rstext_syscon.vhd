@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMadeus Systems
 -- Author(s)   : Fabien Marteau
--- 
+--
 -- Creation Date : 20/07/2008
 -- File          : rstext_syscon.vhd
 --
@@ -14,19 +14,19 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity rstext_syscon is 
+Entity rstext_syscon is
 ---------------------------------------------------------------------------
 generic(
     invert_reset : std_logic := '0' -- 0 : not invert, 1: invert
 );
-port 
+port
 (
 	-- external signals
 	ext_clk :   in std_logic ;
 	ext_rst_n : in std_logic ;
 	--internal signals
 	gls_clk :   out std_logic ;
-	gls_reset : out std_logic 
+	gls_reset : out std_logic
 );
 end entity;
 
@@ -34,7 +34,7 @@ end entity;
 ---------------------------------------------------------------------------
 Architecture rstext_syscon_1 of rstext_syscon is
 ---------------------------------------------------------------------------
-   signal rff1 : std_logic ; 
+   signal rff1 : std_logic ;
 begin
 
     gls_clk <= ext_clk;

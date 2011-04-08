@@ -90,5 +90,5 @@ ghdl-view-vcdgz:
 	gunzip --stdout $(SIMDIR)/$(SIMTOP).vcdgz | $(VIEW_CMD) --vcd
 
 clean :
-	$(GHDL_CMD) --clean --workdir=simu 
+	$(GHDL_CMD) --clean --workdir=simu
 	-rm -rf simu

@@ -198,7 +198,7 @@
 
 `include "uart_defines.v"
 
-module uart_receiver (clk, wb_rst_i, lcr, rf_pop, srx_pad_i, enable, 
+module uart_receiver (clk, wb_rst_i, lcr, rf_pop, srx_pad_i, enable,
 	counter_t, rf_count, rf_data_out, rf_error_bit, rf_overrun, rx_reset, lsr_mask, rstate, rf_push_pulse);
 
 input				clk;
@@ -243,7 +243,7 @@ wire 				break_error = (counter_b == 0);
 
 // RX FIFO instance
 uart_rfifo #(`UART_FIFO_REC_WIDTH) fifo_rx(
-	.clk(		clk		), 
+	.clk(		clk		),
 	.wb_rst_i(	wb_rst_i	),
 	.data_in(	rf_data_in	),
 	.data_out(	rf_data_out	),
@@ -415,7 +415,7 @@ begin
       			rcounter16 	  <= #1 4'b1110;
     				rstate 		  <= #1 sr_rec_start;
           end
-                      
+
 			end
 	default : rstate <= #1 sr_idle;
 	endcase
@@ -432,7 +432,7 @@ end
 
 assign rf_push_pulse = rf_push & ~rf_push_q;
 
-  
+
 //
 // Break condition detection.
 // Works in conjuction with the receiver state machine

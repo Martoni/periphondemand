@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMades Systems
 -- Author(s)   : Fabien Marteau <fabien.marteau@armadeus.com>
--- 
+--
 -- Creation Date : 25/06/2008
 -- File          : uart_top_vhdl.vhd
 --
@@ -14,7 +14,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity uart16750 is 
+Entity uart16750 is
 ---------------------------------------------------------------------------
     generic(
         id : natural := 1;
@@ -42,9 +42,9 @@ Entity uart16750 is
     dtr_pad_o : out std_logic ;
     dsr_pad_i : in  std_logic ;
     ri_pad_i  : in  std_logic ;
-    dcd_pad_i : in  std_logic 
+    dcd_pad_i : in  std_logic
     -- optional baudrate output
---    baud_o  : out std_logic 
+--    baud_o  : out std_logic
     );
 
 end entity;
@@ -93,11 +93,11 @@ begin
 
     wb_dat_i_int <= wb_dat_i(7 downto 0);
 
-    strobe <= wb_stb_i when wb_adr_i(3) = '0' else '0'; 
+    strobe <= wb_stb_i when wb_adr_i(3) = '0' else '0';
 
-    wb_dat_o <= std_logic_vector(to_unsigned(id,wb_size)) 
+    wb_dat_o <= std_logic_vector(to_unsigned(id,wb_size))
                 when wb_adr_i = "1000" and wb_stb_i = '1' and wb_we_i = '0'
-                else "00000000"&wb_dat_o_int              
+                else "00000000"&wb_dat_o_int
                 when wb_adr_i(3)= '0' and wb_stb_i = '1' and wb_we_i = '0'
                 else (others => '0');
 

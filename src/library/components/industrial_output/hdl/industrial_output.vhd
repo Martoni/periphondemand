@@ -21,7 +21,7 @@
 -- File          : industrial_output.vhd
 -- Created on    : 08/06/2009
 -- Author        : Fabien Marteau <fabien.marteau@armadeus.com>
--- 
+--
 -- TODO: adding busy bit on data register to inform operating system
 -- that component is sending a value -> done but not tested
 --
@@ -32,7 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity industrial_output is 
+Entity industrial_output is
 ---------------------------------------------------------------------------
 generic(
     id       : natural := 1;    -- identification register value
@@ -40,7 +40,7 @@ generic(
     serial_speed : natural := 1000; -- serial speed in kHz (min : 9, max 133000)
     clk_freq : natural := 133000 -- fpga clock speed in kHz
 );
-port 
+port
 (
     -- Syscon signals
     reset    : in std_logic ; -- reset
@@ -58,7 +58,7 @@ port
     rclk          : out std_logic;
     srclk         : out std_logic;
     ser           : out std_logic;
-    qh            : in std_logic 
+    qh            : in std_logic
 );
 end entity;
 
@@ -95,10 +95,10 @@ Architecture industrial_output_1 of industrial_output is
     signal spi_clk_rise : std_logic ;
     signal spi_clk_fall : std_logic ;
 
-    -- state machine signals 
+    -- state machine signals
     signal data_wrote : std_logic ;
 
-    --   
+    --
     signal read_ack : std_logic ;
     signal write_ack : std_logic ;
     signal enable_spi_clk : std_logic ;
@@ -116,11 +116,11 @@ begin
             if (wbs_strobe and (not wbs_write) and wbs_cycle) = '1' then
                 read_ack <= '1';
                 case wbs_add is
-                    when CTRL_DATA => 
+                    when CTRL_DATA =>
                         wbs_readdata <= ZERO(15 downto 9)&busy_reg&data;
                     when ID_ADDR   =>
-                        wbs_readdata <= std_logic_vector(to_unsigned(id,wb_size)); 
-                    when others => 
+                        wbs_readdata <= std_logic_vector(to_unsigned(id,wb_size));
+                    when others =>
                         wbs_readdata <= (others => '0');
                 end case;
             else
@@ -195,7 +195,7 @@ begin
     begin
         if reset = '1' then
             state_reg <= out_void;
-            data_reg  <= (others => '0'); 
+            data_reg  <= (others => '0');
             ser_reg   <= '0';
             busy_reg  <= '0';
         elsif rising_edge(clk) then
@@ -207,7 +207,7 @@ begin
     end process spi_state_register_p;
 
     -- next-state logic
-    nstate_p : process( state_reg, spi_clk_fall, spi_clk_rise, 
+    nstate_p : process( state_reg, spi_clk_fall, spi_clk_rise,
                         data_wrote,spi_count_reg )
     begin
         next_state <= state_reg;
@@ -225,7 +225,7 @@ begin
                         next_state <= out_write_pulse;
                     end if;
             when out_write_pulse =>
-                    if (spi_count_reg < 9) and spi_clk_fall = '1' then 
+                    if (spi_count_reg < 9) and spi_clk_fall = '1' then
                         next_state <= out_write_value;
                     elsif (spi_count_reg >= 9) then
                         next_state <= out_out;
@@ -236,26 +236,26 @@ begin
                     else
                         next_state <= out_void;
                     end if;
-            when others => 
+            when others =>
                     next_state <= out_void;
         end case;
     end process nstate_p;
 
     -- output logic
-    output_p : process (state_reg, spi_clk, data_reg, ser_reg, 
+    output_p : process (state_reg, spi_clk, data_reg, ser_reg,
                         spi_count_reg,data,spi_clk_rise,qh)
     begin
         ser_next <= ser_reg;
         data_next <= data_reg;
         case state_reg is
-            when out_void => 
+            when out_void =>
                 rclk   <= '0';
                 srclk  <= '1';
                 ser_next    <= '0';
                 enable_spi_clk <= '0';
                 data_next <= data;
                 busy_next <= '0';
-            when out_init => 
+            when out_init =>
                 rclk   <= '0';
                 srclk  <= '1';
                 ser_next    <= '0';
@@ -267,7 +267,7 @@ begin
                 ser_next  <= data_reg(7);
                 if spi_clk_rise = '1' then
                     data_next <= data_reg(6 downto 0)&qh;
-                end if; 
+                end if;
                 enable_spi_clk <= '1';
                 busy_next <= '1';
             when out_write_pulse =>
@@ -277,14 +277,14 @@ begin
                 data_next <= data_reg;
                 enable_spi_clk <= '1';
                 busy_next <= '1';
-            when out_out => 
+            when out_out =>
                 rclk   <= '1'; -- refresh output
                 srclk  <= '1';
                 ser_next <= ser_reg;
                 data_next <= data_reg;
                 enable_spi_clk <= '1';
                 busy_next <= '1';
-            when others => 
+            when others =>
                 rclk   <= '0';
                 srclk  <= '1';
                 ser_next    <= '0';

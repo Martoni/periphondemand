@@ -2,7 +2,7 @@ Serial input component
 ======================
 
 This component is designed to drive input serializer based on sn65hvs882
-industrial serializer. 
+industrial serializer.
 
 FPGA component
 --------------
@@ -14,16 +14,16 @@ Input component is composed of four 16 bits registers:
 |    0x00    | DATA        | data and interrupt              |
 |    0x01    | READ_PER    | read period = reg x bus period  |
 |    0x02    | BUS_PER     | bus period = reg x clock period |
-|    0x03    | ID          | Identification register         | 
+|    0x03    | ID          | Identification register         |
 
-* DATA : this register contain data value read on low byte and enable 
+* DATA : this register contain data value read on low byte and enable
   register on bit(8).
 
 | 15 downto 9 |  8     | 7 downto 0 |
 |:-----------:|:------:|:----------:|
 |    void     | int_en |  data      |
 
-* READ_PER : Indicating the period between two read. 
+* READ_PER : Indicating the period between two read.
 * BUS_PER  : Period of bus
 * ID       : Identification register
 
@@ -39,7 +39,7 @@ Before using the driver be sure that irq_mngr driver is mounted:
 To read value on input, two modules must be mounted :
 
 > modprobe ginput
-> modporbe board_input 
+> modporbe board_input
 
 ### /dev
 

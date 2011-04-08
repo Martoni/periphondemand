@@ -31,6 +31,6 @@ clean:
 	rm -f .*.cmd \
 	rm -rf .tmp_versions \
 	rm -f Module.symvers
-   
+
 endif
 

@@ -1,11 +1,11 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMades Systems
 -- Author(s)   : Fabien Marteau <fabien.marteau@armadeus.com>
--- 
+--
 -- Creation Date : 25/07/2008
 -- File          : int_gen.vhd
 --
--- Abstract : 
+-- Abstract :
 --
 ---------------------------------------------------------------------------
 
@@ -14,27 +14,27 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity int_gen is 
+Entity int_gen is
 ---------------------------------------------------------------------------
 generic
 (
     periode : integer := 1_000_000;  -- period between two IT in microseconds
     clockperiode : integer := 10     -- clock period in nanoseconds
 );
-port 
+port
 (
     -- candr
     clk   : in std_logic ;
     reset : in std_logic ;
     -- wb16
-    readdata    : out std_logic_vector( 15 downto 0) ; 
+    readdata    : out std_logic_vector( 15 downto 0) ;
     writedata   : in  std_logic_vector( 15 downto 0) ;
     ack         : out std_logic ;
     strobe      : in  std_logic ;
     cycle       : in  std_logic ;
     write       : in  std_logic ;
     -- interrupts
-    interrupts : out std_logic_vector( 15 downto 0) 
+    interrupts : out std_logic_vector( 15 downto 0)
 );
 end entity;
 
@@ -43,7 +43,7 @@ end entity;
 Architecture int_gen_1 of int_gen is
 ---------------------------------------------------------------------------
 
-    constant N : integer := ((periode)/(clockperiode))*1000; 
+    constant N : integer := ((periode)/(clockperiode))*1000;
     signal  rd_ack : std_logic := '0';
     signal  wr_ack : std_logic := '0';
     signal  state : std_logic_vector( 15 downto 0);
@@ -80,7 +80,7 @@ begin
                 wr_ack <= '1';
                 state <= writedata;
                 count <= 0;
-            elsif enable = '1' or wr_ack = '1' then 
+            elsif enable = '1' or wr_ack = '1' then
                 enable := '1';
                 if count = (N-1) then
                     count <= 0;
@@ -91,7 +91,7 @@ begin
                     state <= state;
                     interrupts <= (others => '0');
                 end if;
-            else 
+            else
                 wr_ack <= '0';
             end if;
         end if;

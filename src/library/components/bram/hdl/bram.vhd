@@ -1,11 +1,11 @@
 ---------------------------------------------------------------------------
 -- Company     : Vim Inc
 -- Author(s)   : Fabien Marteau
--- 
+--
 -- Creation Date : 14/11/2008
 -- File          : bram.vhd
 --
--- Abstract : 
+-- Abstract :
 --
 ---------------------------------------------------------------------------
 
@@ -14,12 +14,12 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity bram is 
+Entity bram is
   ---------------------------------------------------------------------------
   generic(
     wb_size : natural := 16 -- Data port size for wishbone
     );
-  port 
+  port
   (
     -- Syscon signals
     gls_reset    : in std_logic ;
@@ -60,11 +60,11 @@ begin
     DATA_WIDTH => 16
     )
   port map (
-    clk => gls_clk, 
+    clk => gls_clk,
     we   =>  wbs_write,
     addr => wbs_add,
     din  => wbs_writedata,
-    dout => wbs_readdata 
+    dout => wbs_readdata
   );
 
   wbs_ack <= wbs_strobe;

@@ -141,7 +141,7 @@
 `include "uart_defines.v"
 
 module uart_top	(
-	wb_clk_i, 
+	wb_clk_i,
 	
 	// Wishbone signals
 	wb_rst_i, wb_adr_i, wb_dat_i, wb_dat_o, wb_we_i, wb_stb_i, wb_cyc_i, wb_ack_o, wb_sel_i,
@@ -223,7 +223,7 @@ wire	[7:0] lsr;
 wire	[`UART_FIFO_COUNTER_W-1:0] rf_count;
 wire	[`UART_FIFO_COUNTER_W-1:0] tf_count;
 wire	[2:0] tstate;
-wire	[3:0] rstate; 
+wire	[3:0] rstate;
 `endif
 
 `ifdef DATA_BUS_WIDTH_8
@@ -235,7 +235,7 @@ uart_wb		wb_interface(
 	.wb_dat_o(wb_dat_o),
 	.wb_dat8_i(wb_dat8_i),
 	.wb_dat8_o(wb_dat8_o),
-	 .wb_dat32_o(32'b0),								 
+	 .wb_dat32_o(32'b0),
 	 .wb_sel_i(4'b0),
 		.wb_we_i(	wb_we_i		),
 		.wb_stb_i(	wb_stb_i	),
@@ -255,7 +255,7 @@ uart_wb		wb_interface(
 	.wb_dat8_i(wb_dat8_i),
 	.wb_dat8_o(wb_dat8_o),
 	 .wb_sel_i(wb_sel_i),
-	 .wb_dat32_o(wb_dat32_o),								 
+	 .wb_dat32_o(wb_dat32_o),
 		.wb_we_i(	wb_we_i		),
 		.wb_stb_i(	wb_stb_i	),
 		.wb_cyc_i(	wb_cyc_i	),
@@ -283,18 +283,18 @@ uart_regs	regs(
 `ifdef DATA_BUS_WIDTH_8
 `else
 // debug interface signals	enabled
-.ier(ier), 
-.iir(iir), 
-.fcr(fcr), 
-.mcr(mcr), 
-.lcr(lcr), 
-.msr(msr), 
-.lsr(lsr), 
+.ier(ier),
+.iir(iir),
+.fcr(fcr),
+.mcr(mcr),
+.lcr(lcr),
+.msr(msr),
+.lsr(lsr),
 .rf_count(rf_count),
 .tf_count(tf_count),
 .tstate(tstate),
 .rstate(rstate),
-`endif					  
+`endif
 	.rts_pad_o(		rts_pad_o		),
 	.dtr_pad_o(		dtr_pad_o		),
 	.int_o(		int_o		)
@@ -322,7 +322,7 @@ uart_debug_if dbg(/*AUTOINST*/
 						.tf_count				 (tf_count[`UART_FIFO_COUNTER_W-1:0]),
 						.tstate					 (tstate[2:0]),
 						.rstate					 (rstate[3:0]));
-`endif 
+`endif
 
 initial
 begin

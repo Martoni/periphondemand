@@ -1,7 +1,7 @@
 /*
  * Driver to test OpenCore IRQ manager driver
  *
- * Copyright (C) 2008 Armadeus Systems 
+ * Copyright (C) 2008 Armadeus Systems
  * Author: Julien Boibessot <julien.boibessot@armadeus.com>
  *
  * This program is free software; you can redistribute it and/or modify

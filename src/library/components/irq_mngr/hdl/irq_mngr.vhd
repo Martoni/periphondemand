@@ -34,24 +34,24 @@ library IEEE;
       -- Global Signals
       gls_clk   : in std_logic;
       gls_reset : in std_logic;
-      
+
       -- Wishbone interface signals
       wbs_s1_address    : in  std_logic_vector(1 downto 0);   -- Address bus
       wbs_s1_readdata   : out std_logic_vector(15 downto 0);  -- Data bus for read access
       wbs_s1_writedata  : in  std_logic_vector(15 downto 0);  -- Data bus for write access
       wbs_s1_ack        : out std_logic;                      -- Access acknowledge
       wbs_s1_strobe     : in  std_logic;                      -- Strobe
-      wbs_s1_cycle      : in  std_logic ;                     -- Cycle    
+      wbs_s1_cycle      : in  std_logic ;                     -- Cycle
       wbs_s1_write      : in  std_logic;                      -- Write access
-    
+
       -- irq from other IP
       irqport        : in  std_logic_vector(irq_count-1 downto 0);
-      
+
       -- Component external signals
       gls_irq           : out std_logic                       -- IRQ request
     );
     end entity;
-    
+
 -- ----------------------------------------------------------------------------
     Architecture RTL of irq_mngr is
 -- ----------------------------------------------------------------------------

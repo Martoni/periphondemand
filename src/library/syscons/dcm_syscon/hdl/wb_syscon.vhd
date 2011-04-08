@@ -1,11 +1,11 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMadeus Systems
 -- Author(s)   : Fabien Marteau
--- 
+--
 -- Creation Date : 05/03/2008
 -- File          : wb_syscon.vhd
 --
--- Abstract : 
+-- Abstract :
 --
 ---------------------------------------------------------------------------
 
@@ -18,15 +18,15 @@ use UNISIM.vcomponents.all;
 
 
 ---------------------------------------------------------------------------
-Entity wb_syscon is 
+Entity wb_syscon is
 ---------------------------------------------------------------------------
-port 
+port
 (
     -- external signals
     ext_clk : in std_logic ;
     --internal signals
     gls_clk : out std_logic ;
-    gls_reset : out std_logic 
+    gls_reset : out std_logic
 );
 end entity;
 

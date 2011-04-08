@@ -30,7 +30,7 @@
 
 static ssize_t button_fpga_read(void * addr,u16 *data,struct button_dev *dev){
   *data = ioread16(addr);/* read the button value */
-  return 2; 
+  return 2;
 }
 
 

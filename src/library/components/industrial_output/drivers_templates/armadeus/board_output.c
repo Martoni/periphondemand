@@ -1,5 +1,5 @@
 /*
- * Specific output driver for generic output driver 
+ * Specific output driver for generic output driver
  *
  * (c) Copyright 2008	Armadeus project
  * Fabien Marteau <fabien.marteau@armadeus.com>

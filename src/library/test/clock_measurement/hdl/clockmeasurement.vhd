@@ -1,11 +1,11 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMadeus Systems
 -- Author(s)   : Fabien Marteau
--- 
+--
 -- Creation Date : 05/03/2008
 -- File          : clockmeasurement.vhd
 --
--- Abstract : measure clock frequency of low_clock 
+-- Abstract : measure clock frequency of low_clock
 --
 -- mapping:
 -- 0x0 : Id
@@ -20,13 +20,13 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 -----------------------------------------------------------------------
-    Entity clockmeas is 
+    Entity clockmeas is
 -----------------------------------------------------------------------
     generic(
         id : natural := 1;
         wb_size : natural := 16 -- Data port size for wishbone
     );
-    port 
+    port
     (
         -- Syscon signals
         gls_reset    : in std_logic ;
@@ -40,7 +40,7 @@ use IEEE.numeric_std.all;
         wbs_write     : in std_logic ;
         wbs_ack       : out std_logic;
         -- input clock signal
-        low_clock : in std_logic 
+        low_clock : in std_logic
     );
 end entity clockmeas;
 

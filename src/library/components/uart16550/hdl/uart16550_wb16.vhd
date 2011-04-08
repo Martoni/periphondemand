@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMades Systems
 -- Author(s)   : Fabien Marteau <fabien.marteau@armadeus.com>
--- 
+--
 -- Creation Date : 25/06/2008
 -- File          : uart_top_vhdl.vhd
 --
@@ -14,7 +14,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity uart16550 is 
+Entity uart16550 is
 ---------------------------------------------------------------------------
     generic(
         id : natural := 1;
@@ -42,9 +42,9 @@ Entity uart16550 is
     dtr_pad_o : out std_logic ;
     dsr_pad_i : in  std_logic ;
     ri_pad_i  : in  std_logic ;
-    dcd_pad_i : in  std_logic 
+    dcd_pad_i : in  std_logic
     -- optional baudrate output
---    baud_o  : out std_logic 
+--    baud_o  : out std_logic
     );
 
 end entity;
@@ -54,7 +54,7 @@ end entity;
 Architecture uart_top_vhdl_1 of uart16550 is
 ---------------------------------------------------------------------------
 
-    component uart_top 
+    component uart_top
     port (
     -- clock
     wb_clk_i : in std_logic;
@@ -79,7 +79,7 @@ Architecture uart_top_vhdl_1 of uart16550 is
     ri_pad_i  : in std_logic ;
     dcd_pad_i : in std_logic
     -- optional baudrate output
---    baud_o  : out std_logic 
+--    baud_o  : out std_logic
     );
     end component;
 
@@ -92,17 +92,17 @@ begin
 
     wb_dat_i_int <= wb_dat_i(7 downto 0);
 
-    strobe <= wb_stb_i when wb_adr_i(3) = '0' else '0'; 
+    strobe <= wb_stb_i when wb_adr_i(3) = '0' else '0';
 
-    wb_dat_o <= std_logic_vector(to_unsigned(id,wb_size)) 
+    wb_dat_o <= std_logic_vector(to_unsigned(id,wb_size))
                 when wb_adr_i = "1000" and wb_stb_i = '1' and wb_we_i = '0'
-                else "00000000"&wb_dat_o_int              
+                else "00000000"&wb_dat_o_int
                 when wb_adr_i(3)= '0' and wb_stb_i = '1' and wb_we_i = '0'
                 else (others => '0');
 
     uart_connect : uart_top
     port map (
-    wb_clk_i => wb_clk_i, 
+    wb_clk_i => wb_clk_i,
     wb_rst_i => wb_rst_i,
     -- Wishbone
     wb_adr_i => wb_adr_i(2 downto 0),
@@ -112,7 +112,7 @@ begin
     wb_stb_i => strobe,
     wb_cyc_i => wb_cyc_i,
     wb_sel_i => "0001", -- byte always on LSB
-    wb_ack_o => wb_ack_o, 
+    wb_ack_o => wb_ack_o,
     int_o    => int_o,
     -- uart s
     srx_pad_i =>  srx_pad_i,

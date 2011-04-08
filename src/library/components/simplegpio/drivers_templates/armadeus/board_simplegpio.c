@@ -3,7 +3,7 @@
  *
  * (c) Copyright 2008	Armadeus project
  * Fabien Marteau <fabien.marteau@armadeus.com>
- * Specific simplegpio driver for generic simplegpio driver 
+ * Specific simplegpio driver for generic simplegpio driver
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

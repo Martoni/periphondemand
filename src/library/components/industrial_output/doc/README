@@ -2,7 +2,7 @@ Serial output component
 =======================
 
 This component is designed to drive output deserializer based on sn74hc594
-8-bits shift register with output register. 
+8-bits shift register with output register.
 
 FPGA component
 --------------

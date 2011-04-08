@@ -3,7 +3,7 @@
  *
  * (c) Copyright 2008    Armadeus project
  * Fabien Marteau <fabien.marteau@armadeus.com>
- * Specific button driver for generic button driver 
+ * Specific button driver for generic button driver
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ static struct plat_button_port plat_button/*$instance_num$*/_data={
 	.name = "/*$instance_name$*/",
 	.interrupt_number=/*$instance_name$*/_IRQ,
 	.num=/*$instance_num$*/,
-	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR_VIRT + 
+	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR_VIRT +
 						/*$registers_base_address:swb16$*/),
 	.idnum=/*$generic:id$*/,
 	.idoffset=/*$register:swb16:id:offset$*/ * (/*$register:swb16:id:size$*/ /8)
@@ -69,7 +69,7 @@ static struct platform_device plat_button/*$instance_num$*/_device={
 static int __init board_button_init(void)
 {
     int ret = -1;
-/*$foreach:instance$*/    
+/*$foreach:instance$*/
 	ret = platform_device_register(&plat_button/*$instance_num$*/_device);
 	if(ret<0)return ret;
 /*$foreach:instance:end$*/
@@ -78,7 +78,7 @@ static int __init board_button_init(void)
 
 static void __exit board_button_exit(void)
 {
-/*$foreach:instance$*/    
+/*$foreach:instance$*/
 	platform_device_unregister(&plat_button/*$instance_num$*/_device);
 /*$foreach:instance:end$*/
 }

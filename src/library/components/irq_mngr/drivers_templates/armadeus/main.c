@@ -1,5 +1,5 @@
 /*
- * Driver for the IRQ manager (OpenCore/Wishbone based) loaded in the FPGA of 
+ * Driver for the IRQ manager (OpenCore/Wishbone based) loaded in the FPGA of
  * the Armadeus boards.
  *
  * (C) Copyright 2008 Armadeus Systems
@@ -214,7 +214,7 @@ static int __devinit ocore_irq_mng_probe(struct platform_device *pdev)
 		pr_debug("IRQ %d\n", irq);
 		set_irq_chip_and_handler(irq, &imx_fpga_chip, handle_edge_irq);
 		set_irq_flags(irq, IRQF_VALID);
-		/* clear pending interrrupts */ 
+		/* clear pending interrrupts */
 		imx_fpga_ack_irq(irq);
 	}
 	set_irq_chained_handler(ARMADEUS_FPGA_IRQ, imx_fpga_demux_handler);

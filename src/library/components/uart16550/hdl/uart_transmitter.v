@@ -189,7 +189,7 @@ wire [`UART_FIFO_COUNTER_W-1:0] 		tf_count;
 assign 										tf_data_in = wb_dat_i;
 
 uart_tfifo fifo_tx(	// error bit signal is not used in transmitter FIFO
-	.clk(		clk		), 
+	.clk(		clk		),
 	.wb_rst_i(	wb_rst_i	),
 	.data_in(	tf_data_in	),
 	.data_out(	tf_data_out	),

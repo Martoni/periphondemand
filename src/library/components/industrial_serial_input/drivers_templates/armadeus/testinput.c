@@ -1,4 +1,4 @@
-/* 
+/*
  * A simple program to test Wishbone button driver
  *
  * (c) Copyright 2008    Armadeus project

@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMades Systems
 -- Author(s)   : Fabien Marteau <fabien.marteau@armadeus.com>
--- 
+--
 -- Creation Date : 13/05/2009
 -- File          : serializer.vhd
 --
@@ -14,9 +14,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity serializer is 
+Entity serializer is
 ---------------------------------------------------------------------------
-port 
+port
 (
     -- serial signals
     clk : in std_logic ;

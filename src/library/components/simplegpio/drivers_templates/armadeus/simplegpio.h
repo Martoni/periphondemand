@@ -105,4 +105,4 @@ struct plat_simplegpio_port{
 #define SGPIO_MAGIC (0x82)
 #define SGPIO_IORDIRECTION _IOR(SGPIO_MAGIC,0,int)
 #define SGPIO_IOWDIRECTION _IOW(SGPIO_MAGIC,1,int)
-#define	SGPIO_IOC_MAX 2 
+#define	SGPIO_IOC_MAX 2

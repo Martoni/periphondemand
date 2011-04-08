@@ -13,7 +13,7 @@
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation; version 2 of the License.
- * 
+ *
  *   This program is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 	__u16 word_write;
 	__s32 word_read;
 	__u8 block[20];
-	__u8  command; 
+	__u8  command;
 
 	printf("* Testing program for i2c-ocore driver *\n");
 
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 	printf("\n");
 
 	/****************************************/
-	/* I2C                              no  */ 
+	/* I2C                              no  */
 
     /****************************************/
 	/* SMBus Quick Command              yes */
@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
 	printf("Write %02x at %02x on EEPROM_L\n",int_write,command);
 
 	command = 0x10; /* EEPROM*/
-	int_write = 0x55; 
+	int_write = 0x55;
 	ret = set_i2c_slave_address(file,EEPROM_ADDR_L);
 	if (ret < 0)
 		goto error;
@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
 	/* SMBus Write Word                 yes */
 	printf("\n* SMBus Write Word :\n");
 	command = 0x10; /* EEPROM*/
-	word_write = 0x5555; 
+	word_write = 0x5555;
 	ret = set_i2c_slave_address(file,EEPROM_ADDR_L);
 	if (ret < 0)
 		goto error;
@@ -325,7 +325,7 @@ int main(int argc, char *argv[])
 	printf("Write %04x at %02x on EEPROM_L\n",word_write,command);
 	sleep(1);
 	command = 0x12; /* EEPROM*/
-	word_write = 0xcaca; 
+	word_write = 0xcaca;
 	ret = set_i2c_slave_address(file,EEPROM_ADDR_L);
 	if (ret < 0)
 		goto error;

@@ -1,11 +1,11 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMadeus Systems
 -- Author(s)   : Fabien Marteau
--- 
+--
 -- Creation Date : 05/03/2008
 -- File          : rstgen_syscon.vhd
 --
--- Abstract : 
+-- Abstract :
 --
 ---------------------------------------------------------------------------
 
@@ -14,18 +14,18 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity rstgen_syscon is 
+Entity rstgen_syscon is
 ---------------------------------------------------------------------------
 generic(
     invert_reset : std_logic := '0' -- 0 : not invert, 1 invert
 );
-port 
+port
 (
 	-- external signals
 	ext_clk : in std_logic ;
 	--internal signals
 	gls_clk : out std_logic ;
-	gls_reset : out std_logic 
+	gls_reset : out std_logic
 );
 end entity;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="uart16750" version="1.0">
 	<description>
-		Complete uart device from opencores (8bits mode), based on 16750 component 
+		Complete uart device from opencores (8bits mode), based on 16750 component
 	</description>
 
     <driver_files>

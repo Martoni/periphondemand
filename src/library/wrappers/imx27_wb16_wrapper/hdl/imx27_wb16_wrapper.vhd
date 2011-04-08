@@ -10,7 +10,7 @@
 --
 --  Description   :  This is the top file of the IP
 -------------------------------------------------------------------------------
---  Modifications : 
+--  Modifications :
 -----
 -- 2008/03/05
 -- Fabien Marteau (fabien.marteau@armadeus.com)
@@ -80,7 +80,7 @@ begin
         writedata <= imx_data;
       end if;
     end process;
-    
+
     wbm_address    <= address when (strobe = '1') else (others => '0');
     wbm_writedata  <= writedata when (write = '1') else (others => '0');
     wbm_strobe     <= strobe;

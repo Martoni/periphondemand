@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMades Systems
 -- Author(s)   : Fabien Marteau <fabien.marteau@armadeus.com>
--- 
+--
 -- Creation Date : 16/04/2008
 -- File          : i2cocore_wb16.vhd
 --
@@ -15,18 +15,18 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity i2cocore is 
+Entity i2cocore is
 ---------------------------------------------------------------------------
 generic(
     id : natural := 1;
     wb_size : natural := 16
 );
-port 
+port
 (
 	clk_i : in std_logic ; -- master clock input
 	rst_i : in std_logic ; -- asynchronous reset
 
-	adr_i : in std_logic_vector( 3 downto 0); 
+	adr_i : in std_logic_vector( 3 downto 0);
 	dat_i : in std_logic_vector( 15 downto 0);
 	dat_o : out std_logic_vector( 15 downto 0);
 	we_i  : in std_logic ;
@@ -37,7 +37,7 @@ port
 	inta_o: out std_logic ;
 
 	scl : inout std_logic ;
-	sda : inout std_logic 
+	sda : inout std_logic
 );
 end entity i2cocore;
 

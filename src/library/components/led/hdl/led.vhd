@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMadeus Systems
 -- Author(s)   : Fabien Marteau
--- 
+--
 -- Creation Date : 05/03/2008
 -- File          : led.vhd
 --
@@ -14,13 +14,13 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 -----------------------------------------------------------------------
-    Entity led is 
+    Entity led is
 -----------------------------------------------------------------------
     generic(
         id : natural := 1;
         wb_size : natural := 16 -- Data port size for wishbone
     );
-    port 
+    port
     (
         -- Syscon signals
         gls_reset    : in std_logic ;
@@ -34,7 +34,7 @@ use IEEE.numeric_std.all;
         wbs_write     : in std_logic ;
         wbs_ack       : out std_logic;
         -- out signals
-        led : out std_logic 
+        led : out std_logic
     );
 end entity led;
 
@@ -53,7 +53,7 @@ wbs_ack <= wbs_strobe;
 -- manage register
 write_bloc : process(gls_clk,gls_reset)
 begin
-    if gls_reset = '1' then 
+    if gls_reset = '1' then
         reg <= (others => '0');
     elsif rising_edge(gls_clk) then
         if ((wbs_strobe and wbs_write and wbs_cycle) = '1' ) then

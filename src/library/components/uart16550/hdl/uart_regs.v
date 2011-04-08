@@ -233,7 +233,7 @@
 `define UART_DL2 15:8
 
 module uart_regs (clk,
-	wb_rst_i, wb_addr_i, wb_dat_i, wb_dat_o, wb_we_i, wb_re_i, 
+	wb_rst_i, wb_addr_i, wb_dat_i, wb_dat_o, wb_we_i, wb_re_i,
 
 // additional signals
 	modem_inputs,
@@ -400,11 +400,11 @@ wire serial_in = loopback ? serial_out : srx_pad;
 assign stx_pad_o = loopback ? 1'b1 : serial_out;
 
 // Receiver Instance
-uart_receiver receiver(clk, wb_rst_i, lcr, rf_pop, serial_in, enable, 
+uart_receiver receiver(clk, wb_rst_i, lcr, rf_pop, serial_in, enable,
 	counter_t, rf_count, rf_data_out, rf_error_bit, rf_overrun, rx_reset, lsr_mask, rstate, rf_push_pulse);
 
 
-// Asynchronous reading here because the outputs are sampled in uart_wb.v file 
+// Asynchronous reading here because the outputs are sampled in uart_wb.v file
 always @(dl or dlab or ier or iir or scratch
 			or lcr or lsr or msr or rf_data_out or wb_addr_i or wb_re_i)   // asynchrounous reading
 begin
@@ -425,7 +425,7 @@ end // always @ (dl or dlab or ier or iir or scratch...
 always @(posedge clk or posedge wb_rst_i)
 begin
 	if (wb_rst_i)
-		rf_pop <= #1 0; 
+		rf_pop <= #1 0;
 	else
 	if (rf_pop)	// restore the signal to 0 after one clock cycle
 		rf_pop <= #1 0;
@@ -503,7 +503,7 @@ always @(posedge clk or posedge wb_rst_i)
 // FIFO Control Register and rx_reset, tx_reset signals
 always @(posedge clk or posedge wb_rst_i)
 	if (wb_rst_i) begin
-		fcr <= #1 2'b11; 
+		fcr <= #1 2'b11;
 		rx_reset <= #1 0;
 		tx_reset <= #1 0;
 	end else
@@ -519,7 +519,7 @@ always @(posedge clk or posedge wb_rst_i)
 // Modem Control Register
 always @(posedge clk or posedge wb_rst_i)
 	if (wb_rst_i)
-		mcr <= #1 5'b0; 
+		mcr <= #1 5'b0;
 	else
 	if (wb_we_i && wb_addr_i==`UART_REG_MC)
 			mcr <= #1 wb_dat_i[4:0];
@@ -613,7 +613,7 @@ always @(posedge clk or posedge wb_rst_i)
 always @(posedge clk or posedge wb_rst_i)
 	if (wb_rst_i) lsr0r <= #1 0;
 	else lsr0r <= #1 (rf_count==1 && rf_pop && !rf_push_pulse || rx_reset) ? 0 : // deassert condition
-					  lsr0r || (lsr0 && ~lsr0_d); // set on rise of lsr0 and keep asserted until deasserted 
+					  lsr0r || (lsr0 && ~lsr0_d); // set on rise of lsr0 and keep asserted until deasserted
 
 // lsr bit 1 (receiver overrun)
 reg lsr1_d; // delayed
@@ -693,7 +693,7 @@ always @(posedge clk or posedge wb_rst_i)
 	else lsr7r <= #1 lsr_mask ? 0 : lsr7r || (lsr7 && ~lsr7_d);
 
 // Frequency divider
-always @(posedge clk or posedge wb_rst_i) 
+always @(posedge clk or posedge wb_rst_i)
 begin
 	if (wb_rst_i)
 		dlc <= #1 0;
@@ -806,37 +806,37 @@ reg 	ti_int_pnd;
 
 // interrupt pending flags assignments
 always  @(posedge clk or posedge wb_rst_i)
-	if (wb_rst_i) rls_int_pnd <= #1 0; 
-	else 
+	if (wb_rst_i) rls_int_pnd <= #1 0;
+	else
 		rls_int_pnd <= #1 lsr_mask ? 0 :  						// reset condition
 							rls_int_rise ? 1 :						// latch condition
 							rls_int_pnd && ier[`UART_IE_RLS];	// default operation: remove if masked
 
 always  @(posedge clk or posedge wb_rst_i)
-	if (wb_rst_i) rda_int_pnd <= #1 0; 
-	else 
+	if (wb_rst_i) rda_int_pnd <= #1 0;
+	else
 		rda_int_pnd <= #1 ((rf_count == {1'b0,trigger_level}) && fifo_read) ? 0 :  	// reset condition
 							rda_int_rise ? 1 :						// latch condition
 							rda_int_pnd && ier[`UART_IE_RDA];	// default operation: remove if masked
 
 always  @(posedge clk or posedge wb_rst_i)
-	if (wb_rst_i) thre_int_pnd <= #1 0; 
-	else 
-		thre_int_pnd <= #1 fifo_write || (iir_read & ~iir[`UART_II_IP] & iir[`UART_II_II] == `UART_II_THRE)? 0 : 
+	if (wb_rst_i) thre_int_pnd <= #1 0;
+	else
+		thre_int_pnd <= #1 fifo_write || (iir_read & ~iir[`UART_II_IP] & iir[`UART_II_II] == `UART_II_THRE)? 0 :
 							thre_int_rise ? 1 :
 							thre_int_pnd && ier[`UART_IE_THRE];
 
 always  @(posedge clk or posedge wb_rst_i)
-	if (wb_rst_i) ms_int_pnd <= #1 0; 
-	else 
-		ms_int_pnd <= #1 msr_read ? 0 : 
+	if (wb_rst_i) ms_int_pnd <= #1 0;
+	else
+		ms_int_pnd <= #1 msr_read ? 0 :
 							ms_int_rise ? 1 :
 							ms_int_pnd && ier[`UART_IE_MS];
 
 always  @(posedge clk or posedge wb_rst_i)
-	if (wb_rst_i) ti_int_pnd <= #1 0; 
-	else 
-		ti_int_pnd <= #1 fifo_read ? 0 : 
+	if (wb_rst_i) ti_int_pnd <= #1 0;
+	else
+		ti_int_pnd <= #1 fifo_read ? 0 :
 							ti_int_rise ? 1 :
 							ti_int_pnd && ier[`UART_IE_RDA];
 // end of pending flags
@@ -847,7 +847,7 @@ begin
 	if (wb_rst_i)	
 		int_o <= #1 1'b0;
 	else
-		int_o <= #1 
+		int_o <= #1
 					rls_int_pnd		?	~lsr_mask					:
 					rda_int_pnd		? 1								:
 					ti_int_pnd		? ~fifo_read					:

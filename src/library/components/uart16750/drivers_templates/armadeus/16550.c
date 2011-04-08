@@ -82,9 +82,9 @@ void plat_uart_release(struct device *dev)
 
 /*$foreach:instance$*/
 static struct plat_serial8250_port ocore_16750_uart/*$instance_num$*/_data[] = {
-	PORT( ARMADEUS_FPGA_BASE_ADDR_VIRT+/*$instance_name$*/_BASE, 
-		  ARMADEUS_FPGA_BASE_ADDR_PHYS+/*$instance_name$*/_BASE, 
-		  /*$instance_name$*/_INPUT_CLOCK, 
+	PORT( ARMADEUS_FPGA_BASE_ADDR_VIRT+/*$instance_name$*/_BASE,
+		  ARMADEUS_FPGA_BASE_ADDR_PHYS+/*$instance_name$*/_BASE,
+		  /*$instance_name$*/_INPUT_CLOCK,
 		  /*$instance_name$*/_IRQ ),
 	{ },
 };
@@ -118,8 +118,8 @@ static int __init ocore_16750_init(void)
 	}
 /*$foreach:instance:end$*/
 
-/*$foreach:instance$*/  
-	ret =	platform_device_register( &ocore_16750_uart/*$instance_num$*/_device ); 
+/*$foreach:instance$*/
+	ret =	platform_device_register( &ocore_16750_uart/*$instance_num$*/_device );
 	if(ret<0)return ret;
 /*$foreach:instance:end$*/
     return ret;

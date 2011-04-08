@@ -20,11 +20,11 @@
 					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR2" pin_dest="0"/>
 					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR1" pin_dest="0"/>
 					</pin>
-					<pin num="2"> 
+					<pin num="2">
 					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR3" pin_dest="0"/>
 					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR2" pin_dest="0"/>
 					</pin>
-					<pin num="3"> 
+					<pin num="3">
 					    <connect instance_dest="apf27" interface_dest="fpga" port_dest="ADDR4" pin_dest="0"/>
 					    <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="ADDR3" pin_dest="0"/>
 					</pin>

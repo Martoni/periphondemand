@@ -6,8 +6,8 @@ ifneq ($(KERNELRELEASE),)
 
 # Part executed when called from kernel build system:
 
-obj-$(CONFIG_POD_DRIVERS) += irq_ocore.o 
-irq_ocore-objs	:= main.o 
+obj-$(CONFIG_POD_DRIVERS) += irq_ocore.o
+irq_ocore-objs	:= main.o
 
 else
 
@@ -30,6 +30,6 @@ clean:
 	rm -f Module.symvers
 	rm -rf .*.cmd
 	rm -f *.mod.c
-    
+
 endif
 

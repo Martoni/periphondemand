@@ -104,7 +104,7 @@ ssize_t simplegpio_read(struct file *fildes, char __user *buff,
 
 	PDEBUG("count %d\n",count);
 	if(count > 2){ /* 16bits max*/
-		count = 2; 
+		count = 2;
 	}
 
 	data = ioread16(sdev->membase+SIMPLEGPIO_REG_OFFSET);
@@ -167,9 +167,9 @@ int simplegpio_release(struct inode *inode, struct file *filp)
 }
 
 /* ioctl */
-int simplegpio_ioctl(struct inode *inode, 
-					 struct file *filp, 
-					 unsigned int cmd, 
+int simplegpio_ioctl(struct inode *inode,
+					 struct file *filp,
+					 unsigned int cmd,
 					 unsigned long arg )
 {
     int err = 0; int ret = 0;
@@ -178,8 +178,8 @@ int simplegpio_ioctl(struct inode *inode,
 	/* */
 //	if(_IOC_TYPE(cmd)!= SGPIO_MAGIC)return -ENOTTY;
 //	if(_IOC_NR(cmd) != SGPIO_IOC_MAX)return -ENOTTY;
-    
-    switch(cmd) 
+
+    switch(cmd)
     {
         case SGPIO_IORDIRECTION:
 			if(!capable(CAP_SYS_RAWIO))
@@ -250,7 +250,7 @@ static int simplegpio_probe(struct platform_device *pdev)
 	}
 	dev->sdev = sdev;
 	sdev->membase = dev->membase;
-	sdev->name = (char *)kmalloc((1+strlen(dev->name))*sizeof(char), 
+	sdev->name = (char *)kmalloc((1+strlen(dev->name))*sizeof(char),
 								 GFP_KERNEL);
 	if (sdev->name == NULL) {
 		printk("Kmalloc name space error\n");
@@ -265,7 +265,7 @@ static int simplegpio_probe(struct platform_device *pdev)
 	/* Get the major and minor device numbers */
 	/******************************************/
 
-	simplegpio_major = 250; 
+	simplegpio_major = 250;
 	simplegpio_minor = dev->num ;/* num come from plat_simplegpio_port data structure */
 
 	PDEBUG("%s:Get the major and minor device numbers\n",dev->name);

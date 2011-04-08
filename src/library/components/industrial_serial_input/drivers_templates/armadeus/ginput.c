@@ -111,9 +111,9 @@ static ssize_t show_input_bus_speed(struct device *dev,
 	return snprintf(buf,PAGE_SIZE,"%d\n",data);
 }
 
-static ssize_t store_input_bus_speed(struct device *dev, 
+static ssize_t store_input_bus_speed(struct device *dev,
 									 struct device_attribute *attr,
-									 const char * buf, 
+									 const char * buf,
 									 size_t count)
 {
 	u16 data;
@@ -138,9 +138,9 @@ static ssize_t show_input_read_per(struct device *dev,
 	return snprintf(buf,PAGE_SIZE,"%d\n",data);
 }
 
-static ssize_t store_input_read_per(struct device *dev, 
+static ssize_t store_input_read_per(struct device *dev,
 									struct device_attribute *attr,
-									const char * buf, 
+									const char * buf,
 									size_t count)
 {
 	u16 data;
@@ -163,9 +163,9 @@ static ssize_t show_interrupt(struct device *dev,
 	return snprintf(buf,PAGE_SIZE,"%d\n",plat_data->sdev->interrupt);
 }
 
-static ssize_t store_interrupt(struct device *dev, 
+static ssize_t store_interrupt(struct device *dev,
 							   struct device_attribute *attr,
-							   const char * buf, 
+							   const char * buf,
 							   size_t count)
 {
 	int data;
@@ -175,7 +175,7 @@ static ssize_t store_interrupt(struct device *dev,
 	if (data == 0){
 		plat_data->sdev->interrupt = 0;
 		/* if read in wait, wake up */
-		if(plat_data->sdev->read_in_wait)up(&plat_data->sdev->sem); 
+		if(plat_data->sdev->read_in_wait)up(&plat_data->sdev->sem);
 		iowrite16(0,plat_data->membase+INPUT_REG_OFFSET);
 		return count;
 	}else{
@@ -191,7 +191,7 @@ static DEVICE_ATTR(interrupt, 0644, show_interrupt, store_interrupt);
 /***********************************
  * characters file /dev operations
  * *********************************/
-ssize_t input_read(struct file *fildes, char __user *buff, 
+ssize_t input_read(struct file *fildes, char __user *buff,
 				   size_t count, loff_t *offp)
 {
 	struct input_dev *ldev = fildes->private_data;
@@ -306,7 +306,7 @@ static int input_probe(struct platform_device *pdev)
 	}
 	dev->sdev = sdev;
 	sdev->membase = dev->membase;
-	sdev->name = (char *)kmalloc((1+strlen(dev->name))*sizeof(char), 
+	sdev->name = (char *)kmalloc((1+strlen(dev->name))*sizeof(char),
 								 GFP_KERNEL);
 	if (sdev->name == NULL) {
 		printk("Kmalloc name space error\n");
@@ -462,11 +462,11 @@ static int __devexit input_remove(struct platform_device *pdev)
 
 }
 
-static struct platform_driver plat_input_driver = 
+static struct platform_driver plat_input_driver =
 {
     .probe      = input_probe,
     .remove     = __devexit_p(input_remove),
-    .driver     = 
+    .driver     =
     {
         .name    = "input",
         .owner   = THIS_MODULE,

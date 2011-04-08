@@ -53,7 +53,7 @@ architecture structural of wishbone_i2c_master is
 		rst : in std_logic;		-- synchronous active high reset (WISHBONE compatible)
 		nReset : in std_logic;	-- asynchornous active low reset (FPGA compatible)
 
-		clk_cnt : in unsigned(15 downto 0);	-- 4x SCL 
+		clk_cnt : in unsigned(15 downto 0);	-- 4x SCL
 
 		-- input signals
 		ena,
@@ -103,7 +103,7 @@ architecture structural of wishbone_i2c_master is
 
 begin
 	-- generate acknowledge output signal
-	ACK_O <= STB_I;	-- since timing is always honored 
+	ACK_O <= STB_I;	-- since timing is always honored
 
 
 	-- assign DAT_O
@@ -231,24 +231,24 @@ begin
 	core_en <= ctr(7);
 
 	-- hookup byte controller block
-	u1: byte_ctrl port map (clk => CLK_I, 
-													rst => RST_I, 
-													nReset => nRESET,  
-													clk_cnt => prer, 
-													ena => core_en, 
-													start => sta,  
-													stop => sto, 
-													read => rd, 
-													write => wr, 
-													ack_in => ack, 
+	u1: byte_ctrl port map (clk => CLK_I,
+													rst => RST_I,
+													nReset => nRESET,
+													clk_cnt => prer,
+													ena => core_en,
+													start => sta,
+													stop => sto,
+													read => rd,
+													write => wr,
+													ack_in => ack,
 													i2c_busy => i2c_busy,
-													Din => txr, 
-													cmd_ack => done, 
-													ack_out => irxack, 
+													Din => txr,
+													cmd_ack => done,
+													ack_out => irxack,
 													Dout => rxr, 			-- note: maybe store rxr in registers ??
-													SCLi => SCLi, 
-													SCLo => SCLo, 
-													SDAi => SDAi, 
+													SCLi => SCLi,
+													SCLo => SCLo,
+													SDAi => SDAi,
 													SDAo => SDAo);
 
 	-- status register block + interrupt request signal
@@ -314,7 +314,7 @@ entity byte_ctrl is
 		rst : in std_logic;		-- synchronous active high reset (WISHBONE compatible)
 		nReset : in std_logic;	-- asynchornous active low reset (FPGA compatible)
 
-		clk_cnt : in unsigned(15 downto 0);	-- 4x SCL 
+		clk_cnt : in unsigned(15 downto 0);	-- 4x SCL
 
 		-- input signals
 		ena,

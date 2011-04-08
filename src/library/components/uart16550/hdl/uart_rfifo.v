@@ -150,7 +150,7 @@
 
 `include "uart_defines.v"
 
-module uart_rfifo (clk, 
+module uart_rfifo (clk,
 	wb_rst_i, data_in, data_out,
 // Control signals
 	push, // push strobe, active high
@@ -197,14 +197,14 @@ reg				overrun;
 
 wire [fifo_pointer_w-1:0] top_plus_1 = top + 1'b1;
 
-raminfr #(fifo_pointer_w,8,fifo_depth) rfifo  
-        (.clk(clk), 
-			.we(push), 
-			.a(top), 
-			.dpra(bottom), 
-			.di(data_in[fifo_width-1:fifo_width-8]), 
+raminfr #(fifo_pointer_w,8,fifo_depth) rfifo
+        (.clk(clk),
+			.we(push),
+			.a(top),
+			.dpra(bottom),
+			.di(data_in[fifo_width-1:fifo_width-8]),
 			.dpo(data8_out)
-		); 
+		);
 
 always @(posedge clk or posedge wb_rst_i) // synchronous FIFO
 begin
@@ -282,7 +282,7 @@ begin
   if (wb_rst_i)
     overrun   <= #1 1'b0;
   else
-  if(fifo_reset | reset_status) 
+  if(fifo_reset | reset_status)
     overrun   <= #1 1'b0;
   else
   if(push & ~pop & (count==fifo_depth))

@@ -31,6 +31,6 @@ clean:
 	rm -f Module.symvers
 	rm -rf .*.cmd
 	rm -f *.mod.c
-    
+
 endif
 

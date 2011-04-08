@@ -1,11 +1,11 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMades Systems
 -- Author(s)   : Fabien Marteau <fabien.marteau@armadeus.com>
--- 
+--
 -- Creation Date : 03/09/2008
 -- File          : simplegpio.vhd
 --
--- Abstract : 
+-- Abstract :
 --
 ---------------------------------------------------------------------------
 
@@ -14,20 +14,20 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity simplegpio is 
+Entity simplegpio is
 ---------------------------------------------------------------------------
 generic(
     id : natural := 3;   -- identify id
     size : natural := 16 -- wishbone data size 8,16 or 32
 );
-port 
+port
 (
     -- clock and reset
 	clk_i : in std_logic ; -- master clock input
 	rst_i : in std_logic ; -- asynchronous reset
 
     -- wishbone
-	adr_i : in std_logic_vector( 1 downto 0); 
+	adr_i : in std_logic_vector( 1 downto 0);
 	dat_i : in std_logic_vector( size-1 downto 0);
 	dat_o : out std_logic_vector( size-1 downto 0);
 	we_i  : in std_logic ;
@@ -61,7 +61,7 @@ begin
     rd_ack <= '0';
   elsif(rising_edge(clk_i)) then
     rd_ack  <= '0';
-    
+
     if(stb_i = '1' and we_i = '0' and cyc_i = '1') then
       rd_ack  <= '1';
       if(adr_i = "00") then

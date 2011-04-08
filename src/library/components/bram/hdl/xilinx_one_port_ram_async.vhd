@@ -1,11 +1,11 @@
 ---------------------------------------------------------------------------
 -- Company     : Vim Inc
 -- Author(s)   : Fabien Marteau
--- 
+--
 -- Creation Date : 19/10/2008
 -- File          : xilinx_one_port_ram_async.vhd
 --
--- Abstract : Xilinx behavioural template for ram 
+-- Abstract : Xilinx behavioural template for ram
 --
 ---------------------------------------------------------------------------
 
@@ -17,14 +17,14 @@ Library UNISIM;
 use UNISIM.vcomponents.all;
 
 ---------------------------------------------------------------------------
-Entity xilinx_one_port_ram_async is 
+Entity xilinx_one_port_ram_async is
   ---------------------------------------------------------------------------
   generic
   (
     ADDR_WIDTH : integer := 10;
     DATA_WIDTH : integer := 16
     );
-  port 
+  port
   (
     clk : in std_logic;
     we  : in std_logic ;
@@ -37,7 +37,7 @@ end entity;
 ---------------------------------------------------------------------------
 Architecture xilinx_one_port_ram_async_1 of xilinx_one_port_ram_async is
   ---------------------------------------------------------------------------
---  type ram_type is array (2**ADDR_WIDTH-1 downto 0) 
+--  type ram_type is array (2**ADDR_WIDTH-1 downto 0)
 --    of std_logic_vector( DATA_WIDTH-1 downto 0);
 --  signal ram: ram_type;
 --  signal addr_reg : std_logic_vector( ADDR_WIDTH-1 downto 0);

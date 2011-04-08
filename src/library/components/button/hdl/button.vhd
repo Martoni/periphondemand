@@ -1,11 +1,11 @@
 ---------------------------------------------------------------------------
 -- Company     : ARMades Systems
 -- Author(s)   : Fabien Marteau <fabien.marteau@armadeus.com>
--- 
+--
 -- Creation Date : 10/03/2008
 -- File          : button.vhd
 --
--- Abstract : 
+-- Abstract :
 --
 ---------------------------------------------------------------------------
 
@@ -14,12 +14,12 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity button is 
+Entity button is
 ---------------------------------------------------------------------------
     generic(
         id : natural := 2
     );
-	port 
+	port
 	(
 		-- global signals
 		gls_reset : in std_logic ;
@@ -34,7 +34,7 @@ Entity button is
 		-- irq
 		irq : out std_logic ;
 		-- fpga input
-		button 		: in std_logic 
+		button 		: in std_logic
 	);
 end entity;
 

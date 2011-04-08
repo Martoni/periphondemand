@@ -91,9 +91,9 @@
 
 module uart_debug_if (/*AUTOARG*/
 // Outputs
-wb_dat32_o, 
+wb_dat32_o,
 // Inputs
-wb_adr_i, ier, iir, fcr, mcr, lcr, msr, 
+wb_adr_i, ier, iir, fcr, mcr, lcr, msr,
 lsr, rf_count, tf_count, tstate, rstate
 ) ;
 

@@ -395,7 +395,7 @@ int open_i2c_dev(const int i2cbus, char *filename, const int quiet)
 				fprintf(stderr, "Run as root?\n");
 		}
 	}
-    
+
 	return file;
 }
 

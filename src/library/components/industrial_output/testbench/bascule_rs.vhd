@@ -21,7 +21,7 @@
 -- File          : bascule_rs.vhd
 -- Created on    : 05/06/2009
 -- Author        : Fabien Marteau <fabien.marteau@armadeus.com>
--- 
+--
 --*********************************************************************
 
 library IEEE;
@@ -29,16 +29,16 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity bascule_rs is 
+Entity bascule_rs is
 ---------------------------------------------------------------------------
-port 
+port
 (
     r1 : in std_logic ;
     r2 : in std_logic ;
     clk : in std_logic ;
     s : in std_logic;
     q :out std_logic ;
-    q_n : out std_logic 
+    q_n : out std_logic
 );
 end entity;
 

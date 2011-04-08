@@ -28,16 +28,16 @@ use ieee.std_logic_1164.all;
 package apf27_test_pkg is
     -- write procedures
     -- Params :
-    --    address      : Write address 
-    --    value        : value to write 
+    --    address      : Write address
+    --    value        : value to write
     --    gls_clk      : clock signal
-    --    imx_cs_n     : Chip select 
+    --    imx_cs_n     : Chip select
     --    imx_oe_n     : Read signal
     --    imx_eb3_n    : Write signal
     --    imx_address  : Address signal
     --    imx_data     : Data signal
     --    WSC          : Value of imx WSC (see MC9328MXLRM.pdf p169) for sync=0
- 
+
     procedure imx_write(
     address     : in std_logic_vector (15 downto 0);
     value       : in std_logic_vector (15 downto 0);
@@ -51,16 +51,16 @@ package apf27_test_pkg is
 );
     -- read procedures
     -- Params :
-    --    address      : Write address 
+    --    address      : Write address
     --    value        : value returned
     --    gls_clk      : clock signal
-    --    imx_cs_n     : Chip select 
+    --    imx_cs_n     : Chip select
     --    imx_oe_n     : Read signal
     --    imx_eb3_n    : Write signal
     --    imx_address  : Address signal
     --    imx_data     : Data signal
     --    WSC          : Value of imx WSC (see MC9328MXLRM.pdf p169) for sync=0
- 
+
 procedure imx_read(
     address     : in std_logic_vector (15 downto 0);
     signal   value       : out std_logic_vector (15 downto 0);
@@ -77,9 +77,9 @@ procedure imx_read(
 end package apf27_test_pkg;
 
 package body apf27_test_pkg is
-    
+
     -- Write value from imx
-       
+
     procedure imx_write(
     address     : in std_logic_vector (15 downto 0);
     value       : in std_logic_vector (15 downto 0);
@@ -105,7 +105,7 @@ begin
         wait until falling_edge(gls_clk);
     else
         for n in 1 to WSC loop
-            wait until falling_edge(gls_clk); -- WSC = 2 
+            wait until falling_edge(gls_clk); -- WSC = 2
         end loop;
     end if;
     wait for 1 ns;
@@ -138,7 +138,7 @@ begin
         wait until falling_edge(gls_clk);
     else
         for n in 1 to WSC loop
-            wait until falling_edge(gls_clk); 
+            wait until falling_edge(gls_clk);
         end loop;
     end if;
     wait until falling_edge(gls_clk);

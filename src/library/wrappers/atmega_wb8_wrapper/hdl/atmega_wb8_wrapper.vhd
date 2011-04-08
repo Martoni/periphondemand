@@ -1,11 +1,11 @@
 ---------------------------------------------------------------------------
 -- Company     : Vim Inc
 -- Author(s)   : Fabien Marteau
--- 
+--
 -- Creation Date : 23/04/2008
 -- File          : atmega_wb8_wrapper.vhd
 --
--- Abstract : An atmega128 to wishbone wrapper components. 
+-- Abstract : An atmega128 to wishbone wrapper components.
 --
 ---------------------------------------------------------------------------
 
@@ -14,9 +14,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity atmega_wb8_wrapper is 
+Entity atmega_wb8_wrapper is
 	---------------------------------------------------------------------------
-	port 
+	port
 	(
 		-- Atmega128 port
 		Address_H : in std_logic_vector( 6 downto 0);
@@ -37,7 +37,7 @@ Entity atmega_wb8_wrapper is
 
 		-- clock 50MHz and reset
 		clk 	  : in std_logic ;
-		reset : in std_logic 
+		reset : in std_logic
 
 		);
 end entity;
@@ -66,7 +66,7 @@ begin
 			
 			-- Address bus latching
 			if ALE = '1' then
-					address(14 downto 8) <= Address_H; 
+					address(14 downto 8) <= Address_H;
 					address(7 downto 0)  <= DA;
 				else
 					address <= address;
@@ -85,7 +85,7 @@ begin
 	wbm_strobe<= strobe;
 	wbm_cycle <= cycle;
 	wbm_address <= address;
-	wbm_writedata <= writedata when (write = '1') else (others => '0'); 
+	wbm_writedata <= writedata when (write = '1') else (others => '0');
 
 	-- buffer direction
 	DIR_buffer <= '1' when write = '0' and strobe='1' else '0';

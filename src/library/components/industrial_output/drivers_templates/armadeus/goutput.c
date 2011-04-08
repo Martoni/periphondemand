@@ -123,7 +123,7 @@ ssize_t output_read(struct file *fildes, char __user *buff,
 
 	PDEBUG("count %d\n",count);
 	if(count > 2){ /* 16bits max*/
-		count = 2; 
+		count = 2;
 	}
 
 	data = ioread16(sdev->membase+output_REG_OFFSET);
@@ -227,7 +227,7 @@ static int output_probe(struct platform_device *pdev)
 	}
 	dev->sdev = sdev;
 	sdev->membase = dev->membase;
-	sdev->name = (char *)kmalloc((1+strlen(dev->name))*sizeof(char), 
+	sdev->name = (char *)kmalloc((1+strlen(dev->name))*sizeof(char),
 								 GFP_KERNEL);
 	if (sdev->name == NULL) {
 		printk("Kmalloc name space error\n");

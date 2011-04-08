@@ -10,7 +10,7 @@
 --
 --  Description   :  This is the top file of the IP
 -------------------------------------------------------------------------------
---  Modifications : 
+--  Modifications :
 -----
 -- 2008/03/05
 -- Fabien Marteau (fabien.marteau@armadeus.com)
@@ -28,7 +28,7 @@ library IEEE;
     port
     (
       -- i.MX Signals
-			imx_address : in    std_logic_vector(11 downto 0); -- LSB not used 
+			imx_address : in    std_logic_vector(11 downto 0); -- LSB not used
       imx_data    : inout std_logic_vector(15 downto 0);
       imx_cs_n    : in    std_logic;
       imx_oe_n    : in    std_logic;
@@ -39,7 +39,7 @@ library IEEE;
       gls_clk   : in std_logic;
 
 			-- Interrupt out for write error
---			int_err        : out std_logic; 
+--			int_err        : out std_logic;
 
       -- Wishbone interface signals
       wbm_address    : out std_logic_vector(12 downto 0);  -- Address bus

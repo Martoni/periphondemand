@@ -89,7 +89,7 @@ struct button_dev{
 /***********************************
  * characters file /dev operations
  * *********************************/
-ssize_t button_read(struct file *fildes, char __user *buff, 
+ssize_t button_read(struct file *fildes, char __user *buff,
                     size_t count, loff_t *offp)
 {
     struct button_dev *ldev = fildes->private_data;
@@ -199,7 +199,7 @@ static int button_probe(struct platform_device *pdev)
 	}
 	dev->sdev = sdev;
 	sdev->membase = dev->membase;
-	sdev->name = (char *)kmalloc((1+strlen(dev->name))*sizeof(char), 
+	sdev->name = (char *)kmalloc((1+strlen(dev->name))*sizeof(char),
 								 GFP_KERNEL);
 	if (sdev->name == NULL) {
 		printk("Kmalloc name space error\n");
@@ -262,7 +262,7 @@ static int button_probe(struct platform_device *pdev)
 	}
     printk(KERN_INFO "button: irq registered : %d\n",
 		   dev->interrupt_number);
-   
+
     /* OK module inserted ! */
     printk(KERN_INFO "%s insered\n",dev->name);
     return 0;
@@ -317,11 +317,11 @@ static int __devexit button_remove(struct platform_device *pdev)
 
 }
 
-static struct platform_driver plat_button_driver = 
+static struct platform_driver plat_button_driver =
 {
     .probe      = button_probe,
     .remove     = __devexit_p(button_remove),
-    .driver     = 
+    .driver     =
     {
         .name    = "button",
         .owner   = THIS_MODULE,

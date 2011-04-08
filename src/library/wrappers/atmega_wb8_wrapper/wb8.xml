@@ -29,7 +29,7 @@
                     <pin num="5"><connect instance_dest="unioc_v11"  interface_dest="fpga" port_dest="AD_fpga_5" pin_dest="0"/></pin>
                     <pin num="6"><connect instance_dest="unioc_v11"  interface_dest="fpga" port_dest="AD_fpga_6" pin_dest="0"/></pin>
                     <pin num="7"><connect instance_dest="unioc_v11"  interface_dest="fpga" port_dest="AD_fpga_7" pin_dest="0"/></pin>
-                </port>                                                                            
+                </port>
                 <port name="ALE" type="EXPORT" size="1" dir="in">
                     <pin num="0"><connect instance_dest="unioc_v11" interface_dest="fpga" port_dest="ALE_3V" pin_dest="0"/></pin>
                 </port>

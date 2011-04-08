@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="rstext_syscon" version="1.0">
     <description>
-        manage rst and clock that come from ext. 
+        manage rst and clock that come from ext.
     </description>
 
     <generics>

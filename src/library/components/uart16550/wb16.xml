@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="uart16550" version="1.0">
 	<description>
-		Complete uart device from opencores (8bits mode wrote in verilog), based on 16550 component 
+		Complete uart device from opencores (8bits mode wrote in verilog), based on 16550 component
 	</description>
 
     <driver_files>

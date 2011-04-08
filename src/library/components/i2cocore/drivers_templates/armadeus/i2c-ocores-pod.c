@@ -43,7 +43,7 @@ struct ocores_i2c {
 #define OCI2C_DATA_RXR		7
 
 
-#define OCI2C_CTRL_IEN		(0x40) 
+#define OCI2C_CTRL_IEN		(0x40)
 #define OCI2C_CTRL_EN		(0x80)
 
 #define OCI2C_CMD_START		(0x91)

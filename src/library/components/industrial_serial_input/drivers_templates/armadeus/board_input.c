@@ -43,7 +43,7 @@ static struct plat_input_port plat_input/*$instance_num$*/_data={
 	.name = "/*$instance_name$*/",
 	.interrupt_number=/*$instance_name$*/_IRQ,
 	.num=/*$instance_num$*/,
-	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR_VIRT + 
+	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR_VIRT +
 						/*$registers_base_address:wbs$*/),
 	.idnum=/*$generic:id$*/,
 	.idoffset=/*$register:wbs:id:offset$*/ * (/*$register:wbs:id:size$*/ /8)
@@ -64,7 +64,7 @@ static struct platform_device plat_input/*$instance_num$*/_device={
 static int __init board_input_init(void)
 {
     int ret = -1;
-/*$foreach:instance$*/    
+/*$foreach:instance$*/
 	ret = platform_device_register(&plat_input/*$instance_num$*/_device);
 	if(ret<0)return ret;
 /*$foreach:instance:end$*/
@@ -73,7 +73,7 @@ static int __init board_input_init(void)
 
 static void __exit board_input_exit(void)
 {
-/*$foreach:instance$*/    
+/*$foreach:instance$*/
 	platform_device_unregister(&plat_input/*$instance_num$*/_device);
 /*$foreach:instance:end$*/
 }

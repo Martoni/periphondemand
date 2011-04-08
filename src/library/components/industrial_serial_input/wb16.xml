@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="industrial_serial_input">
-    
+
     <driver_files>
         <driver_templates architecture="armadeus">
             <support version="3" />
