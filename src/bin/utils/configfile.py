@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     configfile.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  11/02/2009
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -54,14 +54,14 @@ class ConfigFile(WrapperXml):
             self.savefile()
         # fill library path list:
         self.personal_lib_list =\
-            [node.getAttribute("path") 
+            [node.getAttribute("path")
                     for node in self.getSubNodeList("libraries","lib")]
 
     def delLibrary(self,path):
         path = os.path.expanduser(path)
         path = os.path.abspath(path)
          # check if lib doesn't exists in config file
-        libpathlist = [node.getAttribute("path") for node in 
+        libpathlist = [node.getAttribute("path") for node in
                 self.getSubNodeList(nodename="libraries", subnodename="lib")]
         if not (path in libpathlist):
             raise Error("Library "+path+" doesn't exist in config",0)
@@ -75,7 +75,7 @@ class ConfigFile(WrapperXml):
         path = os.path.expanduser(path)
         path = os.path.abspath(path)
         # check if lib doesn't exists in config file
-        libpathlist = [node.getAttribute("path") for node in 
+        libpathlist = [node.getAttribute("path") for node in
                 self.getSubNodeList(nodename="libraries", subnodename="lib")]
         if path in libpathlist:
             raise Error("This library is already in POD",0)

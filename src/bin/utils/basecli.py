@@ -64,7 +64,7 @@ class BaseCli(cmd.Cmd):
             inp = self.pseudo_raw_input(self.continuation_prompt)
             statement = '%s\n%s' % (statement, inp)
         return statement
-        # assembling a list of lines and joining them at the end would be 
+        # assembling a list of lines and joining them at the end would be
         #faster,
         # but statementHasEnded needs a string arg; anyway, we're getting
         # user input and users are slow.
@@ -319,7 +319,7 @@ class BaseCli(cmd.Cmd):
     def listcompletion(self,listargs,subargl,subargt):
         """ return a list of possibility using template:
             [] mandatory argument
-            <> optional arguments 
+            <> optional arguments
             masterinstancename : give list of instances with master bus interface
             slaveinstancename  : give list of instances with slave  bus interface
             instancesysconname : give list of syscon instance in project
@@ -374,9 +374,9 @@ class BaseCli(cmd.Cmd):
         elif subargt == "slaveinstancename":
             return [interface.getParent().getInstanceName() for interface in settings.active_project.getInterfaceSlave()]
         elif subargt == "instancename":
-            return [instance.getInstanceName() for instance in settings.active_project.getInstancesList()] 
+            return [instance.getInstanceName() for instance in settings.active_project.getInstancesList()]
         elif subargt == "instancesysconname":
-            return [interface.getParent().getInstanceName() for interface in settings.active_project.getSysconsList()] 
+            return [interface.getParent().getInstanceName() for interface in settings.active_project.getSysconsList()]
         elif subargt == "interfacename":
             return [""+instancename+"."+interface.getName() for interface in instance.getInterfacesList()]
         elif subargt == "masterinterfacename":
@@ -403,7 +403,7 @@ class BaseCli(cmd.Cmd):
                 libraryname.lower()
             except:
                 return settings.active_library.listComponents()
-            arglist = [libraryname+"."+componentname for 
+            arglist = [libraryname+"."+componentname for
                     componentname in settings.active_library.listComponents(libraryname)]
             return arglist
         elif subargt == "componentversion":
@@ -492,7 +492,7 @@ class BaseCli(cmd.Cmd):
             print line
 
     def do_savehistory(self,line):
-        """ savehistory <filename> 
+        """ savehistory <filename>
         save history command
         """
         try:

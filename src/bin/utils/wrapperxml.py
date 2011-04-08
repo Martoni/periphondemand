@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     WrapperXml.py
-# Purpose:  
+# Purpose:
 #
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 #
@@ -66,7 +66,7 @@ class WrapperXml:
             self.__initnode(args["node"])
         elif "etnode" in args:
             self.__initetnode(args["etnode"])
-        elif "nodename" in args: 
+        elif "nodename" in args:
             self.__initnodename(args["nodename"])
         elif "nodestring" in args:
             self.__initnodestring(args["nodestring"])
@@ -152,7 +152,7 @@ class WrapperXml:
             raise Error("Key not known in addSubNode"+str(keys),0)
 
     def addNode(self,**keys):
-        """ Add a node in the tree,  
+        """ Add a node in the tree,
             addNode(self,node)
             addNode(self,nodename)
             addNode(self,nodename,attributename,value)

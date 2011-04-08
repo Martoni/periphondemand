@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     WrapperSystem.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  25/04/2008
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -62,12 +62,12 @@ def inttobin(n,size):
         return s
 
 def check_name(name):
-    """ This function check if name contain only authorized caracters 
+    """ This function check if name contain only authorized caracters
     authorized caracters : [a-z],[0-9],'_'
     """
     if re.match('[0-9]',name[0]):
         raise Error("Digit forbiden in beginning of name")
-    for car in name: 
+    for car in name:
         if re.match('[a-z]',car):
             continue
         if re.match('[0-9]',car):
@@ -141,9 +141,9 @@ def copyDirectory(source,target):
         os.mkdir(target)
     for root, dirs, files in os.walk(source):
         if '.svn' in dirs:
-            dirs.remove('.svn')  # don't visit .svn directories           
+            dirs.remove('.svn')  # don't visit .svn directories
         for file in files:
-            from_ = join(root, file)           
+            from_ = join(root, file)
             to_ = from_.replace(source, target, 1)
             to_directory = split(to_)[0]
             if not exists(to_directory):

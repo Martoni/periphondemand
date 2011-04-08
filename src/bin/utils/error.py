@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:     Error.py
-# Purpose:  
+# Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  30/04/2008
 #-----------------------------------------------------------------------------
@@ -12,14 +12,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
@@ -50,13 +50,13 @@ class Error(Exception):
         self._message = message
         self.level   = level
         Exception.__init__(self,message)
-                
+
     def __repr__(self):
         return self.message
 
-    def _get_message(self): 
+    def _get_message(self):
         return self._message
-    def _set_message(self, message): 
+    def _set_message(self, message):
         self._message = message
     message = property(_get_message, _set_message)
 
@@ -72,7 +72,7 @@ class Error(Exception):
                 else:
                     return standardmsg
             except NameError:
-                return standardmsg 
+                return standardmsg
         elif self.level == 1:
             standardmsg = "[WARNING] : " + self.message
             try:
@@ -83,7 +83,7 @@ class Error(Exception):
                 else:
                     return standardmsg
             except NameError:
-                return standardmsg 
+                return standardmsg
         else:
             standardmsg = "[INFO] : " + self.message
             try:
@@ -105,4 +105,3 @@ from periphondemand.bin.define import *
 
 settings = Settings()
 
-   
