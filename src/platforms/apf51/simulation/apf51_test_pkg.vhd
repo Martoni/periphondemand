@@ -46,12 +46,12 @@ package apf51_test_pkg is
 
     procedure imx_write(
     address     : in std_logic_vector (15 downto 0);
-    value       : in std_logic_vector (15 downto 0);
-    signal   gls_clk     : in std_logic ;
-    signal   imx_cs_n    : out std_logic ;
-    signal   imx_rw      : out std_logic ;
-    signal   imx_adv     : out std_logic ;
-    signal   imx_da      : inout std_logic_vector (15 downto 0);
+    signal value       : in std_logic_vector (15 downto 0);
+    signal gls_clk     : in std_logic ;
+    signal imx_cs_n    : out std_logic ;
+    signal imx_rw      : out std_logic ;
+    signal imx_adv     : out std_logic ;
+    signal imx_da      : inout std_logic_vector (15 downto 0);
     WWSC         : natural
 );
     -- read procedures
@@ -83,13 +83,13 @@ package body apf51_test_pkg is
     -- Write value from imx
     procedure imx_write(
     address     : in std_logic_vector (15 downto 0);
-    value       : in std_logic_vector (15 downto 0);
-    signal   gls_clk     : in std_logic ;
-    signal   imx_cs_n    : out std_logic ;
-    signal   imx_rw      : out std_logic ;
-    signal   imx_adv     : out std_logic ;
-    signal   imx_da      : inout std_logic_vector (15 downto 0);
-    WWSC         : natural
+    signal value    : in std_logic_vector (15 downto 0);
+    signal gls_clk  : in std_logic;
+    signal imx_cs_n : out std_logic;
+    signal imx_rw   : out std_logic;
+    signal imx_adv  : out std_logic;
+    signal imx_da   : inout std_logic_vector (15 downto 0);
+    WWSC : natural
     ) is
 begin
     -- Write value
@@ -116,7 +116,7 @@ begin
 end procedure imx_write;
 
 -- Read a value from imx
-    procedure imx_read(
+procedure imx_read(
     address : in std_logic_vector( 15 downto 0);
     signal value   : out std_logic_vector( 15 downto 0);
     signal gls_clk : in std_logic ;
