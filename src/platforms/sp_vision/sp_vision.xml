@@ -7,7 +7,7 @@
     <fpga family="spartan6" device="XC6SLX45" speed="-2" package="FGG484" main_clock="100000"/>
 
     <components>
-        <component name="wrappers/sp_vision_wb16_wrapper"/>
+        <component name="wrappers/imx27_wb16_wrapper"/>
         <component name="syscons/rstgen_syscon"/>
         <component name="components/irq_mngr"/>
     </components>
