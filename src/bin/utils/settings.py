@@ -66,16 +66,30 @@ class Settings(object):
             # init personnal libraries path:
             try:
                 self.configfile = ConfigFile(POD_CONFIG)
+            except Error, e:
+                pass
+            try:
                 self.personal_lib_path_list = self.configfile.getLibraries()
                 self.personal_lib_name_list = \
                     [pathlib.split("/")[-1] for pathlib in self.personal_lib_path_list]
             except Error,e:
-                print str(e)
-                print "ConfigFile ignored"
+                pass
+
+            try:
+                self.personal_platformlib_list = self.configfile.getPlatformLibPath()
+                self.personal_platformlib_name_list = \
+                    [pathlib.split("/")[-1] for pathlib in self.personal_platformlib_list]
+            except Error, e:
+                pass
 
             self.active_project = None
             self.active_library = None
             self.active_component = None
+
+    def getPlatformLibPath(self, platformlib_name):
+        for path in self.personal_platformlib_list:
+            if path.split("/")[-1] == platformlib_name:
+                return path
 
     def color(self):
         return self.color_status

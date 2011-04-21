@@ -315,7 +315,7 @@ List all project instances
     def complete_selectplatform(self,text,line,begidx,endidx):
         platformlist = []
         try:
-            platformlist = self.completeargs(text,line,"<platformname>")
+            platformlist = self.completeargs(text,line,"<platformlib>.<platformname>")
         except Exception,e:
             print e
         return platformlist
@@ -327,12 +327,13 @@ Select the platform to use
         """
         try:
             self.isProjectOpen()
-            self.checkargs(line,"<platformname>")
+            self.checkargs(line,"<platformlib>.<platformname>")
         except Error,e:
             print e
             return
         try:
-            settings.active_project.selectPlatform(line)
+            args = line.strip().split(".")
+            settings.active_project.selectPlatform(args[1], args[0])
             settings.active_project.saveProject()
         except Error,e:
             print display

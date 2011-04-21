@@ -318,8 +318,8 @@ class BaseCli(cmd.Cmd):
 
     def listcompletion(self,listargs,subargl,subargt):
         """ return a list of possibility using template:
-            [] mandatory argument
-            <> optional arguments
+            [] optional argument
+            <> mandatory arguments
             masterinstancename : give list of instances with master bus interface
             slaveinstancename  : give list of instances with slave  bus interface
             instancesysconname : give list of syscon instance in project
@@ -328,6 +328,7 @@ class BaseCli(cmd.Cmd):
             libcomponentname   : give list of components available in library (for librarycli)
             componentversion   : give list of components version available in component
             genericname        : give list of generic instance name
+            platformlib        : give list of platform library available
             platformname       : give list of platform available
             instancename       : give list of instances in project
             interfacename      : give list of interface in instance
@@ -346,6 +347,8 @@ class BaseCli(cmd.Cmd):
                listargs[0][0]=="instancesysconname":
                 instance = settings.active_project.getInstance(listargs[0][1])
                 instancename = instance.getInstanceName()
+            elif listargs[0][0]=="platformlib":
+                platformlib = listargs[0][1]
             elif listargs[0][0]=="libraryname":
                 libraryname = listargs[0][1]
             elif listargs[0][0]=="componentname":
@@ -389,6 +392,9 @@ class BaseCli(cmd.Cmd):
             return [""+instancename+"."+interfacename+"."+portname+"."+str(i) for i in range(int(port.getSize()))]
         elif subargt == "libraryname":
             arglist = settings.active_project.library.listLibraries()
+        elif subargt == "platformlib":
+            arglist = settings.personal_platformlib_name_list
+            arglist.append("standard")
             return arglist
         elif subargt == "forcename":
             arglist = [""+port.getName() for port in settings.active_project.getPlatform().getPlatformPortsList()]
@@ -417,7 +423,10 @@ class BaseCli(cmd.Cmd):
             return [libraryname+"."+componentname+"."+comp for comp in settings.active_project.getComponentVersionList(libraryname,componentname)]
 
         elif subargt == "platformname":
-            return settings.active_project.listAvailablePlatforms()
+            if platformlib == "standard":
+                return ["standard."+name for name in settings.active_project.listAvailablePlatforms()]
+            else:
+                return [platformlib+"."+name for name in sy.listFiles(settings.getPlatformLibPath(platformlib))]
 
         elif subargt == "genericname":
             return [""+instancename+"."+generic.getName() for generic in instance.getGenericsList()]

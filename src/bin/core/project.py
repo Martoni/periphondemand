@@ -397,7 +397,7 @@ class Project(WrapperXml):
                                         portlist.append(port)
         return portlist
 
-    def selectPlatform(self,platformname):
+    def selectPlatform(self,platformname, platformlib):
         """ Select a platform for the project
         """
         #suppress platform if already exists
@@ -408,22 +408,21 @@ class Project(WrapperXml):
                 raise e
             print e
 
-        if platformname in self.listAvailablePlatforms():
-            #XXX: todo, improve it to add personnal platform library
+        if platformlib == "standard":
             platformdir = settings.path+PLATFORMPATH+"/"+platformname+"/"
-            platform = Platform(self,file=platformdir+platformname+XMLEXT)
-
-            if sy.fileExist(platformdir+SIMULATIONPATH):
-                sy.copyAllFile(platformdir+SIMULATIONPATH,
-                        settings.projectpath+SIMULATIONPATH)
-            self.addinstance(component=platform)
-            self.addNode(node=platform)
-            # Adding platform default components
-            for component in platform.getComponentsList():
-                self.addinstance(libraryname=component["type"],
-                                  componentname=component["name"])
         else:
-            raise Error("This platform is not available")
+            platformdir = settings.getPlatformLibPath(platformlib)+"/"+platformname+"/"
+        platform = Platform(self,file=platformdir+platformname+XMLEXT)
+
+        if sy.fileExist(platformdir+SIMULATIONPATH):
+            sy.copyAllFile(platformdir+SIMULATIONPATH,
+                    settings.projectpath+SIMULATIONPATH)
+        self.addinstance(component=platform)
+        self.addNode(node=platform)
+        # Adding platform default components
+        for component in platform.getComponentsList():
+            self.addinstance(libraryname=component["type"],
+                              componentname=component["name"])
 
     def delPlatform(self):
         """ Suppress platform from project

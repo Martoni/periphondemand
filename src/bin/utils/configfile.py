@@ -53,9 +53,18 @@ class ConfigFile(WrapperXml):
             self.addNode(nodename="libraries")
             self.savefile()
         # fill library path list:
-        self.personal_lib_list =\
-            [node.getAttribute("path")
-                    for node in self.getSubNodeList("libraries","lib")]
+        try:
+            self.personal_lib_list =\
+                [node.getAttribute("path")
+                        for node in self.getSubNodeList("libraries","lib")]
+        except:
+            self.personal_lib_list = []
+        try:
+            self.personal_platformlib_list =\
+                [node.getAttribute("path")
+                        for node in self.getSubNodeList("platforms","platform")]
+        except:
+            self.personal_platformlib_list = []
 
     def delLibrary(self,path):
         path = os.path.expanduser(path)
@@ -93,6 +102,8 @@ class ConfigFile(WrapperXml):
     def getLibraries(self):
         """ return a list of library path """
         return self.personal_lib_list
+    def getPlatformLibPath(self):
+        return self.personal_platformlib_list
 
     def savefile(self):
         self.file = open(self.filename,"w")
