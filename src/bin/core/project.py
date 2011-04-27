@@ -411,7 +411,10 @@ class Project(WrapperXml):
         if platformlib == "standard":
             platformdir = settings.path+PLATFORMPATH+"/"+platformname+"/"
         else:
-            platformdir = settings.getPlatformLibPath(platformlib)+"/"+platformname+"/"
+            try:
+                platformdir = settings.getPlatformLibPath(platformlib)+"/"+platformname+"/"
+            except TypeError:
+                raise Error("Platform name error")
         platform = Platform(self,file=platformdir+platformname+XMLEXT)
 
         if sy.fileExist(platformdir+SIMULATIONPATH):
