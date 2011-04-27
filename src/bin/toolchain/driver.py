@@ -65,13 +65,17 @@ class Driver(WrapperXml):
             raise Error("Operating system must be selected",0)
         for component in project.getInstancesList():
             if component.getNum() == "0":
-               driverT = component.getDriver_Template(os)
-               if driverT != None:
+                driverT = component.getDriver_Template(os)
+                if driverT != None:
+                    if sy.dirExist(settings.projectpath+DRIVERSPATH+"/"+component.getName()):
+                        display.msg("Driver directory for "+component.getName()+\
+                                    " allready exist. suppressing it")
+                        sy.delDirectory(settings.projectpath+DRIVERSPATH+"/"+component.getName())
                     display.msg("Create directory for "+component.getName()+" driver")
                     # create component directory
                     sy.makeDirectory(settings.projectpath+DRIVERSPATH+"/"+component.getName())
-               else:
-                   display.msg("No driver for "+component.getName())
+                else:
+                    display.msg("No driver for "+component.getName())
 
     def fillAllTemplates(self):
         """ fill template """
