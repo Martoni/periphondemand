@@ -304,22 +304,6 @@ class Project(WrapperXml):
                     interfacelist.append(interface)
         return interfacelist
 
-    def getSysconsList(self):
-        """ return syscon interface list
-        """
-        sysconlist = []
-        for instance in self.getInstancesList():
-            for interface in instance.getInterfacesList():
-                if interface.getClass() == "clk_rst":
-                    if len(interface.getPortsList()) == 2:
-                        direction = "ok"
-                        for port in interface.getPortsList():
-                            if port.getDir() != "out":
-                                direction="nok"
-                        if direction=="ok":
-                            sysconlist.append(interface)
-        return sysconlist
-
     def getInstance(self,instancename):
         """ Return the instance by name
         """
@@ -383,7 +367,7 @@ class Project(WrapperXml):
         # looking for port connected to platform with type="CLK" and "in" direction
         portlist = []
         platformname = self.getPlatform().getInstanceName()
-        for instance in [instance for instance in self.getInstancesList()]:
+        for instance in self.getinstanceslist():
             if not instance.isPlatform():
                 for interface in instance.getInterfacesList():
                     for port in interface.getPortsList():
@@ -572,35 +556,6 @@ class Project(WrapperXml):
                 self.getInstance(instanceslave),
                 interfaceslave)
 
-    def connectClkDomain(self,instancesourcename,instancedestname,
-            interfacesourcename,interfacedestname):
-        """ Connect clock domain
-        """
-        instancesource = self.getInstance(instancesourcename)
-        # check if it's clock&rst generator
-        if instancesource.getInterface(interfacesourcename).getClass() != "clk_rst":
-            raise Error("Interface "+interfacesourcename+" must be 'clk_rst' ",0)
-
-        # Check pin direction
-        for port in instancesource.getInterface(interfacesourcename).getPortsList():
-            if port.getDir() != "out":
-                raise Error("Signals of clock generator must be 'out'",0)
-
-        instancedest = self.getInstance(instancedestname)
-        # check if iterface dest is clk&rst
-        if instancedest.getInterface(interfacesourcename).getClass() != "clk_rst":
-            raise Error("Interface "+\
-                    instancedest.getInterface(interfacesourcename).getClass()+\
-                    " must be 'clk_rst'",0)
-        # clk&rst dest must be slave (pin direction 'in')
-        for port in instancedest.getInterface(interfacesourcename).getPortsList():
-            if port.getDir() != "in":
-                raise Error("Signal "+port.getName()+" must be 'in'",0)
-        # Connect
-        instancesource.connectClkDomain(instancedestname,
-                                        interfacesourcename,
-                                        interfacedestname)
-
     def deleteBus(self,instancemaster,instanceslave,
                 interfacemaster=None,interfaceslave=None):
         """ Delete a slave bus connection
@@ -637,16 +592,6 @@ class Project(WrapperXml):
         if len(slaves) == 0:
             raise Error(" No slave bus in project",0)
 
-        # Check if only one syscon
-        syscon = self.getSysconsList()
-        if len(syscon) < 1:
-            raise Error("No syscon in project",0)
-        elif len(syscon) > 1:
-            raise Error("More than one clock and reset generator, "+\
-                            "bus connection must be made by hand",0)
-
-        syscon = syscon[0]
-
         # connect each slave with the same bus name than master
         for interfaceslave in slaves:
             if interfaceslave.getBusName() == master.getBusName():
@@ -658,11 +603,6 @@ class Project(WrapperXml):
                     e.setLevel(2)
                     display.msg(str(e))
 
-        # Connect clock and reset
-        self.connectClkDomain(syscon.getParent().getInstanceName(),\
-                              master.getParent().getInstanceName(),\
-                              syscon.getName(),\
-                              master.getName())
         display.msg("Bus connected")
 
     def check(self):
