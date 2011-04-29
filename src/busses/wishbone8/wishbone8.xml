@@ -4,7 +4,9 @@
     <components>
         <component name="syscon"/>
     </components>
-    <class name="WBM" type="master">
+		<class name="WBM" type="master">
+        <type name="RST" type="reset" dir="out" />
+        <type name="CLK" type="clock" dir="out" />
         <type name="ADR"   type="address" dir="out" />
         <type name="DAT_I" type="datain"  dir="in" />
         <type name="DAT_O" type="dataout" dir="out" />
@@ -14,7 +16,9 @@
         <type name="CYC"   type="cycle"   dir="out" />
         <type name="STB"   type="strobe"  dir="out" />
     </class>
-    <class name="WBS" type="slave">
+		<class name="WBS" type="slave">
+        <type name="RST"   type="reset"   dir="in" />
+        <type name="CLK"   type="clock"   dir="in" />
         <type name="ADR"   type="address" dir="in" />
         <type name="DAT_I" type="datain"  dir="in" />
         <type name="DAT_O" type="dataout" dir="out" />
@@ -23,9 +27,5 @@
         <type name="ACK"   type="ack"     dir="out" />
         <type name="CYC"   type="cycle"   dir="in" />
         <type name="STB"   type="strobe"  dir="in" />
-    </class>
-    <class name="WBC" type="clk_rst">
-        <type name="CLK" type="clock" />
-        <type name="RST" type="reset" />
     </class>
 </bus>
