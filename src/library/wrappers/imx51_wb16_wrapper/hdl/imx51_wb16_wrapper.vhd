@@ -18,22 +18,22 @@ library IEEE;
   use IEEE.std_logic_1164.all;
   use IEEE.numeric_std.all;
 
----------------------------------------------------------------------------
 Entity imx51_wb16_wrapper is
----------------------------------------------------------------------------
 port
 (
     -- i.MX Signals
     imx_da    : inout std_logic_vector(15 downto 0);
     imx_cs_n  : in std_logic;
-    imx_rw    : in std_logic ;
-    imx_adv   : in std_logic ;
+    imx_rw    : in std_logic;
+    imx_adv   : in std_logic;
 
     -- Global Signals
     gls_reset : in std_logic;
     gls_clk   : in std_logic;
 
     -- Wishbone interface signals
+    wbm_clk : out std_logic;
+    wbm_rst : out std_logic;
     wbm_address    : out std_logic_vector(15 downto 0);  -- Address bus
     wbm_readdata   :  in std_logic_vector(15 downto 0);  -- Data bus for read access
     wbm_writedata  : out std_logic_vector(15 downto 0);  -- Data bus for write access
@@ -44,21 +44,18 @@ port
 );
 end entity;
 
----------------------------------------------------------------------------
 Architecture RTL of imx51_wb16_wrapper is
----------------------------------------------------------------------------
-
     signal write      : std_logic;
     signal read       : std_logic;
     signal strobe     : std_logic;
     signal writedata  : std_logic_vector(15 downto 0);
     signal address    : std_logic_vector(15 downto 0);
-
 begin
 
-    -- ----------------------------------------------------------------------------
+    wbm_clk <= gls_clk;
+    wbm_reset <= gls_reset;
+
     --  External signals synchronization process
-    -- ----------------------------------------------------------------------------
     process(gls_clk, gls_reset)
     begin
       if(gls_reset='1') then
@@ -72,6 +69,7 @@ begin
         end if;
       end if;
     end process;
+
     strobe  <= not (imx_cs_n);
     write   <= (not (imx_cs_n)) and (not(imx_rw));
     read    <= (not (imx_cs_n)) and imx_rw;
@@ -81,7 +79,6 @@ begin
     wbm_strobe     <= strobe;
     wbm_write      <= write;
     wbm_cycle      <= strobe;
-
     imx_da <= wbm_readdata when ((read = '1') and (strobe = '1')) else (others => 'Z');
 
 end architecture RTL;
