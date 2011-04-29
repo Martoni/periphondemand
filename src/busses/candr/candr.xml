@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bus name="candr" version="1.0">
+    <description></description>
+    <class name="CANDRM" type="master">
+        <type name="CLK" type="clock" dir="out" />
+        <type name="RST" type="reset" dir="out" />
+    </class>
+		<class name="CANDRS" type="slave">
+        <type name="CLK" type="clock" dir="in" />
+        <type name="RST" type="reset" dir="in" />
+    </class>
+</bus>
