@@ -36,7 +36,7 @@ Entity atmega_wb8_wrapper is
         wbm_cycle : out std_logic ;
 
         -- clock 50MHz and reset
-        clk       : in std_logic ;
+        clk   : in std_logic ;
         reset : in std_logic
     );
 end entity;

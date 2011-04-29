@@ -45,14 +45,14 @@
             </ports>
         </interface>
 
-        <interface name="candr" class="clk_rst">
+        <interface name="candrinput" class="master" bus="candr">
             <ports>
                 <port name="reset" type="RST" size="1" dir="in"/>
                 <port name="clk" type="CLK" size="1" dir="in"/>
             </ports>
         </interface>
 
-        <interface clockandreset="candr" name="mwb8" class="master" bus="wishbone8">
+        <interface name="mwb8" class="master" bus="wishbone8">
             <ports>
                 <port name="wbm_clk" type="CLK" size="1" dir="out" />
                 <port name="wbm_rst" type="RST" size="1" dir="out" />
