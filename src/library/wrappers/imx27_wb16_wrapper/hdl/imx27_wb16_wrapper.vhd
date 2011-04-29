@@ -22,9 +22,7 @@ library IEEE;
   use IEEE.std_logic_1164.all;
   use IEEE.numeric_std.all;
 
--- ----------------------------------------------------------------------------
-    Entity imx27_wb16_wrapper is
--- ----------------------------------------------------------------------------
+Entity imx27_wb16_wrapper is
     port
     (
       -- i.MX Signals
@@ -34,39 +32,38 @@ library IEEE;
       imx_oe_n    : in    std_logic;
       imx_eb0_n   : in    std_logic;
 
-      -- Global Signals
-      gls_reset : in std_logic;
-      gls_clk   : in std_logic;
+     -- Wishbone interface signals
+      wbm_clk : out std_logic;
+      wbm_rst : out std_logic;
+      wbm_address   : out std_logic_vector(12 downto 0);  -- Address bus
+      wbm_readdata  :  in std_logic_vector(15 downto 0);  -- Data bus for read access
+      wbm_writedata : out std_logic_vector(15 downto 0);  -- Data bus for write access
+      wbm_strobe    : out std_logic;                      -- Data Strobe
+      wbm_write     : out std_logic;                      -- Write access
+      wbm_ack       :  in std_logic;                      -- acknowledge
+      wbm_cycle     : out std_logic;                      -- bus cycle in progress
 
-      -- Wishbone interface signals
-      wbm_address    : out std_logic_vector(12 downto 0);  -- Address bus
-      wbm_readdata   :  in std_logic_vector(15 downto 0);  -- Data bus for read access
-      wbm_writedata  : out std_logic_vector(15 downto 0);  -- Data bus for write access
-      wbm_strobe     : out std_logic;                      -- Data Strobe
-      wbm_write      : out std_logic;                      -- Write access
-      wbm_ack        :  in std_logic;                      -- acknowledge
-      wbm_cycle      : out std_logic                       -- bus cycle in progress
+    -- clock and reset inputs 
+      gls_clk : in std_logic;
+      gls_reset: in std_logic
     );
     end entity;
 
--- ----------------------------------------------------------------------------
-    Architecture RTL of imx27_wb16_wrapper is
--- ----------------------------------------------------------------------------
-
-signal write      : std_logic;
-signal read       : std_logic;
-signal strobe     : std_logic;
-signal writedata  : std_logic_vector(15 downto 0);
-signal address    : std_logic_vector(12 downto 0);
-
+Architecture RTL of imx27_wb16_wrapper is
+    signal write      : std_logic;
+    signal read       : std_logic;
+    signal strobe     : std_logic;
+    signal writedata  : std_logic_vector(15 downto 0);
+    signal address    : std_logic_vector(12 downto 0);
 begin
 
-    -- ----------------------------------------------------------------------------
+    wbm_clk <= gls_reset;
+    wbm_rst <= gls_clk;
+
     --  External signals synchronization process
-    -- ----------------------------------------------------------------------------
     process(gls_clk, gls_reset)
     begin
-      if(gls_reset='1') then
+      if(gls_reset = '1') then
         write   <= '0';
         read    <= '0';
         strobe  <= '0';
@@ -81,12 +78,11 @@ begin
       end if;
     end process;
 
-    wbm_address    <= address when (strobe = '1') else (others => '0');
-    wbm_writedata  <= writedata when (write = '1') else (others => '0');
-    wbm_strobe     <= strobe;
-    wbm_write      <= write;
-    wbm_cycle      <= strobe;
-
-    imx_data <= wbm_readdata when (read = '1') else (others => 'Z');
+    wbm_address   <= address   when (strobe = '1') else (others => '0');
+    wbm_writedata <= writedata when (write = '1') else (others => '0');
+    wbm_strobe    <= strobe;
+    wbm_write     <= write;
+    wbm_cycle     <= strobe;
+    imx_data      <= wbm_readdata when (read = '1') else (others => 'Z');
 
 end architecture RTL;
