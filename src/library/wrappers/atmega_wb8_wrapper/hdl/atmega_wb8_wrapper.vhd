@@ -13,9 +13,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
----------------------------------------------------------------------------
 Entity atmega_wb8_wrapper is
-	---------------------------------------------------------------------------
 	port
 	(
 		-- Atmega128 port
@@ -27,6 +25,8 @@ Entity atmega_wb8_wrapper is
 		DIR_buffer: out std_logic ;
 
 		-- Wishbone port
+        wbm_clk : out std_logic;
+        wbm_rst : out std_logic;
 		wbm_address : out std_logic_vector( 14 downto 0);
 		wbm_readdata : in std_logic_vector( 7 downto 0);
 		wbm_writedata: out std_logic_vector( 7 downto 0);
@@ -38,14 +38,10 @@ Entity atmega_wb8_wrapper is
 		-- clock 50MHz and reset
 		clk 	  : in std_logic ;
 		reset : in std_logic
-
-		);
+	);
 end entity;
 
-
----------------------------------------------------------------------------
 Architecture atmega_wb8_wrapper_1 of atmega_wb8_wrapper is
-	---------------------------------------------------------------------------
 
 	signal write : std_logic ;
 	signal strobe : std_logic ;
@@ -53,6 +49,10 @@ Architecture atmega_wb8_wrapper_1 of atmega_wb8_wrapper is
 	signal writedata : std_logic_vector( 7 downto 0);
 	signal address : std_logic_vector( 14 downto 0);
 begin
+
+    -- connect clock and reset
+    wbm_clk   <= clk;
+    wbm_reset <= reset;
 
 	synchro : process(clk,reset)
 	begin
