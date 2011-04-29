@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="dcm_syscon" version="1.0">
-	<description>
-		Generate a reset pulse and a Clk.
-	</description>
+  <description>
+    Generate a reset pulse and a Clk.
+  </description>
 
-	<hdl_files>
-		<hdl_file filename="dcm_syscon.vhd" scope="spartan3" istop="1"/>
-	</hdl_files>
+  <hdl_files>
+    <hdl_file filename="dcm_syscon.vhd" scope="spartan3" istop="1"/>
+  </hdl_files>
 
-	<interfaces>
-		<interface name="candr" class="clk_rst">
-			<ports>
-				<port name="gls_clk" type="CLK" size="1" dir="out"/>
-				<port name="gls_reset" type="RST" size="1" dir="out"/>
-			</ports>
-		</interface>
+  <interfaces>
+    <interface name="candr" class="clk_rst">
+      <ports>
+        <port name="gls_clk" type="CLK" size="1" dir="out"/>
+        <port name="gls_reset" type="RST" size="1" dir="out"/>
+      </ports>
+    </interface>
 
-		<interface name="clk_ext" class="gls">
-			<ports>
-				<port name="ext_clk" type="EXPORT" size="1" dir="in">
-					<pin num="0"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/></pin>
-				</port>
-			</ports>
-		</interface>
-	</interfaces>
+    <interface name="clk_ext" class="gls">
+      <ports>
+        <port name="ext_clk" type="EXPORT" size="1" dir="in">
+          <pin num="0"><connect instance_dest="apf9328" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/></pin>
+        </port>
+      </ports>
+    </interface>
+  </interfaces>
 
 </component>
