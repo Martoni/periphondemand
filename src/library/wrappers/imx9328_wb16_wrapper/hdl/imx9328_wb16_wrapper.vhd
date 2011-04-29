@@ -37,13 +37,15 @@ Entity imx9328_wb16_wrapper is
       gls_clk   : in std_logic;
 
       -- Wishbone interface signals
-      wbm_address    : out std_logic_vector(12 downto 0);  -- Address bus
-      wbm_readdata   : in  std_logic_vector(15 downto 0);  -- Data bus for read access
-      wbm_writedata  : out std_logic_vector(15 downto 0);  -- Data bus for write access
-      wbm_strobe     : out std_logic;  -- Data Strobe
-      wbm_write      : out std_logic;  -- Write access
-      wbm_ack        : in std_logic;   -- acknowledge
-      wbm_cycle      : out std_logic   -- bus cycle in progress
+      wbm_clk        : out std_logic;
+      wbm_rst        : out std_logic;
+      wbm_address    : out std_logic_vector(12 downto 0); -- Address bus
+      wbm_readdata   : in  std_logic_vector(15 downto 0); -- Data bus for read access
+      wbm_writedata  : out std_logic_vector(15 downto 0); -- Data bus for write access
+      wbm_strobe     : out std_logic; -- Data Strobe
+      wbm_write      : out std_logic; -- Write access
+      wbm_ack        : in std_logic;  -- acknowledge
+      wbm_cycle      : out std_logic  -- bus cycle in progress
     );
 end entity;
 
@@ -54,6 +56,10 @@ Architecture RTL of imx9328_wb16_wrapper is
     signal writedata  : std_logic_vector(15 downto 0);
     signal address    : std_logic_vector(12 downto 0);
 begin
+
+    wbm_clk <= gls_clk;
+    wbm_rst <= gls_reset;
+
     --  External signals synchronization process
     process(gls_clk, gls_reset)
     begin
