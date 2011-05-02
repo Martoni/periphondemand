@@ -60,7 +60,7 @@
             <ports>
                 <port dir="inout" name="selectmap_data" size="16" type="EXPORT">
                     <description />
-								</port>
+                </port>
                 <port dir="inout" name="selectmap_csi_n" size="1" type="EXPORT">
                     <description />
                 </port>
@@ -85,7 +85,7 @@
             </ports>
         </interface>
     </interfaces>
-		<description>
-			Configure a SPARTAN6 FPGA with SelectMap interface
+    <description>
+        Configure a SPARTAN6 FPGA with SelectMap interface
     </description>
 </component>
