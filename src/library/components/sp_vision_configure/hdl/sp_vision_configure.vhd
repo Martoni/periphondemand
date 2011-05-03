@@ -1,9 +1,9 @@
 ---------------------------------------------------------------------------
--- Company     : ARMades Systems
+-- Company     : ARMadeus Systems
 -- Author(s)   : Fabien Marteau <fabien.marteau@armadeus.com>
 --
 -- Creation Date : 30/04/2009
--- File          : spartan_select_map.vhd
+-- File          : sp_vision_configure.vhd
 --
 -- Abstract : This IP manage input serialized by the
 -- industrial 8-digital-input serializer : SN65HVS882
@@ -15,7 +15,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 ---------------------------------------------------------------------------
-Entity spartan_select_map is
+Entity sp_vision_configure is
 ---------------------------------------------------------------------------
     generic(
         id       : natural := 1;    -- identification register value
@@ -48,7 +48,7 @@ Entity spartan_select_map is
 end entity;
 
 ---------------------------------------------------------------------------
-Architecture spartan_select_map_1 of spartan_select_map is
+Architecture sp_vision_configure_1 of sp_vision_configure is
 ---------------------------------------------------------------------------
     -- usefull constant
     constant ZERO : std_logic_vector(15 downto 0) := x"0000";
@@ -199,5 +199,5 @@ begin
 
     wbs_ack <= read_ack or write_ack;
 
-end architecture spartan_select_map_1;
+end architecture sp_vision_configure_1;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component name="spartan_select_map">
+<component name="sp_vision_configure">
     <generics>
         <generic destination="both" match="\d+" name="id" public="true" type="natural" value="1">
             <description />
@@ -12,7 +12,7 @@
         </generic>
     </generics>
     <hdl_files>
-        <hdl_file filename="spartan_selectmap.vhd" istop="1" scope="both" />
+        <hdl_file filename="sp_vision_configure.vhd" istop="1" scope="both" />
     </hdl_files>
     <interfaces>
         <interface class="clk_rst" name="candr">

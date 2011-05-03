@@ -1,4 +1,4 @@
-spartan_selectmap component
+sp_vision_configure component
 =======================
 
 This component is designed to configure a spartan6 with SelectMap Slave
