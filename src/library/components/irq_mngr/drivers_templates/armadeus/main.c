@@ -14,12 +14,12 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  */
 
@@ -32,22 +32,19 @@
 #include <linux/interrupt.h>
 #include <linux/platform_device.h>
 #include <linux/version.h>
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)
-# include <asm/hardware.h>
-# include <asm/arch/irqs.h>
-#else
-# include <mach/hardware.h>
-# include <mach/irqs.h>
-#endif
+
+#include <mach/hardware.h>
+#include <mach/irqs.h>
 #include <asm/irq.h>
 #include <asm/io.h> /* readb() & Co */
 
 #include <asm/mach/irq.h>
 #ifdef CONFIG_MACH_APF27
 #include <mach/fpga.h> /* To remove when MX1 platform merged */
+#define VA_GPIO_BASE	MX27_GPIO_BASE_ADDR
 #else
 #define VA_GPIO_BASE	IO_ADDRESS(IMX_GPIO_BASE)
-#define MXC_ISR(x)     (0x34 + ((x) << 8))
+#define MXC_ISR(x)	(0x34 + ((x) << 8))
 struct fpga_irq_mng_platform_data { /* To remove when MX1 platform merged */
 	int (*init)(struct platform_device*);
 	void (*exit)(struct platform_device*);
@@ -61,7 +58,7 @@ struct fpga_irq_mng_platform_data { /* To remove when MX1 platform merged */
 #define ID_OFFSET (/*$register:swb16:id:offset$*/ * (/*$register:swb16:id:size$*/ /8))
 /*$foreach:instance:end$*/
 
-#define NB_IT    (16)
+#define NB_IT	(16)
 
 #define FPGA_IMR (ARMADEUS_FPGA_BASE_ADDR_VIRT + IRQ_MNGR_BASE + 0x00) /* Interrupt Mask Register */
 #define FPGA_ISR (ARMADEUS_FPGA_BASE_ADDR_VIRT + IRQ_MNGR_BASE + 0x02) /* Interrupt Status Register */
@@ -115,10 +112,14 @@ imx_fpga_unmask_irq(unsigned int irq)
 
 static void
 imx_fpga_handler(unsigned int mask, unsigned int irq,
-                 struct irq_desc *desc)
+		 struct irq_desc *desc)
 {
 	pr_debug("%s: mask:0x%04x\n", __FUNCTION__, mask);
+#if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,29)
+	desc = irq_to_desc(irq);
+#else
 	desc = irq_desc + irq;
+#endif
 	while (mask) {
 		if (mask & 1) {
 			pr_debug("handling irq %d\n", irq);
@@ -163,7 +164,7 @@ static int ocore_irq_mng_suspend(struct platform_device *pdev, pm_message_t stat
 
 static int ocore_irq_mng_resume(struct platform_device *pdev)
 {
-        struct fpga_irq_mng_platform_data *pdata = pdev->dev.platform_data;
+	struct fpga_irq_mng_platform_data *pdata = pdev->dev.platform_data;
 
 	dev_dbg(&pdev->dev, "resumed\n");
 	if (pdata->init)
@@ -190,9 +191,9 @@ static int __devinit ocore_irq_mng_probe(struct platform_device *pdev)
 	/* check if ID is correct */
 	data = ioread16(ARMADEUS_FPGA_BASE_ADDR_VIRT + IRQ_MNGR_BASE + ID_OFFSET);
 	if (data != ID) {
-        	printk(KERN_WARNING "For irq_mngr id:%d doesn't match with id"
+		printk(KERN_WARNING "For irq_mngr id:%d doesn't match with id"
 			 "read %d,\n is device present ?\n", ID, data);
-        	return -ENODEV;
+		return -ENODEV;
 	}
 
 	pdata = pdev->dev.platform_data;
@@ -244,12 +245,12 @@ static int __devexit ocore_irq_mng_remove(struct platform_device *pdev)
 }
 
 static struct platform_driver ocore_irq_mng_driver = {
-	.probe      = ocore_irq_mng_probe,
-	.remove     = ocore_irq_mng_remove,
-	.suspend    = ocore_irq_mng_suspend,
-	.resume     = ocore_irq_mng_resume,
-	.driver     = {
-		.name   = DRIVER_NAME,
+	.probe	= ocore_irq_mng_probe,
+	.remove	= ocore_irq_mng_remove,
+	.suspend= ocore_irq_mng_suspend,
+	.resume	= ocore_irq_mng_resume,
+	.driver	= {
+		.name	= DRIVER_NAME,
 	},
 };
 
