@@ -19,7 +19,7 @@
     <generics>
         <generic name="id" public="true" value="1" match="\d+" type="natural" destination="both" />
         <generic name="wb_size" public="false" value="16" match="\d+" type="natural" destination="fpga" />
-        <generic name="gpiopin" public="true" value="173" match="\d+" type="natural" destination="driver" />
+        <generic name="gpiopin" public="true" value="" match="\d+" type="natural" destination="driver" />
     </generics>
 
     <interfaces>

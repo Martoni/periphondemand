@@ -9,6 +9,12 @@ FPGA component
 Output component is used for read/write in the SJA1000 registers.
 Please see the technical datasheet of the SJA1000 for registers details.
 
+You must specify the generic "gpiopin", otherwise the Linux driver doesn't compile!
+
+note: For ARMadeus APF27, gpiopin value must be "173" if you have soldered the interruption of the SJA1000
+on "SW1" switch. For ARMadeus APF51, gpiopin value must be "3" if you have soldered the interruption of the SJA1000
+on "IMX Switch".
+
 Warning: Please ensure that your configuration respect the timing conditions of the SJA1000.
 You must be sure that duration of a low state on the chipselect of the Wrapper will never be
 less than 100ns (a little bit more is advised) and after a request of the SJA1000, you must be sure that
@@ -30,12 +36,15 @@ ARMadeus linux driver
 
 You must load these modules :
 
+> modprobe sja1000_apf
+> modprobe sja1000_platform
+
+These modules can be required by some applications :
+
 > modprobe can
 > modprobe can_bcm
 > modprobe can_dev
 > modprobe can_raw
-> modprobe sja1000_apf
-> modprobe sja1000_platform
 
 Use this command to set the bitrate :
 
