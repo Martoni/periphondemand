@@ -1,5 +1,5 @@
 /*
- * APF27-dev platform data/device for SJA1000
+ * ARMadeus platform data/device for SJA1000
  *
  * (C) Copyright 2011 - Armadeus Systems <support@armadeus.com>
  *
@@ -35,6 +35,10 @@
 
 #ifdef CONFIG_MACH_APF27
 #define ARMADEUS_FPGA_BASE_ADDR	0xd6000000
+#endif
+
+#ifdef CONFIG_MACH_APF51
+#define ARMADEUS_FPGA_BASE_ADDR	0xb8000000
 #endif
 
 /*$foreach:instance$*/
