@@ -32,19 +32,35 @@
 #include <linux/interrupt.h>
 #include <linux/platform_device.h>
 #include <linux/version.h>
-
-#include <mach/hardware.h>
-#include <mach/irqs.h>
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)
+# include <asm/hardware.h>
+# include <asm/arch/irqs.h>
+#else
+# include <mach/hardware.h>
+# include <mach/irqs.h>
+#endif
 #include <asm/irq.h>
 #include <asm/io.h> /* readb() & Co */
 
 #include <asm/mach/irq.h>
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38)
+#ifdef CONFIG_ARCH_MX1
+# include <mach/mx1.h>
+#define VA_GPIO_BASE	MX1_IO_ADDRESS(MX1_GPIO_BASE_ADDR)
+#else
+# include <mach/mx2x.h>
+#define VA_GPIO_BASE	MX27_IO_ADDRESS(MX27_GPIO_BASE_ADDR)
+#endif /* CONFIG_ARCH_MX1 */
+#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38) */
+
 #ifdef CONFIG_MACH_APF27
 #include <mach/fpga.h> /* To remove when MX1 platform merged */
-#define VA_GPIO_BASE	MX27_GPIO_BASE_ADDR
 #else
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38)
 #define VA_GPIO_BASE	IO_ADDRESS(IMX_GPIO_BASE)
-#define MXC_ISR(x)	(0x34 + ((x) << 8))
+#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) */
+#define MXC_ISR(x)     (0x34 + ((x) << 8))
 struct fpga_irq_mng_platform_data { /* To remove when MX1 platform merged */
 	int (*init)(struct platform_device*);
 	void (*exit)(struct platform_device*);
@@ -115,11 +131,13 @@ imx_fpga_handler(unsigned int mask, unsigned int irq,
 		 struct irq_desc *desc)
 {
 	pr_debug("%s: mask:0x%04x\n", __FUNCTION__, mask);
+
 #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,29)
 	desc = irq_to_desc(irq);
 #else
 	desc = irq_desc + irq;
 #endif
+
 	while (mask) {
 		if (mask & 1) {
 			pr_debug("handling irq %d\n", irq);
