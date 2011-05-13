@@ -19,7 +19,7 @@
 --*********************************************************************
 --
 -- File          : sja1000.vhd
--- Created on    : 05/03/2011
+-- Created on    : 05/05/2011
 -- Author        : Kevin JOLY joly.kevin25@gmail.com
 --
 --*********************************************************************
@@ -60,7 +60,6 @@ architecture sja1000_drive of sja1000 is
 begin
 
     fsm : process(gls_clk, gls_reset)
-        variable counter : integer range 0 to 7 := 0;
     begin
 
         if gls_reset = '1' then
