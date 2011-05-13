@@ -41,14 +41,7 @@
 
     <interfaces>
 
-        <interface name="clock" class="clk_rst">
-            <ports>
-                <port name="wb_clk_i" type="CLK" size="1" dir="in"/>
-                <port name="wb_rst_i" type="RST" size="1" dir="in"/>
-            </ports>
-        </interface>
-
-        <interface name="swb16" class="slave" bus="wishbone16" clockandreset="clock">
+        <interface name="swb16" class="slave" bus="wishbone16" >
             <registers>
                 <description>
                     For more information about register see the opencores documentation
@@ -65,10 +58,12 @@
                 <register name="id"       offset="0x08" size="16" rows="1" />
             </registers>
             <ports>
+                <port name="wb_clk_i" type="CLK" size="1" dir="in"/>
+                <port name="wb_rst_i" type="RST" size="1" dir="in"/>
                 <port name="wb_adr_i" type="ADR" size="4" dir="in"/>
                 <port name="wb_dat_i" type="DAT_I" size="16" dir="in"/>
                 <port name="wb_dat_o" type="DAT_O" size="16" dir="out"/>
-                <port name="wb_we_i" type="WE" size="1" dir="in"/>
+                <port name="wb_we_i"  type="WE" size="1" dir="in"/>
                 <port name="wb_stb_i" type="STB" size="1" dir="in"/>
                 <port name="wb_cyc_i" type="CYC" size="1" dir="in"/>
                 <port name="wb_ack_o" type="ACK" size="1" dir="out"/>

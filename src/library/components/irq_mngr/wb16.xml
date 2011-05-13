@@ -29,20 +29,16 @@
     </generics>
 
     <interfaces>
-        <interface name="candr" class="clk_rst">
-            <ports>
-                <port name="gls_clk" type="CLK" size="1" dir="in"/>
-                <port name="gls_reset" type="RST" size="1" dir="in"/>
-            </ports>
-        </interface>
 
-        <interface name="swb16" class="slave" bus="wishbone16" clockandreset="candr">
+        <interface name="swb16" class="slave" bus="wishbone16" >
             <registers>
                 <register name="irq_mngr_mask" offset="0x00" size="16" rows="1" />
                 <register name="irq_mngr_pending_ack" offset="0x01" size="16" rows="1" />
                 <register name="id" offset="0x02" size="16" rows="1" />
             </registers>
             <ports>
+                <port name="wbs_clk" type="CLK" size="1" dir="in"/>
+                <port name="wbs_reset" type="RST" size="1" dir="in"/>
                 <port name="wbs_s1_address" type="ADR" size="2" dir="in"/>
                 <port name="wbs_s1_readdata" type="DAT_O" size="16" dir="out"/>
                 <port name="wbs_s1_writedata" type="DAT_I" size="16" dir="in"/>

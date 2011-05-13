@@ -22,8 +22,8 @@ Entity button is
 	port
 	(
 		-- global signals
-		gls_reset : in std_logic ;
-		gls_clk 	: in std_logic ;
+		wbs_reset : in std_logic ;
+		wbs_clk 	: in std_logic ;
 		-- Wishbone signals
         wbs_add     : in std_logic ;
 		wbs_readdata  : out std_logic_vector( 15 downto 0);
@@ -47,23 +47,23 @@ Architecture button_1 of button is
 begin
 
 	-- connect button
-	cbutton : process(gls_clk,gls_reset)
+	cbutton : process(wbs_clk, wbs_reset)
 	begin
-		if gls_reset = '1' then
+		if wbs_reset = '1' then
 			reg <= (others => '0');
-		elsif rising_edge(gls_clk) then
+		elsif rising_edge(wbs_clk) then
 			reg <= "000000000000000"&button;
 		end if;
 	end process cbutton;
 
 
 	-- rise interruption
-	pbutton : process(gls_clk,gls_reset)
+	pbutton : process(wbs_clk, wbs_reset)
 	begin
-		if gls_reset = '1' then
+		if wbs_reset = '1' then
 			irq <= '0';
 			button_r <= '0';
-		elsif rising_edge(gls_clk) then
+		elsif rising_edge(wbs_clk) then
 			if button_r /= button then
 				irq <= '1';
 			else
@@ -74,12 +74,12 @@ begin
 	end process pbutton;
 
 	-- register reading process
-	pread : process(gls_clk,gls_reset)
+	pread : process(wbs_clk, wbs_reset)
 	begin
-		if(gls_reset = '1') then
+		if( wbs_reset = '1') then
 			wbs_ack <= '0';
 			wbs_readdata <= (others => '0');
-		elsif(rising_edge(gls_clk)) then
+		elsif(rising_edge(wbs_clk)) then
             wbs_ack <= '0';
 			if(wbs_strobe = '1' and wbs_write = '0' and wbs_cycle = '1')then
     			wbs_ack <= '1';

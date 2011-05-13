@@ -33,17 +33,8 @@
     </interrupts>
 
     <interfaces>
-        <interface class="clk_rst" name="candr">
-            <ports>
-                <port dir="in" name="clk" size="1" type="CLK">
-                    <description />
-                </port>
-                <port dir="in" name="reset" size="1" type="RST">
-                    <description />
-                </port>
-            </ports>
-        </interface>
-        <interface bus="wishbone16" class="slave" clockandreset="candr" name="wbs">
+
+        <interface bus="wishbone16" class="slave" name="wbs">
             <registers>
                 <register name="data" offset="0x0" rows="1" size="16" />
                 <register name="read_per" offset="0x1" rows="1" size="16" />
@@ -51,6 +42,12 @@
                 <register name="id" offset="0x3" rows="1" size="16" />
             </registers>
             <ports>
+                <port dir="in" name="clk" size="1" type="CLK">
+                    <description />
+                </port>
+                <port dir="in" name="reset" size="1" type="RST">
+                    <description />
+                </port>
                 <port dir="in" name="wbs_add" size="2" type="ADR">
                     <description />
                 </port>
@@ -74,6 +71,7 @@
                 </port>
             </ports>
         </interface>
+
         <interface class="gls" name="interrupt">
             <ports>
                 <port dir="out" name="interrupt" size="1" type="EXPORT">

@@ -32,8 +32,8 @@ library IEEE;
     port
     (
       -- Global Signals
-      gls_clk   : in std_logic;
-      gls_reset : in std_logic;
+      wbs_clk   : in std_logic;
+      wbs_reset : in std_logic;
 
       -- Wishbone interface signals
       wbs_s1_address    : in  std_logic_vector(1 downto 0);   -- Address bus
@@ -73,12 +73,12 @@ begin
 -- ----------------------------------------------------------------------------
 --  External signals synchronization process
 -- ----------------------------------------------------------------------------
-process(gls_clk, gls_reset)
+process(wbs_clk, wbs_reset)
 begin
-  if(gls_reset='1') then
+  if(wbs_reset='1') then
     irq_r <= (others => '0');
     irq_old <= (others => '0');
-  elsif(rising_edge(gls_clk)) then
+  elsif(rising_edge(wbs_clk)) then
     irq_r <= irqport;
     irq_old <= irq_r;
   end if;
@@ -87,11 +87,11 @@ end process;
 -- ----------------------------------------------------------------------------
 --  Interruption requests latching process on rising edge
 -- ----------------------------------------------------------------------------
-process(gls_clk, gls_reset)
+process(wbs_clk, wbs_reset)
 begin
-  if(gls_reset='1') then
+  if(wbs_reset='1') then
     irq_pend <= (others => '0');
-  elsif(rising_edge(gls_clk)) then
+  elsif(rising_edge(wbs_clk)) then
     irq_pend <= (irq_pend or ((irq_r and (not irq_old))and irq_mask)) and (not irq_ack);
   end if;
 end process;
@@ -99,12 +99,12 @@ end process;
 -- ----------------------------------------------------------------------------
 --  Register reading process
 -- ----------------------------------------------------------------------------
-process(gls_clk, gls_reset)
+process(wbs_clk, wbs_reset)
 begin
-  if(gls_reset='1') then
+  if(wbs_reset='1') then
     rd_ack    <= '0';
     readdata  <= (others => '0');
-  elsif(rising_edge(gls_clk)) then
+  elsif(rising_edge(wbs_clk)) then
     rd_ack  <= '0';
     if(wbs_s1_strobe = '1' and wbs_s1_write = '0' and wbs_s1_cycle = '1') then
       rd_ack  <= '1';
@@ -124,13 +124,13 @@ end process;
 -- ----------------------------------------------------------------------------
 --  Register update process
 -- ----------------------------------------------------------------------------
-process(gls_clk, gls_reset)
+process(wbs_clk, wbs_reset)
 begin
-  if(gls_reset='1') then
+  if(wbs_reset='1') then
     irq_ack <= (others => '0');
     wr_ack  <= '0';
     irq_mask <= (others => '0');
-  elsif(rising_edge(gls_clk)) then
+  elsif(rising_edge(wbs_clk)) then
     irq_ack <= (others => '0');
     wr_ack  <= '0';
 
@@ -145,7 +145,7 @@ begin
   end if;
 end process;
 
-gls_irq <= irq_level when(unsigned(irq_pend) /= 0 and gls_reset = '0') else
+gls_irq <= irq_level when(unsigned(irq_pend) /= 0 and wbs_reset = '0') else
            not irq_level;
 
 wbs_s1_ack <= rd_ack or wr_ack;
