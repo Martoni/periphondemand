@@ -27,6 +27,7 @@
                     <pin num="0">
                         <connect instance_dest="apf9328" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/>
                         <connect instance_dest="apf27" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/>
+                        <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/>
                         <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L29P_GCLK3_2" pin_dest="0"/>
                         <!-- /!\ For apf51 prototype platform use CLK0 instead -->
                     </pin>
