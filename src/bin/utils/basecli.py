@@ -392,6 +392,8 @@ class BaseCli(cmd.Cmd):
             return [""+instancename+"."+interfacename+"."+portname+"."+str(i) for i in range(int(port.getSize()))]
         elif subargt == "libraryname":
             arglist = settings.active_project.library.listLibraries()
+            return arglist
+
         elif subargt == "platformlib":
             arglist = settings.personal_platformlib_name_list
             arglist.append("standard")
@@ -403,6 +405,7 @@ class BaseCli(cmd.Cmd):
             return ["gnd", "vcc", "undef"]
         elif subargt == "personallibraryname":
             arglist = settings.active_project.library.getPersonalLibName()
+            return arglist
         elif subargt == "componentname":
             # XXX: detect is libraryname defined with proper function
             try:
