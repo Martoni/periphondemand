@@ -72,16 +72,24 @@ static struct sja1000_platform_data /*$instance_name$*/_pdata = {
 	.cdr = CDR_PELICAN | CDR_CBP,
 };
 
+void /*$instance_name$*/_release(struct device *dev)
+{
+	dev_dbg(dev, "released\n");
+}
+
 static struct platform_device /*$instance_name$*/_pdev = {
 	.name = DRV_NAME,
 	.id = 0,
 	.dev = {
 		.platform_data = &/*$instance_name$*/_pdata,
+		.release = /*$instance_name$*/_release,
 	},
 	.num_resources = ARRAY_SIZE(/*$instance_name$*/_resources),
 	.resource = /*$instance_name$*/_resources,
 };
+
 /*$foreach:instance:end$*/
+
 static int __init sja1000_apf27dev_init(void)
 {
 	int ret;
