@@ -8,6 +8,11 @@
  * kind, whether express or implied.
 */
 
+#include <linux/version.h>
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,20)
+#include <linux/config.h>
+#endif
+
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/init.h>
@@ -18,13 +23,20 @@
 #include <linux/wait.h>
 #include <asm/io.h>
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)
+/* hardware addresses */
+#	include <asm/hardware.h>
+#else
+#	include <mach/hardware.h>
+#endif
+
 #include "i2c-ocores-pod.h"
 
 #define APF9328_FPGA_IRQ_MNGR (192)
 #define CLOCK_FPGA     (/*$main_clock$*/)
 
 /*$foreach:instance$*/
-#define /*$instance_name$*/_BASEADDR (ARMADEUS_FPGA_BASE_ADDR_PHYS + /*$registers_base_address:swb16$*/)
+#define /*$instance_name$*/_BASEADDR (ARMADEUS_FPGA_BASE_ADDR_VIRT + /*$registers_base_address:swb16$*/)
 #define /*$instance_name$*/_IRQ      (IRQ_FPGA(/*$interrupt_number$*/))
 /*$foreach:instance:end$*/
 
