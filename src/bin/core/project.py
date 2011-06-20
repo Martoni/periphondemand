@@ -294,7 +294,7 @@ class Project(WrapperXml):
                     interfacelist.append(interface)
         return interfacelist
 
-    def getInterfaceSlave(self):
+    def getInterfacesSlave(self):
         """ Return a list of slave interface
         """
         interfacelist = []
@@ -590,7 +590,7 @@ class Project(WrapperXml):
                             "bus connection must be made by hand",0)
 
         # find slaves bus
-        slaves = self.getInterfaceSlave()
+        slaves = self.getInterfacesSlave()
         if len(slaves) == 0:
             raise Error(" No slave bus in project",0)
 
@@ -626,7 +626,7 @@ class Project(WrapperXml):
         ###########################################
         #check Busses, all slaves bus need a master
         listmaster = self.getInterfacesMaster()
-        listslave  = self.getInterfaceSlave()
+        listslave  = self.getInterfacesSlave()
 
         #Delete all slaves component from listslave
         for master in listmaster:
