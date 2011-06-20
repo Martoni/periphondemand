@@ -585,7 +585,7 @@ class Project(WrapperXml):
         elif len(master) > 1:
             for i in range(len(master)-1):
                 for ii in range(i+1,len(master)):
-                    if (master[i].getBusName() == master[1].getBusName()):    
+                    if (master[i].getBusName() == master[ii].getBusName()):    
                         raise Error("More than one bus master in project, "+\
                             "bus connection must be made by hand",0)
 
