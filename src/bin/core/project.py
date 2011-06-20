@@ -578,14 +578,14 @@ class Project(WrapperXml):
     def autoConnectBus(self):
         """ autoconnect bus
         """
-        master = self.getInterfacesMaster()
+        masters = self.getInterfacesMaster()
         # autoconnection can be made only if they are 1 master interface
-        if len(master) < 1:
+        if len(masters) < 1:
             raise Error("No bus master in project",0)
-        elif len(master) > 1:
-            for i in range(len(master)-1):
-                for ii in range(i+1,len(master)):
-                    if (master[i].getBusName() == master[ii].getBusName()):    
+        elif len(masters) > 1:
+            for i in range(len(masters)-1):
+                for ii in range(i+1,len(masters)):
+                    if (masters[i].getBusName() == masters[ii].getBusName()):    
                         raise Error("More than one bus master in project, "+\
                             "bus connection must be made by hand",0)
 
@@ -595,13 +595,12 @@ class Project(WrapperXml):
             raise Error(" No slave bus in project",0)
 
         # connect each slave with the same bus name than master
-        for i in range(len(master)):
+        for master in masters:
             for interfaceslave in slaves:
-                if interfaceslave.getBusName() == master[i].getBusName():
+                if interfaceslave.getBusName() == master.getBusName():
                     try:
-                        print master[i].getName() + " "+interfaceslave.getName()
                         # connect bus
-                        master[i].connectBus(interfaceslave.getParent(),
+                        master.connectBus(interfaceslave.getParent(),
                                     interfaceslave.getName())
                     except Error,e:
                         e.setLevel(2)
