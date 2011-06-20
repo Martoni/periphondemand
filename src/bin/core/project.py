@@ -583,9 +583,11 @@ class Project(WrapperXml):
         if len(master) < 1:
             raise Error("No bus master in project",0)
         elif len(master) > 1:
-            raise Error("More than one bus master in project, "+\
-                "bus connection must be made by hand",0)
-        master = master[0]
+            for i in range(len(master)-1):
+                for ii in range(i+1,len(master)):
+                    if (master[i].getBusName() == master[1].getBusName()):    
+                        raise Error("More than one bus master in project, "+\
+                            "bus connection must be made by hand",0)
 
         # find slaves bus
         slaves = self.getInterfaceSlave()
@@ -593,15 +595,17 @@ class Project(WrapperXml):
             raise Error(" No slave bus in project",0)
 
         # connect each slave with the same bus name than master
-        for interfaceslave in slaves:
-            if interfaceslave.getBusName() == master.getBusName():
-                try:
-                    # connect bus
-                    master.connectBus(interfaceslave.getParent(),
-                                interfaceslave.getName())
-                except Error,e:
-                    e.setLevel(2)
-                    display.msg(str(e))
+        for i in range(len(master)):
+            for interfaceslave in slaves:
+                if interfaceslave.getBusName() == master[i].getBusName():
+                    try:
+                        print master[i].getName() + " "+interfaceslave.getName()
+                        # connect bus
+                        master[i].connectBus(interfaceslave.getParent(),
+                                    interfaceslave.getName())
+                    except Error,e:
+                        e.setLevel(2)
+                        display.msg(str(e))
 
         display.msg("Bus connected")
 
