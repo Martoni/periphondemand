@@ -373,7 +373,7 @@ class BaseCli(cmd.Cmd):
                 return []
         # fill list
         if   subargt == "masterinstancename":
-            return [interface.getParent().getInstanceName() for interface in settings.active_project.getInterfaceMaster()]
+            return [interface.getParent().getInstanceName() for interface in settings.active_project.getInterfacesMaster()]
         elif subargt == "slaveinstancename":
             return [interface.getParent().getInstanceName() for interface in settings.active_project.getInterfaceSlave()]
         elif subargt == "instancename":
