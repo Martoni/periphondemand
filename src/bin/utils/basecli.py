@@ -4,7 +4,7 @@
 # Name:     cli.py
 # Purpose:  Basic Command Line Interface for Orchestra elements
 #
-# Author:   Fabrice MOUSSET
+# Author:   Fabrice MOUSSET and Fabien Marteau
 #
 # Created:  2008/01/17
 # Licence:  GPLv3 or newer
@@ -373,9 +373,9 @@ class BaseCli(cmd.Cmd):
                 return []
         # fill list
         if   subargt == "masterinstancename":
-            return [interface.getParent().getInstanceName() for interface in settings.active_project.getInterfacesMaster()]
+            return [interface.getParent().getInstanceName() for interface in settings.active_project.getInterfaceMaster()]
         elif subargt == "slaveinstancename":
-            return [interface.getParent().getInstanceName() for interface in settings.active_project.getInterfacesSlave()]
+            return [interface.getParent().getInstanceName() for interface in settings.active_project.getInterfaceSlave()]
         elif subargt == "instancename":
             return [instance.getInstanceName() for instance in settings.active_project.getInstancesList()]
         elif subargt == "instancesysconname":
@@ -392,6 +392,8 @@ class BaseCli(cmd.Cmd):
             return [""+instancename+"."+interfacename+"."+portname+"."+str(i) for i in range(int(port.getSize()))]
         elif subargt == "libraryname":
             arglist = settings.active_project.library.listLibraries()
+            return arglist
+
         elif subargt == "platformlib":
             arglist = settings.personal_platformlib_name_list
             arglist.append("standard")
@@ -403,6 +405,7 @@ class BaseCli(cmd.Cmd):
             return ["gnd", "vcc", "undef"]
         elif subargt == "personallibraryname":
             arglist = settings.active_project.library.getPersonalLibName()
+            return arglist
         elif subargt == "componentname":
             # XXX: detect is libraryname defined with proper function
             try:

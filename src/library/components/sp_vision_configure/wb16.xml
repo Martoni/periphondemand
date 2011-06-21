@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="sp_vision_configure">
+    <generics>
+        <generic destination="both" match="\d+" name="id" public="true" type="natural" value="1">
+            <description />
+        </generic>
+        <generic destination="fpga" match="\d+" name="wb_size" public="false" type="natural" value="16">
+            <description />
+        </generic>
+        <generic destination="both" match="\d+" name="clk_freq" public="false" type="natural" value="100000">
+            <description />
+        </generic>
+    </generics>
+    <hdl_files>
+        <hdl_file filename="sp_vision_configure.vhd" istop="1" scope="both" />
+    </hdl_files>
+    <interfaces>
+        <interface class="clk_rst" name="candr">
+            <ports>
+                <port dir="in" name="clk" size="1" type="CLK">
+                    <description />
+                </port>
+                <port dir="in" name="reset" size="1" type="RST">
+                    <description />
+                </port>
+            </ports>
+        </interface>
+        <interface bus="wishbone16" class="slave" clockandreset="candr" name="wbs">
+            <registers>
+                <register name="id" offset="0x0" rows="1" size="16" />
+                <register name="config" offset="0x1" rows="1" size="16" />
+                <register name="status" offset="0x2" rows="1" size="16" />
+                <register name="data" offset="0x3" rows="1" size="16" />
+            </registers>
+            <ports>
+                <port dir="in" name="wbs_add" size="2" type="ADR">
+                    <description />
+                </port>
+                <port dir="in" name="wbs_writedata" size="16" type="DAT_I">
+                    <description />
+                </port>
+                <port dir="out" name="wbs_readdata" size="16" type="DAT_O">
+                    <description />
+                </port>
+                <port dir="in" name="wbs_strobe" size="1" type="STB">
+                    <description />
+                </port>
+                <port dir="in" name="wbs_cycle" size="1" type="CYC">
+                    <description />
+                </port>
+                <port dir="in" name="wbs_write" size="1" type="WE">
+                    <description />
+                </port>
+                <port dir="out" name="wbs_ack" size="1" type="ACK">
+                    <description />
+                </port>
+            </ports>
+        </interface>
+        <interface class="gls" name="selectmap">
+            <ports>
+                <port dir="inout" name="selectmap_data" size="16" type="EXPORT">
+                    <description />
+                    <pin num="0">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L01N_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L39N_M3LDQSN_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="1">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L01P_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L41N_GCLK26_M3DQ5_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="2">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L10P_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L42P_GCLK25_TRDY2_M3UDM_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="3">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L10N_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L40P_M3DQ6_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="4">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L08P_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L53P_M3CKE_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="5">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L08N_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L83P_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="6">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L04P_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L45P_M3A3_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="7">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L04N_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L43P_GCLK23_M3RASN_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="8">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L02P_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L41P_GCLK27_M3DQ4_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="9">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L02N_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L39P_M3LDQS_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="10">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L12N_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L44P_GCLK21_M3A5_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="11">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L12P_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L46P_M3CLK_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="12">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L16N_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L54P_M3RESET_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="13">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L16P_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L52P_M3A8_3" pin_dest="0"/>
+                    </pin>
+                    <pin num="14">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L18N_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L42P_GCLK7_M1UDM_1" pin_dest="0"/>
+                    </pin>
+                    <pin num="15">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L18P_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L44P_A3_M1DQ6_1" pin_dest="0"/>
+                    </pin>
+                </port>
+                <port dir="inout" name="selectmap_csi_n" size="1" type="EXPORT">
+                    <description />
+                    <pin num="0">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L20N_1" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L74N_DOUT_BUSY_1" pin_dest="0"/>
+                    </pin>
+                </port>
+                <port dir="inout" name="selectmap_rdwr_n" size="1" type="EXPORT">
+                    <description />
+                    <pin num="0">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L23P_1" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L40N_GCLK10_M1A6_1" pin_dest="0"/>
+                    </pin>
+                </port>
+                <port dir="inout" name="selectmap_cclk" size="1" type="EXPORT">
+                    <description />
+                    <pin num="0">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L22N_1" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L40P_GCLK11_M1A5_1" pin_dest="0"/>
+                    </pin>
+                </port>
+                <port dir="inout" name="selectmap_program_n" size="1" type="EXPORT">
+                    <description />
+                    <pin num="0">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L23N_1" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L46N_FOE_B_M1DQ3_1" pin_dest="0"/>
+                    </pin>
+                </port>
+                <port dir="in" name="selectmap_init_n" size="1" type="EXPORT">
+                    <description />
+                    <pin num="0">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L20P_1" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L47N_LDC_M1DQ1_1" pin_dest="0"/>
+                    </pin>
+                </port>
+                <port dir="in" name="selectmap_busy" size="1" type="EXPORT">
+                    <description />
+                    <pin num="0">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L19N_0" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L39N_M1ODT_1" pin_dest="0"/>
+                    </pin>
+                </port>
+                <port dir="in" name="selectmap_done" size="1" type="EXPORT">
+                    <description />
+                    <pin num="0">
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L22P_1" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L46P_FCS_B_M1DQS2_1" pin_dest="0"/>
+                    </pin>
+                </port>
+            </ports>
+        </interface>
+    </interfaces>
+    <description>
+        Configure a SPARTAN6 FPGA with SelectMap interface
+    </description>
+</component>

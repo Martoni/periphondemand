@@ -4,7 +4,7 @@
         Armadeus apf51 card
     </description>
 
-    <fpga family="spartan6" device="XC6SLX16" speed="-2" package="CSG225" main_clock="95000"/>
+    <fpga family="spartan6" device="XC6SLX9" speed="-2" package="CSG225" main_clock="95000"/>
 
     <simulation>
          <simlib filename="apf51_test_pkg.vhd">

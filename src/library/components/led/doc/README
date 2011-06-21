@@ -1,1 +1,26 @@
-Ask fabien.marteau@armadeus.com to document this
+ led component
+================
+
+This component is designed to drive a led plugged on low significant bit of a
+register.
+
+FPGA component
+--------------
+
+led component is composed of two 16 bits registers:
+
+|   offset   | name        | description           |
+|:-----------|:-----------:|:---------------------:|
+|    0x00    | DATA        | data                  |
+|    0x01    | ID          | component identifiant |
+
+* DATA: memory register, LSB is plugged on led :
+
+| 15 downto 1 |   0  |
+|:-----------:|:----:|
+|    void     | led  |
+
+ARMAdeus Linux driver
+---------------------
+
+TODO

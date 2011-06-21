@@ -219,7 +219,8 @@ Load a project
     def complete_addinstance(self,text,line,begidx,endidx):
         componentlist = []
         try:
-            componentlist = self.completeargs(text,line,"<libraryname>.<componentname>.[componentversion] [newinstancename]")
+            componentlist = self.completeargs(text,line,
+                    "<libraryname>.<componentname>.[componentversion] [newinstancename]")
         except Exception,e:
             print e
         return componentlist
