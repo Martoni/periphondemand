@@ -586,9 +586,11 @@ class Project(WrapperXml):
             for i in range(len(masters)-1):
                 for ii in range(i+1,len(masters)):
                     if (masters[i].getBusName() == masters[ii].getBusName()):    
-                        raise Error("More than one bus master in project, "+\
-                            "bus connection must be made by hand",0)
-
+                        raise Error(masters[i].getParent().getInstanceName()+" and "+\
+                            masters[ii].getParent().getInstanceName()+\
+                            " has the same bus type : , "+\
+                            masters[i].getBusName()+\
+                            " bus connection must be made by hand",0)
         # find slaves bus
         slaves = self.getInterfacesSlave()
         if len(slaves) == 0:
