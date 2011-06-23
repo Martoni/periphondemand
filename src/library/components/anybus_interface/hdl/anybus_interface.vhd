@@ -69,7 +69,7 @@ architecture anybus_interface_arch of anybus_interface is
     signal ADDRESS_REG  : std_logic_vector(wb_size-1 downto 0) := x"0000";
     signal DATA_READ_REG    : std_logic_vector(wb_size-1 downto 0) := x"0000";
     signal DATA_WRITE_REG   : std_logic_vector(wb_size-1 downto 0) := x"0000";
- 
+
     --Status signals
     signal communication_error : std_logic := '0';
     signal transmission : std_logic := '0';

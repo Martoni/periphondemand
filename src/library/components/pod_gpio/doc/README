@@ -17,6 +17,8 @@ Use the following registers:
 | 0x03   | GPIO_ENABLE_INTERRUPT    | Enable interrupt on GPIOs  |
 | 0x04   | GPIO_INTERRUPT_STATUS    | Interrupt status register  |
 | 0x05   | GPIO_INTERRUPT_EDGE_TYPE | Edge type interrupt        |
+| 0x06   | void                     | read 0x00                  |
+| 0x07   | void                     | read 0x00                  |
 
 * GPIO_CONFIG
     Set the bit corresponding to the desired GPIO to put it in input. Reset it for output.
