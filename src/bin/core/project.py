@@ -367,7 +367,7 @@ class Project(WrapperXml):
         # looking for port connected to platform with type="CLK" and "in" direction
         portlist = []
         platformname = self.getPlatform().getInstanceName()
-        for instance in self.getinstanceslist():
+        for instance in self.getInstancesList():
             if not instance.isPlatform():
                 for interface in instance.getInterfacesList():
                     for port in interface.getPortsList():
