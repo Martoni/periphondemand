@@ -6,9 +6,9 @@ ifneq ($(KERNELRELEASE),)
 
 # Part executed when called from kernel build system:
 
-obj-$(CONFIG_POD_DRIVERS)	+= 16750_ocore.o
+obj-$(CONFIG_POD_DRIVERS)	+= pod_16750_ocore.o
 
-16750_ocore-objs	:= 16750.o
+pod_16750_ocore-objs	:= 16750.o
 
 else
 
