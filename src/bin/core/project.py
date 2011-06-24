@@ -648,6 +648,9 @@ class Project(WrapperXml):
         #Check bus address
         dict_reg = {}
         for master in listmaster:
+            if (master.getName() == "candroutput"):
+                listmaster.remove(master)
+        for master in listmaster:
             for slave in master.getSlavesList():
                 for register in slave.getInterface().getRegisterMap():
                     if dict_reg.has_key(register["offset"]):
