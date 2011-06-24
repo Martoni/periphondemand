@@ -93,46 +93,45 @@ def architectureHead(masterinterface,intercon):
     archead = archead + "begin\n"
     return archead
 
-def connectClockandReset(syscon,listinterface):
+def connectClockandReset(masterinterface,intercon):
     """ Connect clock and reset
     """
-    out = "\n"+ TAB + "-- Clock and Reset connection\n"
-    for sysconport in syscon.getSysconInterface().getPortsList():
-        if sysconport.getType() == "RST":
-            sysresetname = syscon.getInstanceName()+"_"+sysconport.getName()
-        else:
-            sysclockname = syscon.getInstanceName()+"_"+sysconport.getName()
 
-    for candr in listinterface:
-        candrname = candr.getParent().getInstanceName()
-        for port in candr.getPortsList():
-            if port.getType() == "RST":
-                out = out + TAB+ "%-40s"%(candrname+"_"+port.getName())+\
-                        " <= "+sysresetname+";\n"
-            else:
-                out = out + TAB +"%-40s"%(candrname+"_"+port.getName())+\
-                        " <= "+sysclockname+";\n"
-        out = out + "\n"
+    bus = masterinterface.getBus()
+    masterinstance = masterinterface.getParent()
+    masterinstancename = masterinstance.getInstanceName()
+    masterinterfacename = masterinterface.getName()
+    masterresetname = masterinstancename+"_"+masterinterface.getPortByType(bus.getSignalName("master","reset")).getName()
+    masterclockname = masterinstancename+"_"+masterinterface.getPortByType(bus.getSignalName("master","clock")).getName()
+    out = "\n"+ TAB + "-- Clock and Reset connection\n"
+
+    for slave in masterinterface.getSlavesList():
+        slaveinstance = slave.getInstance()
+        slaveinterface = slave.getInterface()
+        slaveinstancename = slave.getInstanceName()
+        slaveresetname = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("slave","reset")).getName()
+        slaveclockname = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("slave","clock")).getName()
+        #reset
+        out=out+TAB+slaveresetname+" <= "+masterresetname+";\n"
+        #clock
+        out=out+TAB+slaveclockname+" <= "+masterclockname+";\n"
 
     return out
 
-def addressdecoding(masterinterface,sysconinterface,intercon):
+def addressdecoding(masterinterface,masterinstancename,intercon):
     """ generate VHDL for address decoding
     """
     bus = masterinterface.getBus()
     masterinstance = masterinterface.getParent()
     masterinstancename = masterinstance.getInstanceName()
-    sysconinstancename = sysconinterface.getParent().getInstanceName()
-    clk_name = sysconinstancename + "_"+\
-            sysconinterface.getPortByType("CLK").getName()
-    rst_name = sysconinstancename + "_"+\
-            sysconinterface.getPortByType("RST").getName()
-    masteraddressname = masterinstance.getInstanceName()+"_"\
-            +masterinterface.getPortByType(
-                    bus.getSignalName("master","address")).getName()
+    rst_name = masterinstancename+"_"+masterinterface.getPortByType(bus.getSignalName("master","reset")).getName()
+    clk_name = masterinstancename+"_"+masterinterface.getPortByType(bus.getSignalName("master","clock")).getName()
+    masteraddressname = masterinstance.getInstanceName()+"_"+\
+                      masterinterface.getPortByType(
+                              bus.getSignalName("master","address")).getName()
     masterstrobename = masterinstancename+"_"+\
-                    masterinterface.getPortByType(
-                            bus.getSignalName("master","strobe")).getName()
+            masterinterface.getPortByType(
+                    bus.getSignalName("master","strobe")).getName()
     mastersizeaddr = masterinterface.getAddressSize()
 
     out = TAB +       "-----------------------\n"
@@ -376,7 +375,6 @@ def generateIntercon(masterinterface,intercon):
     """Generate intercon VHDL code for wishbone16 bus
     """
     masterinstance = masterinterface.getParent()
-    syscon = masterinterface.getSysconInstance()
     project = masterinstance.getParent()
 
     ###########################
@@ -387,22 +385,20 @@ def generateIntercon(masterinterface,intercon):
     VHDLcode = VHDLcode + entity(intercon)
     VHDLcode = VHDLcode + architectureHead(masterinterface,intercon)
 
-    ###########################
-    #Clock and Reset connection
-    sysconinterface = syscon.getSysconInterface()
-
     listslave = masterinterface.getSlavesList()
     listinterfacesyscon = []
     for slaveinstance in [slave.getInstance() for slave in listslave]:
         listinterfacesyscon.append(slaveinstance.getSysconInterface())
     listinterfacesyscon.append(masterinstance.getSysconInterface())
 
-    VHDLcode = VHDLcode + connectClockandReset(syscon,listinterfacesyscon)
+    ###########################
+    #Clock and Reset connection
+    VHDLcode = VHDLcode + connectClockandReset(masterinterface,intercon)
+
 
     ###########################
     #address decoding
-    VHDLcode = VHDLcode +\
-            addressdecoding(masterinterface,sysconinterface,intercon)
+    VHDLcode = VHDLcode + addressdecoding(masterinterface,masterinstance,intercon)
 
     ###########################
     #controls slaves
