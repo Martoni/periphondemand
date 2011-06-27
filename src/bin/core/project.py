@@ -101,8 +101,8 @@ class Project(WrapperXml):
         self.createXml("project")
         self.setName(name)
         self.setVersion("1.0")
-        self.saveProject()
         self.void = 0
+        self.saveProject()
 
     def loadProject(self,pathname):
         """ Load the  project
@@ -168,6 +168,7 @@ class Project(WrapperXml):
         sy.renameFile(settings.projectpath+SYNTHESISPATH+"/"+toolchainname+XMLEXT,
                       settings.projectpath+SYNTHESISPATH+"/synthesis"+XMLEXT)
         self.synthesis = Synthesis(self)
+        self.saveProject()
 
     def getSynthesisToolChain(self):
         try:
@@ -184,6 +185,7 @@ class Project(WrapperXml):
         sy.renameFile(settings.projectpath+SIMULATIONPATH+"/"+toolchainname+XMLEXT,
                       settings.projectpath+SIMULATIONPATH+"/simulation"+XMLEXT)
         self.simulation = Simulation(self)
+        self.saveProject()
 
     def getSimulationToolChain(self):
         try:
@@ -200,6 +202,7 @@ class Project(WrapperXml):
         sy.renameFile(settings.projectpath+DRIVERSPATH+"/"+toolchainname+XMLEXT,
                       settings.projectpath+DRIVERSPATH+"/drivers"+XMLEXT)
         self.driver = Driver(self)
+        self.saveProject()
 
     def getDriverToolChain(self):
         try:
@@ -209,6 +212,7 @@ class Project(WrapperXml):
 
     def setLanguage(self,language):
         self.setAttribute("name",language,"language")
+        self.saveProject()
 
     def setForce(self, portname, state):
         platform = self.getPlatform()
@@ -220,6 +224,7 @@ class Project(WrapperXml):
         if port.getDir() == "in":
             raise Error("The value of this port can't be set because of it's direction (in)")
         port.setForce(state)
+        self.saveProject()
 
     def getForcesList(self):
         """ List FPGA forced FPGA pin """
@@ -283,6 +288,7 @@ class Project(WrapperXml):
                             subnodename="component",
                             attributedict=attrib)
         display.msg("Component "+comp.getName()+" added as "+instancename)
+        self.saveProject()
 
     def getInterfacesMaster(self):
         """ Return a list of master interface
@@ -426,6 +432,7 @@ class Project(WrapperXml):
         for component in platform.getComponentsList():
             self.addinstance(libraryname=component["type"],
                               componentname=component["name"])
+        self.saveProject()
 
     def delPlatform(self):
         """ Suppress platform from project
@@ -438,6 +445,7 @@ class Project(WrapperXml):
 
         self.delProjectInstance(platform.getInstanceName())
         self.delNode("platform")
+        self.saveProject()
 
     def listAvailablePlatforms(self):
         """ List all supported platforms
@@ -467,6 +475,7 @@ class Project(WrapperXml):
                         instance.getInstanceName())
         instance.delInstance()
         display.msg("Component "+instancename+" deleted")
+        self.saveProject()
 
     def saveProject(self):
         for comp in self.instanceslist:
@@ -481,6 +490,7 @@ class Project(WrapperXml):
         """ connect pin between two instances
         """
         pin_source.connectPin(pin_dest)
+        self.saveProject()
 
     def deletePinConnection_cmd(self,
                             instance_source_name, interface_source_name,
@@ -518,6 +528,7 @@ class Project(WrapperXml):
 
                 pin_source.delConnection(pin_dest)
                 pin_dest.delConnection(pin_source)
+        self.saveProject()
 
     def generateIntercon(self,instance_name,interface_name):
         """ generate intercon for interface interface_name """
@@ -554,6 +565,7 @@ class Project(WrapperXml):
         port_dest = interface_dest.getPort(port_dest_name)
 
         port_source.connectPort(port_dest)
+        self.saveProject()
 
     def connectInterface(self,instance_name1,interface_name1,instance_name2,interface_name2):
         """ Connect an interface between to components
@@ -563,6 +575,7 @@ class Project(WrapperXml):
         instance_dest = self.getInstance(instance_name2)
         interface_dest = instance_dest.getInterface(interface_name2)
         interface_src.connectInterface(interface_dest)
+        self.saveProject()
 
     def connectBus(self,instancemaster,interfacemaster,instanceslave,interfaceslave):
         """ Connect a master bus to a slave bus
@@ -571,6 +584,7 @@ class Project(WrapperXml):
         instance.connectBus(interfacemaster,
                 self.getInstance(instanceslave),
                 interfaceslave)
+        self.saveProject()
 
     def connectClkDomain(self,instancesourcename,instancedestname,
             interfacesourcename,interfacedestname):
@@ -600,6 +614,7 @@ class Project(WrapperXml):
         instancesource.connectClkDomain(instancedestname,
                                         interfacesourcename,
                                         interfacedestname)
+        self.saveProject()
 
     def deleteBus(self,instancemaster,instanceslave,
                 interfacemaster=None,interfaceslave=None):
@@ -607,6 +622,7 @@ class Project(WrapperXml):
         """
         instance = self.getInstance(instancemaster)
         instance.deleteBus(instanceslave,interfacemaster,interfaceslave)
+        self.saveProject()
 
     def reNum(self,componentname):
         """ Renum all instances in the correct order
@@ -619,6 +635,7 @@ class Project(WrapperXml):
         for comp in complist:
             comp.setNum(num)
             num = num + 1
+        self.saveProject()
 
     def autoConnectBus(self):
         """ autoconnect bus
@@ -664,6 +681,7 @@ class Project(WrapperXml):
                               syscon.getName(),\
                               master.getName())
         display.msg("Bus connected")
+        self.saveProject()
 
     def check(self):
         """ This function check all the project wiring
