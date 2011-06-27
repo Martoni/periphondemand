@@ -147,7 +147,7 @@ class Project(WrapperXml):
 
 
         # Set bus master-slave
-        for masterinterface in self.getInterfaceMaster():
+        for masterinterface in self.getInterfacesMaster():
             for slave in masterinterface.getSlavesList():
                 slaveinterface = slave.getInterface()
                 # FIXME: allocMem change address
@@ -284,7 +284,7 @@ class Project(WrapperXml):
                             attributedict=attrib)
         display.msg("Component "+comp.getName()+" added as "+instancename)
 
-    def getInterfaceMaster(self):
+    def getInterfacesMaster(self):
         """ Return a list of master interface
         """
         interfacelist = []
@@ -294,7 +294,7 @@ class Project(WrapperXml):
                     interfacelist.append(interface)
         return interfacelist
 
-    def getInterfaceSlave(self):
+    def getInterfacesSlave(self):
         """ Return a list of slave interface
         """
         interfacelist = []
@@ -623,7 +623,7 @@ class Project(WrapperXml):
     def autoConnectBus(self):
         """ autoconnect bus
         """
-        master = self.getInterfaceMaster()
+        master = self.getInterfacesMaster()
         # autoconnection can be made only if they are 1 master interface
         if len(master) < 1:
             raise Error("No bus master in project",0)
@@ -633,7 +633,7 @@ class Project(WrapperXml):
         master = master[0]
 
         # find slaves bus
-        slaves = self.getInterfaceSlave()
+        slaves = self.getInterfacesSlave()
         if len(slaves) == 0:
             raise Error(" No slave bus in project",0)
 
@@ -681,8 +681,8 @@ class Project(WrapperXml):
 
         ###########################################
         #check Busses, all slaves bus need a master
-        listmaster = self.getInterfaceMaster()
-        listslave  = self.getInterfaceSlave()
+        listmaster = self.getInterfacesMaster()
+        listslave  = self.getInterfacesSlave()
 
         #Delete all slaves component from listslave
         for master in listmaster:
@@ -773,7 +773,7 @@ class Project(WrapperXml):
         else:
             report_file=open(filename,"w")
         text = "* Master interfaces mapping:\n"
-        for master in self.getInterfaceMaster():
+        for master in self.getInterfacesMaster():
             masterinstance = master.getParent()
             text+="\n  "+masterinstance.getInstanceName()+"."+\
                     master.getName()+":\n"

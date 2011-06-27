@@ -750,7 +750,7 @@ List master interface
             print display
             print e
             return
-        for master in settings.active_project.getInterfaceMaster():
+        for master in settings.active_project.getInterfacesMaster():
             print master.parent.getInstanceName()+"."+master.getName()
         print display
 
