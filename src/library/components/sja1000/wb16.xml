@@ -8,7 +8,7 @@
         <driver_templates architecture="armadeus">
             <support version="4" />
             <file name="Makefile" />
-            <file name="sja1000_apf.c" />
+            <file name="pod_sja1000_apf.c" />
         </driver_templates>
     </driver_files>
 
