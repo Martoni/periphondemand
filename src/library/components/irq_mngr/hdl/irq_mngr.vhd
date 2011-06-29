@@ -109,9 +109,9 @@ begin
     if(wbs_s1_strobe = '1' and wbs_s1_write = '0' and wbs_s1_cycle = '1') then
       rd_ack  <= '1';
       if(wbs_s1_address = "00") then
-        readdata(irq_count-1 downto 0) <= irq_mask;
+        readdata <= irq_mask or std_logic_vector(to_unsigned(0, 16));
       elsif(wbs_s1_address="01") then
-        readdata(irq_count-1 downto 0) <= irq_pend;
+        readdata <= irq_pend or std_logic_vector(to_unsigned(0, 16));
       elsif(wbs_s1_address="10") then
         readdata <= std_logic_vector(to_unsigned(id,16));
       else
