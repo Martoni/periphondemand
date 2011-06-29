@@ -48,20 +48,23 @@ static struct plat_serial8250_port ocore_16750_uart/*$instance_num$*/_data[] = {
 		.flags    = UPF_BOOT_AUTOCONF
 	}
 };
-
-static struct platform_device ocore_16750_uart/*$instance_num$*/_device = {
-	.name	= "serial8250",
-	.id	= /*$instance_num$*/,
-	.dev	= {
-		.release	= plat_uart_release,
-		.platform_data	= ocore_16750_uart/*$instance_num$*/_data,
-	},
-};
 /*$foreach:instance:end$*/
+
+static struct platform_device ocore_16750_uart_devices[] = {
+/*$foreach:instance$*/
+    {
+	    .name	= "serial8250",
+	    .id	= /*$instance_num$*/,
+	    .dev	= {
+	    	.release	= plat_uart_release,
+	    	.platform_data	= ocore_16750_uart/*$instance_num$*/_data,
+	    },
+    },
+/*$foreach:instance:end$*/
+};
 
 static int __init ocore_16750_init(void)
 {
-	int ret = -ENODEV;
 	u16 id;
 
 /*$foreach:instance$*/
@@ -81,19 +84,12 @@ static int __init ocore_16750_init(void)
 	}
 /*$foreach:instance:end$*/
 
-/*$foreach:instance$*/
-	ret =	platform_device_register( &ocore_16750_uart/*$instance_num$*/_device );
-	if(ret < 0)
-		return ret;
-/*$foreach:instance:end$*/
-    return ret;
+	return platform_device_register(ocore_16750_uart_devices);
 }
 
 static void __exit ocore_16750_exit(void)
 {
-/*$foreach:instance$*/	
-	platform_device_unregister(&ocore_16750_uart/*$instance_num$*/_device);
-/*$foreach:instance:end$*/
+	platform_device_unregister(ocore_16750_uart_devices);
 }
 
 module_init(ocore_16750_init);
