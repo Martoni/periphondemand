@@ -18,6 +18,11 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <linux/version.h>
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,20)
+#include <linux/config.h>
+#endif
+
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/interrupt.h>
@@ -31,14 +36,8 @@
 #include <linux/io.h>
 #include <linux/gpio.h>
 
-/*#include "sja1000.h"*/
-
-#ifdef CONFIG_MACH_APF27
-#define ARMADEUS_FPGA_BASE_ADDR	0xd6000000
-#endif
-
-#ifdef CONFIG_MACH_APF51
-#define ARMADEUS_FPGA_BASE_ADDR	0xb8000000
+#ifndef CONFIG_MACH_APF9328 /* To remove when MX1 platform is merged */
+#include <mach/fpga.h>
 #endif
 
 /*$foreach:instance$*/
