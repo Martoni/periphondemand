@@ -20,15 +20,16 @@ You must be sure that duration of a low state on the chipselect of the Wrapper w
 less than 100ns (a little bit more is advised) and after a request of the SJA1000, you must be sure that
 the following request will be in 15ns minimum.
 
-Exemple:
+Exemple for an APF27:
 
 in Uboot on ARMadeus Boards
 
 Configuration of the chip select duration (writing 0x00002000 in the register
-D8002050):
+ CSCR5U at address 0xD8002050):
 mw D8002050 00002000
 
-Configuration of the next request time (writing 0x00000d21 in the register D8002054):
+Configuration of the next request time (writing 0x00000d21 in the register
+ CSCR5L at address 0xD8002054):
 mw D8002054 00000d21
 
 ARMadeus linux driver
