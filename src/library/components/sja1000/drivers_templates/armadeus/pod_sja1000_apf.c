@@ -55,7 +55,7 @@ MODULE_LICENSE("GPL");
 static struct resource /*$instance_name$*/_resources[] = {
 	[0] = {
 		.start = ARMADEUS_FPGA_BASE_ADDR + /*$instance_name$*/_BASE,
-		.end = ARMADEUS_FPGA_BASE_ADDR + /*$instance_name$*/_BASE + 0xff,
+		.end = ARMADEUS_FPGA_BASE_ADDR + /*$instance_name$*/_BASE + 0x1ff,
 		.flags = IORESOURCE_MEM | IORESOURCE_MEM_16BIT,
 	},
 	[1] = {
