@@ -78,7 +78,7 @@ void /*$instance_name$*/_release(struct device *dev)
 
 static struct platform_device /*$instance_name$*/_pdev = {
 	.name = DRV_NAME,
-	.id = 0,
+	.id = /*$instance_num$*/,
 	.dev = {
 		.platform_data = &/*$instance_name$*/_pdata,
 		.release = /*$instance_name$*/_release,
