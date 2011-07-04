@@ -45,16 +45,18 @@ entity sja1000 is
              wbs_ack         : out std_logic;
         --sja signals
              sja_ad          : inout std_logic_vector(7 downto 0);
-             sja_ale_as      : out std_logic := '0';
+             sja_ale_as      : inout std_logic := 'H';
              sja_cs          : out std_logic := '1';
-             sja_rd          : out std_logic := '1';
-             sja_wr          : out std_logic := '1'
+             sja_rd          : inout std_logic := 'H';
+             sja_wr          : inout std_logic := 'H'
          );
 end entity sja1000;
 
 architecture sja1000_drive of sja1000 is
 --State signal
-    type state_type is (init, address, val_address,start_cs, read_data, end_read, write_data, end_write, end_cs_write, end_cs_read);
+    type state_type is (init, address, val_address,start_cs,
+                        read_data, end_read, write_data,
+                        end_write, end_cs_write, end_cs_read);
     signal state : state_type := init;
     signal data_to_write : std_logic_vector(7 downto 0);
 begin
@@ -109,24 +111,31 @@ begin
         end if;
     end process fsm;
 
-    sja_ad  <=  wbs_add         when state = address or state = val_address     else
-                data_to_write   when state = write_data or state = end_write or state = end_cs_write else
-                (others => 'Z');
+    sja_ad  <=  wbs_add when state = address or state = val_address else
+                        data_to_write when state = write_data or
+                                           state = end_write or
+                                           state = end_cs_write else
+                                      (others => 'Z');
 
-    sja_ale_as  <=  '1' when state = address    else
-                    '0';
+    sja_ale_as  <=  'H' when state = address    else
+                        '0';
 
     sja_rd  <=  '0' when state = read_data else
-                '1';
+                    'H';
 
     sja_wr  <=  '0' when state = write_data else
-                '1';
+                    'H';
 
-    sja_cs  <=  '0' when state = write_data or state = read_data or state = end_read or state = end_write or state = start_cs else
-                '1';
+    sja_cs  <=  '0' when state = write_data or
+                         state = read_data or
+                         state = end_read or
+                         state = end_write or
+                         state = start_cs else
+                    '1';
 
-    wbs_readdata(7 downto 0) <= sja_ad when state = end_read or state = read_data else
-    (others => '0');
+    wbs_readdata(7 downto 0) <= sja_ad when state = end_read or
+                                            state = read_data else
+                                       (others => '0');
 
 end architecture sja1000_drive;
 
