@@ -53,8 +53,10 @@ end entity pod_gpio;
 
 architecture pod_gpio_arch of pod_gpio is
     --State signal
-    type state_type is (init, read, write);
-    signal state_wb : state_type := init;
+    type state_wb_type is (init, read, write);
+    signal state_wb : state_wb_type := init;
+    type state_irq_type is (recording, sampling, comp);
+    signal state_irq : state_irq_type := recording;
     signal GPIO_CONFIG : std_logic_vector( 15 downto 0) := (others => '1');
     signal GPIO_VALUE : std_logic_vector( 15 downto 0);
     signal gpio_old_value : std_logic_vector( 15 downto 0);
@@ -63,6 +65,7 @@ architecture pod_gpio_arch of pod_gpio is
     signal gpio_new_active_interrupt : std_logic_vector( 15 downto 0);
     signal GPIO_ACK_INTERRUPT : std_logic_vector( 15 downto 0);
     signal GPIO_INTERRUPT_EDGE_TYPE : std_logic_vector( 15 downto 0);
+    signal gpio_new_value : std_logic_vector( 15 downto 0);
 begin
 
     wishbone : process(gls_clk,gls_reset)
@@ -115,15 +118,31 @@ begin
             GPIO_INTERRUPT_STATUS <= (others => '0');
             interrupt <= '0';
             gpio_old_value <= (others => '0');
+            gpio_new_value <= (others => '0');
+            state_irq <= recording;
         elsif(rising_edge(gls_clk)) then
-            gpio_old_value <= gpio;
-            if (not (GPIO_INTERRUPT_STATUS = gpio_new_active_interrupt)) then
-                GPIO_INTERRUPT_STATUS <= gpio_new_active_interrupt;
-                if (GPIO_ACK_INTERRUPT = x"0000") then
-                    interrupt <= '1';
-                end if;
+
+            if (not (GPIO_ACK_INTERRUPT = x"0000")) then
+                GPIO_INTERRUPT_STATUS <= GPIO_INTERRUPT_STATUS AND not GPIO_ACK_INTERRUPT;
             else
-                interrupt <= '0';
+                case state_irq is
+                    when recording => --Recording the old GPIO value
+                        gpio_old_value <= gpio_new_value;
+                        state_irq <= sampling;
+                    when sampling => --Sampling GPIO states
+                        gpio_new_value <= gpio;
+                        state_irq <= comp;
+                    when comp => -- Check if a new interrupt occurs
+                        if (not (GPIO_INTERRUPT_STATUS = gpio_new_active_interrupt)) then
+                            GPIO_INTERRUPT_STATUS <= gpio_new_active_interrupt;
+                            interrupt <= '1';
+                        else
+                            interrupt <= '0';
+                        end if;
+                        state_irq <= recording;
+                    when others =>
+                        state_irq <= recording;
+                end case;
             end if;
         end if;
     end process irq_monitoring;
@@ -141,8 +160,6 @@ begin
                                             GPIO_INTERRUPT_EDGE_TYPE                    when wbs_add = "101" else
                                             (others => '0');
 
-    gpio_new_active_interrupt <= (((GPIO_INTERRUPT_STATUS AND not GPIO_ACK_INTERRUPT) OR ((gpio XOR gpio_old_value) and not (gpio XOR GPIO_INTERRUPT_EDGE_TYPE))) AND GPIO_ENABLE_INTERRUPT);
+    gpio_new_active_interrupt <= ((GPIO_INTERRUPT_STATUS  OR ((gpio_new_value XOR gpio_old_value) and not (gpio_new_value XOR GPIO_INTERRUPT_EDGE_TYPE))) AND GPIO_ENABLE_INTERRUPT);
 
 end architecture pod_gpio_arch;
-
-
