@@ -33,11 +33,11 @@
 
         <interface name="sja1000_interface" class="gls">
             <ports>
-                <port name="sja_ad" type="EXPORT" size="8" dir="inout"/>
-                <port name="sja_cs" type="EXPORT" size="1" dir="out"/>
-                <port name="sja_rd" type="EXPORT" size="1"     dir="inout"/>
-                <port name="sja_wr" type="EXPORT" size="1"     dir="inout"/>
-                <port name="sja_ale_as" type="EXPORT" size="1" dir="inout"/>
+                <port name="sja_ad"     type="EXPORT" size="8" dir="inout"/>
+                <port name="sja_cs"     type="EXPORT" size="1" dir="out"/>
+                <port name="sja_rd"     type="EXPORT" size="1" dir="out"/>
+                <port name="sja_wr"     type="EXPORT" size="1" dir="out"/>
+                <port name="sja_ale_as" type="EXPORT" size="1" dir="out"/>
             </ports>
         </interface>
 
