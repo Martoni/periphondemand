@@ -63,30 +63,6 @@ class Component(WrapperXml):
         self.driver_templateslist = []
         self.interruptslist = []
 
-    def createComponent(self,componentname,libraryname,versionname):
-        """ Creating new component 'componentname' for
-            library 'libraryname'
-        """
-        librarypath = settings.active_library.getLibraryPath(libraryname)
-        componentpath = os.path.join(librarypath,componentname)
-        # verify if component and version exist
-        if sy.fileExist(os.path.join(componentpath,versionname+XMLEXT)):
-                settings.active_component = None
-                raise Error("Component version "+componentname+"."+versionname+\
-                            " already exist")
-        # make directories if component is really new
-        if not sy.dirExist(componentpath):
-            sy.makeDirectory(componentpath)
-            sy.makeDirectory(os.path.join(componentpath,"hdl"))
-            sy.makeDirectory(os.path.join(componentpath,"doc"))
-            sy.makeDirectory(os.path.join(componentpath,"drivers_templates"))
-
-        # create xml file
-        WrapperXml.__init__(self,nodename="component")
-        self.setName(componentname)
-        self.saveComponent(os.path.join(componentpath,versionname))
-        self.setVersionName(versionname)
-
     def loadComponent(self,componentname,libraryname,versionname=None):
         """ load a component in library to modify it
         """
@@ -97,14 +73,6 @@ class Component(WrapperXml):
             print "TODO: load "+componentname+" in "+libraryname
         else:
             print "TODO: load "+componentname+"."+versionname+" in "+libraryname
-
-
-    def saveComponent(self,version=None):
-        """ Save component in library
-        """
-        if version == None:
-            version = self.getVersionName()
-        self.saveXml(os.path.join(self.getComponentPath(),version+XMLEXT))
 
     def setVersionName(self,versionname):
         self.versionname = versionname
