@@ -89,7 +89,7 @@
                 <port name="cts_pad_i" type="EXPORT" size="1" dir="in"/>
                 <port name="dtr_pad_o" type="EXPORT" size="1" dir="out"/>
                 <port name="dsr_pad_i" type="EXPORT" size="1" dir="in"/>
-                <port name="ri_pad_i" type="EXPORT" size="1" dir="in"/>
+                <port name="ri_pad_i" type="EXPORT" size="1" dir="in" unconnected_value="1"/>
                 <port name="dcd_pad_i" type="EXPORT" size="1" dir="in"/>
             </ports>
 		</interface>

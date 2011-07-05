@@ -249,15 +249,19 @@ class TopVHDL(TopGen):
                                     out=out+TAB*3+port.getName()\
                                             +" => open,\n"
                                 else:
-                                    out=out+TAB*3+port.getName()\
-                                            +" => '0',\n"
+                                    out=out + TAB*3+port.getName() +\
+                                            " => '"+\
+                                            str(port.getUnconnectedValue()) +\
+                                            "',\n"
                             else:
                                 if port.getDir() == "out":
                                     out=out+TAB*3+port.getName()\
                                             +" => open,\n"
                                 else:
-                                    out=out+TAB*3+port.getName()\
-                                            +" => \""+sy.inttobin(0,int(port.getSize()))+"\",\n"
+                                    out=out + TAB*3 + port.getName() +\
+                                            " => \"" +\
+                                            str(port.getUnconnectedValue())*int(port.getSize()) +\
+                                            "\",\n"
 
 
                 # Suppress the #!@ last comma

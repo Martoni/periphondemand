@@ -119,6 +119,15 @@ class Port(WrapperXml):
         self.setAttribute("type",type)
     def getDir(self):
         return self.getAttribute("dir")
+    def getUnconnectedValue(self):
+        try:
+            ucvalue = self.getAttribute("unconnected_value")
+            if ucvalue == None:
+                return "0"
+            else:
+                return ucvalue
+        except Error:
+            return "0"
     def setDir(self,dir):
         if not dir.lower() in ["out","in","inout"]:
             raise Error("Direction wrong : "+str(dir))
