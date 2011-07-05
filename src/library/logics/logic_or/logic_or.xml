@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="logic_or" version="1.0">
+
+    <description>
+        simple logic "or" function
+    </description>
+
+    <hdl_files>
+        <hdl_file filename="logic_or.vhd" scope="both" istop="1" />
+    </hdl_files>
+
+    <generics>
+        <generic name="input_count" type="integer"
+                 op="realsizeof" target="input.logic_inputs"
+                 value="32" destination="fpga" />
+    </generics>
+
+    <interfaces>
+        <interface name="input" class="gls" >
+            <ports>
+                <port name="logic_inputs" type="EXPORT" size="32" dir="in" variable_size="1" />
+            </ports>
+        </interface>
+
+        <interface name="output" class="gls" >
+            <ports>
+                <port name="logic_output" type="EXPORT" size="1" dir="out" />
+            </ports>
+        </interface>
+    </interfaces>
+
+</component>
+
