@@ -81,8 +81,8 @@ def generatepinout(self,filename=None):
                 if pin.getConnections() != []:
                     connect = pin.getConnections()
                     if len(connect) > 1:
-                        display.msg("[WARNING] severals pin connected to "+\
-                                port.getName())
+                        display.msg("severals pin connected to "+\
+                                port.getName(), 1)
                         for connection in connect:
                             display.msg("      -> "+connection["instance_dest"]+"."+\
                                             connection["interface_dest"]+"."+\
