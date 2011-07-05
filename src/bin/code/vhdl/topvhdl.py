@@ -346,7 +346,7 @@ class TopVHDL(TopGen):
                                             if connect["instance_dest"] != platformname:
                                                 out = out + TAB*2\
                                                     + component.getInstanceName()+"_"+port.getName()
-                                                if port.getSize() != "1":
+                                                if int(port.getSize()) > 1:
                                                     out = out + "("+ pin.getNum() +")"
                                                 out = out + " <= "+ connect["instance_dest"]+\
                                                         "_"+connect["port_dest"]
@@ -356,9 +356,10 @@ class TopVHDL(TopGen):
                                                         for inter in comp.getInterfacesList():
                                                             if inter.getName() == connect["interface_dest"]:
                                                                 for port2 in inter.getPortsList():
-                                                                    if port2.getSize() != "1":
-                                                                        out = out +"("+\
-                                                                                connect["pin_dest"]+")"
+                                                                    if port2.getName() == connect["port_dest"]:
+                                                                        if int(port2.getSize()) > 1:
+                                                                            out = out +"("+\
+                                                                                    connect["pin_dest"]+")"
                                                 out = out + ";\n"
                             # if port is void, connect '0' or open
                             else:
