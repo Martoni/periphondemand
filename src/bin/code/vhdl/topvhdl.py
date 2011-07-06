@@ -84,6 +84,7 @@ class TopVHDL(TopGen):
                 interfacename = port.getParent().getName()
                 instancename = port.getParent().getParent().getInstanceName()
                 out = out + TAB + "-- "+instancename+"-"+interfacename+"\n"
+
                 if port.isCompletelyConnected():
                     # signal declaration
                     out = out + TAB*2 +\
@@ -367,7 +368,7 @@ class TopVHDL(TopGen):
                                                     +"."+interface.getName()+"."\
                                                     +port.getName()+" is void."\
                                                     +" It will be set to '"+\
-                                                    str(port.getUnconnectedValue())
+                                                    str(port.getUnconnectedValue()+"'")
                                 display.msg(message, 2)
 
         return out
