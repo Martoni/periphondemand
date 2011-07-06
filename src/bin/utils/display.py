@@ -76,12 +76,22 @@ class Display(object):
                      except NameError:
                          out = out+"[WARNING]: "+msg[0].strip()+"\n"
                 elif msg[1] == 2:
+                     try:
+                         if settings.color()==1:
+                             out = out + COLOR_INFO+"[INFO]"+COLOR_END+" : "+\
+                                     COLOR_INFO_MESSAGE+msg[0].strip()+\
+                                     COLOR_END+"\n"
+                         else:
+                             out = out+"[INFO] : "+msg[0].strip()+"\n"
+                     except NameError:
+                         out = out+"[INFO] : "+msg[0].strip()+"\n"
+                else :
                      out = out+msg[0].strip()+"\n"
 
             self.msglist = []
             return out
 
-        def msg(self,msg,level=2):
+        def msg(self,msg,level=3):
             self.msglist.append((msg,level))
 
     def __new__(c): # _new_ is always class method
