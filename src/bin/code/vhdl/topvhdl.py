@@ -85,7 +85,7 @@ class TopVHDL(TopGen):
                 instancename = port.getParent().getParent().getInstanceName()
                 out = out + TAB + "-- "+instancename+"-"+interfacename+"\n"
                 if port.isCompletelyConnected():
-                    # sig declaration
+                    # signal declaration
                     out = out + TAB*2 +\
                             instancename+"_"+portname+\
                             " : " + port.getDir()
@@ -213,7 +213,7 @@ class TopVHDL(TopGen):
         return out
 
     def declareInstance(self):
-        out = TAB + "-------------------------\n"
+        out = TAB +       "-------------------------\n"
         out = out + TAB + "-- declare instances\n"
         out = out + TAB + "-------------------------\n"
         for component in self.project.getInstancesList():
@@ -363,9 +363,12 @@ class TopVHDL(TopGen):
                                                 out = out + ";\n"
                             # if port is void, connect '0' or open
                             else:
-                                 display.msg("port "+ component.getInstanceName()\
+                                message = "port "+ component.getInstanceName()\
                                                     +"."+interface.getName()+"."\
-                                                    +port.getName()+" is void",1)
+                                                    +port.getName()+" is void."\
+                                                    +" It will be set to '"+\
+                                                    str(port.getUnconnectedValue())
+                                display.msg(message, 2)
 
         return out
 
