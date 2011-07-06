@@ -82,6 +82,7 @@ def generatepinout(self,filename=None):
                 if pin.getConnections() != []:
                     connect = pin.getConnections()
                     if len(connect) > 1:
+
                         display.msg("severals pin connected to "+\
                                 port.getName(), 2)
                         for connection in connect:
@@ -89,11 +90,10 @@ def generatepinout(self,filename=None):
                                             connection["interface_dest"]+"."+\
                                             connection["port_dest"]+"."+\
                                             connection["pin_dest"])
-                        display.msg(" Only "+connect[0]["instance_dest"]+"."+\
+                        display.msg("Connection name: "+connect[0]["instance_dest"]+"."+\
                                           connect[0]["interface_dest"]+"."+\
                                           connect[0]["port_dest"]+"."+\
-                                          connect[0]["pin_dest"]+\
-                                          " will be connected",1)
+                                          connect[0]["pin_dest"], 3)
 
                     instancedest = self.project.getInstance(connect[0]["instance_dest"])
                     interfacedest = instancedest.getInterface(connect[0]["interface_dest"])
