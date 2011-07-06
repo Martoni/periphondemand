@@ -69,6 +69,13 @@ class Port(WrapperXml):
     def __initnode(self,node):
         WrapperXml.__init__(self,node=node)
 
+    def getExtendedName(self):
+        """ Get name in this format:
+            instancename_portname
+        """
+        instancename = self.getParent().getParent().getInstanceName()
+        interfacename = self.getParent().getName()
+        return instancename+"_"+self.getName()
     def getPinsList(self):
         return self.pinlist
     def addPin(self,pin):
@@ -302,6 +309,19 @@ class Port(WrapperXml):
                     dest_port_list.append(port_connect)
 
         return dest_port_list
+    def getPortsWithSameConnection(self):
+        """ Return a list of ports that are connected on sames pin.
+            only works with inout port. If only this one port is
+            connected to one pin, self port is returned.
+        """
+        if self.getDir() != "inout":
+            raise Error("Function getPortsWithSameConnection work only"+\
+                        " with 'inout' port direction",0)
+        pin_dest_list = self.getPin(0).getConnectedPinList()
+        if (len(pin_dest_list) == 0):
+            return []
+        first_pin = pin_dest_list[0]
+        return [pin.getParent() for pin in first_pin.getConnectedPinList()]
 
     def getMSBConnected(self):
         """Return the MSB that is connected to an another pin
