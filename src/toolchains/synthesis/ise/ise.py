@@ -80,9 +80,9 @@ def generatepinout(self,filename=None):
                 # Only one connection per platform pin can be branched.
                 # If several connections found, only first is used
                 if pin.getConnections() != []:
-                    connect = pin.getConnections()
+                    connect = pin.getConnections() #XXX: use getConnectedPinList
                     if len(connect) > 1:
-
+                        same_connections_ports = []
                         display.msg("severals pin connected to "+\
                                 port.getName(), 2)
                         for connection in connect:
@@ -90,25 +90,36 @@ def generatepinout(self,filename=None):
                                             connection["interface_dest"]+"."+\
                                             connection["port_dest"]+"."+\
                                             connection["pin_dest"])
-                        display.msg("Connection name: "+connect[0]["instance_dest"]+"."+\
-                                          connect[0]["interface_dest"]+"."+\
-                                          connect[0]["port_dest"]+"."+\
-                                          connect[0]["pin_dest"], 3)
+                            same_connections_ports.append(connection["instance_dest"]+\
+                                                            "_"+\
+                                                          connection["port_dest"])
 
-                    instancedest = self.project.getInstance(connect[0]["instance_dest"])
-                    interfacedest = instancedest.getInterface(connect[0]["interface_dest"])
-                    portdest = interfacedest.getPort(connect[0]["port_dest"])
+                        same_connections_ports.sort()
+                        for connection in connect:
+                            if connection["instance_dest"]+"_"+connection["port_dest"] ==\
+                                    same_connections_ports[0]:
+                                        connect = connection
+                        display.msg("Connection name: "+connect["instance_dest"]+"."+\
+                                          connect["interface_dest"]+"."+\
+                                          connect["port_dest"]+"."+\
+                                          connect["pin_dest"], 3)
+                    else:
+                        connect = connect[0]
+
+                    instancedest = self.project.getInstance(connect["instance_dest"])
+                    interfacedest = instancedest.getInterface(connect["interface_dest"])
+                    portdest = interfacedest.getPort(connect["port_dest"])
 
                     out = out+'NET "'\
-                            +connect[0]["instance_dest"] + "_" + connect[0]["port_dest"]
+                            +connect["instance_dest"] + "_" + connect["port_dest"]
                     if self.project.getInstance(
-                            connect[0]["instance_dest"]).getInterface(
-                                    connect[0]["interface_dest"]).getPort(
-                                            connect[0]["port_dest"]).getSize() != "1":
+                            connect["instance_dest"]).getInterface(
+                                    connect["interface_dest"]).getPort(
+                                            connect["port_dest"]).getSize() != "1":
                         if portdest.isCompletelyConnected():
-                            out=out+"<"+connect[0]["pin_dest"]+">"
+                            out=out+"<"+connect["pin_dest"]+">"
                         else:
-                            out=out+"_pin"+connect[0]["pin_dest"]
+                            out=out+"_pin"+connect["pin_dest"]
                     out = out +'" LOC="'+str(port.getPosition())\
                               +'" | IOSTANDARD='+str(port.getStandart());
                     if port.getDrive() != None:
@@ -120,18 +131,18 @@ def generatepinout(self,filename=None):
                     try:
                         frequency = port.getFreq()
                         out = out+"NET \""+\
-                                connect[0]["instance_dest"]+\
-                                "_"+connect[0]["port_dest"]+\
+                                connect["instance_dest"]+\
+                                "_"+connect["port_dest"]+\
                                 "\" TNM_NET = \""+\
-                                connect[0]["instance_dest"]+\
-                                "_"+connect[0]["port_dest"]+\
+                                connect["instance_dest"]+\
+                                "_"+connect["port_dest"]+\
                                 "\";\n"
                         out = out+"TIMESPEC \"TS_"+\
-                                connect[0]["instance_dest"]+\
-                                "_"+connect[0]["port_dest"]+\
+                                connect["instance_dest"]+\
+                                "_"+connect["port_dest"]+\
                                 "\" = PERIOD \""+\
-                                connect[0]["instance_dest"]+\
-                                "_"+connect[0]["port_dest"]+\
+                                connect["instance_dest"]+\
+                                "_"+connect["port_dest"]+\
                                 "\" "+\
                                 "%g"%((1000/float(frequency)))+\
                                 " ns HIGH 50 %;\n"
@@ -145,7 +156,7 @@ def generatepinout(self,filename=None):
         raise Error(str(e),0)
     file.write(out)
     file.close()
-    display.msg("Constraint file generated with name :"+filename)
+    display.msg("Constraint file generated with name : "+filename)
     return filename
 
 def generateTCL(self,filename=None):

@@ -86,7 +86,7 @@ class TopVHDL(TopGen):
 
                 out = out + TAB + "-- "+instancename+"-"+interfacename+"\n"
                 if port.isCompletelyConnected():
-                    if port.getDir() == "inout":
+                    if (port.getDir() == "in") or (port.getDir() == "inout"):
                         same_connections_ports = port.getPortsWithSameConnection()
                         if same_connections_ports == []:
                             raise Error(str(port.getExtendedName())+" is left unconnected", 0)
@@ -268,7 +268,7 @@ class TopVHDL(TopGen):
                     out = out + TAB*3 + "-- " + interface.getName()+"\n"
                     for port in interface.getPortsList():
                         if len(port.getPinsList())!=0:
-                            if port.getDir() != "inout":
+                            if (port.getDir() != "inout") and (port.getDir() != "in"):
                                 out=  out + TAB*3 + port.getName() + " => "
                                 out = out + port.getExtendedName() + ",\n"
                             else:
