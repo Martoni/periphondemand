@@ -45,10 +45,10 @@ entity sja1000 is
              wbs_ack         : out std_logic;
         --sja signals
              sja_ad          : inout std_logic_vector(7 downto 0);
-             sja_ale_as      : inout std_logic := 'H';
+             sja_ale_as      : out std_logic := '1';
              sja_cs          : out std_logic := '1';
-             sja_rd          : inout std_logic := 'H';
-             sja_wr          : inout std_logic := 'H'
+             sja_rd          : out std_logic := '1';
+             sja_wr          : out std_logic := '1'
          );
 end entity sja1000;
 
