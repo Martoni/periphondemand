@@ -47,6 +47,7 @@ from   periphondemand.bin.commandline.simulationcli import SimulationCli
 from   periphondemand.bin.commandline.drivercli     import DriverCli
 
 from   periphondemand.bin.utils.settings import Settings
+from   periphondemand.bin.utils.basecli  import Statekeeper
 from   periphondemand.bin.utils.basecli  import BaseCli
 from   periphondemand.bin.utils.error    import Error
 
