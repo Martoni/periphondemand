@@ -31,27 +31,8 @@
 
 import re
 
-REVISION = "$Revision: 59 $"
+VERSION = "proto.1"
 URL = "$HeadURL: https://periphondemand.svn.sourceforge.net/svnroot/periphondemand/trunk/setup.py $"
 
 def getVersion():
-    if re.search(r"trunk",URL):
-        dir="trunk"
-        return "HEAD-"+str(getRevision())
-    elif re.search(r"tags",URL):
-        dir="tags"
-        m = re.match(r".*tags\/(.*?)\/.*",url)
-        name=m.group(1)
-        return name
-    elif re.search(r"branches",URL):
-        dir="branches"
-        m = re.match(r".*branches\/(.*?)\/.*",url)
-        name=m.group(1)
-        return name+"-"+str(getRevision())
-
-def getRevision():
-    m = re.match(r"\$Revision:(.*?)\$",REVISION)
-    return m.group(1).strip()
-
-
-
+    return VERSION
