@@ -61,22 +61,25 @@ class AllocMem:
         self.listinterfaceslave.append(interface)
         # set base address
         size = interface.getMemorySize()
-        try:
-            base = int(interface.getBase(),16)
-        except Error:
-            base = self.lastaddress/size
-            if self.lastaddress % size != 0:
-                base = base+1
-            interface.setBase(hex(base*size))
-            display.msg("setting base address "+\
-                    hex(base*size)+" for  "+\
-                    interface.getParent().getInstanceName()+\
-                    "."+interface.getName())
+        if size > 0:
+            try:
+                base = int(interface.getBase(),16)
+            except Error:
+                base = self.lastaddress/size
+                if self.lastaddress % size != 0:
+                    base = base+1
+                interface.setBase(hex(base*size))
+                display.msg("setting base address "+\
+                        hex(base*size)+" for  "+\
+                        interface.getParent().getInstanceName()+\
+                        "."+interface.getName())
+            else:
+                display.msg("Base address is "+hex(base)+" for "+\
+                        interface.getParent().getInstanceName()+\
+                        "."+interface.getName())
+            self.lastaddress = size*(base+ 1)
         else:
-            display.msg("Base address is "+hex(base)+" for "+\
-                    interface.getParent().getInstanceName()+\
-                    "."+interface.getName())
-        self.lastaddress = size*(base+ 1)
+            display.msg("No addressing value in this type of bus")
 
     def delInterfaceSlave(self,interface):
         self.listinterfaceslave.remove(interface)
