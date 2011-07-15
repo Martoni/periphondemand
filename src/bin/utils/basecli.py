@@ -4,7 +4,7 @@
 # Name:     cli.py
 # Purpose:  Basic Command Line Interface for Orchestra elements
 #
-# Author:   Fabrice MOUSSET
+# Author:   Fabrice MOUSSET and Fabien Marteau
 #
 # Created:  2008/01/17
 # Licence:  GPLv3 or newer

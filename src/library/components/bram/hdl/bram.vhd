@@ -22,8 +22,8 @@ Entity bram is
   port
   (
     -- Syscon signals
-    gls_reset    : in std_logic ;
-    gls_clk      : in std_logic ;
+    wbs_reset    : in std_logic ;
+    wbs_clk      : in std_logic ;
     -- Wishbone signals
     wbs_add       : in std_logic_vector( 9 downto 0);
     wbs_writedata : in std_logic_vector( wb_size-1 downto 0);
@@ -60,7 +60,7 @@ begin
     DATA_WIDTH => 16
     )
   port map (
-    clk => gls_clk,
+    clk => wbs_clk,
     we   =>  wbs_write,
     addr => wbs_add,
     din  => wbs_writedata,

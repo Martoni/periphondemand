@@ -13,7 +13,7 @@
     </hdl_files>
 
     <interfaces>
-        <interface name="candr" class="clk_rst">
+        <interface name="candroutput" class="master" bus="candr">
             <ports>
                 <port name="gls_clk" type="CLK" size="1" dir="out"/>
                 <port name="gls_reset" type="RST" size="1" dir="out"/>

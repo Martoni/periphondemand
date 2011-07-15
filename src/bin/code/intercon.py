@@ -79,7 +79,6 @@ class Intercon(Component):
         """ Generate intercon code
         """
         masterinstance = masterinterface.getParent()
-        syscon = masterinterface.getSysconInstance()
 
         # set name and description
         self.setName(str(masterinstance.getInstanceName()) \
@@ -129,48 +128,9 @@ class Intercon(Component):
                 #connect port new port on instance interface
                 port.connectAllPin(newport)
 
-            #########
-            # clk_rst
-            clkint = Interface(self,
-                               name=instance.getInstanceName()\
-                                       +"_"+interface.getClockAndResetName())
-            clkint.setClass("intercon")
-            # Adding clkint
-            self.addInterface(clkint)
-            #Creating port with invert direction value
-            for port in instance.getInterface(
-                    interface.getClockAndResetName()).getPortsList():
-                newport = Port(clkint,
-                               name=instance.getInstanceName()\
-                                       +"_"+port.getName())
-                newport.setDir(self.invertDir(port.getDir()))
-                newport.setSize(port.getSize())
-                # Adding newport on clkint interface
-                clkint.addPort(newport)
-                #connect port
-                port.connectAllPin(newport)
 
 
-        ######
-        #for syscon:
-        bus = Interface(self,
-                        name=syscon.getInstanceName()\
-                                + "_" + masterinstance.getInstanceName())
         bus.setClass("intercon")
-        # Add bus
-        self.addInterface(bus)
         self.setNum("0")
 
-        #Creating port with invert direction value
-        sysconinterface = syscon.getSysconInterface()
-        for port in sysconinterface.getPortsList():
-            newport = Port(bus,
-                           name=syscon.getInstanceName()\
-                                    +"_"+port.getName())
-            newport.setDir(self.invertDir(port.getDir()))
-            newport.setSize(port.getSize())
-            # adding newport
-            bus.addPort(newport)
-            #connect port
-            port.connectAllPin(newport)
 

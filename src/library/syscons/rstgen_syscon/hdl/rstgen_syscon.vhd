@@ -21,11 +21,11 @@ generic(
 );
 port
 (
-	-- external signals
-	ext_clk : in std_logic ;
-	--internal signals
-	gls_clk : out std_logic ;
-	gls_reset : out std_logic
+  -- external signals
+  ext_clk : in std_logic ;
+  --internal signals
+  gls_clk : out std_logic ;
+  gls_reset : out std_logic
 );
 end entity;
 
@@ -34,13 +34,13 @@ end entity;
 Architecture rstgen_syscon_1 of rstgen_syscon is
 ---------------------------------------------------------------------------
 
-	signal dly: std_logic := '0';
-	signal rst: std_logic := '0';
-	signal ext_reset : std_logic;
+  signal dly: std_logic := '0';
+  signal rst: std_logic := '0';
+  signal ext_reset : std_logic;
 
 begin
 
-	ext_reset <= '0';
+  ext_reset <= '0';
 ----------------------------------------------------------------------------
 --  RESET signal generator.
 ----------------------------------------------------------------------------
@@ -56,6 +56,6 @@ end process;
 
 gls_clk <= ext_clk;
 gls_reset <= rst xor invert_reset ;
-	
+  
 end architecture rstgen_syscon_1;
 

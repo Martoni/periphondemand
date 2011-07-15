@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="uart16750" version="1.0">
-	<description>
-		Complete uart device from opencores (8bits mode), based on 16750 component
-	</description>
+    <description>
+        Complete uart device from opencores (8bits mode), based on 16750 component
+    </description>
 
     <driver_files>
         <driver_templates architecture="armadeus">
@@ -19,42 +19,34 @@
         <generic name="wb_size" public="false" value="16" match="\d+" destination="fpga" type="natural" />
     </generics>
 
-	<hdl_files>
+    <hdl_files>
         <hdl_file filename="uart16750_wb16.vhd" scope="both" istop="1" />
-		<hdl_file filename="uart_16750.vhd" scope="both" istop="0" />
-		<hdl_file filename="uart_baudgen.vhd" scope="both" istop="0" />
-		<hdl_file filename="uart_interrupt.vhd" scope="both" istop="0" />
-		<hdl_file filename="uart_receiver.vhd" scope="both" istop="0" />
-		<hdl_file filename="uart_transmitter.vhd" scope="both" istop="0" />
-		<hdl_file filename="slib_clock_div.vhd" scope="both" istop="0" />
-		<hdl_file filename="slib_counter.vhd" scope="both" istop="0" />
-		<hdl_file filename="slib_edge_detect.vhd" scope="both" istop="0" />
-		<hdl_file filename="slib_fifo.vhd" scope="both" istop="0" />
-		<hdl_file filename="slib_input_filter.vhd" scope="both" istop="0" />
-		<hdl_file filename="slib_input_sync.vhd" scope="both" istop="0" />
-		<hdl_file filename="slib_mv_filter.vhd" scope="both" istop="0" />
-	</hdl_files>
+        <hdl_file filename="uart_16750.vhd" scope="both" istop="0" />
+        <hdl_file filename="uart_baudgen.vhd" scope="both" istop="0" />
+        <hdl_file filename="uart_interrupt.vhd" scope="both" istop="0" />
+        <hdl_file filename="uart_receiver.vhd" scope="both" istop="0" />
+        <hdl_file filename="uart_transmitter.vhd" scope="both" istop="0" />
+        <hdl_file filename="slib_clock_div.vhd" scope="both" istop="0" />
+        <hdl_file filename="slib_counter.vhd" scope="both" istop="0" />
+        <hdl_file filename="slib_edge_detect.vhd" scope="both" istop="0" />
+        <hdl_file filename="slib_fifo.vhd" scope="both" istop="0" />
+        <hdl_file filename="slib_input_filter.vhd" scope="both" istop="0" />
+        <hdl_file filename="slib_input_sync.vhd" scope="both" istop="0" />
+        <hdl_file filename="slib_mv_filter.vhd" scope="both" istop="0" />
+    </hdl_files>
 
-	<interrupts>
-		<interrupt interface="interrupt" port="int_o"/>
-	</interrupts>
+    <interrupts>
+        <interrupt interface="interrupt" port="int_o"/>
+    </interrupts>
 
-	<interfaces>
+    <interfaces>
 
-		<interface name="clock" class="clk_rst">
-			<ports>
-				<port name="wb_clk_i" type="CLK" size="1" dir="in"/>
-				<port name="wb_rst_i" type="RST" size="1" dir="in"/>
-			</ports>
-		</interface>
-
-        <interface name="swb16" class="slave" bus="wishbone16" clockandreset="clock">
+        <interface name="swb16" class="slave" bus="wishbone16" >
             <registers>
                 <description>
                     For more information about register see the opencores documentation
                     uart_spec.pdf page 8
                 </description>
-
                 <register name="TXRX_DLL" offset="0x00" size="16" rows="1" />
                 <register name="IEN_DLH"  offset="0x01" size="16" rows="1" />
                 <register name="II_FIFO"  offset="0x02" size="16" rows="1" />
@@ -63,23 +55,25 @@
                 <register name="LS"       offset="0x05" size="16" rows="1" />
                 <register name="MS"       offset="0x06" size="16" rows="1" />
                 <register name="id"       offset="0x08" size="16" rows="1" />
-			</registers>
-			<ports>
-				<port name="wb_adr_i" type="ADR" size="4" dir="in"/>
-				<port name="wb_dat_i" type="DAT_I" size="16" dir="in"/>
-				<port name="wb_dat_o" type="DAT_O" size="16" dir="out"/>
-				<port name="wb_we_i" type="WE" size="1" dir="in"/>
-				<port name="wb_stb_i" type="STB" size="1" dir="in"/>
+            </registers>
+            <ports>
+                <port name="wb_clk_i" type="CLK" size="1" dir="in"/>
+                <port name="wb_rst_i" type="RST" size="1" dir="in"/>
+                <port name="wb_adr_i" type="ADR" size="4" dir="in"/>
+                <port name="wb_dat_i" type="DAT_I" size="16" dir="in"/>
+                <port name="wb_dat_o" type="DAT_O" size="16" dir="out"/>
+                <port name="wb_we_i" type="WE" size="1" dir="in"/>
+                <port name="wb_stb_i" type="STB" size="1" dir="in"/>
                 <port name="wb_cyc_i" type="CYC" size="1" dir="in"/>
-				<port name="wb_ack_o" type="ACK" size="1" dir="out"/>
-			</ports>
-		</interface>
+                <port name="wb_ack_o" type="ACK" size="1" dir="out"/>
+            </ports>
+        </interface>
 
-		<interface name="interrupt" class="gls">
-			<ports>
-				<port name="int_o" type="EXPORT" size="1" dir="out"/>
-			</ports>
-		</interface>
+        <interface name="interrupt" class="gls">
+            <ports>
+                <port name="int_o" type="EXPORT" size="1" dir="out"/>
+            </ports>
+        </interface>
 
         <interface name="uart">
             <ports>
@@ -92,7 +86,7 @@
                 <port name="ri_pad_i" type="EXPORT" size="1" dir="in" unconnected_value="1"/>
                 <port name="dcd_pad_i" type="EXPORT" size="1" dir="in"/>
             </ports>
-		</interface>
-	</interfaces>
+        </interface>
+    </interfaces>
 
 </component>

@@ -20,59 +20,55 @@
     </driver_files>
 
 
-  <hdl_files>
-    <hdl_file filename="irq_mngr.vhd" scope="both" istop="1" />
-  </hdl_files>
+    <hdl_files>
+        <hdl_file filename="irq_mngr.vhd" scope="both" istop="1" />
+    </hdl_files>
 
     <generics>
-    <generic name="id" public="true" value="1" match="\d+" type="natural" destination="both" />
-    <generic name="irq_level" public="true" value="'1'" match="'0'|'1'" type="std_logic" destination="fpga" />
-    <generic name="irq_count" type="integer" op="realsizeof" target="irq.irqport" value="16" destination="fpga" />
-  </generics>
+        <generic name="id" public="true" value="1" match="\d+" type="natural" destination="both" />
+        <generic name="irq_level" public="true" value="'1'" match="'0'|'1'" type="std_logic" destination="fpga" />
+        <generic name="irq_count" type="integer" op="realsizeof" target="irq.irqport" value="16" destination="fpga" />
+    </generics>
 
-  <interfaces>
-    <interface name="candr" class="clk_rst">
-      <ports>
-        <port name="gls_clk" type="CLK" size="1" dir="in"/>
-        <port name="gls_reset" type="RST" size="1" dir="in"/>
-      </ports>
-    </interface>
+    <interfaces>
 
-    <interface name="swb16" class="slave" bus="wishbone16" clockandreset="candr">
+        <interface name="swb16" class="slave" bus="wishbone16" >
             <registers>
-        <register name="irq_mngr_mask" offset="0x00" size="16" rows="1" />
+                <register name="irq_mngr_mask" offset="0x00" size="16" rows="1" />
                 <register name="irq_mngr_pending_ack" offset="0x01" size="16" rows="1" />
                 <register name="id" offset="0x02" size="16" rows="1" />
-      </registers>
-      <ports>
-        <port name="wbs_s1_address" type="ADR" size="2" dir="in"/>
-        <port name="wbs_s1_readdata" type="DAT_O" size="16" dir="out"/>
-        <port name="wbs_s1_writedata" type="DAT_I" size="16" dir="in"/>
-        <port name="wbs_s1_ack" type="ACK" size="1" dir="out" />
-        <port name="wbs_s1_strobe" type="STB" size="1" dir="in"/>
-        <port name="wbs_s1_cycle" type="CYC" size="1" dir="in"/>
-        <port name="wbs_s1_write" type="WE" size="1" dir="in"/>
-      </ports>
-    </interface>
+            </registers>
+            <ports>
+                <port name="wbs_clk" type="CLK" size="1" dir="in"/>
+                <port name="wbs_reset" type="RST" size="1" dir="in"/>
+                <port name="wbs_s1_address" type="ADR" size="2" dir="in"/>
+                <port name="wbs_s1_readdata" type="DAT_O" size="16" dir="out"/>
+                <port name="wbs_s1_writedata" type="DAT_I" size="16" dir="in"/>
+                <port name="wbs_s1_ack" type="ACK" size="1" dir="out" />
+                <port name="wbs_s1_strobe" type="STB" size="1" dir="in"/>
+                <port name="wbs_s1_cycle" type="CYC" size="1" dir="in"/>
+                <port name="wbs_s1_write" type="WE" size="1" dir="in"/>
+            </ports>
+        </interface>
 
-    <interface name="irq" class="gls" >
-      <ports>
-        <port name="irqport" type="EXPORT" size="16" dir="in" variable_size="1" />
-      </ports>
-    </interface>
+        <interface name="irq" class="gls" >
+            <ports>
+                <port name="irqport" type="EXPORT" size="16" dir="in" variable_size="1" />
+            </ports>
+        </interface>
 
-    <interface name="ext_irq" class="gls" >
-      <ports>
-        <port name="gls_irq" type="EXPORT" size="1" dir="out">
+        <interface name="ext_irq" class="gls" >
+            <ports>
+                <port name="gls_irq" type="EXPORT" size="1" dir="out">
                     <pin num="0">
                         <connect instance_dest="apf9328" interface_dest="fpga" port_dest="TIM1" pin_dest="0"/>
                         <connect instance_dest="apf27" interface_dest="fpga" port_dest="INT" pin_dest="0"/>
                         <connect instance_dest="apf51" interface_dest="fpga" port_dest="FPGA_INITB" pin_dest="0"/>
                     </pin>
-        </port>
-      </ports>
-    </interface>
+                </port>
+            </ports>
+        </interface>
 
-  </interfaces>
+    </interfaces>
 
 </component>

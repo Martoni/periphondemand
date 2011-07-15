@@ -2,11 +2,11 @@
 <component name="rstgen_syscon" version="1.0">
   <description>
     Generate a reset pulse and a manage clock.
-    </description>
+  </description>
 
-    <generics>
-        <generic name="invert_reset" public="true" value="'0'" match="'0'|'1'" type="std_logic" />
-    </generics>
+  <generics>
+    <generic name="invert_reset" public="true" value="'0'" match="'0'|'1'" type="std_logic" />
+  </generics>
 
 
   <hdl_files>
@@ -14,7 +14,7 @@
   </hdl_files>
 
   <interfaces>
-    <interface name="candr" class="clk_rst">
+    <interface name="candroutput" class="master" bus="candr">
       <ports>
         <port name="gls_clk" type="CLK" size="1" dir="out"/>
         <port name="gls_reset" type="RST" size="1" dir="out"/>
@@ -24,13 +24,12 @@
     <interface name="clk_ext" class="gls">
       <ports>
         <port name="ext_clk" type="CLK" size="1" dir="in">
-                    <pin num="0">
-                        <connect instance_dest="apf9328" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/>
-                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/>
-                        <connect instance_dest="sp_vision" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/>
-                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L29P_GCLK3_2" pin_dest="0"/>
-                        <!-- /!\ For apf51 prototype platform use CLK0 instead -->
-                    </pin>
+          <pin num="0">
+              <connect instance_dest="apf9328" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/>
+              <connect instance_dest="apf27" interface_dest="fpga" port_dest="CLK0" pin_dest="0"/>
+              <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L29P_GCLK3_2" pin_dest="0"/>
+              <!-- /!\ For apf51 prototype platform use CLK0 instead -->
+          </pin>
         </port>
       </ports>
     </interface>

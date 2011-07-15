@@ -33,16 +33,7 @@
     </hdl_files>
 
     <interfaces>
-        <interface class="clk_rst" name="syscon_entry">
-            <ports>
-                <port dir="in" name="reset" size="1" type="RST">
-                    <description />
-                </port>
-                <port dir="in" name="clk" size="1" type="CLK">
-                    <description />
-                </port>
-            </ports>
-        </interface>
+
         <interface class="gls" name="output">
             <ports>
                 <port dir="out" name="rclk" size="1" type="EXPORT">
@@ -62,12 +53,20 @@
                 </port>
             </ports>
         </interface>
-        <interface bus="wishbone16" class="slave" clockandreset="syscon_entry" name="swb16">
+
+        <interface bus="wishbone16" class="slave" name="swb16">
             <registers>
                 <register name="ctrl_data" offset="0x0" rows="1" size="16" />
                 <register name="id" offset="0x1" rows="1" size="16" />
             </registers>
+
             <ports>
+                <port dir="in" name="reset" size="1" type="RST">
+                    <description />
+                </port>
+                <port dir="in" name="clk" size="1" type="CLK">
+                    <description />
+                </port>
                 <port dir="in" name="wbs_add" size="1" type="ADR">
                     <description />
                 </port>
@@ -91,5 +90,6 @@
                 </port>
             </ports>
         </interface>
+
     </interfaces>
 </component>
