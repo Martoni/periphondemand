@@ -35,7 +35,7 @@
 #__versionTime__ = "02/06/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
-from periphondemand.bin.commandline   import Cli
+from periphondemand.bin.commandline.projectcli import ProjectCli
 from periphondemand.bin.utils         import Settings
 from periphondemand.bin.utils         import wrappersystem as sy
 from periphondemand.bin.define        import POD_PATH
@@ -79,7 +79,7 @@ def main(argv):
         print "Peripherals On Demand version "+ ver.getVersion()
         sys.exit(2)
 
-    CLI = Cli()
+    CLI = ProjectCli()
     SETTINGS = Settings()
     SETTINGS.path = POD_PATH
     SETTINGS.projectpath = sy.pwd()

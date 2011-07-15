@@ -70,6 +70,7 @@ class ProjectCli(BaseCli):
     """
     def __init__(self,parent=None):
         BaseCli.__init__(self,parent)
+        settings.active_project = Project("void",void=1)
         if settings.active_project is None:
             settings.active_project = Project("",void=1)
         if settings.active_library is None:
@@ -213,7 +214,7 @@ Load a project
         except IOError,e:
             print e
             return
-        self.setPrompt("project:"+settings.active_project.getName())
+        self.setPrompt("POD:"+settings.active_project.getName())
         print display
 
     def complete_addinstance(self,text,line,begidx,endidx):
@@ -1047,3 +1048,52 @@ Set fpga pin state in 'gnd', 'vcc'. To unset use 'undef' value
         print display
         print e
         return
+
+    def complete_source(self,text,line,begidx,endidx):
+        """ complete load command with files under directory """
+        path = line.split(" ")[1]
+        if path.find("/") == -1: # sub
+            path = ""
+        elif text.split() == "": # sub/sub/
+            path = "/".join(path)+"/"
+        else: # sub/sub
+            path = "/".join(path.split("/")[0:-1]) + "/"
+        listdir  = sy.listDirectory(path)
+        listfile = sy.listFileType(path, PODSCRIPTEXT[1:])
+        listfile.extend(listdir)
+        return self.completelist(line,text,listfile)
+
+    def do_source(self, fname=None):
+        """\
+Usage : source <filename>
+use <filename> as standard input execute commands stored in.
+Runs command(s) from a file.
+        """
+        keepstate = Statekeeper(self,
+            ('stdin','use_rawinput','prompt','base_prompt','continuation_prompt'))
+        try:
+            self.stdin = open(fname, 'r')
+        except IOError, e:
+            try:
+                self.stdin = open('%s.%s' % (fname, self.default_extension), 'r')
+            except IOError:
+                print 'Problem opening file %s: \n%s' % (fname, e)
+                keepstate.restore()
+                return
+        self.use_rawinput = False
+        self.prompt = self.continuation_prompt = ''
+        settings.setScript(1)
+        self.cmdloop()
+        settings.setScript(0)
+        self.stdin.close()
+        keepstate.restore()
+        self.lastcmd = ''
+        return
+
+    def do_version(self,line):
+        """\
+Usage : version
+Print the version of POD
+        """
+        print "Peripherals On Demand version "+settings.version
+
