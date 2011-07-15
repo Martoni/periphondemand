@@ -56,6 +56,8 @@ library IEEE;
     Architecture RTL of irq_mngr is
 -- ----------------------------------------------------------------------------
 
+constant ZERO : std_logic_vector(15 downto 0) := x"0000";
+
 signal irq_r    : std_logic_vector(irq_count-1 downto 0);
 signal irq_old  : std_logic_vector(irq_count-1 downto 0);
 
@@ -109,9 +111,9 @@ begin
     if(wbs_s1_strobe = '1' and wbs_s1_write = '0' and wbs_s1_cycle = '1') then
       rd_ack  <= '1';
       if(wbs_s1_address = "00") then
-        readdata <= irq_mask or std_logic_vector(to_unsigned(0, 16));
+        readdata <= ZERO(15 downto irq_count)&irq_mask;
       elsif(wbs_s1_address="01") then
-        readdata <= irq_pend or std_logic_vector(to_unsigned(0, 16));
+        readdata <= ZERO(15 downto irq_count)&irq_pend;
       elsif(wbs_s1_address="10") then
         readdata <= std_logic_vector(to_unsigned(id,16));
       else

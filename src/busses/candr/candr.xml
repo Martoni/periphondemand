@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bus name="candr" version="1.0">
+<bus name="candr" version="1.0" datasize="0">
     <description></description>
     <class name="CANDRM" type="master">
         <type name="CLK" type="clock" dir="out" />
