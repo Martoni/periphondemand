@@ -60,7 +60,6 @@ class Error(Exception):
         self._message = message
     message = property(_get_message, _set_message)
 
-
     def __str__(self):
         if self.level == 0:
             standardmsg = "[ERROR] : " + self.message

@@ -72,7 +72,6 @@ class Platform(Component):
             for library in self.getNode("simulation").getNodeList("simlib"):
                 self.librarieslist.append(SimulationLib(self,node=library))
 
-
     def __initnode(self,node):
         WrapperXml.__init__(self,node=node)
     def __initfile(self,file):
@@ -128,8 +127,6 @@ class Platform(Component):
             [portlist]
         """
         portlist = []
-        project = self.getParent()
-
         # loop for each connection in platform interface
         for interface in self.getInterfacesList():
             for port in interface.getPortsList():
@@ -137,17 +134,9 @@ class Platform(Component):
                 if port.forceDefined():
                     portlist.append(port)
                 else:
-                    for pin in port.getPinsList():
-                        for connect in pin.getConnections():
-                            instancedest = project.getInstance(
-                                                            connect["instance_dest"])
-                            interfacedest = instancedest.getInterface(
-                                                            connect["interface_dest"])
-                            portdest = interfacedest.getPort(connect["port_dest"])
-                            try:
-                                portlist.index(portdest)
-                            except ValueError:
-                                portlist.append(portdest)
+                    for port in port.getDestinationPortList():
+                        if port not in portlist:
+                            portlist.append(port)
         return portlist
 
     def getIncompleteExternalPortsList(self):

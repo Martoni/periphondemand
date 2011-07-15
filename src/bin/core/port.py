@@ -69,6 +69,13 @@ class Port(WrapperXml):
     def __initnode(self,node):
         WrapperXml.__init__(self,node=node)
 
+    def getExtendedName(self):
+        """ Get name in this format:
+            instancename_portname
+        """
+        instancename = self.getParent().getParent().getInstanceName()
+        interfacename = self.getParent().getName()
+        return instancename+"_"+self.getName()
     def getPinsList(self):
         return self.pinlist
     def addPin(self,pin):
@@ -119,6 +126,15 @@ class Port(WrapperXml):
         self.setAttribute("type",type)
     def getDir(self):
         return self.getAttribute("dir")
+    def getUnconnectedValue(self):
+        try:
+            ucvalue = self.getAttribute("unconnected_value")
+            if ucvalue == None:
+                return "0"
+            else:
+                return ucvalue
+        except Error:
+            return "0"
     def setDir(self,dir):
         if not dir.lower() in ["out","in","inout"]:
             raise Error("Direction wrong : "+str(dir))
@@ -275,24 +291,37 @@ class Port(WrapperXml):
         """ get destination port connected to this port
             if only one port connected
         """
-        port_dest = None
-        for pin in self.getPinsList():
-            if len(pin.getConnectedPinList())!= 1:
-                return None
-            port_connect = pin.getConnectedPinList()[0].getParent()
+        port_list = self.getDestinationPortList()
+        if len(port_list) == 1:
+            return port_list[0]
+        else:
+            return None
 
-            instanceconnect = \
-                port_connect.getParent().getParent()
-            if (port_dest != None):
-                if(port_dest.getName() != port_connect.getName()\
-                        or \
-                   port_dest.getParent().getParent().getInstanceName() \
-                        != instanceconnect.getInstanceName()\
-                        ):
-                    return None
-            else:
-                port_dest = port_connect
-        return port_dest
+    def getDestinationPortList(self):
+        """ Get a list of destination ports
+        """
+        port_dest = None
+        dest_port_list = []
+        for pin in self.getPinsList():
+            port_connections = [pin.getParent() for pin in pin.getConnectedPinList()]
+            for port_connect in port_connections:
+                if port_connect not in dest_port_list:
+                    dest_port_list.append(port_connect)
+
+        return dest_port_list
+    def getPortsWithSameConnection(self):
+        """ Return a list of ports that are connected on sames pin.
+            only works with inout port. If only this one port is
+            connected to one pin, self port is returned.
+        """
+        if (self.getDir() != "inout") and (self.getDir() != "in"):
+            raise Error("Function getPortsWithSameConnection work only"+\
+                        " with 'inout' port direction",0)
+        pin_dest_list = self.getPin(0).getConnectedPinList()
+        if (len(pin_dest_list) == 0):
+            return []
+        first_pin = pin_dest_list[0]
+        return [pin.getParent() for pin in first_pin.getConnectedPinList()]
 
     def getMSBConnected(self):
         """Return the MSB that is connected to an another pin
@@ -314,11 +343,11 @@ class Port(WrapperXml):
         return True
 
     def isCompletelyConnected(self):
-        """ return 1 if all pin has connection"""
+        """ return True if all pin has connection"""
         if len(self.getPinsList()) != int(self.getSize()):
-            return 0
+            return False
         for pin in self.getPinsList():
             if not pin.isConnected():
-                return 0
-        return 1
+                return False
+        return True
 

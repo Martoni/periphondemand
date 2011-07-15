@@ -66,7 +66,10 @@ class Pin(WrapperXml):
 
     def getConnections(self):
         """ return a list of pin connection
-            return ("instance_dest":string,"interface_dest":string,"port_dest":string,"pin_dest":string)
+            return ("instance_dest":string,
+                    "interface_dest":string,
+                    "port_dest":string,
+                    "pin_dest":string)
         """
         connectionslist =[]
         if(self.getNode("connect")!=None):
@@ -149,14 +152,14 @@ class Pin(WrapperXml):
           "interface_dest":pin_dest.getParent().getParent().getName(),
           "port_dest":pin_dest.getParent().getName(),
           "pin_dest":str(pin_dest.getNum())}:
-                return 1
-        return 0
+                return True
+        return False
 
     def isEmpty(self):
         if len(self.getConnections()) == 0:
-            return 1
+            return True
         else:
-            return 0
+            return False
 
     def setNum(self,num):
         self.setAttribute("num",str(num))
@@ -164,9 +167,9 @@ class Pin(WrapperXml):
         return self.getAttribute("num")
     def isAll(self): # To Be Remove ?
         if self.getAttribute("all") == "true":
-            return 1
+            return True
         else:
-            return 0
+            return False
     def setAll(self):
         self.setAttribute("all","true")
 
@@ -243,7 +246,7 @@ class Pin(WrapperXml):
     def isConnected(self):
         """ Return 1 if pin is connected to something, else return 0 """
         if len(self.getConnectedPinList()) > 0:
-            return 1
+            return True
         else:
-            return 0
+            return False
 

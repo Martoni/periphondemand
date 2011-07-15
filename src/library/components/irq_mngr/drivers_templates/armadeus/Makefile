@@ -6,8 +6,8 @@ ifneq ($(KERNELRELEASE),)
 
 # Part executed when called from kernel build system:
 
-obj-$(CONFIG_POD_DRIVERS) += irq_ocore.o board_irq_mng.o
-irq_ocore-objs	:= main.o
+obj-$(CONFIG_POD_DRIVERS) += pod_irq_ocore.o pod_board_irq_mng.o
+pod_irq_ocore-objs	:= main.o
 
 else
 

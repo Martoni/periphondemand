@@ -34,7 +34,10 @@ __version__ = "1.0.0"
 __versionTime__ = "18/07/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
+from periphondemand.bin.define import *
+from periphondemand.bin.utils.settings import Settings
 
+settings = Settings()
 
 class Display(object):
     """ Class used to display messages,
@@ -51,12 +54,44 @@ class Display(object):
             self.val = None
         def __str__(self):
             out = ""
-            while self.msglist != []:
-                msg =  self.msglist.pop(0)[0].strip()
-                if msg !="":
-                    out = out+msg+"\n"
+            for msg in self.msglist:
+                if   msg[1] == 0:
+                     try:
+                         if settings.color()==1:
+                             out = out + COLOR_ERROR+"[ERROR]"+COLOR_END+"  : "+\
+                                     COLOR_ERROR_MESSAGE+msg[0].strip()+\
+                                     COLOR_END+"\n"
+                         else:
+                             out = out+"[ERROR]  : "+msg[0].strip()+"\n"
+                     except NameError:
+                         out = out+"[ERROR]  : "+msg[0].strip()+"\n"
+                elif msg[1] == 1:
+                     try:
+                         if settings.color()==1:
+                             out = out + COLOR_WARNING+"[WARNING]"+COLOR_END+": "+\
+                                     COLOR_WARNING_MESSAGE+msg[0].strip()+\
+                                     COLOR_END+"\n"
+                         else:
+                             out = out+"[WARNING]: "+msg[0].strip()+"\n"
+                     except NameError:
+                         out = out+"[WARNING]: "+msg[0].strip()+"\n"
+                elif msg[1] == 2:
+                     try:
+                         if settings.color()==1:
+                             out = out + COLOR_INFO+"[INFO]"+COLOR_END+" : "+\
+                                     COLOR_INFO_MESSAGE+msg[0].strip()+\
+                                     COLOR_END+"\n"
+                         else:
+                             out = out+"[INFO] : "+msg[0].strip()+"\n"
+                     except NameError:
+                         out = out+"[INFO] : "+msg[0].strip()+"\n"
+                else :
+                     out = out+msg[0].strip()+"\n"
+
+            self.msglist = []
             return out
-        def msg(self,msg,level=2):
+
+        def msg(self,msg,level=3):
             self.msglist.append((msg,level))
 
     def __new__(c): # _new_ is always class method
@@ -66,7 +101,4 @@ class Display(object):
 
     def __getattr__(self, attr):
        return getattr(self.instance, attr)
-
-#    def __setattr__(self, attr, val):
-#       return setattr(self.instance, attr, val)
 

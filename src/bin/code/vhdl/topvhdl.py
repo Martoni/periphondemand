@@ -70,7 +70,7 @@ class TopVHDL(TopGen):
                     settings.active_project.getDescription())
         return header
 
-    def entity(self,entityname,portlist):
+    def entity(self, entityname, portlist):
         """ return VHDL code for Top entity
         """
         out = "entity "+entityname+" is\n"
@@ -82,19 +82,48 @@ class TopVHDL(TopGen):
             else:
                 portname = port.getName()
                 interfacename = port.getParent().getName()
-                instancename = port.getParent().getParent().getInstanceName()
+                instancename  = port.getParent().getParent().getInstanceName()
+
                 out = out + TAB + "-- "+instancename+"-"+interfacename+"\n"
                 if port.isCompletelyConnected():
-                    # sig declaration
-                    out = out + TAB*2 +\
-                            instancename+"_"+portname+\
-                            " : " + port.getDir()
-                    if port.getMSBConnected() < 1:
-                        out = out + " std_logic;"
+                    if (port.getDir() == "in") or (port.getDir() == "inout"):
+                        same_connections_ports = port.getPortsWithSameConnection()
+                        if same_connections_ports == []:
+                            raise Error(str(port.getExtendedName())+" is left unconnected", 0)
+                        elif len(same_connections_ports) == 1:
+                            out = out + TAB*2 +\
+                                    instancename+"_"+portname+\
+                                    " : " + port.getDir()
+                            if port.getMSBConnected() < 1:
+                                out = out + " std_logic;"
+                            else:
+                                out = out + " std_logic_vector("+str(port.getMSBConnected())\
+                                        +" downto 0);"
+                            out = out + "\n"
+                        else:
+                            same_connections_ports_names = \
+                                sorted([aport.getExtendedName() for aport in same_connections_ports])
+                            if port.getExtendedName() == same_connections_ports_names[0]:
+                                out = out + TAB*2 +\
+                                        instancename+"_"+portname+\
+                                        " : " + port.getDir()
+                                if port.getMSBConnected() < 1:
+                                    out = out + " std_logic;"
+                                else:
+                                    out = out + " std_logic_vector("+str(port.getMSBConnected())\
+                                            +" downto 0);"
+                                out = out + "\n"
                     else:
-                        out = out + " std_logic_vector("+str(port.getMSBConnected())\
-                                +" downto 0);"
-                    out = out + "\n"
+                        # signal declaration
+                        out = out + TAB*2 +\
+                                instancename+"_"+portname+\
+                                " : " + port.getDir()
+                        if port.getMSBConnected() < 1:
+                            out = out + " std_logic;"
+                        else:
+                            out = out + " std_logic_vector("+str(port.getMSBConnected())\
+                                    +" downto 0);"
+                        out = out + "\n"
                 else:
                     for pin in port.getPinsList():
                         if pin.isConnected():
@@ -213,7 +242,7 @@ class TopVHDL(TopGen):
         return out
 
     def declareInstance(self):
-        out = TAB + "-------------------------\n"
+        out = TAB +       "-------------------------\n"
         out = out + TAB + "-- declare instances\n"
         out = out + TAB + "-------------------------\n"
         for component in self.project.getInstancesList():
@@ -235,29 +264,39 @@ class TopVHDL(TopGen):
 
                 out = out + TAB + "port map (\n"
                 for interface in component.getInterfacesList():
+
                     out = out + TAB*3 + "-- " + interface.getName()+"\n"
                     for port in interface.getPortsList():
                         if len(port.getPinsList())!=0:
-                            out=out+TAB*3\
-                                    +port.getName()\
-                                    +" => "
-                            out = out +component.getInstanceName()+"_"+port.getName()
-                            out = out +",\n"
+                            if (port.getDir() != "inout") and (port.getDir() != "in"):
+                                out=  out + TAB*3 + port.getName() + " => "
+                                out = out + port.getExtendedName() + ",\n"
+                            else:
+                                out=out+TAB*3 + port.getName() + " => "
+                                out = out +\
+                                    sorted(
+                                        [aport.getExtendedName() for aport in port.getPortsWithSameConnection()]
+                                          )[0]
+                                out = out +",\n"
                         else:
                             if int(port.getSize()) == 1:
                                 if port.getDir() == "out":
                                     out=out+TAB*3+port.getName()\
                                             +" => open,\n"
                                 else:
-                                    out=out+TAB*3+port.getName()\
-                                            +" => '0',\n"
+                                    out=out + TAB*3+port.getName() +\
+                                            " => '"+\
+                                            str(port.getUnconnectedValue()) +\
+                                            "',\n"
                             else:
                                 if port.getDir() == "out":
                                     out=out+TAB*3+port.getName()\
                                             +" => open,\n"
                                 else:
-                                    out=out+TAB*3+port.getName()\
-                                            +" => \""+sy.inttobin(0,int(port.getSize()))+"\",\n"
+                                    out=out + TAB*3 + port.getName() +\
+                                            " => \"" +\
+                                            str(port.getUnconnectedValue())*int(port.getSize()) +\
+                                            "\",\n"
 
 
                 # Suppress the #!@ last comma
@@ -342,7 +381,7 @@ class TopVHDL(TopGen):
                                             if connect["instance_dest"] != platformname:
                                                 out = out + TAB*2\
                                                     + component.getInstanceName()+"_"+port.getName()
-                                                if port.getSize() != "1":
+                                                if int(port.getSize()) > 1:
                                                     out = out + "("+ pin.getNum() +")"
                                                 out = out + " <= "+ connect["instance_dest"]+\
                                                         "_"+connect["port_dest"]
@@ -352,15 +391,19 @@ class TopVHDL(TopGen):
                                                         for inter in comp.getInterfacesList():
                                                             if inter.getName() == connect["interface_dest"]:
                                                                 for port2 in inter.getPortsList():
-                                                                    if port2.getSize() != "1":
-                                                                        out = out +"("+\
-                                                                                connect["pin_dest"]+")"
+                                                                    if port2.getName() == connect["port_dest"]:
+                                                                        if int(port2.getSize()) > 1:
+                                                                            out = out +"("+\
+                                                                                    connect["pin_dest"]+")"
                                                 out = out + ";\n"
                             # if port is void, connect '0' or open
                             else:
-                                 display.msg("port "+ component.getInstanceName()\
+                                message = "port "+ component.getInstanceName()\
                                                     +"."+interface.getName()+"."\
-                                                    +port.getName()+" is void",1)
+                                                    +port.getName()+" is void."\
+                                                    +" It will be set to '"+\
+                                                    str(port.getUnconnectedValue()+"'")
+                                display.msg(message, 2)
 
         return out
 

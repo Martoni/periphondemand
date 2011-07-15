@@ -60,7 +60,8 @@ class TopGen:
                         +masterinterface.getName()\
                         +"_intercon")
             except Error,e:
-                raise Error("Intercon missing, all intercon must be generated before generate top.\n"+str(e),0)
+                raise Error("Intercon missing, all intercon must be"+\
+                            "generated before generate top.\n"+str(e),0)
 
         ########################
         # header

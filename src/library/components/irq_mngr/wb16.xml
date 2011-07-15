@@ -14,7 +14,7 @@
             <file name="main.c" />
             <file name="Makefile" />
             <file name="README" />
-            <file name="board_irq_mng.c" />
+            <file name="pod_board_irq_mng.c" />
             <file name="irq_mng.h" />
         </driver_templates>
     </driver_files>
