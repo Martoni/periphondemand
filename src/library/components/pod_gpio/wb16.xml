@@ -29,13 +29,6 @@
 
     <interfaces>
 
-        <interface name="candr" class="clk_rst" >
-            <ports>
-                <port name="gls_reset" type="RST" size="1" dir="in"/>
-                <port name="gls_clk" type="CLK" size="1" dir="in"/>
-            </ports>
-        </interface>
-
         <interface name="irq" class="gls">
             <ports>
                 <port name="interrupt" type="EXPORT" size="1" dir="out" />
@@ -48,7 +41,7 @@
             </ports>
         </interface>
 
-        <interface clockandreset="candr" name="swb16" class="slave" bus="wishbone16" >
+        <interface name="swb16" class="slave" bus="wishbone16" >
             <ports>
                 <port name="wbs_add" type="ADR" size="3" dir="in"/>
                 <port name="wbs_writedata" type="DAT_I" size="16" dir="in"/>
@@ -57,6 +50,8 @@
                 <port name="wbs_strobe" type="STB" size="1" dir="in"/>
                 <port name="wbs_ack" type="ACK" size="1" dir="out"/>
                 <port name="wbs_cycle" type="CYC" size="1" dir="in"/>
+                <port name="gls_reset" type="RST" size="1" dir="in"/>
+                <port name="gls_clk" type="CLK" size="1" dir="in"/>
             </ports>
         </interface>
     </interfaces>
