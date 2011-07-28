@@ -28,6 +28,8 @@ Please see the technical datasheet of the HMS Anybus for registers details.
 * DATA_REG
     This register contain the data read/to write by the component in the Anybus registers.
 
+Please don't forget to set generic gpio_reset and gpio_irq
+
 Warning: You must first configure the number of Wishbone clock cycles to wait before an Anybus access
 with your application: It is recommended to not be lower than 25ns.
 Exemple: if your Wishbone bus is clocked at 100Mhz

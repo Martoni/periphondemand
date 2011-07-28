@@ -26,7 +26,7 @@
 #include <mach/fpga.h>
 #endif
 
-#include "pod_anybus_interface.h"
+#include <net/anybus_interface.h>
 
 /*$foreach:instance$*/
 #define /*$instance_name$*/_BASE /*$registers_base_address:swb16$*/
