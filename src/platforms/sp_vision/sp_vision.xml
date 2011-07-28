@@ -5,6 +5,39 @@
     </description>
 
     <fpga family="spartan6" device="XC6SLX45" speed="-2" package="FGG484" main_clock="100000"/>
+    <simulation>
+        <simlib filename="sp_vision_test_pkg.vhd">
+            <description>
+                Defines communication functions between imx and fpga:
+
+                write procedures
+                procedure imx_write
+                Params :
+                address      : Write address
+                value        : value to write
+                gls_clk      : clock signal
+                imx_cs_n     : Chip select
+                imx_oe_n     : Read signal
+                imx_eb3_n    : Write signal
+                imx_address  : Address signal
+                imx_data     : Data signal
+                WSC          : Value of imx WSC (see MC9328MXLRM.pdf p169) for sync=0
+
+                read procedures
+                procedure imx_read
+                Params :
+                address      : Write address
+                value        : value returned
+                gls_clk      : clock signal
+                imx_cs_n     : Chip select
+                imx_oe_n     : Read signal
+                imx_eb3_n    : Write signal
+                imx_address  : Address signal
+                imx_data     : Data signal
+                WSC          : Value of imx WSC (see MC9328MXLRM.pdf p169) for sync=0
+            </description>
+        </simlib>
+    </simulation>
 
     <components>
         <component name="wrappers/imx27_wb16_wrapper"/>
@@ -62,7 +95,7 @@
                                 <port size="1" standard="LVCMOS18" position="A18"    name="IO_L65N_SCP2_0" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="E16"    name="IO_L66P_SCP1_0" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="D17"    name="IO_L66N_SCP0_0" dir="inout"/>
-                                <port size="1" standard="LVCMOS18" position="C19"    name="IO_L1P_A25_1" dir="inout"/>
+                                <port size="1" standard="MOBILE_DDR" position="C19"    name="BANK1_RZQ" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="B20"    name="IO_L1N_A24_VREF_1" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="B21"    name="IO_L19P_1" dir="inout"/>
                                 <port size="1" standard="LVCMOS18" position="B22"    name="IO_L19N_1" dir="inout"/>
