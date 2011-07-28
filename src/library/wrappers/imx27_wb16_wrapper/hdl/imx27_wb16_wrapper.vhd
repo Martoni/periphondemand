@@ -56,9 +56,8 @@ Architecture RTL of imx27_wb16_wrapper is
     signal writedata  : std_logic_vector(15 downto 0);
     signal address    : std_logic_vector(12 downto 0);
 begin
-
-    wbm_clk <= gls_reset;
-    wbm_rst <= gls_clk;
+    wbm_clk <= gls_clk;
+    wbm_rst <= gls_reset;
 
     --  External signals synchronization process
     process(gls_clk, gls_reset)
