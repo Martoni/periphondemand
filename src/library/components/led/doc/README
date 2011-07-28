@@ -14,7 +14,7 @@ led component is composed of two 16 bits registers:
 |    0x00    | DATA        | data                  |
 |    0x01    | ID          | component identifiant |
 
-* DATA: memory register, LSB is plugged on led :
+* DATA: memory register, LSB is plugged on led :
 
 | 15 downto 1 |   0  |
 |:-----------:|:----:|

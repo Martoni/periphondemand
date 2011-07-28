@@ -80,7 +80,7 @@ class Hdl_file(WrapperXml):
 
     def setFileName(self,filename):
         if filename.split(".")[-1] not in HDLEXT:
-            raise Error("File "+str(filename)+" is not an HDL file")
+            raise Error("File "+str(filename)+" is not an HDL file")
         self.setAttribute("filename",filename)
 
     def getFilePath(self):

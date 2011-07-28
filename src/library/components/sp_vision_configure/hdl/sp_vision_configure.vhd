@@ -74,7 +74,7 @@ Architecture sp_vision_configure_1 of sp_vision_configure is
 
 begin
 
-    -- config_reg :
+    -- config_reg :
     -- |15|14|13|12|11|10|9|8|7|6|5| 4 |3 |  2  |    1    |  0   |
     -- |X |X |X |X |X |X |X|X|X|X|X|CLK|X|CSI_n|PROGRAM_n|RDWR_n|
     -- If CLK=1, system clock is routed on CCLK and all configuration output

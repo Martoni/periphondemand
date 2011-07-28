@@ -32,7 +32,7 @@ port
     gls_clk   : in std_logic;
 
     -- Wishbone interface signals
-    wbm_clk : out std_logic;
+    wbm_clk : out std_logic;
     wbm_rst : out std_logic;
     wbm_address    : out std_logic_vector(15 downto 0);  -- Address bus
     wbm_readdata   :  in std_logic_vector(15 downto 0);  -- Data bus for read access
@@ -53,7 +53,7 @@ Architecture RTL of imx51_wb16_wrapper is
 begin
 
     wbm_clk <= gls_clk;
-    wbm_reset <= gls_reset;
+    wbm_rst <= gls_reset;
 
     --  External signals synchronization process
     process(gls_clk, gls_reset)
