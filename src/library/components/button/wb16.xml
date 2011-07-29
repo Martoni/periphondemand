@@ -6,11 +6,11 @@
 
     <driver_files>
         <driver_templates architecture="armadeus">
-            <support version="3" />
-            <file name="Makefile" />
-            <file name="board_buttons.c" />
+            <support version="4.0" />
             <file name="button.h" />
+            <file name="board_buttons.c" />
             <file name="gbutton.c" />
+            <file name="Makefile" />
             <file name="testbutton.c" />
         </driver_templates>
     </driver_files>

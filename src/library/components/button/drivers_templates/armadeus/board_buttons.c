@@ -22,18 +22,16 @@
  */
 
 #include <linux/version.h>
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,20)
-#include <linux/config.h>
-#endif
-
-/* form module/drivers */
 #include <linux/init.h>
 #include <linux/module.h>
-
-/* for platform device */
 #include <linux/platform_device.h>
-#ifndef CONFIG_MACH_APF9328 /* To remove when MX1 platform is merged */
-#include <mach/fpga.h>
+
+#include <mach/hardware.h>
+#ifdef CONFIG_MACH_APF9328 /* To remove when MX1 platform is merged */
+# include "../arch/arm/plat-mxc/include/mach/fpga.h"
+# include <mach/irqs.h>
+#else
+# include <mach/fpga.h>
 #endif
 
 #include "button.h"
@@ -42,49 +40,63 @@
 #define /*$instance_name$*/_IRQ   IRQ_FPGA(/*$interrupt_number$*/)
 /*$foreach:instance:end$*/
 
+
 /*$foreach:instance$*/
-static struct plat_button_port plat_button/*$instance_num$*/_data={
-	.name = "/*$instance_name$*/",
-	.interrupt_number=/*$instance_name$*/_IRQ,
-	.num=/*$instance_num$*/,
-	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR +
-						/*$registers_base_address:swb16$*/),
-	.idnum=/*$generic:id$*/,
-	.idoffset=/*$register:swb16:id:offset$*/ * (/*$register:swb16:id:size$*/ /8)
+static struct resource button/*$instance_num$*/_resources[] = {
+	[0] = {
+		.start	= ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/,
+		.end	= ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/ + 3,
+		.flags	= IORESOURCE_MEM,
+	},
+	[1] = {
+		.start	= /*$instance_name$*/_IRQ,
+		.end	= /*$instance_name$*/_IRQ,
+		.flags	= IORESOURCE_IRQ,
+	}
+};
+
+static struct plat_button_port plat_button/*$instance_num$*/_data = {
+	.name		= "/*$instance_name$*/",
+	.num		= /*$instance_num$*/,
+	.idnum		= /*$generic:id$*/,
+	.idoffset	= /*$register:swb16:id:offset$*/ * (/*$register:swb16:id:size$*/ /8)
 };
 /*$foreach:instance:end$*/
 
+void plat_button_release(struct device *dev)
+{
+	dev_dbg(dev, "released\n");
+}
+
+static struct platform_device plat_button_device[] = {
 /*$foreach:instance$*/
-static struct platform_device plat_button/*$instance_num$*/_device={
-	.name = "button",
-	.id=/*$instance_num$*/,
-	.dev={
-		.platform_data = &plat_button/*$instance_num$*/_data
-	},
-};
+    {
+	    .name		= "button",
+	    .id		= /*$instance_num$*/,
+	    .dev		= {
+	    	.release	= plat_button_release,
+	    	.platform_data	= &plat_button/*$instance_num$*/_data
+	    },
+	    .num_resources	= ARRAY_SIZE(button/*$instance_num$*/_resources),
+	    .resource	= button/*$instance_num$*/_resources,
+    }
 /*$foreach:instance:end$*/
+};
 
 static int __init board_button_init(void)
 {
-    int ret = -1;
-/*$foreach:instance$*/
-	ret = platform_device_register(&plat_button/*$instance_num$*/_device);
-	if(ret<0)return ret;
-/*$foreach:instance:end$*/
-    return ret;
+	return platform_device_register(plat_button_device);
 }
 
 static void __exit board_button_exit(void)
 {
-/*$foreach:instance$*/
-	platform_device_unregister(&plat_button/*$instance_num$*/_device);
-/*$foreach:instance:end$*/
+	platform_device_unregister(plat_button_device);
 }
 
 module_init(board_button_init);
 module_exit(board_button_exit);
 
-MODULE_AUTHOR("Fabien Marteau <fabien.marteau@armadeus.com>");
+MODULE_AUTHOR("Julien Boibessot, <julien.boibessot@armadeus.com>");
 MODULE_DESCRIPTION("Board specific button driver");
 MODULE_LICENSE("GPL");
 

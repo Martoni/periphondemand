@@ -1,9 +1,8 @@
 /*
- ***********************************************************************
- *
- * (c) Copyright 2008    Armadeus project
- * Fabien Marteau <fabien.marteau@armadeus.com>
  * Generic driver for Wishbone button IP
+ *
+ * (c) Copyright 2008-2011    The Armadeus Project - ARMadeus Systems
+ * Fabien Marteau <fabien.marteau@armadeus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,343 +17,302 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- **********************************************************************
  */
 
 #include <linux/version.h>
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,20)
-#include <linux/config.h>
-#endif
-
-/* form module/drivers */
 #include <linux/init.h>
 #include <linux/module.h>
-
-/* for file  operations */
-#include <linux/fs.h>
+#include <linux/fs.h>		/* for file  operations */
 #include <linux/cdev.h>
-
-/* copy_to_user function */
-#include <asm/uaccess.h>
-
-/* request_mem_region */
-#include <linux/ioport.h>
-
-/* readw() writew() */
-#include <asm/io.h>
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)
-/* hardware addresses */
-#	include <asm/hardware.h>
-#else
-#	include <mach/hardware.h>
+#include <linux/ioport.h>	/* request_mem_region */
+#include <linux/platform_device.h>
+#include <linux/interrupt.h>
+#if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,29)
+#include <linux/slab.h>		/* kmalloc */
 #endif
 
+#include <asm/uaccess.h>	/* copy_to_user function */
+#include <asm/io.h>		/* readw() writew() */
 
-/* for platform device */
-#include <linux/platform_device.h>
-
-/* button */
 #include "button.h"
 
-
-/* for debugging messages*/
-//#define BUTTON_DEBUG
-
-#undef PDEBUG
-#ifdef BUTTON_DEBUG
-# ifdef __KERNEL__
-/* for kernel spage */
-#   define PDEBUG(fmt,args...) printk(KERN_DEBUG "BUTTON : " fmt, ##args)
-# else
-/* for user space */
-#   define PDEBUG(fmt,args...) printk(stderr, fmt, ##args)
-# endif
-#else
-# define PDEBUG(fmt,args...) /* no debbuging message */
-#endif
-
-/********************************
- * main device structure
- * ******************************/
-struct button_dev{
-    char *name;           /* name of the instance */
-    struct cdev cdev;     /* char device structure */
-    struct semaphore sem; /* mutex */
-	void * membase;  /* base address for instance  */
-    dev_t devno;          /* to store Major and minor numbers */
-    u8 read_in_wait;      /* user is waiting for value to read */
+struct button_dev {
+	char *name;		/* name of the instance */
+	struct cdev cdev;	/* char device structure */
+	struct semaphore sem;	/* mutex */
+	void *membase;		/* base address for instance  */
+	dev_t devno;		/* to store Major and minor numbers */
+	u8 read_in_wait;	/* user is waiting for value to read */
+	struct resource *mem_res;
+	struct resource *irq_res;
 };
 
-/***********************************
- * characters file /dev operations
- * *********************************/
-ssize_t button_read(struct file *fildes, char __user *buff,
-                    size_t count, loff_t *offp)
+ssize_t button_read(struct file *fildes, char __user * buff,
+		    size_t count, loff_t * offp)
 {
-    struct button_dev *ldev = fildes->private_data;
-    u16 data=0;
-    ssize_t retval = 0;
+	struct button_dev *ldev = fildes->private_data;
+	u16 data = 0;
+	ssize_t retval = 0;
 
-    ldev->read_in_wait = 1;
+	ldev->read_in_wait = 1;
 
-    if(*offp + count >= 1)               /* Only one word can be read */
-        count = 1 - *offp;
+	if (*offp + count >= 1)	/* Only one word can be read */
+		count = 1 - *offp;
 
-    if((retval=down_interruptible(&ldev->sem))<0)
-    {
-        goto out;
-    }
+	if ((retval = down_interruptible(&ldev->sem)) < 0) {
+		goto out;
+	}
 
-    data=ioread16(ldev->membase+BUTTON_REG_OFFSET);
-    PDEBUG("Read %d at 0x%x\n",data,(unsigned int)ldev->membase + BUTTON_REG_OFFSET);
+	data = readw(ldev->membase + BUTTON_REG_OFFSET);
+	pr_debug("Read %d at 0x%x\n", data,
+		 (unsigned int)ldev->membase + BUTTON_REG_OFFSET);
 
-    /* return data for user */
-    if(copy_to_user(buff,&data,2)){
-        printk(KERN_WARNING "read : copy to user data error\n");
-        retval = -EFAULT;
-        goto out;
-    }
+	/* return data for user */
+	if (copy_to_user(buff, &data, 2)) {
+		printk(KERN_WARNING "read : copy to user data error\n");
+		retval = -EFAULT;
+		goto out;
+	}
 
-    *offp = *offp + count;
-    retval = 1;
+	*offp = *offp + count;
+	retval = 1;
 
 out:
-    ldev->read_in_wait = 0;
-    return retval;
+	ldev->read_in_wait = 0;
+	return retval;
 }
 
+int button_open(struct inode *inode, struct file *filp)
+{
+	/* Allocate and fill any data structure to be put in filp->private_data */
+	filp->private_data =
+	    container_of(inode->i_cdev, struct button_dev, cdev);
 
-int button_open(struct inode *inode, struct file *filp){
-   /* Allocate and fill any data structure to be put in filp->private_data */
-    filp->private_data = container_of(inode->i_cdev,struct button_dev, cdev);
-    return 0;
+	return 0;
 }
 
 int button_release(struct inode *inode, struct file *filp)
 {
-    struct button_dev *dev;
+	struct button_dev *dev;
 
-    dev = container_of(inode->i_cdev,struct button_dev,cdev);
-    filp->private_data=NULL;
+	dev = container_of(inode->i_cdev, struct button_dev, cdev);
+	filp->private_data = NULL;
 
-    return 0;
+	return 0;
 }
-
 
 static struct file_operations button_fops = {
-    .owner = THIS_MODULE,
-    .read  = button_read,
-    .open  = button_open,
-    .release = button_release,
+	.owner = THIS_MODULE,
+	.read = button_read,
+	.open = button_open,
+	.release = button_release,
 };
 
-/**********************************
- * irq management
- * awake read process
- * ********************************/
+static irqreturn_t button_interrupt(int irq, void *dev_id)
+{
+	struct button_dev *ldev = dev_id;
 
-static irqreturn_t button_interrupt(int irq,void *dev_id){
-  struct button_dev *ldev = dev_id;
-  /* wake up reading process */
-  if(ldev->read_in_wait)up(&ldev->sem);
-  /* acknowledge irq_mngr */
-  return IRQ_HANDLED;
+	/* wake up reading process */
+	if (ldev->read_in_wait)
+		up(&ldev->sem);
+
+	return IRQ_HANDLED;
 }
 
-/**********************************
- * driver probe
- **********************************/
 static int button_probe(struct platform_device *pdev)
 {
-	struct plat_button_port *dev = pdev->dev.platform_data;
-
-    int result = 0;        /* error return */
-    int button_major,button_minor;
-	u16 data;
+	struct plat_button_port *pdata = pdev->dev.platform_data;
+	int ret = 0;
+	int button_major, button_minor;
+	u16 ip_id;
 	struct button_dev *sdev;
-	
-	PDEBUG("Button probing\n");
-    PDEBUG("Register %s num %d\n",dev->name,dev->num);
+	struct resource *mem_res;
+	struct resource *irq_res;
 
-	/**************************/
+	pr_debug("Button probing\n");
+	pr_debug("Register %s num %d\n", pdata->name, pdata->num);
+
+	if (!pdata) {
+		dev_err(&pdev->dev, "Platform data required !\n");
+		return -ENODEV;
+	}
+
+	/* get resources */
+	mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+	if (!mem_res) {
+		dev_err(&pdev->dev, "can't find mem resource\n");
+		return -EINVAL;
+	}
+	irq_res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+	if (!irq_res) {
+		dev_err(&pdev->dev, "can't find irq resource\n");
+		return -EINVAL;
+	}
+
+	mem_res =
+	    request_mem_region(mem_res->start, resource_size(mem_res),
+			       pdev->name);
+	if (!mem_res) {
+		dev_err(&pdev->dev, "iomem already in use\n");
+		return -EBUSY;
+	}
+
+	/* allocate memory for private structure */
+	sdev = kmalloc(sizeof(struct button_dev), GFP_KERNEL);
+	if (!sdev) {
+		ret = -ENOMEM;
+		goto out_release_mem;
+	}
+
+	sdev->membase = ioremap(mem_res->start, resource_size(mem_res));
+	if (!sdev->membase) {
+		dev_err(&pdev->dev, "ioremap failed\n");
+		ret = -ENOMEM;
+		goto out_dev_free;
+	}
+	sdev->mem_res = mem_res;
+	sdev->irq_res = irq_res;
+
 	/* check if ID is correct */
-	/**************************/
-	data = ioread16(dev->membase+BUTTON_ID_OFFSET);
-	if(data != dev->idnum){
-		result = -1;
-		printk(KERN_WARNING "For %s id:%d doesn't match "
-			   "with id read %d,\n is device present ?\n",
-			   dev->name,dev->idnum,data);
-		goto error_id;
+	ip_id = readw(sdev->membase + BUTTON_ID_OFFSET);
+	if (ip_id != pdata->idnum) {
+		ret = -ENODEV;
+		dev_warn(&pdev->dev, "For %s id:%d doesn't match "
+			 "with id read %d,\n is device present ?\n",
+			 pdata->name, pdata->idnum, ip_id);
+		goto out_iounmap;
 	}
 
-	/********************************************/
-	/*	allocate memory for sdev structure	*/
-	/********************************************/
-	sdev = kmalloc(sizeof(struct button_dev),GFP_KERNEL);
-	if(!sdev){
-		result = -ENOMEM;
-		goto error_sdev_alloc;
-	}
-	dev->sdev = sdev;
-	sdev->membase = dev->membase;
-	sdev->name = (char *)kmalloc((1+strlen(dev->name))*sizeof(char),
-								 GFP_KERNEL);
+	pdata->sdev = sdev;
+
+	sdev->name = (char *)kmalloc((1 + strlen(pdata->name)) * sizeof(char),
+				     GFP_KERNEL);
 	if (sdev->name == NULL) {
-		printk("Kmalloc name space error\n");
-		goto error_name_alloc;
+		dev_err(&pdev->dev, "Kmalloc name space error\n");
+		goto out_iounmap;
 	}
-	if (strncpy(sdev->name,dev->name,1+strlen(dev->name)) < 0) {
+	if (strncpy(sdev->name, pdata->name, 1 + strlen(pdata->name)) < 0) {
 		printk("copy error");
-		goto error_name_copy;
+		goto out_name_free;
 	}
 
-	/******************************************/
 	/* Get the major and minor device numbers */
-	/******************************************/
-    button_major = 251;
-    button_minor = dev->num;
+	button_major = 251;
+	button_minor = pdata->num;
 
 	sdev->devno = MKDEV(button_major, button_minor);
-	result = alloc_chrdev_region(&(sdev->devno),button_minor, 1,dev->name);
-	if (result < 0) {
-		printk(KERN_WARNING "%s: can't get major %d\n",
-							dev->name,button_major);
-		goto error_devno;
+	ret = alloc_chrdev_region(&(sdev->devno), button_minor, 1, pdata->name);
+	if (ret < 0) {
+		dev_warn(&pdev->dev, "%s: can't get major %d\n",
+			 pdata->name, button_major);
+		goto out_name_free;
 	}
-	printk(KERN_INFO "%s: MAJOR: %d MINOR: %d\n",
-		   dev->name,
-		   MAJOR(sdev->devno),
-		   MINOR(sdev->devno));
+	dev_info(&pdev->dev, "%s: MAJOR: %d MINOR: %d\n",
+		 pdata->name, MAJOR(sdev->devno), MINOR(sdev->devno));
 
-    /* initiate mutex locked */
-    sdev->read_in_wait = 0;
-    init_MUTEX_LOCKED(&sdev->sem);
+	/* initiate mutex locked */
+	sdev->read_in_wait = 0;
+	sema_init(&sdev->sem, 0);
 
-	/****************************/
-    /* Init the cdev structure  */
-	/****************************/
-    PDEBUG("Init the cdev structure\n");
-    cdev_init(&sdev->cdev,&button_fops);
-    sdev->cdev.owner = THIS_MODULE;
-    sdev->cdev.ops   = &button_fops;
+	/* Init the cdev structure  */
+	cdev_init(&sdev->cdev, &button_fops);
+	sdev->cdev.owner = THIS_MODULE;
+	sdev->cdev.ops = &button_fops;
 
-    /* Add the device to the kernel, connecting cdev to major/minor number */
-    PDEBUG("%s: Add the device to the kernel, "
-		   "connecting cdev to major/minor number \n",dev->name);
-    result = cdev_add(&sdev->cdev,sdev->devno,1);
-    if(result < 0){
-        printk(KERN_WARNING "%s: can't add cdev\n",dev->name);
-        goto error_cdev_add;
-    }
+	pr_debug("%s: Add the device to the kernel, "
+		 "connecting cdev to major/minor number \n", pdata->name);
+	ret = cdev_add(&sdev->cdev, sdev->devno, 1);
+	if (ret < 0) {
+		dev_warn(&pdev->dev, "%s: can't add cdev\n", pdata->name);
+		goto out_cdev_free;
+	}
 
-    /* irq registering */
-    result = request_irq(dev->interrupt_number,
-						 button_interrupt,
-						 IRQF_SAMPLE_RANDOM,
-						 sdev->name,
-						 sdev);
-	if(result < 0){
+	/* irq registering */
+	ret = request_irq(sdev->irq_res->start,
+			  button_interrupt,
+			  IRQF_SAMPLE_RANDOM, sdev->name, sdev);
+	if (ret < 0) {
 		printk(KERN_ERR "Can't register irq %d\n",
-			   dev->interrupt_number);
+		       sdev->irq_res->start);
 		goto request_irq_error;
 	}
-    printk(KERN_INFO "button: irq registered : %d\n",
-		   dev->interrupt_number);
 
-    /* OK module inserted ! */
-    printk(KERN_INFO "%s insered\n",dev->name);
-    return 0;
+	/* OK driver ready ! */
+	printk(KERN_INFO "%s loaded\n", pdata->name);
+	return 0;
 
-	/*********************/
-	/* Errors management */
-	/*********************/
-	/* freeing irq */
-	free_irq(dev->interrupt_number,sdev);
+	free_irq(sdev->irq_res->start, sdev);
 request_irq_error:
-	/* delete the cdev structure */
 	cdev_del(&sdev->cdev);
-	PDEBUG("%s:cdev deleted\n",dev->name);
-error_cdev_add:
-	/* free major and minor number */
-	unregister_chrdev_region(sdev->devno,1);
-	printk(KERN_INFO "%s: Led deleted\n",dev->name);
-error_devno:
-error_name_copy:
+	pr_debug("%s:cdev deleted\n", pdata->name);
+out_cdev_free:
+	unregister_chrdev_region(sdev->devno, 1);
+	printk(KERN_INFO "%s: button deleted\n", pdata->name);
+out_name_free:
 	kfree(sdev->name);
-error_name_alloc:
+out_iounmap:
+	iounmap(sdev->membase);
+out_dev_free:
 	kfree(sdev);
-error_sdev_alloc:
-	printk(KERN_ERR "%s: not inserted\n", dev->name);
-error_id:
-	return result;
+out_release_mem:
+	release_mem_region(mem_res->start, resource_size(mem_res));
+
+	return ret;
 }
 
 static int __devexit button_remove(struct platform_device *pdev)
 {
-	struct plat_button_port *dev = pdev->dev.platform_data;
-	struct button_dev *sdev = (*dev).sdev;
-	/* freeing irq */
-	free_irq(dev->interrupt_number,sdev);
-//request_irq_error:
-	/* delete the cdev structure */
-	cdev_del(&sdev->cdev);
-	PDEBUG("%s:cdev deleted\n",dev->name);
-//error_cdev_add:
-	/* free major and minor number */
-	unregister_chrdev_region(sdev->devno,1);
-	printk(KERN_INFO "%s: Led deleted\n",dev->name);
-//error_devno:
-//error_name_copy:
-	kfree(sdev->name);
-//error_name_alloc:
-	kfree(sdev);
-//error_sdev_alloc:
-	printk(KERN_INFO "%s: deleted with success\n", dev->name);
-//error_id:
-	return 0;
+	struct plat_button_port *pdata = pdev->dev.platform_data;
+	struct button_dev *sdev = (*pdata).sdev;
 
+	free_irq(sdev->irq_res->start, sdev);
+
+	cdev_del(&sdev->cdev);
+	pr_debug("%s:cdev deleted\n", pdata->name);
+
+	unregister_chrdev_region(sdev->devno, 1);
+	printk(KERN_INFO "%s: button deleted\n", pdata->name);
+
+	kfree(sdev->name);
+	iounmap(sdev->membase);
+	kfree(sdev);
+	release_mem_region(sdev->mem_res->start, resource_size(sdev->mem_res));
+	printk(KERN_INFO "%s: deleted with success\n", pdata->name);
+
+	return 0;
 }
 
-static struct platform_driver plat_button_driver =
-{
-    .probe      = button_probe,
-    .remove     = __devexit_p(button_remove),
-    .driver     =
-    {
-        .name    = "button",
-        .owner   = THIS_MODULE,
-    },
+static struct platform_driver plat_button_driver = {
+	.probe = button_probe,
+	.remove = __devexit_p(button_remove),
+	.driver = {
+		   .name = "button",
+		   .owner = THIS_MODULE,
+		   },
 };
 
-/**********************************
- * Module management
- **********************************/
 static int __init button_init(void)
 {
-    int ret;
+	int ret;
 
-    PDEBUG("Platform driver name %s",plat_button_driver.driver.name);
-    ret = platform_driver_register(&plat_button_driver);
-    if (ret) {
-        printk(KERN_ERR "Platform driver register error\n");
-        return ret;
-    }
-    return 0;
+	pr_debug("Platform driver name %s", plat_button_driver.driver.name);
+	ret = platform_driver_register(&plat_button_driver);
+	if (ret) {
+		printk(KERN_ERR "Platform driver register error\n");
+		return ret;
+	}
+
+	return 0;
 }
 
 static void __exit button_exit(void)
 {
-    platform_driver_unregister(&plat_button_driver);
+	platform_driver_unregister(&plat_button_driver);
 }
 
 module_init(button_init);
 module_exit(button_exit);
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Fabien Marteau <fabien.marteau@armadeus.com> "
-			  "- ARMadeus Systems");
-MODULE_DESCRIPTION("button device generic driver");
-
-
+MODULE_AUTHOR("Fabien Marteau <fabien.marteau@armadeus.com>");
+MODULE_DESCRIPTION("Wishbone button IP generic driver");
