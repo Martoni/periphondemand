@@ -3,46 +3,43 @@
 # --  Generate a project with one led and one button
 # -----------------------------------------------------
 !rm -rf ledbutton
-project.listcomponents
-project.create ledbutton
-project.selectplatform apf9328
-project.setforce IO_L01N_3 gnd
-project.setforce IO_L23N_2 vcc
-project.addinstance components.button
-project.addinstance components.led.wb16
-project.listinterfaces button00
-#project.connectpin led00.int_led.led apf9328.fpga.IO_1
-#project.connectpin button00.int_button.button.0 apf9328.fpga.IO_L01N_0
-project.connectpin button00.int_button.irq irq_mngr00.irq.irqport.0
-project.autoconnectbus
+listcomponents
+create ledbutton
+selectplatform standard.apf9328
+setforce IO_L01N_3 gnd
+setforce IO_L23N_2 vcc
+addinstance components.button
+addinstance components.led.wb16
+listinterfaces button00
+#connectpin led00.int_led.led apf9328.fpga.IO_1
+#connectpin button00.int_button.button.0 apf9328.fpga.IO_L01N_0
+connectpin button00.int_button.irq irq_mngr00.irq.irqport.0
+autoconnectbus
 # -----------------------
 # - Intercon generation
 # -----------------------
-project.intercon imx9328_wb16_wrapper00.mwb16
+intercon imx9328_wb16_wrapper00.mwb16
+intercon rstgen_syscon00.candroutput
 # -----------------------
 # - Top generation
 # -----------------------
-project.top
-project.synthesis.selecttoolchain ise
-project.synthesis.generateproject
-project.saveproject
+top
+synthesis.selecttoolchain ise
+synthesis.generateproject
 # ---------------------
 # -- simulation      --
 # ---------------------
-project.simulation.selecttoolchain ghdl
-project.simulation.generateproject
+simulation.selecttoolchain ghdl
+simulation.generateproject
 
 # ---------------------
 # -- driver
 # ---------------------
-project.driver.selecttoolchain armadeus
-project.driver.generateproject
-project.driver.selectprojecttree ~/virgin-apf9328/target/linux/modules/fpga/POD
-project.driver.copydrivers
-project.saveproject
+driver.selecttoolchain armadeus
+driver.generateproject
 # ---------------------
 # -- mapping
 # ---------------------
-project.getmapping imx9328_wb16_wrapper00.mwb16
-project.report
+getmapping imx9328_wb16_wrapper00.mwb16
+report
 exit
