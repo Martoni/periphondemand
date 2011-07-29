@@ -22,63 +22,64 @@
  */
 
 #include <linux/version.h>
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,20)
-#include <linux/config.h>
-#endif
-
-/* form module/drivers */
 #include <linux/init.h>
 #include <linux/module.h>
-
-/* for platform device */
 #include <linux/platform_device.h>
-#ifndef CONFIG_MACH_APF9328 /* To remove when MX1 platform is merged */
-#include <mach/fpga.h>
+
+#ifdef CONFIG_MACH_APF9328 /* To remove when MX1 platform is merged */
+# include "../arch/arm/plat-mxc/include/mach/fpga.h"
+# include <mach/irqs.h>
+#else
+# include <mach/fpga.h>
 #endif
 
-#include"led.h"
+#include "led.h"
 
 /*$foreach:instance$*/
+static struct resource led/*$instance_num$*/_resources[] = {
+	[0] = {
+		.start	= ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/,
+		.end	= ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/ + 3,
+		.flags	= IORESOURCE_MEM,
+	},
+};
+
 static struct plat_led_port plat_led/*$instance_num$*/_data = {
-	.name = "/*$instance_name$*/",
-	.num=/*$instance_num$*/,
-	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/),
-	.idnum=/*$generic:id$*/,
-	.idoffset=/*$register:swb16:id:offset$*/ * (16 /8)
+	.name		= "/*$instance_name$*/",
+	.num		= /*$instance_num$*/,
+	.idnum		= /*$generic:id$*/,
+	.idoffset	=  /*$register:swb16:id:offset$*/ * (16 /8)
 };
 /*$foreach:instance:end$*/
 
-void plat_led_release(struct device *dev){
-	PDEBUG("device %s .released\n",dev->bus_id);
+void plat_led_release(struct device *dev)
+{
+	dev_dbg(dev, "released\n");
 }
 
+static struct platform_device plat_led_devices[] = {
 /*$foreach:instance$*/
-static struct platform_device plat_led/*$instance_num$*/_device = {
-	.name = "led",
-	.id=/*$instance_num$*/,
-	.dev={
-		.release = plat_led_release,
-		.platform_data=&plat_led/*$instance_num$*/_data},
-};
+    {
+	    .name	= "led",
+	    .id	= /*$instance_num$*/,
+	    .dev	= {
+	    	.release	= plat_led_release,
+	    	.platform_data	= &plat_led/*$instance_num$*/_data
+	    },
+	    .num_resources	= ARRAY_SIZE(led0_resources),
+	    .resource	= led0_resources,
+    }
 /*$foreach:instance:end$*/
+};
 
 static int __init sled_init(void)
 {
-	int ret=-1;
-/*$foreach:instance$*/	
-	ret = platform_device_register(&plat_led/*$instance_num$*/_device);
-	if(ret<0)return ret;
-/*$foreach:instance:end$*/
-	PDEBUG("*led inserted*\n");
-	return ret;
+	return platform_device_register(plat_led_devices);
 }
 
 static void __exit sled_exit(void)
 {
-	printk(KERN_WARNING "deleting board_leds\n");
-/*$foreach:instance$*/	
-	platform_device_unregister(&plat_led/*$instance_num$*/_device);
-/*$foreach:instance:end$*/
+	platform_device_unregister(plat_led_devices);
 }
 
 module_init(sled_init);

@@ -1,9 +1,8 @@
 /*
- ***********************************************************************
+ * Generic driver for Wishbone LED IP
  *
  * (c) Copyright 2008	Armadeus project
  * Fabien Marteau <fabien.marteau@armadeus.com>
- * Generic driver for Wishbone led IP
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,76 +17,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- **********************************************************************
  */
 
 #include <linux/version.h>
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,20)
-#include <linux/config.h>
-#endif
-
-/* form module/drivers */
 #include <linux/init.h>
 #include <linux/module.h>
-
-/* for file  operations */
 #include <linux/fs.h>
 #include <linux/cdev.h>
-
-/* copy_to_user function */
-#include <asm/uaccess.h>
-
-/* request_mem_region */
-#include <linux/ioport.h>
-
-/* readw() writew() */
-#include <asm/io.h>
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)
-/* hardware addresses */
-#	include <asm/hardware.h>
-#else
-#	include <mach/hardware.h>
+#include <linux/ioport.h>	/* request_mem_region */
+#include <linux/platform_device.h>
+#if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,29)
+#include <linux/slab.h>		/* kmalloc */
 #endif
 
+#include <asm/uaccess.h>	/* copy_to_user function */
+#include <asm/io.h>		/* readw() writew() */
+#include <mach/hardware.h>
 
-/* for platform device */
-#include <linux/platform_device.h>
-
-/* led */
 #include "led.h"
 
-
-/* for debugging messages*/
-//#define LED_DEBUG
-
-#undef PDEBUG
-#ifdef LED_DEBUG
-# ifdef __KERNEL__
-/* for kernel spage */
-#   define PDEBUG(fmt,args...) printk(KERN_DEBUG "LED : " fmt, ##args)
-# else
-/* for user space */
-#   define PDEBUG(fmt,args...) printk(stderr, fmt, ##args)
-# endif
-#else
-# define PDEBUG(fmt,args...) /* no debbuging message */
-#endif
-
-/*************************/
 /* main device structure */
-/*************************/
-struct led_dev{
+struct led_dev {
 	char *name;		/* the name of the instance */
 	int  loaded_led_num;/* number of the led, depends on load order*/
 	struct cdev cdev;/* Char device structure */
 	void * membase;  /* base address for instance  */
 	dev_t devno;	 /* to store Major and minor numbers */
+	struct resource *mem_res;
 };
 
-/******************************/
-/* to read write led register */
-/******************************/
 ssize_t led_read(struct file *fildes, char __user *buff,
 				 size_t count, loff_t *offp);
 
@@ -109,25 +67,27 @@ struct file_operations led_fops = {
  * characters file /dev operations
  * *********************************/
 ssize_t led_read(struct file *fildes, char __user *buff,
-				 size_t count, loff_t *offp){
+				 size_t count, loff_t *offp)
+{
 	struct led_dev *sdev = fildes->private_data;
 	u16 data=0;
-	PDEBUG("Read value\n");
-	if(*offp != 0 ){ /* offset must be 0 */
-		PDEBUG("offset %d\n",(int)*offp);
+
+	pr_debug("Read value\n");
+	if (*offp != 0) { /* offset must be 0 */
+		pr_debug("offset %d\n", (int)*offp);
 		return 0;
 	}
 
-	PDEBUG("count %d\n",count);
-	if(count > 2){ /* 16bits max*/
-		count = 2;
+	pr_debug("count %d\n", count);
+	if (count > 2) { /* 16bits max*/
+		count = 2; 
 	}
 
-	data = ioread16(sdev->membase+LED_REG_OFFSET);
-	PDEBUG("Read %d at %x\n",data,(int)(sdev->membase+LED_REG_OFFSET));
+	data = readw(sdev->membase + LED_REG_OFFSET);
+	pr_debug("Read %d at %x\n", data, (int)(sdev->membase + LED_REG_OFFSET));
 
 	/* return data for user */
-	if(copy_to_user(buff,&data,count)){
+	if (copy_to_user(buff, &data, count)) {
 		printk(KERN_WARNING "read : copy to user data error\n");
 		return -EFAULT;
 	}
@@ -135,186 +95,191 @@ ssize_t led_read(struct file *fildes, char __user *buff,
 }
 
 ssize_t led_write(struct file *fildes, const char __user *
-				  buff,size_t count, loff_t *offp){
+				  buff,size_t count, loff_t *offp)
+{
 	struct led_dev *sdev = fildes->private_data;
-	u16 data=0;
+	u16 data = 0;
 
-	if(*offp != 0){ /* offset must be 0 */
-		PDEBUG("offset %d\n",(int)*offp);
+	if (*offp != 0) { /* offset must be 0 */
+		pr_debug("offset %d\n", (int)*offp);
 		return 0;
 	}
 
-	PDEBUG("count %d\n",count);
-	if(count > 2){ /* 16 bits max)*/
+	pr_debug("count %d\n", count);
+	if (count > 2) { /* 16 bits max)*/
 		count = 2;
 	}
 
-	if(copy_from_user(&data,buff,count)){
+	if (copy_from_user(&data, buff, count)) {
 		printk(KERN_WARNING "write : copy from user error\n");
 		return -EFAULT;
 	}
 
-	PDEBUG("Write %d at %x\n",
+	pr_debug("Write %d at %x\n",
 		   data,
-		   (int)(sdev->membase+LED_REG_OFFSET));
-	iowrite16(data,sdev->membase+LED_REG_OFFSET);
+		   (int)(sdev->membase + LED_REG_OFFSET));
+	writew(data, sdev->membase + LED_REG_OFFSET);
 
 	return count;
 }
 
-int led_open(struct inode *inode, struct file *filp){
+int led_open(struct inode *inode, struct file *filp)
+{
 	/* Allocate and fill any data structure to be put in filp->private_data */
-	filp->private_data = container_of(inode->i_cdev,struct led_dev, cdev);
-	PDEBUG( "Led opened\n");
+	filp->private_data = container_of(inode->i_cdev, struct led_dev, cdev);
+	pr_debug("LED opened\n");
 	return 0;
 }
 
-/* ******************************
- * Init and release functions
- * ******************************/
 int led_release(struct inode *inode, struct file *filp)
 {
 	struct led_dev *dev;
 
-	dev = container_of(inode->i_cdev,struct led_dev,cdev);
-	PDEBUG( "%s: released\n",dev->name);
+	dev = container_of(inode->i_cdev, struct led_dev, cdev);
+	pr_debug("%s: released\n", dev->name);
 	filp->private_data=NULL;
 
 	return 0;
 }
 
-/**********************************
- * driver probe
- **********************************/
 static int led_probe(struct platform_device *pdev)
 {
-	struct plat_led_port *dev = pdev->dev.platform_data;
-
-	int result = 0;				 /* error return */
-	int led_major,led_minor;
-	u16 data;
+	struct plat_led_port *pdata = pdev->dev.platform_data;
+	int ret = 0;
+	int led_major, led_minor;
+	u16 ip_id;
 	struct led_dev *sdev;
+	struct resource *mem_res;
 
-	PDEBUG("Led probing\n");
-	PDEBUG("Register %s num %d\n",dev->name,dev->num);
+	pr_debug("LED probing\n");
+	pr_debug("Register %s num %d\n", pdata->name, pdata->num);
 
-	/**************************/
+	if (!pdata) {
+		dev_err(&pdev->dev, "Platform data required !\n");
+		return -ENODEV;
+	}
+
+	/* get resources */
+	mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+	if (!mem_res) {
+		dev_err(&pdev->dev, "can't find mem resource\n");
+		return -EINVAL;
+	}
+
+	mem_res =
+	    request_mem_region(mem_res->start, resource_size(mem_res),
+			       pdev->name);
+	if (!mem_res) {
+		dev_err(&pdev->dev, "iomem already in use\n");
+		return -EBUSY;
+	}
+
+	/* allocate memory for private structure */
+	sdev = kmalloc(sizeof(struct led_dev), GFP_KERNEL);
+	if (!sdev) {
+		ret = -ENOMEM;
+		goto out_release_mem;
+	}
+
+	sdev->membase = ioremap(mem_res->start, resource_size(mem_res));
+	if (!sdev->membase) {
+		dev_err(&pdev->dev, "ioremap failed\n");
+		ret = -ENOMEM;
+		goto out_dev_free;
+	}
+	sdev->mem_res = mem_res;
+
 	/* check if ID is correct */
-	/**************************/
-	data = ioread16(dev->membase+dev->idoffset);
-	if(data != dev->idnum){
-		result = -1;
+	ip_id = readw(sdev->membase + pdata->idoffset);
+	if (ip_id != pdata->idnum) {
+		ret = -ENODEV;
 		printk(KERN_WARNING "For %s id:%d doesn't match with "
 			   "id read %d,\n is device present ?\n",
-			   dev->name,dev->idnum,data);
-		goto error_id;
+			   pdata->name, pdata->idnum, ip_id);
+		goto out_iounmap;
 	}
 
-	/********************************************/
-	/*	allocate memory for sdev structure	*/
-	/********************************************/
-	sdev = kmalloc(sizeof(struct led_dev),GFP_KERNEL);
-	if(!sdev){
-		result = -ENOMEM;
-		goto error_sdev_alloc;
-	}
-	dev->sdev = sdev;
-	sdev->membase = dev->membase;
-	sdev->name = (char *)kmalloc((1+strlen(dev->name))*sizeof(char),
+	pdata->sdev = sdev;
+	sdev->name = (char *)kmalloc((1+strlen(pdata->name))*sizeof(char), 
 								 GFP_KERNEL);
 	if (sdev->name == NULL) {
 		printk("Kmalloc name space error\n");
-		goto error_name_alloc;
+		goto out_iounmap;
 	}
-	if (strncpy(sdev->name,dev->name,1+strlen(dev->name)) < 0) {
+	if (strncpy(sdev->name, pdata->name, 1+strlen(pdata->name)) < 0) {
 		printk("copy error");
-		goto error_name_copy;
+		goto out_name_free;
 	}
 
-	/******************************************/
 	/* Get the major and minor device numbers */
-	/******************************************/
-
 	led_major = 252;
-	led_minor = dev->num ;/* num come from plat_led_port data structure */
+	led_minor = pdata->num;
 
 	sdev->devno = MKDEV(led_major, led_minor);
-	result = alloc_chrdev_region(&(sdev->devno),led_minor, 1,dev->name);
-	if (result < 0) {
-		printk(KERN_WARNING "%s: can't get major %d\n",dev->name,led_major);
-		goto error_devno;
+	ret = alloc_chrdev_region(&(sdev->devno), led_minor, 1, pdata->name);
+	if (ret < 0) {
+		printk(KERN_WARNING "%s: can't get major %d\n", pdata->name, led_major);
+		goto out_name_free;
 	}
 	printk(KERN_INFO "%s: MAJOR: %d MINOR: %d\n",
-		   dev->name,
+		   pdata->name,
 		   MAJOR(sdev->devno),
 		   MINOR(sdev->devno));
 
-	/****************************/
 	/* Init the cdev structure  */
-	/****************************/
-	PDEBUG("Init the cdev structure\n");
+	pr_debug("Init the cdev structure\n");
 	cdev_init(&sdev->cdev, &led_fops);
 	sdev->cdev.owner = THIS_MODULE;
 	sdev->cdev.ops   = &led_fops;
 
 	/* Add the device to the kernel, connecting cdev to major/minor number */
-	PDEBUG("%s:Add the device to the kernel, "
-		   "connecting cdev to major/minor number \n", dev->name);
-	result = cdev_add(&sdev->cdev, sdev->devno, 1);
-	if (result) {
-		printk(KERN_WARNING "%s: can't add cdev\n", dev->name);
-		goto error_cdev_add;
+	pr_debug("%s:Add the device to the kernel, "
+		   "connecting cdev to major/minor number \n", pdata->name);
+	ret = cdev_add(&sdev->cdev, sdev->devno, 1);
+	if (ret) {
+		printk(KERN_WARNING "%s: can't add cdev\n", pdata->name);
+		goto out_cdev_free;
 	}
 
-	/* initialize led value */
-	data=1;
-	iowrite16(data,sdev->membase);
-	PDEBUG("Wrote %x at %x\n", data,(int)( sdev->membase+LED_REG_OFFSET));
+	/* initialize LED value */
+	writew(1, sdev->membase);
 
 	/* OK module inserted ! */
-	printk(KERN_INFO "Led module %s insered\n", dev->name);
+	printk(KERN_INFO "LED module %s inserted\n", pdata->name);
 	return 0;
 
-	/*********************/
-	/* Errors management */
-	/*********************/
-	/* delete the cdev structure */
 	cdev_del(&sdev->cdev);
-	PDEBUG("%s:cdev deleted\n",dev->name);
-error_cdev_add:
-	/* free major and minor number */
-	unregister_chrdev_region(sdev->devno,1);
-	printk(KERN_INFO "%s: Led deleted\n",dev->name);
-error_devno:
-error_name_copy:
+out_cdev_free:
+	unregister_chrdev_region(sdev->devno, 1);
+	printk(KERN_INFO "%s: LED deleted\n", pdata->name);
+out_name_free:
 	kfree(sdev->name);
-error_name_alloc:
+out_iounmap:
+	iounmap(sdev->membase);
+out_dev_free:
 	kfree(sdev);
-error_sdev_alloc:
-	printk(KERN_ERR "%s: not inserted\n", dev->name);
-error_id:
-	return result;
+out_release_mem:
+	release_mem_region(mem_res->start, resource_size(mem_res));
+
+	return ret;
 }
 
 static int __devexit led_remove(struct platform_device *pdev)
 {
 	struct plat_led_port *dev = pdev->dev.platform_data;
 	struct led_dev *sdev = (*dev).sdev;
-	PDEBUG("Unregister %s, number %d\n",dev->name,dev->num);
-	/* delete the cdev structure */
-	PDEBUG("cdev name : %s\n",sdev->name);
+
+	pr_debug("Unregister %s, number %d\n", dev->name, dev->num);
+	pr_debug("cdev name : %s\n", sdev->name);
 	cdev_del(&sdev->cdev);
-	PDEBUG("%s:cdev deleted\n",dev->name);
-	/*error_cdev_add:*/
-	/* free major and minor number */
-	unregister_chrdev_region(sdev->devno,1);
-	/*error_devno:*/
-	/*error_name_copy:*/
+	pr_debug("%s:cdev deleted\n", dev->name);
+	unregister_chrdev_region(sdev->devno, 1);
 	kfree(sdev->name);
-	/*error_name_alloc:*/
+	iounmap(sdev->membase);
 	kfree(sdev);
-	/*error_sdev_alloc:*/
+	release_mem_region(sdev->mem_res->start, resource_size(sdev->mem_res));
 	printk(KERN_INFO "%s: deleted with success\n", dev->name);
+
 	return 0;
 }
 
@@ -327,14 +292,11 @@ static struct platform_driver plat_led_driver = {
 	},
 };
 
-/**********************************
- * Module management
- **********************************/
 static int __init led_init(void)
 {
 	int ret;
 
-	PDEBUG("Platform driver name %s\n", plat_led_driver.driver.name);
+	pr_debug("Platform driver name %s\n", plat_led_driver.driver.name);
 	ret = platform_driver_register(&plat_led_driver);
 	return ret;
 }
@@ -342,13 +304,13 @@ static int __init led_init(void)
 static void led_exit(void)
 {
 	platform_driver_unregister(&plat_led_driver);
-	PDEBUG("driver unregistered\n");
+	pr_debug("driver unregistered\n");
 }
 
 module_init(led_init);
 module_exit(led_exit);
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Fabien Marteau <fabien.marteau@armadeus.com>-ARMadeus Systems");
-MODULE_DESCRIPTION("Led device driver");
+MODULE_AUTHOR("Fabien Marteau <fabien.marteau@armadeus.com>");
+MODULE_DESCRIPTION("Wishbone IP LED device driver");
 

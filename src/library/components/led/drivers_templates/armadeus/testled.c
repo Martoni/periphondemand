@@ -1,4 +1,4 @@
-/* a program to write/read values on fpga address map
+/* a program to test led driver
  * Fabien Marteau <fabien.marteau@armadeus.com>
  * 7 april 2008
  * fpgaaccess.h

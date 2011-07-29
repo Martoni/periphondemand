@@ -13,7 +13,7 @@
 
     <driver_files>
         <driver_templates architecture="armadeus">
-            <support version="3" />
+            <support version="4.0" />
             <file name="Makefile" />
             <file name="g_led.c" />
             <file name="led.h" />
