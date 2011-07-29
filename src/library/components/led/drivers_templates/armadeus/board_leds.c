@@ -32,6 +32,9 @@
 
 /* for platform device */
 #include <linux/platform_device.h>
+#ifndef CONFIG_MACH_APF9328 /* To remove when MX1 platform is merged */
+#include <mach/fpga.h>
+#endif
 
 #include"led.h"
 
@@ -39,7 +42,7 @@
 static struct plat_led_port plat_led/*$instance_num$*/_data = {
 	.name = "/*$instance_name$*/",
 	.num=/*$instance_num$*/,
-	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR_VIRT + /*$registers_base_address:swb16$*/),
+	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/),
 	.idnum=/*$generic:id$*/,
 	.idoffset=/*$register:swb16:id:offset$*/ * (16 /8)
 };

@@ -38,7 +38,7 @@
 #	include <linux/semaphore.h>
 #endif
 
-#ifdef CONFIG_MACH_APF27 /* To remove when MX1 platform merged */
+#ifndef CONFIG_MACH_APF9328 /* To remove when MX1 platform is merged */
 #include <mach/fpga.h>
 #endif
 
@@ -82,7 +82,7 @@ void plat_uart_release(struct device *dev)
 
 /*$foreach:instance$*/
 static struct plat_serial8250_port ocore_16550_uart/*$instance_num$*/_data[] = {
-	PORT( ARMADEUS_FPGA_BASE_ADDR_VIRT+/*$instance_name$*/_BASE,
+	PORT( ARMADEUS_FPGA_BASE_ADDR+/*$instance_name$*/_BASE,
 		  ARMADEUS_FPGA_BASE_ADDR_PHYS+/*$instance_name$*/_BASE,
 		  /*$instance_name$*/_INPUT_CLOCK,
 		  /*$instance_name$*/_IRQ ),
@@ -110,7 +110,7 @@ static int __init ocore_16550_init(void)
 	/*************************************************/
 	/* check if ID is correct for /*$instance_name$*/*/
 	/*************************************************/
-	data = ioread16((void*)ARMADEUS_FPGA_BASE_ADDR_VIRT+/*$registers_base_address:swb16$*/+/*$register:swb16:id:offset$*/*2);
+	data = ioread16((void*)ARMADEUS_FPGA_BASE_ADDR+/*$registers_base_address:swb16$*/+/*$register:swb16:id:offset$*/*2);
 	if(data != /*$generic:id$*/){
 		printk(KERN_WARNING "For /*$instance_name$*/ id:/*$generic:id$*/ doesn't match with "
 			   "id read %d,\n is device present ?\n",data);

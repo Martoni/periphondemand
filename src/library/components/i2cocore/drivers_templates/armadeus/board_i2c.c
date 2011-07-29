@@ -22,12 +22,8 @@
 #include <linux/interrupt.h>
 #include <linux/wait.h>
 #include <asm/io.h>
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)
-/* hardware addresses */
-#	include <asm/hardware.h>
-#else
-#	include <mach/hardware.h>
+#ifndef CONFIG_MACH_APF9328 /* To remove when MX1 platform is merged */
+#include <mach/fpga.h>
 #endif
 
 #include "i2c-ocores-pod.h"
@@ -36,7 +32,7 @@
 #define CLOCK_FPGA     (/*$main_clock$*/)
 
 /*$foreach:instance$*/
-#define /*$instance_name$*/_BASEADDR (ARMADEUS_FPGA_BASE_ADDR_VIRT + /*$registers_base_address:swb16$*/)
+#define /*$instance_name$*/_BASEADDR (ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/)
 #define /*$instance_name$*/_IRQ      (IRQ_FPGA(/*$interrupt_number$*/))
 /*$foreach:instance:end$*/
 

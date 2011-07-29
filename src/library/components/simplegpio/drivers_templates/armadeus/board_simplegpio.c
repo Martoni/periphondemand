@@ -33,7 +33,7 @@
 /* for platform device */
 #include <linux/platform_device.h>
 #include <mach/hardware.h>
-#ifdef CONFIG_MACH_APF27 /* To remove when MX1 platform merged */
+#ifndef CONFIG_MACH_APF9328 /* To remove when MX1 platform is merged */
 #include <mach/fpga.h>
 #endif
 
@@ -44,7 +44,7 @@
 static struct plat_simplegpio_port plat_simplegpio/*$instance_num$*/_data = {
 	.name = "/*$instance_name$*/",
 	.num=/*$instance_num$*/,
-	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR_VIRT + /*$registers_base_address:swb16$*/),
+	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/),
 	.idnum=/*$generic:id$*/,
 	.idoffset=/*$register:swb16:id:offset$*/ * (16 /8)
 };

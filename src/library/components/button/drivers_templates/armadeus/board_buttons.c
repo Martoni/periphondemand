@@ -32,11 +32,9 @@
 
 /* for platform device */
 #include <linux/platform_device.h>
-#include <mach/hardware.h>
-#ifdef CONFIG_MACH_APF27 /* To remove when MX1 platform merged */
+#ifndef CONFIG_MACH_APF9328 /* To remove when MX1 platform is merged */
 #include <mach/fpga.h>
 #endif
-
 
 #include "button.h"
 
@@ -49,7 +47,7 @@ static struct plat_button_port plat_button/*$instance_num$*/_data={
 	.name = "/*$instance_name$*/",
 	.interrupt_number=/*$instance_name$*/_IRQ,
 	.num=/*$instance_num$*/,
-	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR_VIRT +
+	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR +
 						/*$registers_base_address:swb16$*/),
 	.idnum=/*$generic:id$*/,
 	.idoffset=/*$register:swb16:id:offset$*/ * (/*$register:swb16:id:size$*/ /8)

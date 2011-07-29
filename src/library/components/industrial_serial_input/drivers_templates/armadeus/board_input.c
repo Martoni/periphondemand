@@ -28,7 +28,7 @@
 #include <linux/module.h>
 #include <linux/platform_device.h>
 #include <mach/hardware.h>
-#ifdef CONFIG_MACH_APF27 /* To remove when MX1 platform merged */
+#ifndef CONFIG_MACH_APF9328 /* To remove when MX1 platform is merged */
 #include <mach/fpga.h>
 #endif
 
@@ -43,7 +43,7 @@ static struct plat_input_port plat_input/*$instance_num$*/_data={
 	.name = "/*$instance_name$*/",
 	.interrupt_number=/*$instance_name$*/_IRQ,
 	.num=/*$instance_num$*/,
-	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR_VIRT +
+	.membase = (void *)(ARMADEUS_FPGA_BASE_ADDR +
 						/*$registers_base_address:wbs$*/),
 	.idnum=/*$generic:id$*/,
 	.idoffset=/*$register:wbs:id:offset$*/ * (/*$register:wbs:id:size$*/ /8)
