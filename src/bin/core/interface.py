@@ -121,21 +121,7 @@ class Interface(WrapperXml):
         if not classname in INTERFACE_CLASS:
             raise Error("classname "+classname+" unknown")
         self.setAttribute("class",classname)
-    def getClockAndResetName(self):
-        value = self.getAttribute("clockandreset")
-        if value == None:
-            raise Error("No clock and reset name in '"+self.getName()+"' interface")
-        return value
 
-    #TODO:
-    def getClockAndResetInterface(self):
-        print "TODO getclockandresetinterface"
-
-    def setClockAndReset(self,interfacename):
-        #check if interfacename exist
-        self.getParent().getInterface(interfacename)
-        #TODO: check if interfacename is a clockandreset
-        self.setAttribute("clockandreset",interfacename)
     def getBase(self):
         try:
            base = self.getAttribute("base","registers")
@@ -245,7 +231,9 @@ class Interface(WrapperXml):
                 elif slave.getInterfaceName() == interfaceslavename:
                     self.delSlave(slave)
                     return
-        raise Error("Bus connection "+str(self.getName())+" -> "+str(instanceslavename)+"."+str(interfaceslavename) +" doesn't exist",0)
+        raise Error("Bus connection "+str(self.getName())+\
+                    " -> "+str(instanceslavename)+"."+\
+                    str(interfaceslavename) +" doesn't exist",0)
 
     def connectInterface(self,interface_dest):
         """ Connect an interface between to components
