@@ -277,7 +277,9 @@ request_irq_error:
 out_iounmap:
 	iounmap(mng->membase);
 out_dev_free:
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,36)
 	kfree(mng);
+#endif
 out_release_mem:
 	release_mem_region(mem_res->start, resource_size(mem_res));
 
