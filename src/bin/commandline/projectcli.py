@@ -174,7 +174,7 @@ create new project
                 print e
                 return
 
-        self.setPrompt("project",settings.active_project.getName())
+        self.setPrompt("POD",settings.active_project.getName())
         print "Project "+settings.active_project.getName()+" created"
 
     def complete_load(self,text,line,begidx,endidx):
