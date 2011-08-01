@@ -1071,7 +1071,7 @@ use <filename> as standard input execute commands stored in.
 Runs command(s) from a file.
         """
         keepstate = Statekeeper(self,
-            ('stdin','use_rawinput','prompt','base_prompt','continuation_prompt'))
+            ('stdin','use_rawinput',))
         try:
             self.stdin = open(fname, 'r')
         except IOError, e:

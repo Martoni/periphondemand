@@ -109,7 +109,7 @@ def main(argv):
                 return
 
         tmpfile = open(TMPFILENAME,"w")
-        tmpfile.write("project.load "+argument)
+        tmpfile.write("load "+argument)
         tmpfile.close()
         print "Loading project "+str(argument)+" :\n"
         CLI.do_source(TMPFILENAME)
