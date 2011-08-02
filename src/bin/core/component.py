@@ -63,17 +63,6 @@ class Component(WrapperXml):
         self.driver_templateslist = []
         self.interruptslist = []
 
-    def loadComponent(self,componentname,libraryname,versionname=None):
-        """ load a component in library to modify it
-        """
-        if not componentname in settings.active_library.listComponents(libraryname):
-            raise Error("No component named "+str(componentname)+" in "+str(libraryname),0)
-
-        if versionname==None:
-            print "TODO: load "+componentname+" in "+libraryname
-        else:
-            print "TODO: load "+componentname+"."+versionname+" in "+libraryname
-
     def setVersionName(self,versionname):
         self.versionname = versionname
     def getVersionName(self):
@@ -186,11 +175,9 @@ class Component(WrapperXml):
                 return hdlfile
         raise Error("no hdl file named "+filename)
 
-    # TODO: remove (used in intercon generator)##
-    def addHdl_file(self,hdl_file):
+    def addHdl_file(self, hdl_file):
         self.addSubNode(nodename="hdl_files",subnode=hdl_file)
         return self.hdl_fileslist.append(hdl_file)
-    #############################################
 
     def setHDLfile(self,hdlfilepath,istop=0,scope="both"):
         """ Add HDL file in library component
