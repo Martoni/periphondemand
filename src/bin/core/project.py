@@ -718,23 +718,6 @@ class Project(WrapperXml):
         filelist = sy.listDirectory(settings.path + TOOLCHAINPATH +DRIVERSPATH)
         return filelist
 
-    # TODO: move it in library class
-    def getComponentVersionList(self,libraryname,componentname):
-        """ list component version name in archive
-        """
-        filelist = sy.listFiles(self.library.getLibraryPath(libraryname)+\
-                "/"+componentname)
-        outlist = []
-        for name in filelist:
-            # take only xml file
-            ext = XMLEXT[1:] # suppress dot
-            pattern = ".*%s"%ext+"$"
-            if re.match(pattern,name):
-                # Suppress extension
-                name = name.split(".")[0]
-                outlist.append(name)
-        return outlist
-
     def generateReport(self,filename=None):
         """ generate a project report """
         TAB = "    "
