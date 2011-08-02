@@ -100,7 +100,7 @@ def main(argv):
     elif "--load" in options or "-l" in options:
         for opt,arg in opts:
             if opt=="--load" or opt=="-l":
-                argument = arg
+                argument = arg.strip('/')
                 break
             if not os.path.exists(argument):
                 print "[ERROR] project "+str(argument)+\
