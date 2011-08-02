@@ -7,9 +7,10 @@ to Wisbone 16 bits bus.
 FPGA component
 --------------
 
-No registers
+No register
 
 ARMadeus linux driver
 ---------------------
 
-TODO
+There is no driver for wrapper, do write a driver using this bus use
+'platform_bus'.
