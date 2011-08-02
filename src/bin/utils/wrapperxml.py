@@ -141,9 +141,12 @@ class WrapperXml:
             elif "subnodename" in keys:
                 subnodename = keys["subnodename"]
                 if "attributename" in keys:
-                    return node.addNode(nodename=subnodename,attributename=keys["attributename"],value=keys["value"])
+                    return node.addNode(nodename=subnodename,
+                                        attributename=keys["attributename"],
+                                        value=keys["value"])
                 elif "attributedict" in keys:
-                    return node.addNode(nodename=subnodename,attributedict=keys["attributedict"])
+                    return node.addNode(nodename=subnodename,
+                                        attributedict=keys["attributedict"])
                 else:
                     raise Error("Key not known in addSubNode "+str(keys),0)
             else:
@@ -266,7 +269,6 @@ class WrapperXml:
                 xmlfile = open(filename,'r')
            except IOError,e:
                 raise Error(str(e),0)
-           # TODO: warning if no header
            content = xmlfile.read().replace(r'<?xml version="1.0" encoding="utf-8"?>','')
            try:
                self.tree = ET.fromstring(content)
