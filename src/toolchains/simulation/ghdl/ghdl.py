@@ -107,8 +107,6 @@ def signals(portlist):
     """
     out = ""
     for port in portlist:
-        # TODO: comment with instancename-interfacename
-
         portname = port.getName()
         interfacename = port.getParent().getName()
         instancename = port.getParent().getParent().getInstanceName()
@@ -132,8 +130,6 @@ def declareTop(portlist):
     out = out + "\n" + TAB + "port ("
 
     for port in portlist:
-        # TODO: comments
-
         portname = port.getName()
         interfacename = port.getParent().getName()
         instancename = port.getParent().getParent().getInstanceName()
