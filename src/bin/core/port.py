@@ -117,6 +117,7 @@ class Port(WrapperXml):
                 return pin
         pin = Pin(self, num=str(num))
         self.pinlist.append(pin)
+        self.addNode(node=pin)
         return pin
 
     def getType(self):
