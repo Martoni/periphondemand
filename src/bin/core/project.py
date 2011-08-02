@@ -214,6 +214,13 @@ class Project(WrapperXml):
         self.setAttribute("name",language,"language")
         self.saveProject()
 
+    def setUnconnectedValue(self, instancename, interfacename, portname, value):
+        """ Set port unconnected value
+        """
+        port = self.getInstance(instancename).getInterface(interfacename).getPort(portname)
+        port.setUnconnectedValue(value)
+        self.saveProject()
+
     def setForce(self, portname, state):
         platform = self.getPlatform()
         interfaces_list = platform.getInterfacesList()
@@ -537,7 +544,7 @@ class Project(WrapperXml):
     def connectPort(self,
             instance_source_name, interface_source_name, port_source_name,
             instance_dest_name,interface_dest_name, port_dest_name):
-        """ Connect all pin of a port source on all pin of
+        """ Connect all pins of a port source on all pins of
             port dest
         """
         instance_source = self.getInstance(instance_source_name)
@@ -552,7 +559,7 @@ class Project(WrapperXml):
         self.saveProject()
 
     def connectInterface(self,instance_name1,interface_name1,instance_name2,interface_name2):
-        """ Connect an interface between to components
+        """ Connect an interface between two components
         """
         instance_src = self.getInstance(instance_name1)
         interface_src = instance_src.getInterface(interface_name1)

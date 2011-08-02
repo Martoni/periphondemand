@@ -136,6 +136,17 @@ class Port(WrapperXml):
                 return ucvalue
         except Error:
             return "0"
+    def setUnconnectedValue(self, value):
+        if self.getDir() != "in":
+            raise Error("Unconnected Value can be set only on 'in' port", 0)
+        if str(value).isdigit():
+            if int(value) in [0, 1]:
+                self.setAttribute("unconnected_value", str(value))
+            else:
+                raise Error("Wrong value : "+str(value), 0)
+        else:
+            raise Error("Wrong value : "+str(value), 0)
+
     def setDir(self,dir):
         if not dir.lower() in ["out","in","inout"]:
             raise Error("Direction wrong : "+str(dir))

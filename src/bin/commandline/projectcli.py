@@ -367,7 +367,6 @@ List platform available
             print e
         return pinlist
 
-
     def do_listinterfaces(self,line=None):
         """\
 Usage : listinterfaces
@@ -413,7 +412,8 @@ Connect pin between instances
         """
         try:
             self.isProjectOpen()
-            self.checkargs(line,"<instancename>.<interfacename>.<portname>.[pinnum] <instancename>.<interfacename>.<portname>.[pinnum]")
+            self.checkargs(line, "<instancename>.<interfacename>.<portname>.[pinnum] "+\
+                                 "<instancename>.<interfacename>.<portname>.[pinnum]")
         except Error,e:
             print display
             print e
@@ -440,10 +440,52 @@ Connect pin between instances
             return
         print display
 
+    def complete_setunconnectedvalue(self, text, line, begidx, endidx):
+        portlist = []
+        try:
+            portlist = self.completeargs(text, line,
+                                         "<instancename>.<interfacename>.<portname> <uvalue>")
+        except Exception,e:
+            print e
+        return portlist
+
+    def do_setunconnectedvalue(self, line):
+        """
+Usage : setunconnectedvalue <instancename>.<interfacename>.<portname> <uvalue>
+Force input port unconnected value
+        """
+        try:
+            self.isProjectOpen()
+            self.checkargs(line,"<instancename>.<interfacename>.<portname> <uvalue>")
+        except Exception,e:
+            print display
+            print e
+            return
+        arg=line.split(' ')
+        source = arg[0].split('.')
+        if len(arg) != 2:
+            print "arguments error"
+            return
+        uvalue = arg[1].strip()
+
+        if len(source) != 3:
+            print "source arguments error"
+            return
+        try:
+            settings.active_project.setUnconnectedValue(source[0], source[1], source[2], uvalue)
+        except Error, e:
+            print display
+            print e
+            return
+        print display
+
+
     def complete_connectport(self,text,line,begidx,endidx):
         portlist = []
         try:
-            portlist = self.completeargs(text,line,"<instancename>.<interfacename>.<portname> <instancename>.<interfacename>.<portname>")
+            portlist = self.completeargs(text, line,
+                                        "<instancename>.<interfacename>.<portname> "+\
+                                        "<instancename>.<interfacename>.<portname>")
         except Exception,e:
             print e
         return portlist
@@ -455,7 +497,8 @@ Connect all pins of two same size ports.
         """
         try:
             self.isProjectOpen()
-            self.checkargs(line,"<instancename>.<interfacename>.<portname> <instancename>.<interfacename>.<portname>")
+            self.checkargs(line,"<instancename>.<interfacename>.<portname> "+\
+                                "<instancename>.<interfacename>.<portname>")
         except Exception,e:
             print display
             print e
