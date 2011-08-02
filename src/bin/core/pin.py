@@ -222,7 +222,6 @@ class Pin(WrapperXml):
                           "port_dest":str(port_destname)}
         self.addNode(nodename="connect",attributedict=attributes)
 
-
     def autoconnectPin(self):
         """ connect all platform connection, if connection is not for this platform, delete it
         """
@@ -236,12 +235,10 @@ class Pin(WrapperXml):
                                         connection["port_dest"]).getPin(
                                                 connection["pin_dest"])
                 pindest_list.append(pin_dest)
-
         self.delAllConnectionsForce()
 
         for pin_dest in pindest_list:
             self.connectPin(pin_dest)
-
 
     def isConnected(self):
         """ Return 1 if pin is connected to something, else return 0 """
