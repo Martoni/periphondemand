@@ -26,8 +26,8 @@
 
 __doc__ = "Basic Command Line Interface"
 __version__ = "1.0.0"
-#__versionTime__ = "xx/xx/xxxx"
-__author__ = "Fabrice MOUSSET <fabrice.mousset@laposte.net> and Fabien Marteau <fabien.marteau@armadeus.com>"
+__author__ = "Fabrice MOUSSET <fabrice.mousset@laposte.net> "+\
+             "and Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import cmd, re, os, sys
 from periphondemand.bin.define import *
@@ -76,7 +76,9 @@ class BaseCli(cmd.Cmd):
         return self.stdin.readline()
 
     def pseudo_raw_input(self, prompt):
-        """copied from cmd's cmdloop; like raw_input, but accounts for changed stdin, stdout"""
+        """ copied from cmd's cmdloop; like raw_input,
+            but accounts for changed stdin, stdout
+        """
 
         if self.use_rawinput:
             try:
@@ -373,23 +375,32 @@ class BaseCli(cmd.Cmd):
                 return []
         # fill list
         if   subargt == "masterinstancename":
-            return [interface.getParent().getInstanceName() for interface in settings.active_project.getInterfacesMaster()]
+            return [interface.getParent().getInstanceName()
+                    for interface in settings.active_project.getInterfacesMaster()]
         elif subargt == "slaveinstancename":
-            return [interface.getParent().getInstanceName() for interface in settings.active_project.getInterfacesSlave()]
+            return [interface.getParent().getInstanceName()
+                    for interface in settings.active_project.getInterfacesSlave()]
         elif subargt == "instancename":
-            return [instance.getInstanceName() for instance in settings.active_project.getInstancesList()]
+            return [instance.getInstanceName()
+                    for instance in settings.active_project.getInstancesList()]
         elif subargt == "instancesysconname":
-            return [interface.getParent().getInstanceName() for interface in settings.active_project.getSysconsList()]
+            return [interface.getParent().getInstanceName()
+                    for interface in settings.active_project.getSysconsList()]
         elif subargt == "interfacename":
-            return [""+instancename+"."+interface.getName() for interface in instance.getInterfacesList()]
+            return [""+instancename+"."+interface.getName()
+                    for interface in instance.getInterfacesList()]
         elif subargt == "masterinterfacename":
-            return [""+instancename+"."+interface.getName() for interface in instance.getMasterInterfaceList()]
+            return [""+instancename+"."+interface.getName()
+                    for interface in instance.getMasterInterfaceList()]
         elif subargt == "slaveinterfacename":
-            return [""+instancename+"."+interface.getName() for interface in instance.getSlaveInterfaceList()]
+            return [""+instancename+"."+interface.getName()
+                    for interface in instance.getSlaveInterfaceList()]
         elif subargt == "portname":
-            return [""+instancename+"."+interfacename+"."+port.getName() for port in interface.getPortsList()]
+            return [""+instancename+"."+interfacename+"."+port.getName()
+                    for port in interface.getPortsList()]
         elif subargt == "pinnum":
-            return [""+instancename+"."+interfacename+"."+portname+"."+str(i) for i in range(int(port.getSize()))]
+            return [""+instancename+"."+interfacename+"."+portname+"."+str(i)
+                    for i in range(int(port.getSize()))]
         elif subargt == "libraryname":
             arglist = settings.active_project.library.listLibraries()
             return arglist
@@ -399,7 +410,8 @@ class BaseCli(cmd.Cmd):
             arglist.append("standard")
             return arglist
         elif subargt == "forcename":
-            arglist = [""+port.getName() for port in settings.active_project.getPlatform().getPlatformPortsList()]
+            arglist = [""+port.getName()
+                    for port in settings.active_project.getPlatform().getPlatformPortsList()]
             return arglist
         elif subargt == "forcestate":
             return ["gnd", "vcc", "undef"]
@@ -423,16 +435,20 @@ class BaseCli(cmd.Cmd):
                 libraryname = settings.active_library.getLibName()
                 return [componentname+"."+version for
                         version in settings.active_project.getComponentVersionList(libraryname,componentname)]
-            return [libraryname+"."+componentname+"."+comp for comp in settings.active_project.getComponentVersionList(libraryname,componentname)]
+            return [libraryname+"."+componentname+"."+comp
+                    for comp in settings.active_project.getComponentVersionList(libraryname,componentname)]
 
         elif subargt == "platformname":
             if platformlib == "standard":
-                return ["standard."+name for name in settings.active_project.listAvailablePlatforms()]
+                return ["standard."+name
+                        for name in settings.active_project.listAvailablePlatforms()]
             else:
-                return [platformlib+"."+name for name in sy.listFiles(settings.getPlatformLibPath(platformlib))]
+                return [platformlib+"."+name
+                        for name in sy.listFiles(settings.getPlatformLibPath(platformlib))]
 
         elif subargt == "genericname":
-            return [""+instancename+"."+generic.getName() for generic in instance.getGenericsList()]
+            return [""+instancename+"."+generic.getName()
+                    for generic in instance.getGenericsList()]
 
         elif subargt == "simulationtoolchain":
             return settings.active_project.getSimulationToolChainList()
