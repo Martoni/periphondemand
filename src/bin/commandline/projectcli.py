@@ -525,7 +525,9 @@ Connect all pins of two same size ports.
     def complete_connectinterface(self, text, line, begidx, endix):
         buslist = []
         try:
-            buslist = self.completeargs(text,line,"<instancename>.<interfacename> <instancename>.<interfacename>")
+            buslist = self.completeargs(text, line,
+                                        "<instancename>.<interfacename> "+\
+                                        "<instancename>.<interfacename>")
         except Exception,e:
             print e
         return buslist
@@ -560,7 +562,9 @@ Connect interface between two components
     def complete_connectbus(self,text,line,begidx,endidx):
         buslist = []
         try:
-            buslist = self.completeargs(text,line,"<masterinstancename>.<masterinterfacename> <slaveinstancename>.<slaveinterfacename>")
+            buslist = self.completeargs(text, line,
+                                        "<masterinstancename>.<masterinterfacename> "+\
+                                        "<slaveinstancename>.<slaveinterfacename>")
         except Exception,e:
             print e
         return buslist
@@ -572,7 +576,8 @@ Connect slave to master bus
         """
         try:
             self.isProjectOpen()
-            self.checkargs(line,"<masterinstancename>.<masterinterfacename> <slaveinstancename>.<slaveinterfacename>")
+            self.checkargs(line, "<masterinstancename>.<masterinterfacename> "+\
+                                 "<slaveinstancename>.<slaveinterfacename>")
         except Exception,e:
             print display
             print e
@@ -608,7 +613,9 @@ Autoconnect bus if only one master in project
     def complete_addbusclock(self,text,line,begidx,endidx):
         clocklist = []
         try:
-            clocklist = self.completeargs(text,line,"<instancesysconname>.<interfacename> <masterinstancename>.<masterinterfacename>")
+            clocklist = self.completeargs(text, line,
+                                          "<instancesysconname>.<interfacename> "+\
+                                          "<masterinstancename>.<masterinterfacename>")
         except Exception,e:
             print e
         return clocklist
@@ -620,7 +627,8 @@ Specify the bus clock
         """
         try:
             self.isProjectOpen()
-            self.checkargs(line,"<instancesysconname>.<interfacename> <masterinstancename>.<masterinterfacename>")
+            self.checkargs(line, "<instancesysconname>.<interfacename> "+\
+                                 "<masterinstancename>.<masterinterfacename>")
         except Error,e:
             print display
             print e
@@ -642,7 +650,9 @@ Specify the bus clock
     def complete_delpinconnection(self,text,line,begidx,endidx):
         connectlist = []
         try:
-            connectlist = self.completeargs(text,line,"<instancename>.<interfacename>.<portname>.<pinnum> <instancename>.<interfacename>.<portname>.<pinnum>")
+            connectlist = self.completeargs(text, line,
+                                        "<instancename>.<interfacename>.<portname>.<pinnum> "+\
+                                        "<instancename>.<interfacename>.<portname>.<pinnum>")
         except Exception,e:
             print e
         return connectlist
@@ -654,7 +664,8 @@ Suppress a pin connection
         """
         try:
             self.isProjectOpen()
-            self.checkargs(line,"<instancename>.<interfacename>.<portname>.[pinnum] [instancename].[interfacename].[portname].[pinnum]")
+            self.checkargs(line, "<instancename>.<interfacename>.<portname>.[pinnum] "+\
+                                 "[instancename].[interfacename].[portname].[pinnum]")
         except Error,e:
             print display
             print e
@@ -676,8 +687,10 @@ Suppress a pin connection
         if len(dest) == 3 :
             dest.append(None)
         try:
-            settings.active_project.deletePinConnection_cmd(source[0],source[1],source[2],source[3],
-                                              dest[0],dest[1],dest[2],dest[3])
+            settings.active_project.deletePinConnection_cmd(source[0], source[1],
+                                                            source[2], source[3],
+                                                            dest[0], dest[1],
+                                                            dest[2], dest[3])
         except Error, e:
             print display
             print e
@@ -685,11 +698,11 @@ Suppress a pin connection
         print display
         print "Connection deleted"
 
-    # TODO
     def complete_delbusconnection(self,text,line,begidx,endidx):
         connectlist = []
         try:
-            connectlist = self.completeargs(text,line,"<instancename>.<interfacename>.<portname>")
+            connectlist = self.completeargs(text, line,
+                                            "<instancename>.<interfacename>.<portname>")
         except Exception,e:
             print e
         return connectlist
@@ -746,7 +759,9 @@ Check the project before code generation
     def complete_setaddr(self,text,line,begidx,endidx):
         addrlist = []
         try:
-            addrlist = self.completeargs(text,line,"<slaveinstancename>.<slaveinterfacename> <addressinhexa>")
+            addrlist = self.completeargs(text, line,
+                                         "<slaveinstancename>.<slaveinterfacename> "+\
+                                         "<addressinhexa>")
         except Exception,e:
             print e
         return addrlist
@@ -758,7 +773,7 @@ Set the base address of slave interface
         """
         try:
             self.isProjectOpen()
-            self.checkargs(line,"<slaveinstancename>.<slaveinterfacename> <addressinhexa>")
+            self.checkargs(line, "<slaveinstancename>.<slaveinterfacename> <addressinhexa>")
         except Error,e:
             print display
             print e
@@ -766,7 +781,7 @@ Set the base address of slave interface
         arg = line.split(' ')
         names = arg[0].split('.')
         if len(names) < 2:
-            masterinterface = settings.active_project.getInstance(names[0]).getSlaveInterfaceList()
+            masterinterface =settings.active_project.getInstance(names[0]).getSlaveInterfaceList()
             if len(masterinterface) != 1:
                 print display
                 print "Error, need a slave interface name"
@@ -802,7 +817,8 @@ List master interface
     def complete_getmapping(self,text,line,begidx,endidx):
         mappinglist = []
         try:
-            mappinglist = self.completeargs(text,line,"<masterinstancename>.<masterinterfacename>")
+            mappinglist = self.completeargs(text, line,
+                                            "<masterinstancename>.<masterinterfacename>")
         except Exception,e:
             print e
         return mappinglist
@@ -832,7 +848,7 @@ Return mapping for a master interface
     def complete_printxml(self,text,line,begidx,endidx):
         printlist = []
         try:
-            printlist = self.completeargs(text,line,"<instancename>")
+            printlist = self.completeargs(text, line, "<instancename>")
         except Exception,e:
             print e
         return printlist
@@ -883,11 +899,13 @@ Print instance information
         for interface in instance.getInterfacesList():
             if interface.getBusName() != None:
                 if interface.getClass() == "slave":
-                    print "%-15s "%interface.getName()+" Base address:"+hex(interface.getBaseInt())
+                    print "%-15s "%interface.getName()+\
+                            " Base address:"+hex(interface.getBaseInt())
                 elif interface.getClass() == "master":
                     print "%-15s :"%interface.getName()
                     for slave in interface.getSlavesList():
-                        print " "*10 + "slave -> "+slave.getInstanceName()+"."+slave.getInterfaceName()
+                        print " "*10 + "slave -> "+\
+                                slave.getInstanceName()+"."+slave.getInterfaceName()
             else:
                 print "%-15s :"%interface.getName()
 
@@ -904,12 +922,15 @@ Print instance information
                         if first is not True:
                             print " "*8+"|"+" "*5,
                         first = False
-                        print "-> "+connection["instance_dest"]+"."+connection["interface_dest"]+"."+connection["port_dest"]+"."+connection["pin_dest"]
+                        print "-> "+connection["instance_dest"]+"."+\
+                                connection["interface_dest"]+"."+\
+                                connection["port_dest"]+"."+connection["pin_dest"]
 
     def complete_setgeneric(self,text,line,begidx,endidx):
         genericlist = []
         try:
-            genericlist = self.completeargs(text,line,"<instancename>.<genericname> <genericvalue>")
+            genericlist = self.completeargs(text, line,
+                                            "<instancename>.<genericname> <genericvalue>")
         except Exception,e:
             print e
         return genericlist
@@ -969,20 +990,19 @@ Close the project
 
     # Generate CODE
 
-    def complete_intercon(self,text,line,begidx,endidx):
+    def complete_generateintercon(self,text,line,begidx,endidx):
         interconlist = []
         try:
-            interconlist = self.completeargs(text,line,"<masterinstancename>.<masterinterfacename>")
+            interconlist = self.completeargs(text, line,
+                                             "<masterinstancename>.<masterinterfacename>")
         except Exception,e:
             print e
         return interconlist
 
 
-    ############# FIXME: Move it in synthesiscli ? ######################-
-    #TODO: change name to generateintercon
-    def do_intercon(self,line=None):
+    def do_generateintercon(self,line=None):
         """\
-Usage : intercon <masterinstancename>.<masterinterfacename>
+Usage : generateintercon <masterinstancename>.<masterinterfacename>
 Generate intercon for master given in argument
         """
         try:
@@ -1003,10 +1023,9 @@ Generate intercon for master given in argument
             return
         print display
 
-    #TODO : change name to generatetop
-    def do_top(self,line):
+    def do_generatetop(self,line):
         """\
-Usage : top
+Usage : generatetop
 Generate top component
         """
         try:
@@ -1019,8 +1038,6 @@ Generate top component
             return
         print display
         print "Top generated with name : top_"+settings.active_project.getName()+".vhd"
-
-    #####################################################################
 
     def do_report(self,line):
         """\
@@ -1058,12 +1075,10 @@ List all force configured for this project
             print e
             return
 
-
-# TODO
     def complete_setforce(self,text,line,begidx,endidx):
       pinlist = []
       try:
-        pinlist = self.completeargs(text,line,"<forcename> <forcestate>")
+        pinlist = self.completeargs(text, line, "<forcename> <forcestate>")
       except Exception,e:
         print e
       return pinlist
@@ -1076,7 +1091,7 @@ Set fpga pin state in 'gnd', 'vcc'. To unset use 'undef' value
 
       try:
         self.isProjectOpen()
-        self.checkargs(line,"<forcename> <forcestate>")
+        self.checkargs(line, "<forcename> <forcestate>")
       except Error,e:
         print display
         print e
