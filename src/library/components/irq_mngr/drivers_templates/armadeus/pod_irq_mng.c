@@ -31,7 +31,8 @@
 #include <mach/fpga.h>
 #endif
 
-#include "irq_mng.h"
+#include "../../virtual_components/irq_mngr/irq_mng.h"
+
 /*$foreach:instance$*/
 static struct resource /*$instance_name$*/_resources[] = {
 	[0] = {

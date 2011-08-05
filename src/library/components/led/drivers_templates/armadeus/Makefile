@@ -4,7 +4,7 @@
 
 ifneq ($(KERNELRELEASE),)
 
-obj-$(CONFIG_POD_DRIVERS)	+= board_leds.o g_led.o
+obj-$(CONFIG_ARMADEUS_FPGA_POD_LED_DRIVER) += pod_leds.o 
 
 # Part executed when called from standard make in this directory:
 # (preferably use Makefile in parent directory)

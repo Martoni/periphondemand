@@ -7,11 +7,9 @@
     <driver_files>
         <driver_templates architecture="armadeus">
             <support version="4.0" />
-            <file name="button.h" />
-            <file name="board_buttons.c" />
-            <file name="gbutton.c" />
+            <file name="pod_buttons.c" />
             <file name="Makefile" />
-            <file name="testbutton.c" />
+            <file name="Kconfig" />
         </driver_templates>
     </driver_files>
 

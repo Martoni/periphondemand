@@ -10,12 +10,10 @@
 
     <driver_files>
         <driver_templates architecture="armadeus">
-            <support version="3" />
-            <file name="main.c" />
+            <support version="4.0" />
+            <file name="pod_irq_mng.c" />
             <file name="Makefile" />
-            <file name="README" />
-            <file name="pod_board_irq_mng.c" />
-            <file name="irq_mng.h" />
+            <file name="Kconfig" />
         </driver_templates>
     </driver_files>
 

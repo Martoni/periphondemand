@@ -1,9 +1,9 @@
 /*
  ***********************************************************************
  *
- * (c) Copyright 2008    Armadeus project
+ * (c) Copyright 2008	Armadeus project
  * Fabien Marteau <fabien.marteau@armadeus.com>
- * Specific button driver for generic button driver
+ * Specific led driver for generic led driver
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 #include <linux/module.h>
 #include <linux/platform_device.h>
 
-#include <mach/hardware.h>
 #ifdef CONFIG_MACH_APF9328 /* To remove when MX1 platform is merged */
 # include "../arch/arm/plat-mxc/include/mach/fpga.h"
 # include <mach/irqs.h>
@@ -34,69 +33,59 @@
 # include <mach/fpga.h>
 #endif
 
-#include "button.h"
+#include "../../virtual_components/led/led.h"
 
 /*$foreach:instance$*/
-#define /*$instance_name$*/_IRQ   IRQ_FPGA(/*$interrupt_number$*/)
-/*$foreach:instance:end$*/
-
-
-/*$foreach:instance$*/
-static struct resource button/*$instance_num$*/_resources[] = {
+static struct resource led/*$instance_num$*/_resources[] = {
 	[0] = {
 		.start	= ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/,
 		.end	= ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/ + 3,
 		.flags	= IORESOURCE_MEM,
 	},
-	[1] = {
-		.start	= /*$instance_name$*/_IRQ,
-		.end	= /*$instance_name$*/_IRQ,
-		.flags	= IORESOURCE_IRQ,
-	}
 };
 
-static struct plat_button_port plat_button/*$instance_num$*/_data = {
+static struct plat_led_port plat_led/*$instance_num$*/_data = {
 	.name		= "/*$instance_name$*/",
 	.num		= /*$instance_num$*/,
 	.idnum		= /*$generic:id$*/,
-	.idoffset	= /*$register:swb16:id:offset$*/ * (/*$register:swb16:id:size$*/ /8)
+	.idoffset	=  /*$register:swb16:id:offset$*/ * (16 /8)
 };
 /*$foreach:instance:end$*/
 
-void plat_button_release(struct device *dev)
+void plat_led_release(struct device *dev)
 {
 	dev_dbg(dev, "released\n");
 }
 
-static struct platform_device plat_button_device[] = {
+static struct platform_device plat_led_devices[] = {
 /*$foreach:instance$*/
     {
-	    .name		= "button",
-	    .id		= /*$instance_num$*/,
-	    .dev		= {
-	    	.release	= plat_button_release,
-	    	.platform_data	= &plat_button/*$instance_num$*/_data
+	    .name	= "led",
+	    .id	= /*$instance_num$*/,
+	    .dev	= {
+	    	.release	= plat_led_release,
+	    	.platform_data	= &plat_led/*$instance_num$*/_data
 	    },
-	    .num_resources	= ARRAY_SIZE(button/*$instance_num$*/_resources),
-	    .resource	= button/*$instance_num$*/_resources,
+	    .num_resources	= ARRAY_SIZE(led0_resources),
+	    .resource	= led0_resources,
     }
 /*$foreach:instance:end$*/
 };
 
-static int __init board_button_init(void)
+static int __init sled_init(void)
 {
-	return platform_device_register(plat_button_device);
+	return platform_device_register(plat_led_devices);
 }
 
-static void __exit board_button_exit(void)
+static void __exit sled_exit(void)
 {
-	platform_device_unregister(plat_button_device);
+	platform_device_unregister(plat_led_devices);
 }
 
-module_init(board_button_init);
-module_exit(board_button_exit);
+module_init(sled_init);
+module_exit(sled_exit);
 
-MODULE_AUTHOR("Julien Boibessot, <julien.boibessot@armadeus.com>");
-MODULE_DESCRIPTION("Board specific button driver");
+MODULE_AUTHOR("Fabien Marteau <fabien.marteau@armadeus.com>");
+MODULE_DESCRIPTION("Driver to blink blink some leds");
 MODULE_LICENSE("GPL");
 

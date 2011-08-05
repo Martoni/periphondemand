@@ -1,0 +1,7 @@
+
+config ARMADEUS_FPGA_POD_BUTTON_DRIVER
+	tristate "POD button"
+	default n
+	depends on POD_DRIVERS 
+	select ARMADEUS_FPGA_VIRTUAL_COMPONENTS_BUTTON
+	---help---

@@ -15,10 +15,8 @@
         <driver_templates architecture="armadeus">
             <support version="4.0" />
             <file name="Makefile" />
-            <file name="g_led.c" />
-            <file name="led.h" />
-            <file name="board_leds.c" />
-            <file name="testled.c" />
+            <file name="Kconfig" />
+            <file name="pod_leds.c" />
         </driver_templates>
     </driver_files>
 

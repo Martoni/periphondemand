@@ -4,7 +4,7 @@
 
 ifneq ($(KERNELRELEASE),)
 
-obj-$(CONFIG_POD_DRIVERS)	+= board_i2c.o i2c-ocores-pod.o
+obj-$(CONFIG_ARMADEUS_FPGA_POD_I2C_OCORE_DRIVER) += pod_board_i2c.o i2c-ocores-pod.o
 
 # Part executed when called from standard make in this directory:
 # (preferably use Makefile in parent directory)

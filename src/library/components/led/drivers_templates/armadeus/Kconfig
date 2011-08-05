@@ -1,0 +1,7 @@
+
+config ARMADEUS_FPGA_POD_LED_DRIVER
+	tristate "POD led"
+	default n
+	depends on POD_DRIVERS 
+	select ARMADEUS_FPGA_VIRTUAL_COMPONENTS_LED
+	---help---
