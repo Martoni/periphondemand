@@ -6,7 +6,8 @@
 
     <driver_files>
         <driver_templates architecture="armadeus">
-            <support version="4" />
+            <support version="4.0" />
+            <file name="Kconfig" />
             <file name="Makefile" />
             <file name="pod_anybus_interface.c" />
             <file name="pod_anybus_interface_platform.c" />
