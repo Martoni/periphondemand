@@ -68,7 +68,7 @@ package_files_list.extend(getTree("busses"))
 package_files_list.extend(getTree("toolchains"))
 package_files_list.extend(getTree("tests"))
 
-datafiles=[ ('/usr/bin',['src/bin/pod']) ]
+datafiles=[ ('bin',['src/bin/pod']) ]
 
 setup(  name='PeriphOnDemand',
         version=getVersion(),
