@@ -33,8 +33,6 @@ from periphondemand.bin.core.hdl_file          import Hdl_file
 from periphondemand.bin.core.driver_templates  import Driver_Templates
 from periphondemand.bin.core.generic           import Generic
 
-from periphondemand.bin.code.entityparser   import EntityParser
-
 settings = Settings()
 display  = Display()
 

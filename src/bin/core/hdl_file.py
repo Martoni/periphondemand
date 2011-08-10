@@ -42,11 +42,6 @@ from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings   import Settings
 from periphondemand.bin.utils.error      import Error
 
-from periphondemand.bin.code.entityparser          import EntityParser
-
-from periphondemand.bin.core.port    import Port
-from periphondemand.bin.core.generic import Generic
-
 settings = Settings()
 
 class Hdl_file(WrapperXml):
@@ -109,61 +104,4 @@ class Hdl_file(WrapperXml):
             self.setAttribute("scope",scope)
         else:
             raise Error("Unknown scope "+str(scope))
-
-    def getGeneric(self,genericname):
-        """ Get generic declared in HDL file"""
-        for generic in self.getGenericsList():
-            if generic.getName() == genericname:
-                return generic
-        raise Error("No generic named "+str(genericname))
-
-    def getGenericsList(self):
-        """ Parse HDL file and return a list of generic """
-        if not self.isTop():
-            raise Error("Only top HDL file can be parsed")
-        if self.parser == None:
-            Et = EntityParser()
-            self.parser = Et.factory(self.getFilePath())
-        parsed_generic_list = self.parser.parseGeneric()
-        generic_list = []
-        for parsed_generic in parsed_generic_list:
-            generic = Generic(self,name=parsed_generic["name"])
-            generic.setType(parsed_generic["type"])
-            generic.setValue(parsed_generic["defautvalue"])
-            generic.setDescription(parsed_generic["description"])
-            generic_list.append(generic)
-        return generic_list
-
-    def getEntityName(self):
-        if self.parser == None:
-            Et = EntityParser()
-            self.parser = Et.factory(self.getFilePath())
-        return self.parser.getEntityName()
-
-    def getPort(self,portname):
-        """ get port declared in HDL file """
-        portlist = self.getPortsList()
-        for port in portlist:
-            if port.getName() == portname:
-                return port
-        raise Error("No port named "+portname+\
-                " in file "+self.getFileName())
-
-    def getPortsList(self):
-        """ Parse HDL file and return a list of ports"""
-        if not self.isTop():
-            raise Error("Only top HDL file can be parsed")
-        if self.parser == None:
-            Et = EntityParser()
-            self.parser = Et.factory(self.getFilePath())
-        parsedportlist = self.parser.parsePort()
-        portlist = []
-        for parsedport in parsedportlist:
-            port = Port(self,name=parsedport["name"])
-            port.setDir(parsedport["direction"])
-            port.setSize(str(parsedport["size"]))
-            port.setDescription(parsedport["description"])
-            portlist.append(port)
-        return portlist
-
 
