@@ -92,18 +92,8 @@ select toolchain used for simulation
 
     def do_generateproject(self,line):
         """\
-Usage : generateproject
+Usage : generateproject <simulationtoolchain>
 Make projects files for simulation (makefile and testbench sources)
-        """
-        self.do_generatetestbench(line)
-        self.do_generatemakefile(line)
-
-
-
-    def do_generatetestbench(self,line):
-        """\
-Usage : generatetestbench
-Make a template for testbench simulation
         """
         if line.strip() != "":
             try:
@@ -122,41 +112,13 @@ Make a template for testbench simulation
             return
         try:
             filename = settings.active_project.simulation.generateTemplate()
-        except Error,e:
-            print e
-            return
-        print display
-        print "Testbench with name : "+filename+" Done"
-
-    def do_generatemakefile(self,line):
-        """\
-Usage : generatemakefile
-Make a Makefile to ease simulation
-        """
-        if line.strip() != "":
-            try:
-                self.do_selecttoolchain(line)
-            except Error,e:
-                print e
-                return
-        elif settings.active_project.simulation == None:
-            print Error("simulation toolchain must be selected before")
-            return
-
-        if settings.active_project.getSimulationToolChain() == None:
-            print Error("Choose a toolchain before")
-            for toolchain in settings.active_project.getSimulationToolChainList():
-                print toolchain.getName()
-            return
-        try:
             filename = settings.active_project.simulation.generateMakefile()
         except Error,e:
             print e
             return
         print display
+        print "Testbench with name : "+filename+" Done"
         print "Makefile generated with name : "+filename+" Done"
-
-
 
 if __name__ == "__main__":
     print "SimulationCli class test\n"
