@@ -400,7 +400,8 @@ Save project in the curent directory
     def complete_connectpin(self,text,line,begidx,endidx):
         pinlist = []
         try:
-            pinlist = self.completeargs(text,line,"<instancename>.<interfacename>.<portname>.<pinnum> <instancename>.<interfacename>.<portname>.<pinnum>")
+            pinlist = self.completeargs(text,line,"<instancename>.<interfacename>.<portname>.<pinnum> "+\
+                                                  "<instancename>.<interfacename>.<portname>.<pinnum>")
         except Exception,e:
             print e
         return pinlist
@@ -472,13 +473,13 @@ Force input port unconnected value
             print "source arguments error"
             return
         try:
-            settings.active_project.setUnconnectedValue(source[0], source[1], source[2], uvalue)
+            settings.active_project.setUnconnectedValue(source[0], source[1],
+                                                        source[2], uvalue)
         except Error, e:
             print display
             print e
             return
         print display
-
 
     def complete_connectport(self,text,line,begidx,endidx):
         portlist = []
@@ -563,18 +564,39 @@ Connect interface between two components
         connectlist = []
         try:
             connectlist = self.completeargs(text, line,
-                                            "<instancename>.<interfacename> <slaveinstancename>.<slaveinterfacename>")
+                                                "<masterinstancename>.<masterinterfacename> "+\
+                                                "<slaveinstancename>.<slaveinterfacename>")
         except Exception,e:
             print e
         return connectlist
 
-    # TODO
     def do_delbusconnection(self,line):
         """\
-Usage : delbusconnection <instancename>.<interfacebusname> <slaveinstancename>.<slaveinterfacename>
+Usage : delbusconnection <masterinstancename>.<masterinterfacename> <slaveinstancename>.<slaveinterfacename>
 Suppress a pin connection
         """
-        print "TODO"
+        try:
+            self.isProjectOpen()
+            self.checkargs(line, "<masterinstancename>.<masterinterfacename> "+\
+                                 "<slaveinstancename>.<slaveinterfacename>")
+        except Exception,e:
+            print display
+            print e
+            return
+        arg=line.split(' ')
+        source = arg[0].split('.')
+        dest   = arg[-1].split('.')
+        if len(source) != 2 or len(dest) != 2:
+            print "Argument error"
+            return
+        try:
+            settings.active_project.deleteBus(source[0],dest[0],source[1],dest[1])
+        except Error, e:
+            print display
+            print e
+            return
+        print display
+
 
     def complete_connectbus(self,text,line,begidx,endidx):
         buslist = []
