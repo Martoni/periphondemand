@@ -559,6 +559,23 @@ Connect interface between two components
             return
         print display
 
+    def complete_delbusconnection(self,text,line,begidx,endidx):
+        connectlist = []
+        try:
+            connectlist = self.completeargs(text, line,
+                                            "<instancename>.<interfacename> <slaveinstancename>.<slaveinterfacename>")
+        except Exception,e:
+            print e
+        return connectlist
+
+    # TODO
+    def do_delbusconnection(self,line):
+        """\
+Usage : delbusconnection <instancename>.<interfacebusname> <slaveinstancename>.<slaveinterfacename>
+Suppress a pin connection
+        """
+        print "TODO"
+
     def complete_connectbus(self,text,line,begidx,endidx):
         buslist = []
         try:
@@ -605,43 +622,6 @@ Autoconnect bus if only one master in project
             self.isProjectOpen()
             settings.active_project.autoConnectBus()
         except Error,e:
-            print display
-            print e
-            return
-        print display
-
-    def complete_addbusclock(self,text,line,begidx,endidx):
-        clocklist = []
-        try:
-            clocklist = self.completeargs(text, line,
-                                          "<instancesysconname>.<interfacename> "+\
-                                          "<masterinstancename>.<masterinterfacename>")
-        except Exception,e:
-            print e
-        return clocklist
-
-    def do_addbusclock(self,line):
-        """\
-Usage : busaddclock <instancesysconname>.<interfacename> <masterinstancename>.<masterinterfacename>
-Specify the bus clock
-        """
-        try:
-            self.isProjectOpen()
-            self.checkargs(line, "<instancesysconname>.<interfacename> "+\
-                                 "<masterinstancename>.<masterinterfacename>")
-        except Error,e:
-            print display
-            print e
-            return
-        arg=line.split(' ')
-        source = arg[0].split('.')
-        dest   = arg[-1].split('.')
-        if len(source) != 2 or len(dest) != 2:
-            print "Argument error"
-            return
-        try:
-            settings.active_project.connectClkDomain(source[0],dest[0],source[1],dest[1])
-        except Error, e:
             print display
             print e
             return
@@ -697,23 +677,6 @@ Suppress a pin connection
             return
         print display
         print "Connection deleted"
-
-    def complete_delbusconnection(self,text,line,begidx,endidx):
-        connectlist = []
-        try:
-            connectlist = self.completeargs(text, line,
-                                            "<instancename>.<interfacename>.<portname>")
-        except Exception,e:
-            print e
-        return connectlist
-
-    # TODO
-    def do_delbusconnection(self,line):
-        """\
-Usage : delbusconnection <instancename>.<interfacebusname>
-Suppress a pin connection
-        """
-        print "TODO"
 
     def complete_delinstance(self,text,line,begidx,endidx):
         componentlist = []
