@@ -9,9 +9,7 @@
             <support version="4.0" />
             <file name="Kconfig" />
             <file name="Makefile" />
-            <file name="pod_anybus_interface.c" />
             <file name="pod_anybus_interface_platform.c" />
-            <file name="pod_anybus_interface.h" />
         </driver_templates>
     </driver_files>
 
