@@ -4,16 +4,6 @@
         A simple gpio to read/write on fpga pin via wishbone bus
     </description>
 
-    <driver_files>
-        <driver_templates architecture="armadeus">
-            <support version="2.6.23" />
-            <file name="Makefile" />
-            <file name="board_simplegpio.c" />
-            <file name="gsimplegpio.c" />
-            <file name="simplegpio.h" />
-        </driver_templates>
-    </driver_files>
-
     <hdl_files>
         <hdl_file filename="simplegpio.vhd" scope="both" istop="1" />
     </hdl_files>
