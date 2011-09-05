@@ -28,3 +28,7 @@ loaded the manager :
 
 > modprobe irq_ocore
 
+Then load pod_irq module :
+
+> modprobe pod_irq_mng
+
