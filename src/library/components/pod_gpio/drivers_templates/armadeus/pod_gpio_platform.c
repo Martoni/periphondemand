@@ -26,7 +26,7 @@
 #include <mach/fpga.h>
 #endif
 
-#include "pod_gpio.h"
+#include "../../virtual_components/pod_gpio/pod_gpio.h"
 
 /*$foreach:instance$*/
 #define /*$instance_name$*/_BASE /*$registers_base_address:swb16$*/

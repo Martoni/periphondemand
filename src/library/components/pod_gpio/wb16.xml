@@ -6,11 +6,10 @@
 
     <driver_files>
         <driver_templates architecture="armadeus">
-            <support version="4" />
+            <support version="4.0" />
             <file name="Makefile" />
-            <file name="pod_gpio.c" />
+            <file name="Kconfig" />
             <file name="pod_gpio_platform.c" />
-            <file name="pod_gpio.h" />
         </driver_templates>
     </driver_files>
 
