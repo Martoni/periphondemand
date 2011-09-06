@@ -30,6 +30,8 @@
 
 /*$foreach:instance$*/
 #define /*$instance_name$*/_BASE /*$registers_base_address:swb16$*/
+#define RESET_GPIO /*$generic:gpio_reset$*/
+#define IRQ_GPIO /*$generic:gpio_irq$*/
 /*$foreach:instance:end$*/
 
 /*$foreach:instance$*/
@@ -38,6 +40,16 @@ static struct resource /*$instance_name$*/_resources[] = {
 		.start = ARMADEUS_FPGA_BASE_ADDR + /*$instance_name$*/_BASE,
 		.end = ARMADEUS_FPGA_BASE_ADDR + /*$instance_name$*/_BASE + 0x3,
 		.flags = IORESOURCE_MEM | IORESOURCE_MEM_16BIT,
+	},
+	[1] = {
+		.start = IRQ_GPIO,
+		.end = IRQ_GPIO,
+		.flags = IORESOURCE_IRQ,
+	},
+	[2] = {
+		.start = RESET_GPIO,
+		.end = RESET_GPIO,
+		.flags = IORESOURCE_IO | IORESOURCE_IRQ_LOWEDGE,
 	}
 };
 

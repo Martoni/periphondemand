@@ -18,8 +18,10 @@
     </hdl_files>
 
     <generics>
-        <generic name="id" public="true" value="1" match="\d+" type="natural" destination="both" />
-        <generic name="wb_size" public="false" value="16" match="\d+" type="natural" destination="fpga" />
+        <generic destination="both" match="\d+" name="id" public="true" type="natural" value="1" />
+        <generic destination="fpga" match="\d+" name="wb_size" public="false" type="natural" value="16" />
+        <generic destination="driver" match="\d+" name="gpio_reset" public="true" type="natural" value="240" />
+        <generic destination="driver" match="\d+" name="gpio_irq" public="true" type="natural" value="337" />
     </generics>
 
     <interfaces>
