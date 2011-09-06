@@ -6,8 +6,9 @@
 
     <driver_files>
         <driver_templates architecture="armadeus">
-            <support version="4" />
+            <support version="4.0" />
             <file name="Makefile" />
+            <file name="Kconfig" />
             <file name="pod_sja1000_apf.c" />
         </driver_templates>
     </driver_files>
