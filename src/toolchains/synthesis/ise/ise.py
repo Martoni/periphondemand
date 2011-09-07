@@ -66,7 +66,7 @@ def generatepinout(self,filename=None):
             if port.forceDefined():
                 out = out+'NET "force_'+str(port.getName())
                 out = out +'" LOC="'+str(port.getPosition())\
-                          +'" | IOSTANDARD='+str(port.getStandart());
+                          +'" | IOSTANDARD='+str(port.getStandard());
                 if port.getDrive() != None:
                     out = out + " | DRIVE="+str(port.getDrive())
                 out = out+r'; # '+str(port.getName())+'\n'
@@ -121,7 +121,7 @@ def generatepinout(self,filename=None):
                         else:
                             out=out+"_pin"+connect["pin_dest"]
                     out = out +'" LOC="'+str(port.getPosition())\
-                              +'" | IOSTANDARD='+str(port.getStandart());
+                              +'" | IOSTANDARD='+str(port.getStandard());
                     if port.getDrive() != None:
                         out = out + " | DRIVE="+str(port.getDrive())
                     out = out+r'; # '+str(port.getName())+'\n'

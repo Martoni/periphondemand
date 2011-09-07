@@ -375,7 +375,9 @@ List instance interface
         try:
             self.checkargs(line,"<instancename>")
             self.isProjectOpen()
-            interfacelist= [interface.getName() for interface in settings.active_project.getInstance(line).getInterfacesList()]
+            interfacelist= [interface.getName()\
+                    for interface in\
+                    settings.active_project.getInstance(line).getInterfacesList()]
         except Error,e:
             print display
             print e

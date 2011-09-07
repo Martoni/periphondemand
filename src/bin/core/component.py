@@ -236,18 +236,18 @@ class Component(WrapperXml):
                 fpgalist.append(generic)
         return fpgalist
 
-    def getGeneric(self,genericname):
+    def getGeneric(self, genericname):
         for generic in self.getGenericsList():
             if generic.getName() == genericname:
                 return generic
         raise Error("No generic with name "+genericname,0)
 
-    def addGeneric(self,generic):
+    def addGeneric(self, generic):
         generic.setParent(self)
         self.genericslist.append(generic)
         self.addSubNode(nodename="generics",subnode=generic)
 
-    def getInterface(self,interfacename):
+    def getInterface(self, interfacename):
         for interface in self.interfaceslist:
             if interface.getName() == interfacename:
                 return interface

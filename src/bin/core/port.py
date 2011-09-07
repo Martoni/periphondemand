@@ -151,7 +151,7 @@ class Port(WrapperXml):
         if not dir.lower() in ["out","in","inout"]:
             raise Error("Direction wrong : "+str(dir))
         self.setAttribute("dir",dir)
-    def getStandart(self):
+    def getStandard(self):
         return self.getAttribute("standard")
     def setStandard(self,standard):
         self.setAttribute("standard",standard)
