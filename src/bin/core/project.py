@@ -368,7 +368,7 @@ class Project(WrapperXml):
         for component in self.getInstancesList():
             if component.getName() == "platform":
                 return component
-        raise Error("No platform in project",1)
+        raise Error("No platform in project", 1)
 
     def getPlatformName(self):
         """ return platform name """
@@ -717,6 +717,19 @@ class Project(WrapperXml):
         """
         filelist = sy.listDirectory(settings.path + TOOLCHAINPATH +DRIVERSPATH)
         return filelist
+
+    def getIOlist(self):
+        """ return a list of IOs avaiable in platform """
+        platform = self.getPlatform()
+        return platform.getInterfacesList()[0].getPortsList()
+
+    def getIO(self, io_name):
+        """ return IO with io_name given """
+        for io in self.getIOlist():
+            if io.getName() == io_name:
+                return io
+        raise Error("No IO with name "+str(io_name))
+        
 
     def getComponentVersionList(self,libraryname,componentname):
         """ list component version name in archive

@@ -340,6 +340,7 @@ class BaseCli(cmd.Cmd):
             drivertoolchain    : give list of toolchain available for driver
             synthesistoolchain : give list of toolchain available for synthesis
             forcename          : give list of pin where value can be forced
+            IO_name            : give list of platform IO pin name
         """
         # read listargs (come from template)
         if len(listargs) > 0:
@@ -461,6 +462,9 @@ class BaseCli(cmd.Cmd):
             return settings.active_project.getSynthesisToolChainList()
         elif subargt == "drivertoolchain":
             return settings.active_project.getDriverToolChainList()
+        elif subargt == "IO_name":
+            return [ port.getName() for port in settings.active_project.getIOlist()]
+
         else:
             return []
 
