@@ -767,9 +767,12 @@ class Project(WrapperXml):
                 text+=TAB+instance.getInstanceName()+\
                         "."+interfaceslave.getName()+\
                         ":\n"
-                for reg in interfaceslave.getRegisterMap():
-                    text+=TAB+"  "+"0x%02x : %s\n"%(reg["offset"],
-                            reg["name"])
+                try:
+                    for reg in interfaceslave.getRegisterMap():
+                        text+=TAB+"  "+"0x%02x : %s\n"%(reg["offset"],
+                                reg["name"])
+                except Error, e:
+                    text+="\n"
         report_file.write(text)
         report_file.close()
         return text
