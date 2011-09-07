@@ -31,7 +31,7 @@
 
 import re
 
-VERSION = "1.0-rc3"
+VERSION = "1.0-rc4"
 URL = "$HeadURL: https://periphondemand.svn.sourceforge.net/svnroot/periphondemand/trunk/setup.py $"
 
 def getVersion():
