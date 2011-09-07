@@ -199,7 +199,7 @@ generate the bitstream for fpga configuration
 
     def do_setiostandard(self, line):
         """\
-Usage : setIOstandard <IO_name> <standard_value>
+Usage : setiostandard <IO_name> <standard_value>
 set IO standard value
         """
         try:
@@ -212,7 +212,7 @@ set IO standard value
         io_name = arg[0]
         standard_value = arg[1]
         try:
-            print settings.active_project.getIO(io_name).setStandard(standard_value)
+            settings.active_project.getIO(io_name).setStandard(standard_value)
         except Error, e:
             print display
             print e
@@ -229,7 +229,7 @@ set IO standard value
 
     def do_getiostandard(self, line):
         """\
-Usage : getIOstandard <IO_name>
+Usage : getiostandard <IO_name>
 get IO standard value
         """
         try:
@@ -247,6 +247,66 @@ get IO standard value
             print e
             return
         print display
+
+    def complete_setiodrive(self, text, line, begidx, endidx):
+        IOlist = []
+        try:
+            IOlist = self.completeargs(text, line, "<IO_name>")
+        except Exception, e:
+            print e
+        return IOlist
+
+    def do_setiodrive(self, line):
+        """\
+Usage : setiodrive <IO_name> <drive_value>
+set IO drive value
+        """
+        try:
+            self.checkargs(line,"<IO_name> <drive_value>")
+        except Exception, e:
+            print display
+            print e
+            return
+        arg = line.split(' ')
+        io_name = arg[0]
+        drive_value = arg[1]
+        try:
+            settings.active_project.getIO(io_name).setDrive(drive_value)
+        except Error, e:
+            print display
+            print e
+            return
+
+    def complete_getiodrive(self, text, line, begidx, endidx):
+        IOlist = []
+        try:
+            IOlist = self.completeargs(text, line, "<IO_name>")
+        except Exception, e:
+            print e
+        return IOlist
+
+
+    def do_getiodrive(self, line):
+        """\
+Usage : getiodrive <IO_name>
+get IO drive value
+        """
+        try:
+            self.checkargs(line,"<IO_name>")
+        except Exception, e:
+            print display
+            print e
+            return
+        arg = line.split(' ')
+        io_name = arg[0]
+        try:
+            print settings.active_project.getIO(io_name).getDrive()
+        except Error, e:
+            print display
+            print e
+            return
+        print display
+
 
     def do_setfpga(self, line):
         """\
