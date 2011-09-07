@@ -112,17 +112,17 @@ class Project(WrapperXml):
         # load components
         if(components):
             for node in components.getNodeList("component"):
-                if node.getAttribute("platform")==None:
+                if node.getAttributeValue("platform")==None:
                     comp = Component(self)
                 else:
                     comp = Platform(self,node=self.getNode("platform"))
                 try:
-                    comp.loadInstance(node.getAttribute("name"))
+                    comp.loadInstance(node.getAttributeValue("name"))
                 except IOError:
                     self.delSubNode("components",
                                     "component",
-                                    "name",node.getAttribute("name"))
-                    raise Error("Can't open "+node.getAttribute("name")+\
+                                    "name",node.getAttributeValue("name"))
+                    raise Error("Can't open "+node.getAttributeValue("name")+\
                                     " directory",0)
                 else:
                     self.instanceslist.append(comp)
@@ -156,7 +156,7 @@ class Project(WrapperXml):
 
         # set bsp directory
         if self.getNode(nodename="bsp")!= None:
-            self.bspdir = self.getNode(nodename="bsp").getAttribute("directory")
+            self.bspdir = self.getNode(nodename="bsp").getAttributeValue("directory")
         self.void=0
 
     def setSynthesisToolChain(self,toolchainname):
@@ -372,7 +372,7 @@ class Project(WrapperXml):
 
     def getPlatformName(self):
         """ return platform name """
-        return self.getNode("platform").getAttribute("name")
+        return self.getNode("platform").getAttributeValue("name")
 
     def getListClockPorts(self):
         """ return a list of external clock port
@@ -729,7 +729,7 @@ class Project(WrapperXml):
             if io.getName() == io_name:
                 return io
         raise Error("No IO with name "+str(io_name))
-        
+
 
     def getComponentVersionList(self,libraryname,componentname):
         """ list component version name in archive

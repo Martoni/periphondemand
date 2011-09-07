@@ -360,7 +360,7 @@ get fpga attributes values
         att_name = arg[0]
         try:
             platform = settings.active_project.getPlatform()
-            print platform.getAttribute(att_name, "fpga")
+            print platform.getAttributeValue(att_name, "fpga")
         except Error, e:
             print display
             print e

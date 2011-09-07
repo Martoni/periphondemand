@@ -71,7 +71,7 @@ class Hdl_file(WrapperXml):
         self.setFileName(filename)
 
     def getFileName(self):
-        return self.getAttribute("filename")
+        return self.getAttributeValue("filename")
 
     def setFileName(self,filename):
         if filename.split(".")[-1] not in HDLEXT:
@@ -87,7 +87,7 @@ class Hdl_file(WrapperXml):
         return filepath
 
     def isTop(self):
-        if self.getAttribute("istop") == "1":
+        if self.getAttributeValue("istop") == "1":
             return 1
         else:
             return 0
@@ -97,7 +97,7 @@ class Hdl_file(WrapperXml):
         self.setAttribute("istop","0")
 
     def getScope(self):
-        return self.getAttribute("scope")
+        return self.getAttributeValue("scope")
     def setScope(self,scope):
         SCOPE = ["both","fpga","driver"]
         if scope.lower() in SCOPE:

@@ -94,7 +94,7 @@ class Platform(Component):
         componentslist = []
         try:
             for element in self.getSubNodeList("components","component"):
-                component = element.getAttribute("name").split("/")
+                component = element.getAttributeValue("name").split("/")
                 componentslist.append({"type":component[0],"name":component[1]})
         except AttributeError:
             pass
@@ -155,19 +155,19 @@ class Platform(Component):
             return []
 
     def getFamily(self):
-        return self.getNode("fpga").getAttribute("family")
+        return self.getNode("fpga").getAttributeValue("family")
 
     def getDevice(self):
-        return self.getNode("fpga").getAttribute("device")
+        return self.getNode("fpga").getAttributeValue("device")
 
     def getPackage(self):
-        return self.getNode("fpga").getAttribute("package")
+        return self.getNode("fpga").getAttributeValue("package")
 
     def getSpeed(self):
-        return self.getNode("fpga").getAttribute("speed")
+        return self.getNode("fpga").getAttributeValue("speed")
 
     def getMainClock(self):
-        return self.getNode("fpga").getAttribute("main_clock")
+        return self.getNode("fpga").getAttributeValue("main_clock")
 
     def isPlatform(self):
         return 1

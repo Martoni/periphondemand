@@ -54,7 +54,7 @@ class Bus(WrapperXml):
             + name +"/"+name+ ".xml"))
 
     def getDataSize(self):
-        size = self.getAttribute("datasize")
+        size = self.getAttributeValue("datasize")
         if size == None:
             raise Error("No datasize attribute in bus "+self.getName(),0)
         else:
@@ -64,10 +64,10 @@ class Bus(WrapperXml):
         """ return the signal name for a given type
         """
         for classnode in self.getNodeList("class"):
-            if classnode.getAttribute("type") == classname:
+            if classnode.getAttributeValue("type") == classname:
                 for signal in classnode.getNodeList("type"):
-                    if signal.getAttribute("type") == typename:
-                        return signal.getAttribute("name")
+                    if signal.getAttributeValue("type") == typename:
+                        return signal.getAttributeValue("name")
         return None
 
     def generateIntercon(self,intercon):

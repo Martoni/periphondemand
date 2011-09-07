@@ -57,12 +57,12 @@ class Slave(WrapperXml):
             raise Error("Keys unknowns in Slave init()",0)
 
     def getInstanceName(self):
-        return self.getAttribute("instancename")
+        return self.getAttributeValue("instancename")
     def setInstanceName(self,instancename):
         self.setAttribute("instancename",instancename)
 
     def getInterfaceName(self):
-        return self.getAttribute("interfacename")
+        return self.getAttributeValue("interfacename")
     def setInterfaceName(self,interfacename):
         self.setAttribute("interfacename",interfacename)
 

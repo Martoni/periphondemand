@@ -60,10 +60,10 @@ class Simulation(WrapperXml):
         pass
 
     def getLibrary(self):
-        return self.getNode("library").getAttribute("name")
+        return self.getNode("library").getAttributeValue("name")
 
     def getLanguage(self):
-        return self.getNode("language").getAttribute("name")
+        return self.getNode("language").getAttributeValue("name")
 
     def generateTemplate(self):
         import sys

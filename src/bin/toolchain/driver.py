@@ -136,7 +136,7 @@ class Driver(WrapperXml):
                 for match in iterator:
                     attributevalue = instance.getInterface(
                             match.group(1)).getRegister(
-                                    match.group(2)).getAttribute(
+                                    match.group(2)).getAttributeValue(
                                             match.group(3))
                     if not attributevalue :
                         raise Error("Wrong register value -> "+\

@@ -66,10 +66,10 @@ class Synthesis(WrapperXml):
 
     def getSynthesisToolName(self):
         """ return synthesis tool name """
-        return self.getAttribute(key="name",subnodename="tool")
+        return self.getAttributeValue(key="name",subnodename="tool")
     def getSynthesisToolCommand(self):
         """ Test if command exist and return it """
-        command_name = self.getAttribute(key="command",subnodename="tool")
+        command_name = self.getAttributeValue(key="command",subnodename="tool")
         if not sy.commandExist(command_name):
             raise Error("Synthesis tool tcl shell command named "+command_name+\
                     "doesn't exist in PATH");
@@ -128,7 +128,7 @@ class Synthesis(WrapperXml):
 
     def getTCLScriptName(self):
         try:
-            return self.getAttribute(key="filename",subnodename="script")
+            return self.getAttributeValue(key="filename",subnodename="script")
         except Error,e:
             raise Error("TCL script must be generated before")
 

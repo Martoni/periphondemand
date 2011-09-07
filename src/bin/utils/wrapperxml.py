@@ -192,12 +192,12 @@ class WrapperXml:
                 if(element.tree.tag == nodename):
                     if(attribute==None):
                         self.tree.remove(element.tree)
-                    elif (type(attribute) == str) and (element.getAttribute(attribute) == value):
+                    elif (type(attribute) == str) and (element.getAttributeValue(attribute) == value):
                         self.tree.remove(element.tree)
                     elif type(attribute) == dict:
                         match = 1
                         for key in attribute:
-                            if element.getAttribute(key) != attribute[key]:
+                            if element.getAttributeValue(key) != attribute[key]:
                                 match = 0
                         if match==1:
                             self.tree.remove(element.tree)
@@ -208,7 +208,7 @@ class WrapperXml:
         node = self.getNode(nodename)
         node.delNode(subnodename,attribute,value)
 
-    def getAttribute(self,key,subnodename=None):
+    def getAttributeValue(self,key,subnodename=None):
         if subnodename == None:
             return self.tree.get(key)
         else:
@@ -253,16 +253,16 @@ class WrapperXml:
         return description
 
     def getSize(self):
-        return self.getAttribute("size")
+        return self.getAttributeValue("size")
 
     def setSize(self,size):
         self.setAttribute("size",str(size))
     def getName(self):
-        return self.getAttribute("name")
+        return self.getAttributeValue("name")
     def setName(self,value):
         return self.setAttribute("name",value)
     def getVersion(self):
-        return self.getAttribute("version")
+        return self.getAttributeValue("version")
     def setVersion(self,version):
         return self.setAttribute("version",version)
 

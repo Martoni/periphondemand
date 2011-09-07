@@ -147,8 +147,8 @@ class Component(WrapperXml):
             for element in self.getSubNodeList("interrupts","interrupt"):
                 self.interruptslist.append(
                         self.getInterface(
-                            element.getAttribute("interface")).getPort(
-                                element.getAttribute("port")))
+                            element.getAttributeValue("interface")).getPort(
+                                element.getAttributeValue("port")))
 
         self.setInstanceName(instancename)
 
@@ -319,7 +319,7 @@ class Component(WrapperXml):
                     self.getInstanceName())
 
     def getInstanceName(self):
-        return self.getAttribute("instance_name")
+        return self.getAttributeValue("instance_name")
 
     def setInstanceName(self,instancename):
         return self.setAttribute("instance_name",instancename)
@@ -330,7 +330,7 @@ class Component(WrapperXml):
         return self.setAttribute("num",str(num))
 
     def getNum(self):
-        return self.getAttribute("num")
+        return self.getAttributeValue("num")
 
     def invertDir(self,dirname):
         """ invert direction given in params

@@ -63,5 +63,5 @@ class SimulationLib(WrapperXml):
         WrapperXml.__init__(self,nodestring=nodestring)
 
     def getFileName(self):
-        return self.getAttribute("filename")
+        return self.getAttributeValue("filename")
 

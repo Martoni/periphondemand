@@ -55,13 +55,13 @@ class ConfigFile(WrapperXml):
         # fill library path list:
         try:
             self.personal_lib_list =\
-                [node.getAttribute("path")
+                [node.getAttributeValue("path")
                         for node in self.getSubNodeList("libraries","lib")]
         except:
             self.personal_lib_list = []
         try:
             self.personal_platformlib_list =\
-                [node.getAttribute("path")
+                [node.getAttributeValue("path")
                         for node in self.getSubNodeList("platforms","platform")]
         except:
             self.personal_platformlib_list = []
@@ -70,7 +70,7 @@ class ConfigFile(WrapperXml):
         path = os.path.expanduser(path)
         path = os.path.abspath(path)
          # check if lib doesn't exists in config file
-        libpathlist = [node.getAttribute("path") for node in
+        libpathlist = [node.getAttributeValue("path") for node in
                 self.getSubNodeList(nodename="libraries", subnodename="lib")]
         if not (path in libpathlist):
             raise Error("Library "+path+" doesn't exist in config",0)
@@ -84,7 +84,7 @@ class ConfigFile(WrapperXml):
         path = os.path.expanduser(path)
         path = os.path.abspath(path)
         # check if lib doesn't exists in config file
-        libpathlist = [node.getAttribute("path") for node in
+        libpathlist = [node.getAttributeValue("path") for node in
                 self.getSubNodeList(nodename="libraries", subnodename="lib")]
         if path in libpathlist:
             raise Error("This library is already in POD",0)

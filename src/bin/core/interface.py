@@ -116,7 +116,7 @@ class Interface(WrapperXml):
         return self.interfacemaster
 
     def getClass(self):
-        return self.getAttribute("class")
+        return self.getAttributeValue("class")
     def setClass(self,classname):
         if not classname in INTERFACE_CLASS:
             raise Error("classname "+classname+" unknown")
@@ -124,7 +124,7 @@ class Interface(WrapperXml):
 
     def getBase(self):
         try:
-           base = self.getAttribute("base","registers")
+           base = self.getAttributeValue("base","registers")
         except AttributeError:
             raise Error("Base address register not set",0)
 
@@ -167,7 +167,7 @@ class Interface(WrapperXml):
         self.setAttribute("base",baseoffset,"registers")
 
     def getBusName(self):
-        return self.getAttribute("bus")
+        return self.getAttributeValue("bus")
 
     def getBus(self):
         return self.bus

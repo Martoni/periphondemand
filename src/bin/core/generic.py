@@ -69,17 +69,17 @@ class Generic(WrapperXml):
         self.setName(name)
 
     def getOp(self):
-        return self.getAttribute("op")
+        return self.getAttributeValue("op")
     def setOp(self,op):
         self.setAttribute("op",op)
 
     def getTarget(self):
-        return self.getAttribute("target")
+        return self.getAttributeValue("target")
     def setTarget(self,target):
         self.setAttribute("target",target)
 
     def isPublic(self):
-        if self.getAttribute("public")=="true":
+        if self.getAttributeValue("public")=="true":
             return "true"
         else:
             return "false"
@@ -90,7 +90,7 @@ class Generic(WrapperXml):
         self.setAttribute("public",public)
 
     def getType(self):
-        the_type = self.getAttribute("type")
+        the_type = self.getAttributeValue("type")
         if the_type == None:
             raise Error("Generic "+self.getName()+\
                     " description malformed, type must be defined",0)
@@ -101,7 +101,7 @@ class Generic(WrapperXml):
 
     def getMatch(self):
         try:
-            return self.getAttribute("match").encode("utf-8")
+            return self.getAttributeValue("match").encode("utf-8")
         except AttributeError:
             return None
     def setMatch(self,match):
@@ -112,7 +112,7 @@ class Generic(WrapperXml):
         """
         component = self.getParent()
         if self.getOp() == None:
-            return self.getAttribute("value")
+            return self.getAttributeValue("value")
         else:
             target = self.getTarget().split(".")
             if self.getOp() == "realsizeof":
@@ -131,7 +131,7 @@ class Generic(WrapperXml):
     def getDestination(self):
         """ return the generic destination (fpga,driver or both)
         """
-        return self.getAttribute("destination")
+        return self.getAttributeValue("destination")
 
     def setDestination(self,destination):
         destination = destination.lower()

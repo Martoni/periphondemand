@@ -64,13 +64,13 @@ class Driver_Templates(WrapperXml):
 
     def getTemplatesList(self):
         """ return a list of templates file name """
-        return [template.getAttribute("name") for template in self.getNodeList("file")]
+        return [template.getAttributeValue("name") for template in self.getNodeList("file")]
 
     def getVersionsList(self):
         """ return a list of version supported """
-        return [version.getAttribute("version") for version in self.getNodeList("support")]
+        return [version.getAttributeValue("version") for version in self.getNodeList("support")]
 
     def getArchitecture(self):
         """ return arcitecture name """
-        return self.getAttribute("architecture")
+        return self.getAttributeValue("architecture")
 

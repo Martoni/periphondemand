@@ -74,10 +74,10 @@ class Pin(WrapperXml):
         connectionslist =[]
         if(self.getNode("connect")!=None):
             for element in self.getNodeList("connect"):
-                connectionslist.append({"instance_dest":str(element.getAttribute("instance_dest")),\
-                             "interface_dest":str(element.getAttribute("interface_dest")),\
-                             "port_dest":str(element.getAttribute("port_dest")),\
-                             "pin_dest":str(element.getAttribute("pin_dest"))})
+                connectionslist.append({"instance_dest":str(element.getAttributeValue("instance_dest")),\
+                             "interface_dest":str(element.getAttributeValue("interface_dest")),\
+                             "port_dest":str(element.getAttributeValue("port_dest")),\
+                             "pin_dest":str(element.getAttributeValue("pin_dest"))})
         return connectionslist
 
     def delAllConnectionsForce(self):
@@ -164,9 +164,9 @@ class Pin(WrapperXml):
     def setNum(self,num):
         self.setAttribute("num",str(num))
     def getNum(self):
-        return self.getAttribute("num")
+        return self.getAttributeValue("num")
     def isAll(self): # To Be Remove ?
-        if self.getAttribute("all") == "true":
+        if self.getAttributeValue("all") == "true":
             return True
         else:
             return False

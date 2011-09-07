@@ -121,15 +121,15 @@ class Port(WrapperXml):
         return pin
 
     def getType(self):
-        return self.getAttribute("type")
+        return self.getAttributeValue("type")
     def setType(self,type):
         #TODO: check if type is known
         self.setAttribute("type",type)
     def getDir(self):
-        return self.getAttribute("dir")
+        return self.getAttributeValue("dir")
     def getUnconnectedValue(self):
         try:
-            ucvalue = self.getAttribute("unconnected_value")
+            ucvalue = self.getAttributeValue("unconnected_value")
             if ucvalue == None:
                 return "0"
             else:
@@ -152,15 +152,15 @@ class Port(WrapperXml):
             raise Error("Direction wrong : "+str(dir))
         self.setAttribute("dir",dir)
     def getStandard(self):
-        return self.getAttribute("standard")
+        return self.getAttributeValue("standard")
     def setStandard(self,standard):
         self.setAttribute("standard",standard)
     def setDrive(self, drive):
         self.setAttribute("drive", drive)
     def getDrive(self):
-        return self.getAttribute("drive")
+        return self.getAttributeValue("drive")
     def getForce(self):
-        return self.getAttribute("force")
+        return self.getAttributeValue("force")
     def setForce(self, force):
         listofpins = self.getPinsList()
         if len(listofpins) > 1:
@@ -184,17 +184,17 @@ class Port(WrapperXml):
         return False
 
     def getPosition(self):
-        return self.getAttribute("position")
+        return self.getAttributeValue("position")
     def setPosition(self,position):
         self.setAttribute("position",position)
     def getFreq(self):
-        freq = self.getAttribute("freq")
+        freq = self.getAttributeValue("freq")
         if freq == None:
             raise Error("No frequency attribute for "+self.getName())
         return freq
     def isvariable(self):
         try:
-            if self.getAttribute("variable_size") == "1":
+            if self.getAttributeValue("variable_size") == "1":
                 return 1
             else:
                 return 0
