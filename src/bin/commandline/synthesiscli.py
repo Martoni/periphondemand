@@ -285,7 +285,6 @@ set IO drive value
             print e
         return IOlist
 
-
     def do_getiodrive(self, line):
         """\
 Usage : getiodrive <IO_name>
@@ -307,18 +306,64 @@ get IO drive value
             return
         print display
 
+    def complete_setfpga(self, text, line, begidx, endidx):
+        attributes = []
+        try:
+            attributes = self.completeargs(text, line, "<fpga_attributes>")
+        except Exception, e:
+            print e
+        return attributes
 
     def do_setfpga(self, line):
         """\
-Usage : setfpga <attribute_name> <attribute_value>
-Set fpga attribute
+Usage : setfpga <fpga_attributes> <attribute_value>
+Set fpga attributes
         """
-        print "TODO"
+        try:
+            self.checkargs(line,"<fpga_attributes> <attribute_value>")
+        except Exception, e:
+            print display
+            print e
+            return
+        arg = line.split(' ')
+        att_name = arg[0]
+        att_value = arg[1]
+        try:
+            platform = settings.active_project.getPlatform()
+            platform.setAttribute(att_name, att_value, "fpga")
+        except Error, e:
+            print display
+            print e
+            return
+        print display
+
+    def complete_getfpga(self, text, line, begidx, endidx):
+        attributes = []
+        try:
+            attributes = self.completeargs(text, line, "<fpga_attributes>")
+        except Exception, e:
+            print e
+        return attributes
 
     def do_getfpga(self, line):
         """\
-Usage : getfpga
+Usage : getfpga <fpga_attributes>
 get fpga attributes values
         """
-        print "TODO"
+        try:
+            self.checkargs(line,"<fpga_attributes>")
+        except Exception, e:
+            print display
+            print e
+            return
+        arg = line.split(' ')
+        att_name = arg[0]
+        try:
+            platform = settings.active_project.getPlatform()
+            print platform.getAttribute(att_name, "fpga")
+        except Error, e:
+            print display
+            print e
+            return
+        print display
 

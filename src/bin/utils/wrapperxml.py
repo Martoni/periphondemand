@@ -218,6 +218,16 @@ class WrapperXml:
             return node.get(key)
         raise Error("No attribute named "+key+" for tag "+str(subnodename))
 
+    def getAttributeNameList(self, subnodename=None):
+        if subnodename == None:
+            return self.tree.keys()
+        else:
+            node = self.tree.find(subnodename)
+            if node == None:
+                raise Error("No tag named "+str(subnodename))
+            return node.keys()
+        raise Error("getAttributeNameList error")
+
     def setAttribute(self,key,value,subname=None):
         if subname == None:
             self.tree.attrib[key] = value

@@ -341,6 +341,7 @@ class BaseCli(cmd.Cmd):
             synthesistoolchain : give list of toolchain available for synthesis
             forcename          : give list of pin where value can be forced
             IO_name            : give list of platform IO pin name
+            fpga_attributes    : give list of fpga attributes in platform
         """
         # read listargs (come from template)
         if len(listargs) > 0:
@@ -464,7 +465,9 @@ class BaseCli(cmd.Cmd):
             return settings.active_project.getDriverToolChainList()
         elif subargt == "IO_name":
             return [ port.getName() for port in settings.active_project.getIOlist()]
-
+        elif subargt == "fpga_attributes":
+            platform = settings.active_project.getPlatform()
+            return platform.getAttributeNameList("fpga")
         else:
             return []
 
