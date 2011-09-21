@@ -189,7 +189,7 @@ class Interface(WrapperXml):
         for port in self.portslist:
             if port.getType() == porttypename:
                 return port
-        raise Error("Not port with type "+ str(porttypename),1)
+        raise Error("No port with type "+ str(porttypename),1)
 
     def addPort(self,port):
         port.setParent(self)
