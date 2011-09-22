@@ -5,11 +5,19 @@
         <generic destination="fpga" match="\d+" name="wb_size" public="false" type="natural" value="16" />
         <generic destination="both" match="\d+" name="clk_freq" public="false" type="natural" value="100000" />
     </generics>
+	<driver_files>
+		<driver_templates architecture="armadeus">
+			<support version="4.0" />
+			<file name="sploader_prober.c" />
+			<file name="Makefile" />
+			<file name="Kconfig" />
+		</driver_templates>
+	</driver_files>
     <hdl_files>
         <hdl_file filename="sp_vision_configure.vhd" istop="1" scope="both" />
     </hdl_files>
     <interfaces>
-        <interface bus="wishbone16" class="slave" name="wbs">
+        <interface bus="wishbone16" class="slave" name="swb16">
             <registers>
                 <register name="id" offset="0x0" rows="1" size="16" />
                 <register name="config" offset="0x1" rows="1" size="16" />
