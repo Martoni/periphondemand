@@ -4,7 +4,7 @@
 
 ifneq ($(KERNELRELEASE),)
 
-obj-$(CONFIG_ARMADEUS_FPGA_SPVISION_PROBER_DRIVER)	+= sploader_prober.o
+obj-$(CONFIG_ARMADEUS_FPGA_POD_SPVISION_PROBER_DRIVER) += pod_sploader_prober.o
 
 # Part executed when called from standard make in this directory:
 # (preferably use Makefile in parent directory)
