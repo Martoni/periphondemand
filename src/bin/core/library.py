@@ -58,6 +58,7 @@ class Library:
         """
         componentlist = sy.listDirectory(settings.path + LIBRARYPATH )
         componentlist.extend(self.getPersonalLibName())
+        componentlist.extend(self.getProjectLibName())
         return componentlist
 
     def getOfficialLibraries(self):
@@ -118,6 +119,9 @@ class Library:
 
     def getPersonalLibName(self):
         return settings.personal_lib_name_list
+
+    def getProjectLibName(self):
+        return [] # TODO
 
     def getPersonalLibPath(self,name):
         for libpath in settings.personal_lib_path_list:

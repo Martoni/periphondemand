@@ -238,13 +238,14 @@ class Project(WrapperXml):
         platform = self.getPlatform()
         return platform.getForcesList()
 
-    def addinstance(self,**keys):
+
+    def addInstance(self,**keys):
         """ Add a component in project
-            addinstance(self,component)
-            addinstance(self,libraryname,componentname)
-            addinstance(self,libraryname,componentname,instancename)
-            addinstance(self,libraryname,componentname,componentversion)
-            addinstance(self,libraryname,componentname,
+            addInstance(self,component)
+            addInstance(self,libraryname,componentname)
+            addInstance(self,libraryname,componentname,instancename)
+            addInstance(self,libraryname,componentname,componentversion)
+            addInstance(self,libraryname,componentname,
                                     componentversion,instancename)
         """
         if "component" in keys:
@@ -280,7 +281,7 @@ class Project(WrapperXml):
                                   instancename)
             comp.setNum(self.getInstanceAvailability(componentname))
         else:
-            raise Error("Key not known in addinstance",0)
+            raise Error("Key not known in addInstance",0)
 
         #Add component to project
         self.instanceslist.append(comp)
@@ -417,11 +418,11 @@ class Project(WrapperXml):
         if sy.fileExist(platformdir+SIMULATIONPATH):
             sy.copyAllFile(platformdir+SIMULATIONPATH,
                     settings.projectpath+SIMULATIONPATH)
-        self.addinstance(component=platform)
+        self.addInstance(component=platform)
         self.addNode(node=platform)
         # Adding platform default components
         for component in platform.getComponentsList():
-            self.addinstance(libraryname=component["type"],
+            self.addInstance(libraryname=component["type"],
                               componentname=component["name"])
         self.saveProject()
 
@@ -538,7 +539,7 @@ class Project(WrapperXml):
 
         intercon = Intercon(
                 self.getInstance(instance_name).getInterface(interface_name),self)
-        self.addinstance(component=intercon)
+        self.addInstance(component=intercon)
         self.saveProject()
 
     def connectPort(self,

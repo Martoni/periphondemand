@@ -254,18 +254,18 @@ Add component in project
             if instancename != None:
                 sy.check_name(instancename)
             if instancename== None and componentversion==None:
-                settings.active_project.addinstance(componentname=subarg[1],
+                settings.active_project.addInstance(componentname=subarg[1],
                                                      libraryname=subarg[0])
             elif instancename != None and componentversion==None:
-                settings.active_project.addinstance(componentname=subarg[1],
+                settings.active_project.addInstance(componentname=subarg[1],
                                                      libraryname=subarg[0],
                                                      instancename=instancename)
             elif instancename == None and componentversion!=None:
-                settings.active_project.addinstance(componentname=subarg[1],
+                settings.active_project.addInstance(componentname=subarg[1],
                                                      libraryname=subarg[0],
                                                      componentversion=componentversion)
             else:
-                settings.active_project.addinstance(componentname=subarg[1],
+                settings.active_project.addInstance(componentname=subarg[1],
                                                      libraryname=subarg[0],
                                                      componentversion=componentversion,
                                                      instancename=instancename)
