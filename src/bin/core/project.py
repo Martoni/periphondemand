@@ -37,7 +37,6 @@ from   periphondemand.bin.toolchain.simulation import Simulation
 from   periphondemand.bin.toolchain.synthesis  import Synthesis
 from   periphondemand.bin.toolchain.driver     import Driver
 
-
 settings = Settings()
 display  = Display()
 
@@ -238,6 +237,33 @@ class Project(WrapperXml):
         platform = self.getPlatform()
         return platform.getForcesList()
 
+    def addComponentLib(self, aPath):
+        """ Adding a component library under the project """
+        if sy.dirExist(aPath):
+            path = sy.pwd() + "/" + aPath
+            if self.getNode("componentslibs") is None:
+                self.addNode(nodename="componentslibs")
+            self.addSubNode(nodename="componentslibs",
+                            subnodename="componentslib",
+                            attributename="path",
+                            value=path)
+            self.saveProject()
+        else:
+            raise Error("ComponentsLib directory "+str(aPath)+" doesn't exists")
+
+    def addPlatformsLib(self, aPath):
+        """ Adding a platforms library under the project """
+        if sy.dirExist(aPath):
+            path = sy.pwd() + "/" + aPath
+            if self.getNode("platformlibs") is None:
+                self.addNode(nodename="platformlibs")
+            self.addSubNode(nodename ="platformlibs",
+                            subnodename="platformlib",
+                            attributename="path",
+                            value=path)
+            self.saveProject()
+        else:
+            raise Error("ComponentsLib directory "+str(aPath)+" doesn't exists")
 
     def addInstance(self,**keys):
         """ Add a component in project

@@ -218,7 +218,47 @@ Load a project
         self.setPrompt("POD:"+settings.active_project.getName())
         print display
 
-    def complete_addinstance(self,text,line,begidx,endidx):
+    def complete_addcomponentslib(self, text, line, begidx, endidx):
+        """ TOOD """
+        pass
+
+    def do_addcomponentslib(self, line):
+        try:
+            self.isProjectOpen()
+            self.checkargs(line,"<componentslibpath>")
+        except Error,e:
+            print display
+            print e
+            return
+        try:
+            settings.active_project.addComponentLib(line)
+        except Error,e:
+            print display
+            print e
+            return
+        print display
+
+    def complete_addplatformslib(self, text, line, begidx, endidx):
+        """ TOOD """
+        pass
+
+    def do_addplatformslib(self, line):
+        try:
+            self.isProjectOpen()
+            self.checkargs(line,"<platformslibpath>")
+        except Error,e:
+            print display
+            print e
+            return
+        try:
+            settings.active_project.addPlatformsLib(line)
+        except Error,e:
+            print display
+            print e
+            return
+        print display
+
+    def complete_addinstance(self, text, line, begidx, endidx):
         componentlist = []
         try:
             componentlist = self.completeargs(text,line,
@@ -227,7 +267,7 @@ Load a project
             print e
         return componentlist
 
-    def do_addinstance(self,line):
+    def do_addinstance(self, line):
         """\
 Usage : addinstance <libraryname>.<componentname>.[componentversion] [newinstancename]
 Add component in project
@@ -384,20 +424,6 @@ List instance interface
             return
         print display
         return self.columnize(interfacelist)
-
-    def do_saveproject(self,line):
-        """\
-Usage : saveproject
-Save project in the curent directory
-        """
-        try:
-            self.isProjectOpen()
-        except Error,e:
-            print display
-            print e
-            return
-        print display
-        settings.active_project.saveProject()
 
     def complete_connectpin(self,text,line,begidx,endidx):
         pinlist = []

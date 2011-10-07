@@ -58,7 +58,7 @@ class Library:
         """
         componentlist = sy.listDirectory(settings.path + LIBRARYPATH )
         componentlist.extend(self.getPersonalLibName())
-        componentlist.extend(self.getProjectLibName())
+        componentlist.extend(self.getComponentsLibName())
         return componentlist
 
     def getOfficialLibraries(self):
@@ -72,6 +72,8 @@ class Library:
             return settings.path+LIBRARYPATH+"/"+libraryname
         elif libraryname in self.getPersonalLibName():
             return settings.active_library.getPersonalLibPath(libraryname)
+        elif libraryname in self.getComponentsLibName():
+            return settings.active_library.getComponentsLibPath(libraryname)
         else:
             raise Error("Library not found : "+str(libraryname),0)
 
@@ -86,6 +88,8 @@ class Library:
             componentlist = sy.listDirectory(settings.path+LIBRARYPATH+"/"+libraryname)
         elif libraryname in self.getPersonalLibName():
             componentlist = sy.listDirectory(self.getPersonalLibPath(libraryname))
+        elif libraryname in self.getComponentsLibName():
+            componentlist = sy.listDirectory(self.getComponentsLibPath(libraryname))
         return componentlist
 
     def addLibrary(self,path):
@@ -117,11 +121,26 @@ class Library:
                             " contain a component that exist in '"+\
                             libraryname+"' : "+component,0)
 
+    def getComponentsLibPath(self, name=None):
+        path_list = []
+        for node in settings.active_project.getSubNodeList("componentslibs", "componentslib"):
+            path_list.append(node.getAttributeValue(key="path"))
+        if name==None:
+            return path_list
+        else:
+            for libpath in path_list:
+                if libpath.split("/")[-1] == name:
+                    return libpath
+            return ""
+
+    def getComponentsLibName(self):
+        name_list = []
+        for path in self.getComponentsLibPath():
+            name_list.append(path.split("/")[-1])
+        return name_list
+
     def getPersonalLibName(self):
         return settings.personal_lib_name_list
-
-    def getProjectLibName(self):
-        return [] # TODO
 
     def getPersonalLibPath(self,name):
         for libpath in settings.personal_lib_path_list:

@@ -417,11 +417,8 @@ class BaseCli(cmd.Cmd):
             return arglist
         elif subargt == "forcestate":
             return ["gnd", "vcc", "undef"]
-        elif subargt == "personallibraryname":
-            arglist = settings.active_project.library.getPersonalLibName()
-            return arglist
         elif subargt == "componentname":
-            # XXX: detect is libraryname defined with proper function
+            # XXX: detect if libraryname defined with proper function
             try:
                 libraryname.lower()
             except:
