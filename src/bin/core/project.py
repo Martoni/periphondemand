@@ -103,7 +103,7 @@ class Project(WrapperXml):
         self.void = 0
         self.saveProject()
 
-    def loadProject(self,pathname):
+    def loadProject(self, pathname):
         """ Load the  project
         """
         self.openXml(pathname)

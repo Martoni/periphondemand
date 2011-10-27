@@ -98,18 +98,21 @@ class WrapperXml:
 
     def getParent(self):
         return self.parent
-    def setParent(self,parent):
+    def setParent(self, parent):
         self.parent = parent
 
-    def getSubNodeList(self,nodename,subnodename):
+    def getSubNodeList(self, nodename, subnodename):
         """ Return a list of subnodes
         """
         nodelist = []
-        for element in self.getNode(nodename).getNodeList(subnodename):
-            nodelist.append(element)
-        return nodelist
+        try:
+            for element in self.getNode(nodename).getNodeList(subnodename):
+                nodelist.append(element)
+            return nodelist
+        except AttributeError:
+            return []
 
-    def getNodeList(self,nodename):
+    def getNodeList(self, nodename):
         """ Return a list of nodes
         """
         nodelist =[]
@@ -118,7 +121,7 @@ class WrapperXml:
             nodelist.append(tmp)
         return nodelist
 
-    def getNode(self,nodename):
+    def getNode(self, nodename):
         """ return the first node found
         """
         try:
@@ -126,7 +129,7 @@ class WrapperXml:
         except IndexError:
             return None
 
-    def addSubNode(self,**keys):
+    def addSubNode(self, **keys):
         """ Add a subnode in the object tree
             addSubNode(self,nodename,subnode)
             addSubNode(self,nodename,subnodename,attributename,value)
