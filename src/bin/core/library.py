@@ -58,6 +58,7 @@ class Library:
         """
         componentlist = sy.listDirectory(settings.path + LIBRARYPATH )
         componentlist.extend(self.getPersonalLibName())
+
         componentlist.extend(self.getComponentsLibName())
         return componentlist
 
@@ -123,15 +124,18 @@ class Library:
 
     def getComponentsLibPath(self, name=None):
         path_list = []
-        for node in settings.active_project.getSubNodeList("componentslibs", "componentslib"):
-            path_list.append(node.getAttributeValue(key="path"))
-        if name==None:
-            return path_list
-        else:
-            for libpath in path_list:
-                if libpath.split("/")[-1] == name:
-                    return libpath
-            return ""
+        try:
+            for node in settings.active_project.getSubNodeList("componentslibs", "componentslib"):
+                path_list.append(node.getAttributeValue(key="path"))
+            if name==None:
+                return path_list
+            else:
+                for libpath in path_list:
+                    if libpath.split("/")[-1] == name:
+                        return libpath
+                return []
+        except AttributeError:
+            return []
 
     def getComponentsLibName(self):
         name_list = []
