@@ -88,6 +88,7 @@ Architecture uart_top_vhdl_1 of uart16750 is
 
     signal strobe : std_logic ;
     signal baudrateX16 : std_logic ;
+    signal uart_rd_s : std_logic;
 
 begin
 
@@ -101,6 +102,8 @@ begin
                 when wb_adr_i(3)= '0' and wb_stb_i = '1' and wb_we_i = '0'
                 else (others => '0');
 
+    uart_rd_s <= not wb_we_i;
+
     uart_connect : uart_16750
     port map (
         CLK      => wb_clk_i,               -- Clock
@@ -108,7 +111,7 @@ begin
         BAUDCE   => '1',                    -- Baudrate generator clock enable
         CS       => wb_stb_i,               -- Chip select
         WR       => wb_we_i,                -- Write to UART
-        RD       => not wb_we_i,            -- Read from UART
+        RD       => uart_rd_s,            -- Read from UART
         A        => wb_adr_i(2 downto 0),   -- Register select
         DIN      => wb_dat_i_int,   -- Data bus input
         DOUT     => wb_dat_o_int,   -- Data bus output
