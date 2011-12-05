@@ -84,7 +84,11 @@ static int __init board_irq_mng_init(void)
 	if (ret)
 		return -EINVAL;
 #endif
+#if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,39)
+    irq_set_irq_type(ARMADEUS_FPGA_IRQ, IRQ_TYPE_EDGE_RISING);
+#else
 	set_irq_type(ARMADEUS_FPGA_IRQ, IRQ_TYPE_EDGE_RISING);
+#endif
 /*$foreach:instance$*/
 	ret = platform_device_register(&/*$instance_name$*/_device);
 /*$foreach:instance:end$*/
