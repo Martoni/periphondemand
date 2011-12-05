@@ -109,7 +109,7 @@ begin
         CLK      => wb_clk_i,               -- Clock
         RST      => wb_rst_i,               -- Reset
         BAUDCE   => '1',                    -- Baudrate generator clock enable
-        CS       => wb_stb_i,               -- Chip select
+        CS       => strobe,                 -- Chip select
         WR       => wb_we_i,                -- Write to UART
         RD       => uart_rd_s,            -- Read from UART
         A        => wb_adr_i(2 downto 0),   -- Register select
