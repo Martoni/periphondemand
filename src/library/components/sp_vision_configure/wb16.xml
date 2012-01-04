@@ -98,11 +98,11 @@
                     </pin>
                     <pin num="14">
                         <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L18N_0" pin_dest="0"/>
-                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L42P_GCLK7_M1UDM_1" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L44P_A3_M1DQ6_1" pin_dest="0"/>
                     </pin>
                     <pin num="15">
                         <connect instance_dest="apf27" interface_dest="fpga" port_dest="IO_L18P_0" pin_dest="0"/>
-                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L44P_A3_M1DQ6_1" pin_dest="0"/>
+                        <connect instance_dest="apf51" interface_dest="fpga" port_dest="IO_L42P_GCLK7_M1UDM_1" pin_dest="0"/>
                     </pin>
                 </port>
                 <port dir="inout" name="selectmap_csi_n" size="1" type="EXPORT">
