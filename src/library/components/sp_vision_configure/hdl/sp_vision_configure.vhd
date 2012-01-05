@@ -167,7 +167,8 @@ begin
         if reset = '1' then
             cclk_trig <= '0';
         elsif rising_edge(clk) then
-                if wbs_add = DATA_REG_ADDR then
+                if (wbs_add = DATA_REG_ADDR) and
+                   (wbs_strobe = '1') and (wbs_write = '1') then
                     cclk_trig <= '1';
                 else
                     cclk_trig <= '0';
