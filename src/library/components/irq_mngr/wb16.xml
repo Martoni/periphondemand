@@ -60,7 +60,7 @@
                 <port name="gls_irq" type="EXPORT" size="1" dir="out">
                     <pin num="0">
                         <connect instance_dest="apf9328" interface_dest="fpga" port_dest="TIM1" pin_dest="0"/>
-                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="INT" pin_dest="0"/>
+                        <connect instance_dest="apf27" interface_dest="fpga" port_dest="FPGA_INITB" pin_dest="0"/>
                         <connect instance_dest="apf51" interface_dest="fpga" port_dest="FPGA_INITB" pin_dest="0"/>
                     </pin>
                 </port>

@@ -51,7 +51,7 @@
             <ports>
 
                 <port size="1" name="FPGA_RESET" standard="LVCMOS18" drive="8" position="T9" dir="inout"/>
-                <port size="1" name="INT"        standard="LVCMOS18" drive="8" position="T12" dir="inout"/>
+                <port size="1" name="FPGA_INITB" standard="LVCMOS18" drive="8" position="T12" dir="inout"/>
                 <port size="1" name="CS4_DTACK"  standard="LVCMOS18" drive="8" position="R3" dir="inout"/>
                 <port size="1" name="CS5N"       standard="LVCMOS18"           position="P10" dir="inout"/>
                 <port size="1" name="DATA0"      standard="LVCMOS18" drive="8" position="T5" dir="inout"/>
