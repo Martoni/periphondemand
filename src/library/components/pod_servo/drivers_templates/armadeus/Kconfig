@@ -1,0 +1,7 @@
+
+config ARMADEUS_FPGA_POD_SERVO_DRIVER
+	tristate "pod_servo_platform"
+	default n
+	depends on POD_DRIVERS 
+	select ARMADEUS_FPGA_VIRTUAL_COMPONENTS_SERVO
+	---help---
