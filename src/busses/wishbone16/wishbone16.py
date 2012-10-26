@@ -324,21 +324,24 @@ def controlmaster(masterinterface,intercon):
     out = out + masterinterface.getPortByType(bus.getSignalName("master","ack")).getName()
     out = out + " <= "
     count = 0
-    for slave in masterinterface.getSlavesList():
-        slaveinstance = slave.getInstance()
-        slaveinterface = slave.getInterface()
-        slaveinterfacename = slaveinterface.getName()
-        slaveinstancename = slave.getInstanceName()
-        if count == 0:
-            out=out+" "
-            count = 1
-        else:
-            out = out+"\n"+TAB*9+"or \n"
-            out = out+TAB*8
-        out = out +"("+slaveinstancename+"_"\
-            +slaveinterface.getPortByType(bus.getSignalName("slave","ack")).getName()\
-            +" and "\
-            +slaveinstancename+"_"+slaveinterfacename+"_cs)"
+    if masterinterface.getSlavesList() :
+        for slave in masterinterface.getSlavesList():
+            slaveinstance = slave.getInstance()
+            slaveinterface = slave.getInterface()
+            slaveinterfacename = slaveinterface.getName()
+            slaveinstancename = slave.getInstanceName()
+            if count == 0:
+                out=out+" "
+                count = 1
+            else:
+                out = out+"\n"+TAB*9+"or \n"
+                out = out+TAB*8
+            out = out +"("+slaveinstancename+"_"\
+                +slaveinterface.getPortByType(bus.getSignalName("slave","ack")).getName()\
+                +" and "\
+                +slaveinstancename+"_"+slaveinterfacename+"_cs)"
+    else: 
+        out = out + "'0'"
     out = out+";\n"
     return out
 
