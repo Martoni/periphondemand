@@ -128,7 +128,6 @@ select software developpement tree, to copy driver
         """
         try:
             self.testIfToolChainSelected()
-            self.checkargs(line,"[osdirectory]")
             self.driver.setBSPDirectory(line)
         except Error,e:
             print display
