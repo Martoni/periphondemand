@@ -53,7 +53,7 @@ void /*$instance_name$*/_release(struct device *dev)
 
 static struct platform_device /*$instance_name$*/_pdev = {
 	.name = pod_gpio_DRIVER_NAME,
-	.id = /*$generic:id$*/,
+	.id = /*$instance_num$*/,
 	.dev = {
 		.release = /*$instance_name$*/_release,
 	},
