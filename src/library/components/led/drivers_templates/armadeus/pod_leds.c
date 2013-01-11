@@ -66,8 +66,8 @@ static struct platform_device plat_led_devices[] = {
 	    	.release	= plat_led_release,
 	    	.platform_data	= &plat_led/*$instance_num$*/_data
 	    },
-	    .num_resources	= ARRAY_SIZE(led0_resources),
-	    .resource	= led0_resources,
+	    .num_resources	= ARRAY_SIZE(led/*$instance_num$*/_resources),
+	    .resource	= led/*$instance_num$*/_resources,
     }
 /*$foreach:instance:end$*/
 };
