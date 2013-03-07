@@ -421,7 +421,7 @@ class Project(WrapperXml):
                                         portlist.append(port)
         return portlist
 
-    def selectPlatform(self,platformname, platformlib):
+    def selectPlatform(self,platformname, platformlibname):
         """ Select a platform for the project
         """
         #suppress platform if already exists
@@ -432,13 +432,21 @@ class Project(WrapperXml):
                 raise e
             print e
 
-        if platformlib == "standard":
+        if platformlibname == "standard":
             platformdir = settings.path+PLATFORMPATH+"/"+platformname+"/"
         else:
+            # if not standard platform, try personnal platform
             try:
-                platformdir = settings.getPlatformLibPath(platformlib)+"/"+platformname+"/"
+                platformdir = settings.getPlatformLibPath(platformlibname)+"/"+platformname+"/"
             except TypeError:
-                raise Error("Platform name error")
+                # if not personnal platform, try project specific platform (added with addplatformslib cmd)
+                platformdir = ""
+                for node in self.getSubNodeList("platformlibs", "platformlib"):
+                    apath = node.getAttributeValue("path")
+                    if apath.split("/")[-1] == platformlibname:
+                        platformdir = apath+"/"+platformname+"/"
+                if platformdir == "":
+                    raise Error("Platform name error")
         platform = Platform(self,file=platformdir+platformname+XMLEXT)
 
         if sy.fileExist(platformdir+SIMULATIONPATH):
@@ -798,7 +806,7 @@ class Project(WrapperXml):
                     for reg in interfaceslave.getRegisterMap():
                         text+=TAB+"  "+"0x%02x : %s\n"%(reg["offset"],
                                 reg["name"])
-                except Error, e:
+                except Error:
                     text+="\n"
         report_file.write(text)
         report_file.close()
