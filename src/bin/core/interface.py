@@ -176,6 +176,13 @@ class Interface(WrapperXml):
         self.bus = Bus(self,name=attribute)
         self.setAttribute("bus",attribute)
 
+    def isBus(self):
+        try:
+            self.getBus()
+        except AttributeError:
+            return False
+        return True
+
     def getPortsList(self):
         return self.portslist
 

@@ -515,6 +515,12 @@ class Project(WrapperXml):
     def connectPin_cmd(self, pin_source, pin_dest):
         """ connect pin between two instances
         """
+        if pin_source.getParent().getParent().isBus():
+            raise Error("One of this pin is under a bus interface."\
+                    + "Please use connectbus.")
+        if pin_dest.getParent().getParent().isBus():
+            raise Error("One of this pin is under a bus interface."\
+                    + "Please use connectbus.")
         pin_source.connectPin(pin_dest)
         self.saveProject()
 
