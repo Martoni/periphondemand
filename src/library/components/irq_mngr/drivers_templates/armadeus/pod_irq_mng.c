@@ -53,7 +53,7 @@ static struct ocore_irq_mng_pdata /*$instance_name$*/_data = {
 	.idoffset	= (/*$register:swb16:id:offset$*/ * (/*$register:swb16:id:size$*/ /8)),
 };
 
-void /*$instance_name$*/_release(struct device *dev)
+static void /*$instance_name$*/_release(struct device *dev)
 {
 	dev_dbg(dev, "released\n");
 }
