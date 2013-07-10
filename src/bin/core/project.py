@@ -712,10 +712,11 @@ class Project(WrapperXml):
         ##########################################
         #Check bus address
         dict_reg = {}
+        newmaster= []
         for master in listmaster:
-            if (master.getName() == "candroutput"):
-                listmaster.remove(master)
-        for master in listmaster:
+            if (master.getName() != "candroutput"):
+                newmaster.append(master)
+        for master in newmaster:
             for slave in master.getSlavesList():
                 for register in slave.getInterface().getRegisterMap():
                     if dict_reg.has_key(register["offset"]):
