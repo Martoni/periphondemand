@@ -121,6 +121,10 @@ def generatepinout(self,filename=None):
                         else:
                             out=out+"_pin"+connect["pin_dest"]
                     out = out +'" LOC="'+str(port.getPosition())+'"'
+                    if portdest.getPortOption() != None:
+                        out = out + ' | '+str(portdest.getPortOption())
+                    elif port.getPortOption() != None:
+                        out = out + ' | '+str(port.getPortOption())
                     if portdest.getStandard() != None:
                         out = out + " | IOSTANDARD="+str(portdest.getStandard())
                     else:

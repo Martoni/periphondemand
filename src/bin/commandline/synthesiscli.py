@@ -248,6 +248,65 @@ get IO standard value
             return
         print display
 
+    def complete_setportoption(self, text, line, begidx, endidx):
+        IOlist = []
+        try:
+            IOlist = self.completeargs(text, line, "<IO_name>")
+        except Exception, e:
+            print e
+        return IOlist
+
+    def do_setportoption(self, line):
+        """\
+Usage : setportoption <IO_name> <port_option_value>
+set IO standard value
+        """
+        try:
+            self.checkargs(line,"<IO_name> <port_option_value>")
+        except Exception, e:
+            print display
+            print e
+            return
+        arg = line.split(' ')
+        io_name = arg[0]
+        port_option_value = arg[1]
+        try:
+            settings.active_project.getIO(io_name).setPortOption(port_option_value)
+        except Error, e:
+            print display
+            print e
+            return
+
+    def complete_getportoption(self, text, line, begidx, endidx):
+        IOlist = []
+        try:
+            IOlist = self.completeargs(text, line, "<IO_name>")
+        except Exception, e:
+            print e
+        return IOlist
+
+
+    def do_getportoption(self, line):
+        """\
+Usage : getportoption <IO_name>
+get IO Port option value
+        """
+        try:
+            self.checkargs(line,"<IO_name>")
+        except Exception, e:
+            print display
+            print e
+            return
+        arg = line.split(' ')
+        io_name = arg[0]
+        try:
+            print settings.active_project.getIO(io_name).getPortOption()
+        except Error, e:
+            print display
+            print e
+            return
+        print display
+
     def complete_setiodrive(self, text, line, begidx, endidx):
         IOlist = []
         try:
