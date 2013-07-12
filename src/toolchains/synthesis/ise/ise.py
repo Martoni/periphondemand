@@ -120,9 +120,14 @@ def generatepinout(self,filename=None):
                             out=out+"<"+connect["pin_dest"]+">"
                         else:
                             out=out+"_pin"+connect["pin_dest"]
-                    out = out +'" LOC="'+str(port.getPosition())\
-                              +'" | IOSTANDARD='+str(port.getStandard());
-                    if port.getDrive() != None:
+                    out = out +'" LOC="'+str(port.getPosition())+'"'
+                    if portdest.getStandard() != None:
+                        out = out + " | IOSTANDARD="+str(portdest.getStandard())
+                    else:
+                        out = out + " | IOSTANDARD="+str(port.getStandard())
+                    if portdest.getDrive() != None:
+                        out = out + " | DRIVE="+str(portdest.getDrive())
+                    elif port.getDrive() != None:
                         out = out + " | DRIVE="+str(port.getDrive())
                     out = out+r'; # '+str(port.getName())+'\n'
 
