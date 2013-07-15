@@ -8,7 +8,7 @@
 	<driver_files>
 		<driver_templates architecture="armadeus">
 			<support version="4.0" />
-			<file name="sploader_prober.c" />
+			<file name="pod_sploader_prober.c" />
 			<file name="Makefile" />
 			<file name="Kconfig" />
 		</driver_templates>
