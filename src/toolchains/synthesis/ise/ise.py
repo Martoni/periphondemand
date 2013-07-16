@@ -52,6 +52,28 @@ settings = Settings()
 display = Display()
 TAB = "    "
 
+def generatelibraryconstraints(self):
+    """ Adds constraints specified by a component, such as placement for a PLL,
+        multiplier, etc. or clock informations about PLL output signals
+    """
+    out = "# components constraints \n"
+    for instance in self.project.getInstancesList():
+        if instance.getConstraintsList() != []:
+            for constraint in instance.getConstraintsList():
+                instanceName = instance.getInstanceName()
+                attrValName = str(constraint.getAttributeValue("name"))
+                if constraint.getAttributeValue("type") == "clk":
+                    attrValNameUnder = attrValName.replace('/','_')
+                    out += "NET \""+instanceName+"/"+attrValName+"\" TNM_NET = "+instanceName+"/"+attrValName+";\n"
+                    out += "TIMESPEC TS_"+instanceName+"_"+attrValNameUnder+" = PERIOD \""+instanceName+"/"+attrValName+"\""
+                    out += " %g"%((1000/float(constraint.getAttributeValue("frequency"))))+ " ns HIGH 50%;\n"
+                elif constraint.getAttributeValue("type") == "placement":
+                    out += "INST \""+instanceName+"/"+attrValName+"\" LOC="+constraint.getAttributeValue("loc")+";\n"
+                else:
+                    raise Error("component "+instance.getName()+\
+                            " has an unknown type "+constraint.getAttributeValue("type"),0)
+    return out
+
 def generatepinout(self,filename=None):
     """ Generate the constraint file .ucf for xilinx fpga
     """
@@ -158,6 +180,7 @@ def generatepinout(self,filename=None):
                     except:
                         pass
 
+    out = out + generatelibraryconstraints(self)
     out = out + "#end\n"
     try:
         file = open(filename,"w")
