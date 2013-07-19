@@ -160,11 +160,17 @@ class Platform(Component):
     def getDevice(self):
         return self.getNode("fpga").getAttributeValue("device")
 
+    def setDevice(self, device):
+        self.getNode("fpga").setAttribute("device", device)
+
     def getPackage(self):
         return self.getNode("fpga").getAttributeValue("package")
 
     def getSpeed(self):
         return self.getNode("fpga").getAttributeValue("speed")
+
+    def setSpeed(self, speed):
+        return self.getNode("fpga").setAttribute("speed", speed)
 
     def getMainClock(self):
         return self.getNode("fpga").getAttributeValue("main_clock")
