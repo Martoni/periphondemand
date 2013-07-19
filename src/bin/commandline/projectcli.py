@@ -218,6 +218,80 @@ Load a project
         self.setPrompt("POD:"+settings.active_project.getName())
         print display
 
+    def complete_setspeedgrade(self, text, line, begidx, endidx):
+        """ TOOD """
+        pass
+
+    def do_setspeedgrade(self, line):
+        try:
+            self.isProjectOpen()
+            self.checkargs(line,"<speedgrade>")
+        except Error,e:
+            print display
+            print e
+            return
+        try:
+            settings.active_project.setFpgaSpeedGrade(line)
+        except Error,e:
+            print display
+            print e
+            return
+        print display
+
+    def complete_getspeedgrade(self,text,line,begidx,endidx):
+        """ TODO """
+        pass
+
+    def do_getspeedgrade(self,line=None):
+        """\
+Usage : getspeedgrade
+Print FPGA speed grade information
+        """
+        try:
+            speedgrade = settings.active_project.getFpgaSpeedGrade()
+        except Error,e:
+            print display
+            print e
+            return
+        print "FPGA speed grade : "+speedgrade
+
+    def complete_setfpgadevice(self, text, line, begidx, endidx):
+        """ TODO """
+        pass
+
+    def do_setfpgadevice(self, line):
+        try:
+            self.isProjectOpen()
+            self.checkargs(line,"<fpgatype>")
+        except Error,e:
+            print display
+            print e
+            return
+        try:
+            platform = settings.active_project.setFpgaDevice(line)
+        except Error,e:
+            print display
+            print e
+            return
+        print display
+
+    def complete_getfpgadevice(self,text,line,begidx,endidx):
+        """ TODO """
+        pass
+
+    def do_getfpgadevice(self,line=None):
+        """\
+Usage : getfpgadevice
+Print FPGA device information
+        """
+        try:
+            fpgadevice = settings.active_project.getFpgaDevice()
+        except Error,e:
+            print display
+            print e
+            return
+        print "FPGA model : "+fpgadevice
+
     def complete_addcomponentslib(self, text, line, begidx, endidx):
         """ TOOD """
         pass
