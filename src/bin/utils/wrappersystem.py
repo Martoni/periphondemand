@@ -62,8 +62,8 @@ def inttobin(n,size):
         return s
 
 def check_name(name):
-    """ This function check if name contain only authorized caracters
-    authorized caracters : [a-z],[0-9],'_'
+    """ This function check if name contain only authorized characters
+    authorized characters : [a-z],[0-9],'_'
     """
     if re.match('[0-9]',name[0]):
         raise Error("Digit forbiden in beginning of name")
@@ -74,7 +74,7 @@ def check_name(name):
             continue
         if car == '_':
             continue
-        raise Error("Caracter "+car+" forbiden",0);
+        raise Error("Character "+car+" forbiden, must be included in [a-z],[0-9],_",0);
 
     if re.search(r'__',name):
         raise Error(" Double '_' forbiden",0);
