@@ -175,6 +175,20 @@ class Project(WrapperXml):
         except:
             return None
 
+    def getFpgaSpeedGrade(self):
+        return self.getPlatform().getSpeed()
+
+    def setFpgaSpeedGrade(self, speed):
+        self.getPlatform().setSpeed(speed)
+        self.saveProject()
+
+    def getFpgaDevice(self):
+        return self.getPlatform().getDevice()
+
+    def setFpgaDevice(self, device):
+        self.getPlatform().setDevice(device)
+        self.saveProject()
+
     def setSimulationToolChain(self,toolchainname):
         if toolchainname not in self.getSimulationToolChainList():
             raise Error("No toolchain named "+toolchainname+" in POD")

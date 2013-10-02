@@ -60,6 +60,7 @@ class Component(WrapperXml):
         self.hdl_fileslist = []
         self.driver_templateslist = []
         self.interruptslist = []
+        self.constraintslist = []
 
     def setVersionName(self,versionname):
         self.versionname = versionname
@@ -150,7 +151,14 @@ class Component(WrapperXml):
                             element.getAttributeValue("interface")).getPort(
                                 element.getAttributeValue("port")))
 
+        if self.getNode("constraints")!=None:
+            for element in self.getSubNodeList("constraints","constraint"):
+                self.constraintslist.append(element)
+
         self.setInstanceName(instancename)
+
+    def getConstraintsList(self):
+        return self.constraintslist;
 
     def autoconnectPin(self):
         """ Auto connect platform default pins
