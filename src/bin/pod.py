@@ -73,11 +73,11 @@ def main(argv):
 
     if "help" in options or "-h" in options:
         usage()
-        sys.exit(2)
+        sys.exit(0)
 
     if "version" in options or "-v" in options:
         print "Peripherals On Demand version "+ ver.getVersion()
-        sys.exit(2)
+        sys.exit(0)
 
     CLI = ProjectCli()
     SETTINGS = Settings()
