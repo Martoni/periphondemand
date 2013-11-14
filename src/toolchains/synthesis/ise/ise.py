@@ -210,6 +210,7 @@ def generateTCL(self,filename=None):
     tclfile.write("project set package "+platform.getPackage()+"\n")
     tclfile.write("project set speed "+platform.getSpeed()+"\n")
     tclfile.write("project set {Preferred Language} VHDL\n")
+    tclfile.write('project set "Create Binary Configuration File" TRUE\n');
 
     # Source files
     tclfile.write("## add components sources file\n")
