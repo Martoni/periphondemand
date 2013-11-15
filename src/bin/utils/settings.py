@@ -109,6 +109,9 @@ class Settings(object):
         else:
             self.script = 0
 
+    def getSynthesisToolCommand(self):
+        return self.configfile.getSynthesisToolCommand()
+
     components_dir  = property(lambda self: self.getDir("components"))
     board_dir       = property(lambda self: self.getDir("boards"))
 

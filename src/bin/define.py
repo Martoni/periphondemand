@@ -35,7 +35,8 @@ DRIVERS_TEMPLATES_PATH = "/drivers_templates"
 BINARYPROJECTPATH = "/binaries"
 OBJSPATH = "/objs"
 BINARY_PREFIX = "top_"
-BINARY_SUFFIX = ".bit"
+BINARY_SUFFIX = ".bin"
+BITSTREAM_SUFFIX = ".bit"
 
 # template
 HEADERTPL = "/headervhdl.tpl"

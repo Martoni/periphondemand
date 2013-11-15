@@ -105,6 +105,18 @@ class ConfigFile(WrapperXml):
     def getPlatformLibPath(self):
         return self.personal_platformlib_list
 
+    def getSynthesisToolCommand(self):
+        command_name = self.getAttributeValue(key="command",
+                                              subnodename="tool")
+        command_path = self.getAttributeValue(key="default_path",
+                                              subnodename="tool")
+        command_name = command_path + "/" + command_name
+        if not sy.commandExist(command_name):
+            raise Error("Synthesis tool tcl shell command named "+\
+                        command_name+\
+                        " doesn't exist in .podrc");
+        return command_name
+
     def savefile(self):
         self.file = open(self.filename,"w")
         self.file.write(str(self))

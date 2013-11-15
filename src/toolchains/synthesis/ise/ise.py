@@ -253,17 +253,22 @@ def generateTCL(self,filename=None):
             settings.active_project.getName()+TCLEXT)
     return settings.active_project.getName()+TCLEXT
 
-def generateBitStream(self,commandname,scriptname):
+def generateBitStream(self, commandname, scriptname):
     """ generate the bitstream """
     pwd = sy.pwd()
     sy.deleteAll(settings.projectpath+OBJSPATH)
     sy.chdir(settings.projectpath+SYNTHESISPATH)
-    for line in sy.launchAShell(commandname,scriptname):
+
+    for line in sy.launchAShell(commandname, scriptname):
         if settings.color()==1:
             print COLOR_SHELL+line+COLOR_END,
         else:
             print "SHELL>"+line,
     try:
+        sy.copyFile(settings.projectpath+OBJSPATH+"/"+\
+                    BINARY_PREFIX+settings.active_project.getName()+\
+                    BITSTREAM_SUFFIX,
+                    settings.projectpath+BINARYPROJECTPATH+"/")
         sy.copyFile(settings.projectpath+OBJSPATH+"/"+\
                     BINARY_PREFIX+settings.active_project.getName()+\
                     BINARY_SUFFIX,

@@ -69,11 +69,21 @@ class Synthesis(WrapperXml):
         return self.getAttributeValue(key="name",subnodename="tool")
     def getSynthesisToolCommand(self):
         """ Test if command exist and return it """
-        command_name = self.getAttributeValue(key="command",subnodename="tool")
-        if not sy.commandExist(command_name):
-            raise Error("Synthesis tool tcl shell command named "+command_name+\
-                    "doesn't exist in PATH");
-        return command_name
+        try:
+            # try if .podrc exists
+            return settings.getSynthesisToolCommand()
+        except:
+            # else use toolchain default
+            command_name = self.getAttributeValue(key="command",
+                                                  subnodename="tool")
+            command_path = self.getAttributeValue(key="default_path",
+                                                  subnodename="tool")
+            command_name = command_path + "/" + command_name
+            if not sy.commandExist(command_name):
+                raise Error("Synthesis tool tcl shell command named "+\
+                            command_name+\
+                            " doesn't exist in PATH");
+            return command_name
 
     def generateProject(self):
         """ copy all hdl file in synthesis project directory
@@ -153,7 +163,10 @@ class Synthesis(WrapperXml):
         except ImportError,e:
             raise Error(str(e),0)
         tclscript_name = self.getTCLScriptName()
-        scriptpath = settings.projectpath+SYNTHESISPATH+"/"+tclscript_name
-        plugin.generateBitStream(self,self.getSynthesisToolCommand(),
+        scriptpath = settings.projectpath +\
+                     SYNTHESISPATH +\
+                     "/" + tclscript_name
+        plugin.generateBitStream(self,
+                                 self.getSynthesisToolCommand(),
                                  scriptpath)
 
