@@ -228,7 +228,17 @@ def generateTCL(self,filename=None):
     tclfile.write("# add constraint file\n")
     tclfile.write("xfile add .."+SYNTHESISPATH+"/"+\
             settings.active_project.getName() + UCFEXT+" \n")
+    tclfile.write("set constraints_file .."+SYNTHESISPATH+"/"+\
+            settings.active_project.getName() + UCFEXT+" \n")
+    tclfile.write('project set "Load Physical Constraints File" "Default" -process "Analyze Power Distribution (XPower Analyzer)"\n')
+    tclfile.write('project set "Load Physical Constraints File" "Default" -process "Generate Text Power Report"\n')
+    tclfile.write('project set "Target UCF File Name" "" -process "Back-annotate Pin Locations"\n')
+    tclfile.write('project set "Ignore User Timing Constraints" "false" -process "Map"\n')
     # Run synthesis
+    tclfile.write('process run "Synthesize"\n')
+    tclfile.write('process run "Translate"\n')
+    tclfile.write('process run "Map"\n')
+    tclfile.write('process run "Place & Route"\n')
     tclfile.write('process run "Generate Programming File"\n')
 
     # Run post synthesis model generation
@@ -237,11 +247,7 @@ def generateTCL(self,filename=None):
     #        '_synthesis.vhd ../simulation/\n')
     # Run post place and route model generation
     tclfile.write('process run "Generate Post-Place & Route Simulation Model"\n')
-    #tclfile.write('cp netgen/par/top_'+settings.active_project.getName()+\
-    #        '_timesim.vhd ../simulation/\n')
-
-    # XXX: to avoid ISE .ucf loading bug
-    tclfile.write('process run "Generate Programming File" -force rerun_all\n')
+    tclfile.write('project close\n')
 
     display.msg("TCL script generated with name : "+\
             settings.active_project.getName()+TCLEXT)
