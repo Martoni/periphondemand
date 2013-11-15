@@ -240,6 +240,9 @@ def generateTCL(self,filename=None):
     #tclfile.write('cp netgen/par/top_'+settings.active_project.getName()+\
     #        '_timesim.vhd ../simulation/\n')
 
+    # XXX: to avoid ISE .ucf loading bug
+    tclfile.write('process run "Generate Programming File" -force rerun_all\n')
+
     display.msg("TCL script generated with name : "+\
             settings.active_project.getName()+TCLEXT)
     return settings.active_project.getName()+TCLEXT
