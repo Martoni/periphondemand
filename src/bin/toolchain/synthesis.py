@@ -52,21 +52,23 @@ class Synthesis(WrapperXml):
 
     def __init__(self,parent):
         self.parent = parent
-        filepath = settings.projectpath+"/"+SYNTHESISPATH+"/synthesis"+XMLEXT
+        filepath = settings.projectpath +\
+                "/" + SYNTHESISPATH + "/synthesis" + XMLEXT
         if not sy.fileExist(filepath):
             raise Error("No synthesis project found",3)
-        WrapperXml.__init__(self,file=filepath)
+        WrapperXml.__init__(self, file=filepath)
         # adding path for toolchain plugin
-        sys.path.append(settings.path+TOOLCHAINPATH+\
-                SYNTHESISPATH+"/"+self.getName())
-
+        sys.path.append(settings.path + TOOLCHAINPATH +\
+                SYNTHESISPATH + "/" + self.getName())
 
     def save(self):
-        self.saveXml(settings.projectpath+"/synthesis/synthesis"+XMLEXT)
+        self.saveXml(settings.projectpath +\
+                "/synthesis/synthesis" + XMLEXT)
 
     def getSynthesisToolName(self):
         """ return synthesis tool name """
-        return self.getAttributeValue(key="name",subnodename="tool")
+        return self.getAttributeValue(key="name", subnodename="tool")
+
     def getSynthesisToolCommand(self):
         """ Test if command exist and return it """
         try:
@@ -80,8 +82,8 @@ class Synthesis(WrapperXml):
                                                   subnodename="tool")
             command_name = command_path + "/" + command_name
             if not sy.commandExist(command_name):
-                raise Error("Synthesis tool tcl shell command named "+\
-                            command_name+\
+                raise Error("Synthesis tool tcl shell command named " +\
+                            command_name +\
                             " doesn't exist in PATH");
             return command_name
 
@@ -91,46 +93,47 @@ class Synthesis(WrapperXml):
         for component in self.parent.getInstancesList():
             if component.getNum() == "0":
                 # Make directory
-                compdir = settings.projectpath+SYNTHESISPATH+"/"+\
+                compdir = settings.projectpath + SYNTHESISPATH + "/"+\
                           component.getName()
                 if sy.dirExist(compdir):
-                    display.msg("Directory "+compdir+" exist, will be deleted")
+                    display.msg("Directory " + compdir +\
+                            " exist, will be deleted")
                     sy.delDirectory(compdir)
                 sy.makeDirectory(compdir)
-                display.msg("Make directory for "+component.getName())
+                display.msg("Make directory for " + component.getName())
                 # copy hdl files
                 for hdlfile in component.getHdl_filesList():
                     try:
-                        sy.copyFile(settings.projectpath+\
-                                COMPONENTSPATH+\
-                                "/"+\
-                                component.getInstanceName()+\
-                                "/hdl/"+\
+                        sy.copyFile(settings.projectpath +\
+                                COMPONENTSPATH +\
+                                "/" +\
+                                component.getInstanceName() +\
+                                "/hdl/" +\
                                 hdlfile.getFileName(),
-                                compdir+"/")
-                    except IOError,e:
+                                compdir + "/")
+                    except IOError, e:
                         print display
-                        raise Error(str(e),0)
+                        raise Error(str(e), 0)
 
-    def generateTCL(self,filename=None):
+    def generateTCL(self, filename=None):
         """ generate tcl script to drive synthesis tool """
         try:
             plugin = __import__(self.getName())
         except ImportError,e:
-            sys.path.remove(settings.path+TOOLCHAINPATH+\
-                    SYNTHESISPATH+"/"+self.getName())
-            raise Error(str(e),0)
-        sys.path.append(settings.path+TOOLCHAINPATH+\
-                    SYNTHESISPATH+"/"+self.getName())
+            sys.path.remove(settings.path + TOOLCHAINPATH +\
+                    SYNTHESISPATH + "/" + self.getName())
+            raise Error(str(e), 0)
+        sys.path.append(settings.path + TOOLCHAINPATH +\
+                    SYNTHESISPATH+"/" + self.getName())
         filename = plugin.generateTCL(self)
         self.setTCLScriptName(str(filename))
         return None
 
-    def setTCLScriptName(self,filename):
-        if self.getNode("script")==None:
-            self.addNode(nodename="script",
-                         attributename="filename",
-                         value=str(filename))
+    def setTCLScriptName(self, filename):
+        if self.getNode("script") == None:
+            self.addNode(nodename = "script",
+                         attributename = "filename",
+                         value = str(filename))
         else:
             self.setAttribute(key="filename",
                               value=filename,
@@ -138,30 +141,31 @@ class Synthesis(WrapperXml):
 
     def getTCLScriptName(self):
         try:
-            return self.getAttributeValue(key="filename",subnodename="script")
+            return self.getAttributeValue(key="filename",
+                    subnodename="script")
         except Error,e:
             raise Error("TCL script must be generated before")
 
-    def generatePinout(self,filename):
+    def generatePinout(self, filename):
         """ Generate pinout constraints file """
         try:
             plugin = __import__(self.getName())
         except ImportError,e:
-            sy.delFile(settings.path+TOOLCHAINPATH+\
-                    SYNTHESISPATH+"/"+self.getName())
-            raise Error(str(e),0)
-        sy.delFile(settings.path+TOOLCHAINPATH+\
-                SYNTHESISPATH+"/"+self.getName())
+            sy.delFile(settings.path + TOOLCHAINPATH + \
+                    SYNTHESISPATH + "/" + self.getName())
+            raise Error(str(e), 0)
+        sy.delFile(settings.path + TOOLCHAINPATH +\
+                SYNTHESISPATH + "/" + self.getName())
 
-        plugin.generatepinout(self,filename)
+        plugin.generatepinout(self, filename)
         return None
 
     def generateBitStream(self):
         """ Generate the bitstream for fpga configuration """
         try:
             plugin = __import__(self.getName())
-        except ImportError,e:
-            raise Error(str(e),0)
+        except ImportError, e:
+            raise Error(str(e), 0)
         tclscript_name = self.getTCLScriptName()
         scriptpath = settings.projectpath +\
                      SYNTHESISPATH +\
