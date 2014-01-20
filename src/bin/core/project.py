@@ -55,6 +55,7 @@ class Project(WrapperXml):
         self.void = void
         WrapperXml.__init__(self,nodename="void")
         self.instanceslist = []
+        self.vhdlVersion = "vhdl87"
 
         self.simulation    = None
         self.synthesis     = None
@@ -264,6 +265,16 @@ class Project(WrapperXml):
             self.saveProject()
         else:
             raise Error("ComponentsLib directory "+str(aPath)+" doesn't exists")
+
+    def setVhdlVersion(self, version):
+        """ select vhdl version (VHDL '87 or '93) """
+        if version != "vhdl93" and version != "vhdl87":
+            raise Error(str(version)+" is not acceptable version")
+        self.vhdlVersion = version
+        self.saveProject()
+
+    def getVhdlVersion(self):
+        return self.vhdlVersion
 
     def addPlatformsLib(self, aPath):
         """ Adding a platforms library under the project """

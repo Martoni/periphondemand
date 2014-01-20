@@ -151,6 +151,8 @@ class TopVHDL(TopGen):
     def declareComponents(self):
         """ Declare components
         """
+        if self.project.getVhdlVersion() == "vhdl93":
+            return ""
         out =       TAB + "-------------------------\n"
         out = out + TAB + "-- declare components  --\n"
         out = out + TAB + "-------------------------\n"
@@ -248,9 +250,10 @@ class TopVHDL(TopGen):
         for component in self.project.getInstancesList():
             if component.getName() != "platform":
                 out = out + "\n" + TAB+component.getInstanceName()\
-                        +" : "\
-                        +component.getName()\
-                        +"\n"
+                        +" : "
+                if self.project.getVhdlVersion() == "vhdl93":
+                    out = out + "entity work."
+                out = out + component.getName() +"\n"
                 if component.getFPGAGenericsList() != []:
                     out = out + TAB + "generic map (\n"
                     for generic in component.getFPGAGenericsList():

@@ -279,6 +279,26 @@ Print FPGA speed grade information
         """ TODO """
         pass
 
+    def complete_selectvhdlversion(self, text, line, begidx, endidx):
+        """ TODO """
+        pass
+
+    def do_selectvhdlversion(self, line):
+        try:
+            self.isProjectOpen()
+            self.checkargs(line,"<vhdlversion>")
+        except Error,e:
+            print display
+            print e
+            return
+        try:
+            settings.active_project.setVhdlVersion(line)
+        except Error,e:
+            print display
+            print e
+            return
+        print display
+
     def do_getfpgadevice(self,line=None):
         """\
 Usage : getfpgadevice
