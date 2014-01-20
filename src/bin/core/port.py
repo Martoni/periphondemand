@@ -107,6 +107,15 @@ class Port(WrapperXml):
         self.pinlist.remove(pin)
         self.delNode(pin)
 
+    def getSize(self):
+        """ return port size
+        """
+        size = WrapperXml.getSize(self)
+        if size.isdigit():
+            return size
+        else:
+            return self.parent.parent.getGeneric(str(size)).getValue()
+
     def getPin(self,num):
         """ return pin node
         """
