@@ -8,10 +8,6 @@
     <hdl_file filename="imx9328_wb16_wrapper.vhd" scope="spartan3" istop="1"/>
   </hdl_files>
 
-  <generics>
-      <generic name="id" public="true" value="1" match="\d+" type="natural" destination="both" />
-  </generics>
-
   <interfaces>
     <interface name="eim" class="gls">
       <ports>
