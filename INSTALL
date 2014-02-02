@@ -1,11 +1,12 @@
 This is the POD installation instructions.
 
-From SVN :
+From GIT :
 ==========
 
-Checkout the source code with command (subversion is needed):
+Checkout the source code with command (git is needed):
 
-$svn co https://periphondemand.svn.sourceforge.net/svnroot/periphondemand
+$git clone git://git.code.sf.net/p/periphondemand/code periphondemand
+
 
 Make python POD distribution with command:
 
