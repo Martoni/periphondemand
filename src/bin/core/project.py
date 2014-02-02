@@ -9,10 +9,6 @@
 #
 # Created:  24/04/2008
 # Licence:  GPLv3 or newer
-#-----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
 #
 #-----------------------------------------------------------------------------
 
@@ -42,10 +38,12 @@ display  = Display()
 
 class Project(WrapperXml):
     """This class manage the project
-        attributes:
-            instanceslist  -- list of objects component in the project
-            settings       -- Settings object containing system parameters
-            platform       -- platform oblect containing platform dependances
+
+    attributes:
+    instanceslist  -- list of objects component in the project
+    settings       -- Settings object containing system parameters
+    platform       -- platform oblect containing platform dependances
+
     """
 
     def __init__(self,projectpathname,void=0,
@@ -292,12 +290,13 @@ class Project(WrapperXml):
 
     def addInstance(self,**keys):
         """ Add a component in project
-            addInstance(self,component)
-            addInstance(self,libraryname,componentname)
-            addInstance(self,libraryname,componentname,instancename)
-            addInstance(self,libraryname,componentname,componentversion)
-            addInstance(self,libraryname,componentname,
-                                    componentversion,instancename)
+
+        addInstance(self,component)
+        addInstance(self,libraryname,componentname)
+        addInstance(self,libraryname,componentname, instancename)
+        addInstance(self,libraryname,componentname, componentversion)
+        addInstance(self,libraryname,componentname, componentversion,instancename)
+
         """
         if "component" in keys:
             comp=keys["component"]
@@ -674,7 +673,7 @@ class Project(WrapperXml):
         elif len(masters) > 1:
             for i in range(len(masters)-1):
                 for ii in range(i+1,len(masters)):
-                    if (masters[i].getBusName() == masters[ii].getBusName()):    
+                    if (masters[i].getBusName() == masters[ii].getBusName()):
                         raise Error(masters[i].getParent().getInstanceName()+" and "+\
                             masters[ii].getParent().getInstanceName()+\
                             " has the same bus type : , "+\

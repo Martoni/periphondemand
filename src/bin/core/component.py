@@ -38,11 +38,13 @@ display  = Display()
 
 class Component(WrapperXml):
     """Manage components
-        attributes:
-            tree           -- root tree xml component
-            settings       -- Settings object with system settings
-            interfaceslist -- list of interfaces
-            genericslist   -- list of generics
+
+    attributes:
+        tree           -- root tree xml component
+        settings       -- Settings object with system settings
+        interfaceslist -- list of interfaces
+        genericslist   -- list of generics
+
     """
 
     def __init__(self,parent=None,void=0):
