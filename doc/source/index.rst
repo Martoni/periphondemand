@@ -9,8 +9,9 @@ Welcome to PeripheralOnDemand's documentation
 Contents:
 
 .. toctree::
-    :maxdepth: 2 
-    
+    :maxdepth: 5
+
+    install.rst
     library.rst
     source.rst
 

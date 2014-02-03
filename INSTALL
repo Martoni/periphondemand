@@ -1,31 +1,82 @@
-This is the POD installation instructions.
+.. This is the POD installation instructions.
 
-From GIT :
-==========
+Installation
+============
 
-Checkout the source code with command (git is needed):
+Prerequisites
++++++++++++++
 
-$git clone git://git.code.sf.net/p/periphondemand/code periphondemand
+Mandatory
+---------
 
+* *Python 2.7*: POD uses python 2.7.
+* *pyparsing*: A python module to parse files.
+ 
+On debian-based distribution, just type this command:
+
+``[  ] $ sudo apt-get install python-pyparsing``
+
+Optional
+--------
+
+* *ghdl, gtkwave* : POD can generate VHDL testbench ready for ghdl simulator. As it's standard VHDL, another simulator should work.
+* *ISE Webpack* : to generate synthesis project for Xilinx.
+* *Quartus* : to generate synthesis project for Altera.
+* *ARMadeus SDK* : to generate driver project for the Armadeus boards.
+
+From GIT
+++++++++
+
+For developpers
+###############
+
+If you are a developper you need a user login to pull code with :
+
+``$ git clone ssh://USER@git.code.sf.net/p/periphondemand/code periphondemand``
+
+For all
+#######
+
+Checkout the source code with the following command (git is needed):
+
+``$ git clone git://git.code.sf.net/p/periphondemand/code periphondemand``
+
+Install it
+##########
+
+To install it on your computer, just do (has super user):
+
+``$ python setup.py install``
+
+Make a distribution archive
+###########################
 
 Make python POD distribution with command:
 
-$python setup.py sdist
+``$ python setup.py sdist``
 
 The POD package can be found in directory dist/
 
-From Package:
-=============
+
+From Package
+++++++++++++
+
 Decompress the package PeriphOnDemand-X.X.tar.gz in install directory:
-$ tar -zxvf PeriphOnDemand-X.X.tar.gz
+
+``$ tar -zxvf PeriphOnDemand-X.X.tar.gz``
 
 Walk through periphondemand/ directory:
-$ cd periphondemand
+
+``$ cd periphondemand``
 
 Then install POD with root privilege:
-root$> python setup.py install
 
-Enjoy:
-======
+``$ python setup.py install``
+
+Enjoy
+++++++
+
 To launch periphondemand just type «pod»:
-$ pod
+
+``$ pod``
+
