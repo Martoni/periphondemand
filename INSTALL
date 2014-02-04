@@ -27,29 +27,25 @@ Optional
 From GIT
 ++++++++
 
-For developpers
-###############
+**For developpers**
 
 If you are a developper you need a user login to pull code with :
 
 ``$ git clone ssh://USER@git.code.sf.net/p/periphondemand/code periphondemand``
 
 For all
-#######
 
 Checkout the source code with the following command (git is needed):
 
 ``$ git clone git://git.code.sf.net/p/periphondemand/code periphondemand``
 
-Install it
-##########
+**Install it**
 
 To install it on your computer, just do (has super user):
 
 ``$ python setup.py install``
 
-Make a distribution archive
-###########################
+**Make a distribution archive**
 
 Make python POD distribution with command:
 
