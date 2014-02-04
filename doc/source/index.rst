@@ -3,16 +3,34 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to PeripheralOnDemand's documentation
-=============================================
-
-Contents:
+POD overview
+============
 
 .. toctree::
-    :titlesonly:
+    overview.rst
 
+Installation guide
+==================
+
+.. toctree::
     install.rst
+
+Use POD
+=======
+
+.. toctree::
+    usepod.rst
+
+Library
+=======
+ 
+.. toctree::
     library.rst
+
+Sources description
+===================
+
+.. toctree::
     source.rst
 
 Indices and tables

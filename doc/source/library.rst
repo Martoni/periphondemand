@@ -1,7 +1,4 @@
-.. commentaire ?
-
-Library
-=======
+..  Library
 
 Components
 ++++++++++
