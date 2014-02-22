@@ -28,18 +28,19 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" Manage busses """
 
 __doc__ = ""
 __version__ = "1.0.0"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
-
 from periphondemand.bin.define import *
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.settings   import Settings
-from periphondemand.bin.utils.error      import Error
+from periphondemand.bin.utils.settings import Settings
+from periphondemand.bin.utils.error import Error
 
 settings = Settings()
+
 
 class Bus(WrapperXml):
     """ Class for bus type
@@ -47,20 +48,22 @@ class Bus(WrapperXml):
             settings --
     """
 
-    def __init__(self,parent,name,setting=settings):
+    def __init__(self, parent, name, setting=settings):
         self.parent = parent
         self.setting = setting
-        WrapperXml.__init__(self,file=(setting.path + BUSPATH+"/" \
-            + name +"/"+name+ ".xml"))
+        WrapperXml.__init__(self,
+                            file=(setting.path + BUSPATH + "/" +
+                                  name + "/" + name + ".xml"))
 
     def getDataSize(self):
+        """ Get size of data"""
         size = self.getAttributeValue("datasize")
-        if size == None:
-            raise Error("No datasize attribute in bus "+self.getName(),0)
+        if size is None:
+            raise Error("No datasize attribute in bus " + self.getName(), 0)
         else:
             return size
 
-    def getSignalName(self,classname,typename):
+    def getSignalName(self, classname, typename):
         """ return the signal name for a given type
         """
         for classnode in self.getNodeList("class"):
@@ -70,19 +73,14 @@ class Bus(WrapperXml):
                         return signal.getAttributeValue("name")
         return None
 
-    def generateIntercon(self,intercon):
+    def generateIntercon(self, intercon):
         """ generate intercon
         """
         masterinterface = self.getParent()
         import sys
         # load module path
-        sys.path.append(settings.path+BUSPATH+"/"+self.getName())
+        sys.path.append(settings.path + BUSPATH + "/" + self.getName())
         plugin = __import__(self.getName())
-        sys.path.remove(settings.path+BUSPATH+"/"+self.getName())
+        sys.path.remove(settings.path + BUSPATH + "/" + self.getName())
 
-        plugin.generateIntercon(masterinterface,intercon)
-
-
-
-
-
+        plugin.generateIntercon(masterinterface, intercon)

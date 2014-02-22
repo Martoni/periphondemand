@@ -11,9 +11,8 @@
 # Licence:  GPLv3 or newer
 #
 #-----------------------------------------------------------------------------
+""" Main class to manage project"""
 
-__doc__ = ""
-__version__ = "1.0.0"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import os

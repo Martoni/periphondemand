@@ -28,9 +28,8 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" Class that manage memory map for bus assignement """
 
-__doc__ = ""
-__version__ = "1.0.0"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.display import Display
