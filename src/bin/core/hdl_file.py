@@ -28,43 +28,45 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" Managing list of hdl files """
 
-__doc__ = ""
-__version__ = "1.0.0"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import os
 
-from   periphondemand.bin.define import *
+from periphondemand.bin.define import *
 
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.settings   import Settings
-from periphondemand.bin.utils.error      import Error
+from periphondemand.bin.utils.settings import Settings
+from periphondemand.bin.utils.error import Error
 
 settings = Settings()
+
 
 class Hdl_file(WrapperXml):
     """ Manage source files
     """
 
-    def __init__(self,parent,**keys):
+    def __init__(self, parent, **keys):
         """ Init Hdl_file,
-            __init__(self,parent,node)
-            __init__(self,filename,istop,scope)
+            __init__(self, parent, node)
+            __init__(self, filename, istop, scope)
         """
         self.parent = parent
         self.parser = None
         if "node" in keys:
-            WrapperXml.__init__(self,node=keys["node"])
+            WrapperXml.__init__(self,
+                                node=keys["node"])
         elif "filename" in keys:
             self.__initfilename(filename=keys["filename"],
-                                istop=keys["istop"],scope=keys["scope"])
+                                istop=keys["istop"],
+                                scope=keys["scope"])
         else:
-            raise Error("Keys unknown in Hdl_file",0)
+            raise Error("Keys unknown in Hdl_file", 0)
 
-    def __initfilename(self,filename,istop,scope):
-        WrapperXml.__init__(self,nodename="hdl_file")
+    def __initfilename(self, filename, istop, scope):
+        WrapperXml.__init__(self, nodename="hdl_file")
         if istop == 1:
             self.setTop()
         self.setScope(scope)
@@ -73,10 +75,10 @@ class Hdl_file(WrapperXml):
     def getFileName(self):
         return self.getAttributeValue("filename")
 
-    def setFileName(self,filename):
+    def setFileName(self, filename):
         if filename.split(".")[-1] not in HDLEXT:
-            raise Error("File "+str(filename)+" is not an HDL file")
-        self.setAttribute("filename",filename)
+            raise Error("File " + str(filename) + " is not an HDL file")
+        self.setAttribute("filename", filename)
 
     def getFilePath(self):
         """ return an open file pointer of HDL file """
@@ -91,17 +93,19 @@ class Hdl_file(WrapperXml):
             return 1
         else:
             return 0
+
     def setTop(self):
-        self.setAttribute("istop","1")
+        self.setAttribute("istop", "1")
+
     def unsetTop(self):
-        self.setAttribute("istop","0")
+        self.setAttribute("istop", "0")
 
     def getScope(self):
         return self.getAttributeValue("scope")
-    def setScope(self,scope):
-        SCOPE = ["both","fpga","driver"]
-        if scope.lower() in SCOPE:
-            self.setAttribute("scope",scope)
-        else:
-            raise Error("Unknown scope "+str(scope))
 
+    def setScope(self, scope):
+        SCOPE = ["both", "fpga", "driver"]
+        if scope.lower() in SCOPE:
+            self.setAttribute("scope", scope)
+        else:
+            raise Error("Unknown scope " + str(scope))
