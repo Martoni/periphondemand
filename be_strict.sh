@@ -9,3 +9,4 @@ pep8 src/bin/core/generic.py
 pep8 src/bin/core/hdl_file.py
 pep8 src/bin/core/interface.py
 pep8 src/bin/core/library.py
+pep8 src/bin/core/pin.py
