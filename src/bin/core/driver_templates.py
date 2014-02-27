@@ -28,23 +28,23 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" Class that manage driver templates """
 
-__doc__ = ""
-__version__ = "1.0.0"
-thor__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
+__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.error      import Error
-from periphondemand.bin.utils.display    import Display
-from periphondemand.bin.utils.settings   import Settings
+from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.display import Display
+from periphondemand.bin.utils.settings import Settings
 
 settings = Settings()
-display  = Display()
+display = Display()
+
 
 class Driver_Templates(WrapperXml):
     """
     """
-    def __init__(self,parent,**keys):
+    def __init__(self, parent, **keys):
         """ init driver_templates,
             __init__(self,parent,node)
             __init__(self,parent,nodestring)
@@ -55,22 +55,24 @@ class Driver_Templates(WrapperXml):
         elif "nodestring" in keys:
             self.__initnodestring(keys["nodestring"])
         else:
-            raise Error("Keys unknown in Driver_Templates init()",0)
+            raise Error("Keys unknown in Driver_Templates init()", 0)
 
-    def __initnode(self,node):
-        WrapperXml.__init__(self,node=node)
-    def __initnodestring(self,nodestring):
-        WrapperXml.__init__(self,nodestring=nodestring)
+    def __initnode(self, node):
+        WrapperXml.__init__(self, node=node)
+
+    def __initnodestring(self, nodestring):
+        WrapperXml.__init__(self, nodestring=nodestring)
 
     def getTemplatesList(self):
         """ return a list of templates file name """
-        return [template.getAttributeValue("name") for template in self.getNodeList("file")]
+        return [template.getAttributeValue("name") for
+                template in self.getNodeList("file")]
 
     def getVersionsList(self):
         """ return a list of version supported """
-        return [version.getAttributeValue("version") for version in self.getNodeList("support")]
+        return [version.getAttributeValue("version") for
+                version in self.getNodeList("support")]
 
     def getArchitecture(self):
         """ return arcitecture name """
         return self.getAttributeValue("architecture")
-

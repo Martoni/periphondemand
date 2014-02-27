@@ -28,22 +28,22 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" Manage library """
 
-__doc__ = ""
-__version__ = "1.0.0"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import os
-from   periphondemand.bin.define import *
+from periphondemand.bin.define import *
 
-from   periphondemand.bin.utils.error         import *
-from   periphondemand.bin.utils.wrapperxml    import WrapperXml
-from   periphondemand.bin.utils.settings      import Settings
-from   periphondemand.bin.utils.display       import Display
-from   periphondemand.bin.utils               import wrappersystem as sy
+from periphondemand.bin.utils.error import *
+from periphondemand.bin.utils.wrapperxml import WrapperXml
+from periphondemand.bin.utils.settings import Settings
+from periphondemand.bin.utils.display import Display
+from periphondemand.bin.utils import wrappersystem as sy
 
 settings = Settings()
-display  = Display()
+display = Display()
+
 
 class Library:
     """ Libraries management class
@@ -56,50 +56,56 @@ class Library:
     def listLibraries(self):
         """ Return a list of libraries availables
         """
-        componentlist = sy.listDirectory(settings.path + LIBRARYPATH )
+        componentlist = sy.listDirectory(settings.path + LIBRARYPATH)
         componentlist.extend(self.getPersonalLibName())
-
         componentlist.extend(self.getComponentsLibName())
         return componentlist
 
     def getOfficialLibraries(self):
-        return sy.listDirectory(settings.path + LIBRARYPATH )
+        """ Get list of official libraries"""
+        return sy.listDirectory(settings.path + LIBRARYPATH)
 
-    def getLibraryPath(self,libraryname=None):
-        if libraryname == None:
+    def getLibraryPath(self, libraryname=None):
+        """ Get the library path """
+        if libraryname is None:
             libraryname = self.getLibName()
         official_component_type = self.getOfficialLibraries()
         if libraryname in official_component_type:
-            return settings.path+LIBRARYPATH+"/"+libraryname
+            return settings.path + LIBRARYPATH + "/" + libraryname
         elif libraryname in self.getPersonalLibName():
             return settings.active_library.getPersonalLibPath(libraryname)
         elif libraryname in self.getComponentsLibName():
             return settings.active_library.getComponentsLibPath(libraryname)
         else:
-            raise Error("Library not found : "+str(libraryname),0)
+            raise Error("Library not found : " + str(libraryname), 0)
 
-    def listComponents(self,libraryname=None):
+    def listComponents(self, libraryname=None):
         """ Return a list with all library components
         """
-        if libraryname==None:
+        if libraryname is None:
             libraryname = self.getLibName()
         official_component_type = self.getOfficialLibraries()
         componentlist = []
         if libraryname in official_component_type:
-            componentlist = sy.listDirectory(settings.path+LIBRARYPATH+"/"+libraryname)
+            componentlist =\
+                    sy.listDirectory(settings.path +
+                                     LIBRARYPATH + "/" +
+                                     libraryname)
         elif libraryname in self.getPersonalLibName():
-            componentlist = sy.listDirectory(self.getPersonalLibPath(libraryname))
+            componentlist =\
+                    sy.listDirectory(self.getPersonalLibPath(libraryname))
         elif libraryname in self.getComponentsLibName():
-            componentlist = sy.listDirectory(self.getComponentsLibPath(libraryname))
+            componentlist =\
+                    sy.listDirectory(self.getComponentsLibPath(libraryname))
         return componentlist
 
-    def addLibrary(self,path):
+    def addLibrary(self, path):
         self.checkLib(path)
         settings.configfile.addLibrary(path)
         settings.personal_lib_path_list.append(path)
         settings.personal_lib_name_list.append(path.split("/")[-1])
 
-    def delLibrary(self,libraryname):
+    def delLibrary(self, libraryname):
         """ delete library path from config file
         """
         if libraryname in self.getOfficialLibraries():
@@ -107,27 +113,30 @@ class Library:
         libpath = self.getPersonalLibPath(libraryname)
         settings.configfile.delLibrary(libpath)
 
-    def checkLib(self,path):
+    def checkLib(self, path):
         """ check if lib and component are not duplicated """
         libname = path.split("/")[-1]
         # check if lib name exist
         if libname in self.listLibraries():
-            raise Error("Library "+libname+" already exist",0)
+            raise Error("Library " + libname + " already exist", 0)
         # check if components under library are new
         componentlist = sy.listDirectory(path)
         for component in componentlist:
             for libraryname in self.listLibraries():
                 if component in self.listComponents(libraryname):
-                    raise Error("Library "+libname+\
-                            " contain a component that exist in '"+\
-                            libraryname+"' : "+component,0)
+                    raise Error("Library " + libname +
+                            " contain a component that exist in '" +
+                            libraryname + "' : " + component, 0)
 
     def getComponentsLibPath(self, name=None):
+        """ Get the path of library"""
         path_list = []
         try:
-            for node in settings.active_project.getSubNodeList("componentslibs", "componentslib"):
+            for node in\
+                    settings.active_project.getSubNodeList("componentslibs",
+                                                           "componentslib"):
                 path_list.append(node.getAttributeValue(key="path"))
-            if name==None:
+            if name is None:
                 return path_list
             else:
                 for libpath in path_list:
@@ -138,25 +147,29 @@ class Library:
             return []
 
     def getComponentsLibName(self):
+        """ Get the name of library"""
         name_list = []
         for path in self.getComponentsLibPath():
             name_list.append(path.split("/")[-1])
         return name_list
 
     def getPersonalLibName(self):
+        """ Get the list names of Personnal library"""
         return settings.personal_lib_name_list
 
-    def getPersonalLibPath(self,name):
+    def getPersonalLibPath(self, name):
+        """ Get the path library"""
         for libpath in settings.personal_lib_path_list:
             if libpath.split("/")[-1] == name:
                 return libpath
         return ""
 
-    def load(self,libname):
+    def load(self, libname):
+        """ Load a library with name given in parameter"""
         if not libname in self.listLibraries():
-            raise Error("No "+libname+" in pod libraries")
+            raise Error("No " + libname + " in pod libraries")
         self.libname = libname
 
     def getLibName(self):
+        """ Get the library name """
         return self.libname
-

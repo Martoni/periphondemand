@@ -11,30 +11,31 @@
 # Licence:  GPLv3 or newer
 #
 #-----------------------------------------------------------------------------
+""" Main class to manage project"""
 
-__doc__ = ""
-__version__ = "1.0.0"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
-import os,re
-from   periphondemand.bin.define import *
+import os
+import re
+from periphondemand.bin.define import *
 
-from   periphondemand.bin.utils.wrapperxml    import WrapperXml
-from   periphondemand.bin.utils.settings      import Settings
-from   periphondemand.bin.utils.display       import Display
-from   periphondemand.bin.utils.error         import *
-from   periphondemand.bin.utils               import wrappersystem as sy
+from periphondemand.bin.utils.wrapperxml import WrapperXml
+from periphondemand.bin.utils.settings import Settings
+from periphondemand.bin.utils.display import Display
+from periphondemand.bin.utils.error import *
+from periphondemand.bin.utils import wrappersystem as sy
 
-from   periphondemand.bin.core.component      import Component
-from   periphondemand.bin.core.platform       import Platform
-from   periphondemand.bin.core.library        import Library
+from periphondemand.bin.core.component import Component
+from periphondemand.bin.core.platform import Platform
+from periphondemand.bin.core.library import Library
 
-from   periphondemand.bin.toolchain.simulation import Simulation
-from   periphondemand.bin.toolchain.synthesis  import Synthesis
-from   periphondemand.bin.toolchain.driver     import Driver
+from periphondemand.bin.toolchain.simulation import Simulation
+from periphondemand.bin.toolchain.synthesis import Synthesis
+from periphondemand.bin.toolchain.driver import Driver
 
 settings = Settings()
-display  = Display()
+display = Display()
+
 
 class Project(WrapperXml):
     """This class manage the project
@@ -46,34 +47,34 @@ class Project(WrapperXml):
 
     """
 
-    def __init__(self,projectpathname,void=0,
+    def __init__(self, projectpathname, void=0,
                  description="insert a description here"):
         """ create project if doesn't exist
         """
         self.void = void
-        WrapperXml.__init__(self,nodename="void")
+        WrapperXml.__init__(self, nodename="void")
         self.instanceslist = []
         self.vhdlVersion = "vhdl87"
 
-        self.simulation    = None
-        self.synthesis     = None
-        self.driver        = None
+        self.simulation = None
+        self.synthesis = None
+        self.driver = None
 
         self.library = Library()
 
-        self.bspdir        = None
-        self.bspos         = None
+        self.bspdir = None
+        self.bspos = None
         if not self.isVoid():
             if projectpathname.find(XMLEXT) >= 0:
                 try:
                     settings.projectpath = os.path.abspath(
                             os.path.dirname(projectpathname))
-                except IOError,e:
-                    raise Error(str(e),0)
+                except IOError, e:
+                    raise Error(str(e), 0)
             else:
                 settings.projectpath = projectpathname
             settings.author = ""
-            name =os.path.basename(projectpathname)
+            name = os.path.basename(projectpathname)
             if sy.fileExist(projectpathname):
                 self.loadProject(projectpathname)
             else:
@@ -82,19 +83,19 @@ class Project(WrapperXml):
 
             settings.active_project = self
 
-    def createProject(self,name):
+    def createProject(self, name):
         if sy.dirExist(settings.projectpath):
-            raise Error("Can't create project, directory "+name +\
-                        " allready exists",0)
+            raise Error("Can't create project, directory " + name +
+                        " allready exists", 0)
         sy.makeDirectory(settings.projectpath)
 
-        sy.makeDirectory(settings.projectpath+BINARYPROJECTPATH)
-        sy.makeDirectory(settings.projectpath+COMPONENTSPATH)
-        sy.makeDirectory(settings.projectpath+OBJSPATH)
+        sy.makeDirectory(settings.projectpath + BINARYPROJECTPATH)
+        sy.makeDirectory(settings.projectpath + COMPONENTSPATH)
+        sy.makeDirectory(settings.projectpath + OBJSPATH)
 
-        sy.makeDirectory(settings.projectpath+SIMULATIONPATH)
-        sy.makeDirectory(settings.projectpath+SYNTHESISPATH)
-        sy.makeDirectory(settings.projectpath+DRIVERSPATH)
+        sy.makeDirectory(settings.projectpath + SIMULATIONPATH)
+        sy.makeDirectory(settings.projectpath + SYNTHESISPATH)
+        sy.makeDirectory(settings.projectpath + DRIVERSPATH)
 
         self.createXml("project")
         self.setName(name)
@@ -110,18 +111,19 @@ class Project(WrapperXml):
         # load components
         if(components):
             for node in components.getNodeList("component"):
-                if node.getAttributeValue("platform")==None:
+                if node.getAttributeValue("platform") is None:
                     comp = Component(self)
                 else:
-                    comp = Platform(self,node=self.getNode("platform"))
+                    comp = Platform(self, node=self.getNode("platform"))
                 try:
                     comp.loadInstance(node.getAttributeValue("name"))
                 except IOError:
                     self.delSubNode("components",
                                     "component",
-                                    "name",node.getAttributeValue("name"))
-                    raise Error("Can't open "+node.getAttributeValue("name")+\
-                                    " directory",0)
+                                    "name", node.getAttributeValue("name"))
+                    raise Error("Can't open " +
+                                node.getAttributeValue("name") + " directory",
+                                0)
                 else:
                     self.instanceslist.append(comp)
 
@@ -130,19 +132,18 @@ class Project(WrapperXml):
         #if(toolchains):
         #       node = toolchains.getNode("simulation")
         #       if node!=None:
-        #           self.simulation = Simulation(self,node.getName())
+        #           self.simulation = Simulation(self, node.getName())
         #       node = toolchains.getNode("synthesis")
         #       if node!=None:
-        #           self.synthesis = Synthesis(self,node.getName())
+        #           self.synthesis = Synthesis(self, node.getName())
         try:
             self.synthesis = Synthesis(self)
-        except Error,e:
+        except Error, e:
             display.msg(str(e))
         try:
             self.simulation = Simulation(self)
-        except Error,e:
+        except Error, e:
             display.msg(str(e))
-
 
         # Set bus master-slave
         for masterinterface in self.getInterfacesMaster():
@@ -153,18 +154,21 @@ class Project(WrapperXml):
                 slaveinterface.setMaster(masterinterface)
 
         # set bsp directory
-        if self.getNode(nodename="bsp")!= None:
-            self.bspdir = self.getNode(nodename="bsp").getAttributeValue("directory")
-        self.void=0
+        if self.getNode(nodename="bsp") is not None:
+            self.bspdir = self.getNode(
+                    nodename="bsp").getAttributeValue("directory")
+        self.void = 0
 
-    def setSynthesisToolChain(self,toolchainname):
+    def setSynthesisToolChain(self, toolchainname):
         if toolchainname not in self.getSynthesisToolChainList():
-            raise Error("No toolchain named "+toolchainname+" in POD")
-        sy.copyFile(settings.path+TOOLCHAINPATH+SYNTHESISPATH+\
-                    "/"+toolchainname+"/"+toolchainname+XMLEXT,
-                    settings.projectpath+SYNTHESISPATH+"/")
-        sy.renameFile(settings.projectpath+SYNTHESISPATH+"/"+toolchainname+XMLEXT,
-                      settings.projectpath+SYNTHESISPATH+"/synthesis"+XMLEXT)
+            raise Error("No toolchain named " + toolchainname + " in POD")
+        sy.copyFile(settings.path + TOOLCHAINPATH + SYNTHESISPATH +
+                    "/" + toolchainname + "/" + toolchainname + XMLEXT,
+                    settings.projectpath + SYNTHESISPATH + "/")
+        sy.renameFile(settings.projectpath + SYNTHESISPATH +
+                      "/" + toolchainname + XMLEXT,
+                      settings.projectpath + SYNTHESISPATH +
+                      "/synthesis" + XMLEXT)
         self.synthesis = Synthesis(self)
         self.saveProject()
 
@@ -188,14 +192,16 @@ class Project(WrapperXml):
         self.getPlatform().setDevice(device)
         self.saveProject()
 
-    def setSimulationToolChain(self,toolchainname):
+    def setSimulationToolChain(self, toolchainname):
         if toolchainname not in self.getSimulationToolChainList():
-            raise Error("No toolchain named "+toolchainname+" in POD")
-        sy.copyFile(settings.path+TOOLCHAINPATH+SIMULATIONPATH+\
-                    "/"+toolchainname+"/"+toolchainname+XMLEXT,
-                    settings.projectpath+SIMULATIONPATH+"/")
-        sy.renameFile(settings.projectpath+SIMULATIONPATH+"/"+toolchainname+XMLEXT,
-                      settings.projectpath+SIMULATIONPATH+"/simulation"+XMLEXT)
+            raise Error("No toolchain named " + toolchainname + " in POD")
+        sy.copyFile(settings.path + TOOLCHAINPATH + SIMULATIONPATH +
+                    "/" + toolchainname + "/" + toolchainname + XMLEXT,
+                    settings.projectpath + SIMULATIONPATH + "/")
+        sy.renameFile(settings.projectpath + SIMULATIONPATH +
+                      "/" + toolchainname + XMLEXT,
+                      settings.projectpath + SIMULATIONPATH +
+                      "/simulation" + XMLEXT)
         self.simulation = Simulation(self)
         self.saveProject()
 
@@ -205,14 +211,16 @@ class Project(WrapperXml):
         except:
             return None
 
-    def setDriverToolChain(self,toolchainname):
+    def setDriverToolChain(self, toolchainname):
         if toolchainname not in self.getDriverToolChainList():
-            raise Error("No toolchain named "+toolchainname+" in POD")
-        sy.copyFile(settings.path+TOOLCHAINPATH+DRIVERSPATH+\
-                    "/"+toolchainname+"/"+toolchainname+XMLEXT,
-                    settings.projectpath+DRIVERSPATH+"/")
-        sy.renameFile(settings.projectpath+DRIVERSPATH+"/"+toolchainname+XMLEXT,
-                      settings.projectpath+DRIVERSPATH+"/drivers"+XMLEXT)
+            raise Error("No toolchain named " + toolchainname + " in POD")
+        sy.copyFile(settings.path + TOOLCHAINPATH + DRIVERSPATH +
+                    "/" + toolchainname + "/" + toolchainname + XMLEXT,
+                    settings.projectpath + DRIVERSPATH + "/")
+        sy.renameFile(settings.projectpath + DRIVERSPATH +
+                      "/" + toolchainname + XMLEXT,
+                      settings.projectpath + DRIVERSPATH +
+                      "/drivers" + XMLEXT)
         self.driver = Driver(self)
         self.saveProject()
 
@@ -222,14 +230,17 @@ class Project(WrapperXml):
         except:
             return None
 
-    def setLanguage(self,language):
-        self.setAttribute("name",language,"language")
+    def setLanguage(self, language):
+        self.setAttribute("name", language, "language")
         self.saveProject()
 
-    def setUnconnectedValue(self, instancename, interfacename, portname, value):
+    def setUnconnectedValue(self, instancename, interfacename,
+                                  portname, value):
         """ Set port unconnected value
         """
-        port = self.getInstance(instancename).getInterface(interfacename).getPort(portname)
+        port = self.getInstance(
+                instancename).getInterface(
+                        interfacename).getPort(portname)
         port.setUnconnectedValue(value)
         self.saveProject()
 
@@ -237,11 +248,13 @@ class Project(WrapperXml):
         platform = self.getPlatform()
         interfaces_list = platform.getInterfacesList()
         if len(interfaces_list) != 1:
-            raise Error("I found "+str(len(interfaces_list))+\
-            " FPGAs ("+str(interfaces_list)+") and multiple FPGA project is not implemented yet.")
+            raise Error("I found " + str(len(interfaces_list)) +
+                        " FPGAs (" + str(interfaces_list) +
+                        ") and multiple FPGA project is not implemented yet.")
         port = interfaces_list[0].getPort(portname)
         if port.getDir() == "in":
-            raise Error("The value of this port can't be set because of it's direction (in)")
+            raise Error("The value of this port can't be set " +
+                        "because of it's direction (in)")
         port.setForce(state)
         self.saveProject()
 
@@ -262,12 +275,13 @@ class Project(WrapperXml):
                             value=path)
             self.saveProject()
         else:
-            raise Error("ComponentsLib directory "+str(aPath)+" doesn't exists")
+            raise Error("ComponentsLib directory " +
+                        str(aPath) + " doesn't exists")
 
     def setVhdlVersion(self, version):
         """ select vhdl version (VHDL '87 or '93) """
-        if version != "vhdl93" and version != "vhdl87":
-            raise Error(str(version)+" is not acceptable version")
+        if (version != "vhdl93") and (version != "vhdl87"):
+            raise Error(str(version) + " is not acceptable version")
         self.vhdlVersion = version
         self.saveProject()
 
@@ -280,26 +294,27 @@ class Project(WrapperXml):
             path = sy.pwd() + "/" + aPath
             if self.getNode("platformlibs") is None:
                 self.addNode(nodename="platformlibs")
-            self.addSubNode(nodename ="platformlibs",
+            self.addSubNode(nodename="platformlibs",
                             subnodename="platformlib",
                             attributename="path",
                             value=path)
             self.saveProject()
         else:
-            raise Error("ComponentsLib directory "+str(aPath)+" doesn't exists")
+            raise Error("ComponentsLib directory " + str(aPath) +
+                        " doesn't exists")
 
-    def addInstance(self,**keys):
+    def addInstance(self, **keys):
         """ Add a component in project
 
-        addInstance(self,component)
-        addInstance(self,libraryname,componentname)
-        addInstance(self,libraryname,componentname, instancename)
-        addInstance(self,libraryname,componentname, componentversion)
-        addInstance(self,libraryname,componentname, componentversion,instancename)
-
+        addInstance(self, component)
+        addInstance(self, libraryname, componentname)
+        addInstance(self, libraryname, componentname, instancename)
+        addInstance(self, libraryname, componentname, componentversion)
+        addInstance(self, libraryname, componentname,
+                            componentversion, instancename)
         """
         if "component" in keys:
-            comp=keys["component"]
+            comp = keys["component"]
             instancename = comp.getInstanceName()
         elif ("componentname" in keys) and ("libraryname" in keys):
             componentname = keys["componentname"]
@@ -307,23 +322,25 @@ class Project(WrapperXml):
             if "instancename" in keys:
                 instancename = keys["instancename"]
                 # check if instancename is not <componentname><number><number>
-                if re.match(r'^'+componentname+'\d{2}$',instancename):
-                    raise Error("Instance name forbiden, it's reserved for "+\
-                            "automatic instance name generation :"+instancename,0)
+                if re.match(r'^' + componentname + '\d{2}$', instancename):
+                    raise Error("Instance name forbiden, it's reserved for " +
+                                "automatic instance name generation :" +
+                                instancename, 0)
                 #check instance availability
                 for instance in self.getInstancesList():
                     if instance.getName() == instancename:
-                        raise Error("This instance name already exists",0)
+                        raise Error("This instance name already exists", 0)
             else:
-                instancename = componentname+\
-                        "%02d"%self.getInstanceAvailability(componentname)
+                instancename = componentname +\
+                        "%02d" % self.getInstanceAvailability(componentname)
             if "componentversion" in keys:
                 componentversion = keys["componentversion"]
             else:
                 componentversion = None
             # Load and create component
-            if (componentname == instancename) :
-                raise Error("Instance name can't be the same as component name",0)
+            if (componentname == instancename):
+                raise Error("Instance name can't be the" +
+                            "same as component name", 0)
             comp = Component(self)
             comp.loadNewInstance(libraryname,
                                   componentname,
@@ -331,7 +348,7 @@ class Project(WrapperXml):
                                   instancename)
             comp.setNum(self.getInstanceAvailability(componentname))
         else:
-            raise Error("Key not known in addInstance",0)
+            raise Error("Key not known in addInstance", 0)
 
         #Add component to project
         self.instanceslist.append(comp)
@@ -341,11 +358,12 @@ class Project(WrapperXml):
                             attributename="name",
                             value=instancename)
         else:
-            attrib = {"name":instancename,"platform":"true"}
+            attrib = {"name": instancename, "platform": "true"}
             self.addSubNode(nodename="components",
                             subnodename="component",
                             attributedict=attrib)
-        display.msg("Component "+comp.getName()+" added as "+instancename)
+        display.msg("Component " + comp.getName() +
+                    " added as " + instancename)
         self.saveProject()
 
     def getInterfacesMaster(self):
@@ -368,7 +386,7 @@ class Project(WrapperXml):
                     interfacelist.append(interface)
         return interfacelist
 
-    def getInstance(self,instancename):
+    def getInstance(self, instancename):
         """ Return the instance by name
         """
         for instance in self.getInstancesList():
@@ -378,6 +396,7 @@ class Project(WrapperXml):
 
     def getInstancesList(self):
         return self.instanceslist
+
     def getVariablePortsList(self):
         """ Get list of all variable ports available in project
         """
@@ -386,6 +405,7 @@ class Project(WrapperXml):
             if port.isvariable():
                 variable_ports_list.append(port)
         return variable_ports_list
+
     def getPortsList(self):
         """ Get list of all ports available in project
         """
@@ -395,7 +415,8 @@ class Project(WrapperXml):
                 for port in interface.getPortsList():
                     ports_list.append(port)
         return ports_list
-    def getInstanceListofComponent(self,componentname):
+
+    def getInstanceListofComponent(self, componentname):
         """ return a list of instances for a componentname """
         listinstance = []
         for instance in self.getInstancesList():
@@ -403,14 +424,15 @@ class Project(WrapperXml):
                 listinstance.append(instance)
         return listinstance
 
-    def getInstanceAvailability(self,componentname):
+    def getInstanceAvailability(self, componentname):
         """ Return the number of the same component in project
         """
         cmpt = 0
-        if self.getNode("components") ==None:
+        if self.getNode("components") is None:
             return 0
         for element in self.getInstancesList():
-            if element.getName() == componentname: cmpt = cmpt + 1
+            if element.getName() == componentname:
+                cmpt = cmpt + 1
         return cmpt
 
     def getPlatform(self):
@@ -428,7 +450,8 @@ class Project(WrapperXml):
     def getListClockPorts(self):
         """ return a list of external clock port
         """
-        # looking for port connected to platform with type="CLK" and "in" direction
+        # looking for port connected to platform
+        # with type="CLK" and "in" direction
         portlist = []
         platformname = self.getPlatform().getInstanceName()
         for instance in self.getInstancesList():
@@ -437,45 +460,49 @@ class Project(WrapperXml):
                     for port in interface.getPortsList():
                         if (port.getDir() == "in") and \
                                 (port.getSize() == "1") and \
-                                        (port.getType()=="CLK"):
+                                        (port.getType() == "CLK"):
                             for pin in port.getPinsList():
                                 if len(pin.getConnections()) == 1:
                                     connection = pin.getConnections()[0]
-                                    if connection["instance_dest"] == platformname:
+                                    if connection["instance_dest"] ==\
+                                            platformname:
                                         portlist.append(port)
         return portlist
 
-    def selectPlatform(self,platformname, platformlibname):
+    def selectPlatform(self, platformname,  platformlibname):
         """ Select a platform for the project
         """
         #suppress platform if already exists
         try:
             self.delPlatform()
-        except Error,e:
+        except Error, e:
             if e.getLevel() < 2:
                 raise e
             print e
 
         if platformlibname == "standard":
-            platformdir = settings.path+PLATFORMPATH+"/"+platformname+"/"
+            platformdir = settings.path + PLATFORMPATH +\
+                          "/" + platformname + "/"
         else:
             # if not standard platform, try personnal platform
             try:
-                platformdir = settings.getPlatformLibPath(platformlibname)+"/"+platformname+"/"
+                platformdir = settings.getPlatformLibPath(platformlibname) +\
+                                                 "/" + platformname + "/"
             except TypeError:
-                # if not personnal platform, try project specific platform (added with addplatformslib cmd)
+                # if not personnal platform, try project specific
+                # platform (added with addplatformslib cmd)
                 platformdir = ""
                 for node in self.getSubNodeList("platformlibs", "platformlib"):
                     apath = node.getAttributeValue("path")
                     if apath.split("/")[-1] == platformlibname:
-                        platformdir = apath+"/"+platformname+"/"
+                        platformdir = apath + "/" + platformname + "/"
                 if platformdir == "":
                     raise Error("Platform name error")
-        platform = Platform(self,file=platformdir+platformname+XMLEXT)
+        platform = Platform(self, file=platformdir + platformname + XMLEXT)
 
-        if sy.fileExist(platformdir+SIMULATIONPATH):
-            sy.copyAllFile(platformdir+SIMULATIONPATH,
-                    settings.projectpath+SIMULATIONPATH)
+        if sy.fileExist(platformdir + SIMULATIONPATH):
+            sy.copyAllFile(platformdir + SIMULATIONPATH,
+                    settings.projectpath + SIMULATIONPATH)
         self.addInstance(component=platform)
         self.addNode(node=platform)
         # Adding platform default components
@@ -491,7 +518,7 @@ class Project(WrapperXml):
         try:
             platform = self.getPlatform()
         except Error:
-            raise Error("No platform in project",2)
+            raise Error("No platform in project", 2)
 
         self.delProjectInstance(platform.getInstanceName())
         self.delNode("platform")
@@ -500,10 +527,10 @@ class Project(WrapperXml):
     def listAvailablePlatforms(self):
         """ List all supported platforms
         """
-        platformlist = sy.listDirectory(settings.path+PLATFORMPATH)
+        platformlist = sy.listDirectory(settings.path + PLATFORMPATH)
         return platformlist
 
-    def delProjectInstance(self,instancename):
+    def delProjectInstance(self, instancename):
         """ Remove instance from project
         """
         instance = self.getInstance(instancename)
@@ -524,15 +551,15 @@ class Project(WrapperXml):
                         "name",
                         instance.getInstanceName())
         instance.delInstance()
-        display.msg("Component "+instancename+" deleted")
+        display.msg("Component " + instancename + " deleted")
         self.saveProject()
 
     def saveProject(self):
         for comp in self.instanceslist:
             comp.saveInstance()
-        if self.synthesis != None:
+        if self.synthesis is not None:
             self.synthesis.save()
-        if self.simulation != None:
+        if self.simulation is not None:
             self.simulation.save()
         self.saveXml(settings.projectpath + "/" + self.getName() + XMLEXT)
 
@@ -540,11 +567,11 @@ class Project(WrapperXml):
         """ connect pin between two instances
         """
         if pin_source.getParent().getParent().isBus():
-            raise Error("One of this pin is under a bus interface."\
-                    + "Please use connectbus.")
+            raise Error("One of this pin is under a bus interface." +
+                        "Please use connectbus.")
         if pin_dest.getParent().getParent().isBus():
-            raise Error("One of this pin is under a bus interface."\
-                    + "Please use connectbus.")
+            raise Error("One of this pin is under a bus interface." +
+                        "Please use connectbus.")
         pin_source.connectPin(pin_dest)
         self.saveProject()
 
@@ -552,63 +579,67 @@ class Project(WrapperXml):
                             instance_source_name, interface_source_name,
                             port_source_name, pin_source_num,
                             instance_dest_name, interface_dest_name,
-                            port_dest_name,pin_dest_num):
+                            port_dest_name, pin_dest_num):
         """ delete pin between two instances
         """
         instance_source = self.getInstance(instance_source_name)
         interface_source = instance_source.getInterface(interface_source_name)
         port_source = interface_source.getPort(port_source_name)
         if pin_source_num is None:
-            if(port_source.getSize())==1:
+            if(port_source.getSize()) == 1:
                 pin_source_num = "0"
             else:
-               raise Error("Source pin number not given, and port size > 1")
+                raise Error("Source pin number not given, and port size > 1")
         pin_source = port_source.getPin(pin_source_num)
 
         # test if destination given
-        if (instance_dest_name!=None) and (interface_dest_name!=None) \
-            and (port_dest_name != None) and (pin_dest_num!=None):
-            instance_dest  = self.getInstance(instance_dest_name)
+        if (instance_dest_name is not None) and\
+           (interface_dest_name is not None) and\
+           (port_dest_name is not None) and\
+           (pin_dest_num is not None):
+            instance_dest = self.getInstance(instance_dest_name)
             interface_dest = instance_dest.getInterface(interface_dest_name)
-            port_dest      = interface_dest.getPort(port_dest_name)
-            pin_dest       = port_dest.getPin(pin_dest_num)
+            port_dest = interface_dest.getPort(port_dest_name)
+            pin_dest = port_dest.getPin(pin_dest_num)
 
             pin_source.delConnection(pin_dest)
             pin_dest.delConnection(pin_source)
-        else: # if only instance_source given, delete all connection from this instance_source
+        else:  # if only instance_source given,
+               # delete all connection from this instance_source
             for connection in pin_source.getConnections():
-                instance_dest  = self.getInstance(connection["instance_dest"])
-                interface_dest = instance_dest.getInterface(connection["interface_dest"])
-                port_dest      = interface_dest.getPort(connection["port_dest"])
-                pin_dest       = port_dest.getPin(connection["pin_dest"])
+                instance_dest = self.getInstance(connection["instance_dest"])
+                interface_dest =\
+                       instance_dest.getInterface(connection["interface_dest"])
+                port_dest = interface_dest.getPort(connection["port_dest"])
+                pin_dest = port_dest.getPin(connection["pin_dest"])
 
                 pin_source.delConnection(pin_dest)
                 pin_dest.delConnection(pin_source)
         self.saveProject()
 
-    def generateIntercon(self,instance_name,interface_name):
+    def generateIntercon(self, instance_name, interface_name):
         """ generate intercon for interface interface_name """
         # test if intercon already exists
-        from   periphondemand.bin.code.intercon       import Intercon
+        from periphondemand.bin.code.intercon import Intercon
         try:
-            intercon =\
-                    self.getInstance(
-                            instance_name+"_"+interface_name+"_intercon")
+            intercon = self.getInstance(instance_name + "_" +
+                                        interface_name + "_intercon")
         except Error:
             pass
         else:
-            print Error(instance_name+"_"+interface_name\
-                    +" allready exists",INFO)
+            print Error(instance_name + "_" + interface_name +
+                        " allready exists", INFO)
             self.delProjectInstance(intercon.getInstanceName())
 
         intercon = Intercon(
-                self.getInstance(instance_name).getInterface(interface_name),self)
+                self.getInstance(instance_name).getInterface(interface_name),
+                self)
         self.addInstance(component=intercon)
         self.saveProject()
 
     def connectPort(self,
             instance_source_name, interface_source_name, port_source_name,
-            instance_dest_name,interface_dest_name, port_dest_name):
+            instance_dest_name, interface_dest_name, port_dest_name):
         """ Connect all pins of a port source on all pins of
             port dest
         """
@@ -623,7 +654,8 @@ class Project(WrapperXml):
         port_source.connectPort(port_dest)
         self.saveProject()
 
-    def connectInterface(self,instance_name1,interface_name1,instance_name2,interface_name2):
+    def connectInterface(self, instance_name1, interface_name1,
+                               instance_name2, interface_name2):
         """ Connect an interface between two components
         """
         instance_src = self.getInstance(instance_name1)
@@ -633,7 +665,8 @@ class Project(WrapperXml):
         interface_src.connectInterface(interface_dest)
         self.saveProject()
 
-    def connectBus(self,instancemaster,interfacemaster,instanceslave,interfaceslave):
+    def connectBus(self, instancemaster, interfacemaster,
+                         instanceslave, interfaceslave):
         """ Connect a master bus to a slave bus
         """
         instance = self.getInstance(instancemaster)
@@ -642,15 +675,15 @@ class Project(WrapperXml):
                 interfaceslave)
         self.saveProject()
 
-    def deleteBus(self,instancemaster,instanceslave,
-                interfacemaster=None,interfaceslave=None):
+    def deleteBus(self, instancemaster, instanceslave,
+                interfacemaster=None, interfaceslave=None):
         """ Delete a slave bus connection
         """
         instance = self.getInstance(instancemaster)
-        instance.deleteBus(instanceslave,interfacemaster,interfaceslave)
+        instance.deleteBus(instanceslave, interfacemaster, interfaceslave)
         self.saveProject()
 
-    def reNum(self,componentname):
+    def reNum(self, componentname):
         """ Renum all instances in the correct order
         """
         complist = []
@@ -669,20 +702,21 @@ class Project(WrapperXml):
         masters = self.getInterfacesMaster()
         # autoconnection can be made only if they are 1 master interface
         if len(masters) < 1:
-            raise Error("No bus master in project",0)
+            raise Error("No bus master in project", 0)
         elif len(masters) > 1:
-            for i in range(len(masters)-1):
-                for ii in range(i+1,len(masters)):
+            for i in range(len(masters) - 1):
+                for ii in range(i + 1, len(masters)):
                     if (masters[i].getBusName() == masters[ii].getBusName()):
-                        raise Error(masters[i].getParent().getInstanceName()+" and "+\
-                            masters[ii].getParent().getInstanceName()+\
-                            " has the same bus type : , "+\
-                            masters[i].getBusName()+\
-                            " bus connection must be made by hand",0)
+                        raise Error(masters[i].getParent().getInstanceName()
+                            + " and " +
+                            masters[ii].getParent().getInstanceName() +
+                            " has the same bus type : , " +
+                            masters[i].getBusName() +
+                            " bus connection must be made by hand", 0)
         # find slaves bus
         slaves = self.getInterfacesSlave()
         if len(slaves) == 0:
-            raise Error(" No slave bus in project",0)
+            raise Error(" No slave bus in project", 0)
 
         # connect each slave with the same bus name than master
         for master in masters:
@@ -692,7 +726,7 @@ class Project(WrapperXml):
                         # connect bus
                         master.connectBus(interfaceslave.getParent(),
                                     interfaceslave.getName())
-                    except Error,e:
+                    except Error, e:
                         e.setLevel(2)
                         display.msg(str(e))
 
@@ -707,81 +741,89 @@ class Project(WrapperXml):
         # Check connections on variable ports
         for port in self.getVariablePortsList():
             if port.checkVariablePort() is False:
-                raise Error("Pin connections on port "+\
-                        str(port.getParent().getParent().getInstanceName())+"."+\
-                        str(port.getParent().getName())+"."+\
-                        str(port.getName())+\
+                raise Error("Pin connections on port " +
+                        str(port.getParent().getParent().getInstanceName()) +
+                        "." + str(port.getParent().getName()) + "." +
+                        str(port.getName()) +
                         "is wrong, pin number must be followed.")
 
         ###########################################
         #check Busses, all slaves bus need a master
         listmaster = self.getInterfacesMaster()
-        listslave  = self.getInterfacesSlave()
+        listslave = self.getInterfacesSlave()
 
         #Delete all slaves component from listslave
         for master in listmaster:
             for slave in master.getSlavesList():
                 for slave2 in listslave:
-                    if slave2.getParent().getInstanceName()==\
+                    if slave2.getParent().getInstanceName() ==\
                         slave.getInstanceName() and \
                             slave2.getName() == slave.getInterfaceName():
                         listslave.remove(slave2)
 
         for slave in listslave:
-            display.msg(slave.getParent().getInstanceName()+\
-                    " is not connected on a master bus",1)
+            display.msg(slave.getParent().getInstanceName() +
+                    " is not connected on a master bus", 1)
         if len(listslave) != 0:
-            display.msg("Some slave bus are not connected",1)
+            display.msg("Some slave bus are not connected", 1)
 
         ##########################################
         #Check bus address
         dict_reg = {}
-        newmaster= []
+        newmaster = []
         for master in listmaster:
             if (master.getName() != "candroutput"):
                 newmaster.append(master)
         for master in newmaster:
             for slave in master.getSlavesList():
                 for register in slave.getInterface().getRegisterMap():
-                    if dict_reg.has_key(register["offset"]):
-                        display.msg("Register conflict at "+hex(register["offset"])+\
-                                " between "+str(slave.getInstanceName())+"."+\
-                                str(register["name"])+" and "\
-                                +str(dict_reg[register["offset"]][0])+"."+\
-                                str(dict_reg[register["offset"]][1]),0)
-                        dict_reg[register["offset"]]=(
-                                str(dict_reg[register["offset"]][0])+","+\
-                                slave.getInstanceName()+"/!\\",
-                                str(dict_reg[register["offset"]][1])+ ","+\
-                                register["name"]+"/!\\")
+                    if register["offset"] in dict_reg:
+                        display.msg("Register conflict at " +
+                                hex(register["offset"]) + " between " +
+                                str(slave.getInstanceName()) + "." +
+                                str(register["name"]) + " and " +
+                                str(dict_reg[register["offset"]][0]) + "." +
+                                str(dict_reg[register["offset"]][1]), 0)
+                        dict_reg[register["offset"]] = (
+                                str(dict_reg[register["offset"]][0]) + "," +
+                                slave.getInstanceName() + "/!\\",
+                                str(dict_reg[register["offset"]][1]) + "," +
+                                register["name"] + "/!\\")
                     else:
-                        dict_reg[register["offset"]] = (slave.getInstanceName(),
-                                                        register["name"])
+                        dict_reg[register["offset"]] =
+                        (slave.getInstanceName(), register["name"])
             display.msg("")
             display.msg("Mapping for interface " + master.getName() + ":")
-            display.msg("Address  | instance.interface             | size        ")
-            display.msg("---------------------------------------------------------")
+            display.msg("Address  | instance.interface             |" +
+                        " size        ")
+            display.msg("-----------------------------" +
+                        "----------------------------")
             for register in master.allocMem.getMapping():
-                display.msg("%8s"%register[0]+" | "+"%30s"%register[1]+\
-                        " | "+"%10s"%register[2])
-            display.msg("---------------------------------------------------------")
+                display.msg("%8s" % register[0] + " | " +
+                        "%30s" % register[1] +
+                        " | " + "%10s" % register[2])
+            display.msg("----------------------------" +
+                        "-----------------------------")
 
     def getSimulationToolChainList(self):
         """ list all toolchain availables
         """
-        filelist = sy.listDirectory(settings.path + TOOLCHAINPATH +SIMULATIONPATH)
+        filelist = sy.listDirectory(settings.path +
+                TOOLCHAINPATH + SIMULATIONPATH)
         return filelist
 
     def getSynthesisToolChainList(self):
         """ list all toolchains availables
         """
-        filelist = sy.listDirectory(settings.path + TOOLCHAINPATH +SYNTHESISPATH)
+        filelist = sy.listDirectory(settings.path +
+                TOOLCHAINPATH + SYNTHESISPATH)
         return filelist
 
     def getDriverToolChainList(self):
         """ list all toolchains availables
         """
-        filelist = sy.listDirectory(settings.path + TOOLCHAINPATH +DRIVERSPATH)
+        filelist = sy.listDirectory(settings.path +
+                TOOLCHAINPATH + DRIVERSPATH)
         return filelist
 
     def getIOlist(self):
@@ -794,52 +836,50 @@ class Project(WrapperXml):
         for io in self.getIOlist():
             if io.getName() == io_name:
                 return io
-        raise Error("No IO with name "+str(io_name))
+        raise Error("No IO with name " + str(io_name))
 
-
-    def getComponentVersionList(self,libraryname,componentname):
+    def getComponentVersionList(self, libraryname, componentname):
         """ list component version name in archive
         """
-        filelist = sy.listFiles(self.library.getLibraryPath(libraryname)+\
-                "/"+componentname)
+        filelist = sy.listFiles(self.library.getLibraryPath(libraryname) +
+                "/" + componentname)
         outlist = []
         for name in filelist:
             # take only xml file
-            ext = XMLEXT[1:] # suppress dot
-            pattern = ".*%s"%ext+"$"
-            if re.match(pattern,name):
+            ext = XMLEXT[1:]  # suppress dot
+            pattern = ".*%s" % ext + "$"
+            if re.match(pattern, name):
                 # Suppress extension
                 name = name.split(".")[0]
                 outlist.append(name)
         return outlist
 
-    def generateReport(self,filename=None):
+    def generateReport(self, filename=None):
         """ generate a project report """
         TAB = "    "
-        if filename==None:
-            report_file=open(settings.projectpath+\
-                    "/"+self.getName()+\
-                    "_report.txt","w")
+        if filename is None:
+            report_file = open(settings.projectpath +
+                    "/" + self.getName() +
+                    "_report.txt", "w")
         else:
-            report_file=open(filename,"w")
+            report_file = open(filename, "w")
         text = "* Master interfaces mapping:\n"
         for master in self.getInterfacesMaster():
             masterinstance = master.getParent()
-            text+="\n  "+masterinstance.getInstanceName()+"."+\
-                    master.getName()+":\n"
+            text += "\n  " + masterinstance.getInstanceName() + "." +\
+                    master.getName() + ":\n"
             for slave in master.getSlavesList():
                 interfaceslave = slave.getInterface()
                 instance = interfaceslave.getParent()
-                text+=TAB+instance.getInstanceName()+\
-                        "."+interfaceslave.getName()+\
+                text += TAB + instance.getInstanceName() +\
+                        "." + interfaceslave.getName() +\
                         ":\n"
                 try:
                     for reg in interfaceslave.getRegisterMap():
-                        text+=TAB+"  "+"0x%02x : %s\n"%(reg["offset"],
+                        text += TAB + "  " + "0x%02x : %s\n" % (reg["offset"],
                                 reg["name"])
                 except Error:
-                    text+="\n"
+                    text += "\n"
         report_file.write(text)
         report_file.close()
         return text
-
