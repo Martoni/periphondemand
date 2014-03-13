@@ -34,15 +34,16 @@ __versionTime__ = "28/04/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.settings   import Settings
-from periphondemand.bin.utils.error      import Error
-from periphondemand.bin.utils            import wrappersystem as sy
+from periphondemand.bin.utils.settings import Settings
+from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils import wrappersystem as sy
 
-from periphondemand.bin.core.component  import Component
-from periphondemand.bin.core.interface  import Interface
-from periphondemand.bin.core.simulationlib    import SimulationLib
+from periphondemand.bin.core.component import Component
+from periphondemand.bin.core.interface import Interface
+from periphondemand.bin.core.simulationlib import SimulationLib
 
 settings = Settings()
+
 
 class Platform(Component):
     """ This class manage platform dependances
@@ -51,38 +52,40 @@ class Platform(Component):
             interfacelist   -- list objects containing platforms constraints
     """
 
-    def __init__(self,parent,**keys):
+    def __init__(self, parent, **keys):
         """ Init Component,
             __init__(self,parent,node)
             __init__(self,parent,file)
         """
-        Component.__init__(self,parent)
+        Component.__init__(self, parent)
         if "node" in keys:
             self.__initnode(keys["node"])
         elif "file" in keys:
             self.__initfile(keys["file"])
         else:
-            raise Error("Keys unknown in Platform constructor",0)
+            raise Error("Keys unknown in Platform constructor", 0)
 
-        if self.getNode("interfaces") != None:
+        if self.getNode("interfaces") is not None:
             for element in self.getNode("interfaces").getNodeList("interface"):
-                self.interfaceslist.append(Interface(self,node=element))
+                self.interfaceslist.append(Interface(self, node=element))
         self.librarieslist = []
-        if self.getNode("simulation") != None:
+        if self.getNode("simulation") is not None:
             for library in self.getNode("simulation").getNodeList("simlib"):
-                self.librarieslist.append(SimulationLib(self,node=library))
+                self.librarieslist.append(SimulationLib(self, node=library))
 
-    def __initnode(self,node):
-        WrapperXml.__init__(self,node=node)
-    def __initfile(self,file):
-        WrapperXml.__init__(self,file=file)
+    def __initnode(self, node):
+        WrapperXml.__init__(self, node=node)
+
+    def __initfile(self, file):
+        WrapperXml.__init__(self, file=file)
 
     def getForcesList(self):
         forcelist = []
         interfaces_list = self.getInterfacesList()
         if len(interfaces_list) != 1:
-            raise Error("I found "+str(len(interfaces_list))+\
-            " FPGAs ("+str(interfaces_list)+") and multiple FPGA project is not implemented yet.")
+            raise Error("I found " + str(len(interfaces_list)) +
+                        " FPGAs (" + str(interfaces_list) +
+                        ") and multiple FPGA project is not implemented yet.")
         for port in interfaces_list[0].getPortsList():
             if port.forceDefined():
                 forcelist.append(port)
@@ -93,9 +96,10 @@ class Platform(Component):
         """
         componentslist = []
         try:
-            for element in self.getSubNodeList("components","component"):
+            for element in self.getSubNodeList("components", "component"):
                 component = element.getAttributeValue("name").split("/")
-                componentslist.append({"type":component[0],"name":component[1]})
+                componentslist.append({"type": component[0],
+                                       "name": component[1]})
         except AttributeError:
             pass
         return componentslist
@@ -111,7 +115,7 @@ class Platform(Component):
         """
         pass
 
-    def loadInstance(self,name):
+    def loadInstance(self, name):
         """ Load platform
         """
         pass
@@ -140,7 +144,9 @@ class Platform(Component):
         return portlist
 
     def getIncompleteExternalPortsList(self):
-        """ Return the list of incomplete in or inout port connected on platform """
+        """ Return the list of incomplete in or
+            inout port connected on platform
+        """
         incomplete_port_list = []
         for port in self.getConnectPortsList():
             if port.getDir() != "out":
@@ -151,7 +157,7 @@ class Platform(Component):
     def getLibrariesList(self):
         try:
             return self.librarieslist
-        except AttributeError,e:
+        except AttributeError, error:
             return []
 
     def getFamily(self):
@@ -176,7 +182,7 @@ class Platform(Component):
         return self.getNode("fpga").getAttributeValue("main_clock")
 
     def isPlatform(self):
-        return 1
+        return True
 
     def getPlatformPortsList(self):
         """ Get all port in platform """
@@ -185,5 +191,3 @@ class Platform(Component):
             for port in interface.getPortsList():
                 portslist.append(port)
         return portslist
-
-

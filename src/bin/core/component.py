@@ -491,7 +491,7 @@ class Component(WrapperXml):
         return display_port
 
     def isPlatform(self):
-        return None
+        return False
 
     ##################################
     # Settings attributes for nodes
