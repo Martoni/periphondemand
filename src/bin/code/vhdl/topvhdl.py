@@ -28,8 +28,8 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" Generating code for top component """
 
-__doc__ = ""
 __version__ = "1.0.0"
 __versionTime__ = "15/05/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
@@ -301,7 +301,6 @@ class TopVHDL(TopGen):
                                             str(port.getUnconnectedValue())*int(port.getSize()) +\
                                             "\",\n"
 
-
                 # Suppress the #!@ last comma
                 out = out[:-2] + "\n"
                 out = out + TAB*3 + ");\n"
@@ -349,7 +348,6 @@ class TopVHDL(TopGen):
                                         str(pinnum)+");\n"
                     except:
                         pass
-
 
         # connect all "in" ports pin
         for component in self.project.getInstancesList():
@@ -412,4 +410,3 @@ class TopVHDL(TopGen):
 
     def architectureBegin(self):
         return "\nbegin\n"
-

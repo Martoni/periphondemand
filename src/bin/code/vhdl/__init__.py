@@ -28,8 +28,8 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" generate vhdl """
 
-__doc__ = ""
 __version__ = "1.0.0"
 __versionTime__ = "02/06/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
