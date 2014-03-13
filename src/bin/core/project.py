@@ -790,7 +790,7 @@ class Project(WrapperXml):
                                 str(dict_reg[register["offset"]][1]) + "," +
                                 register["name"] + "/!\\")
                     else:
-                        dict_reg[register["offset"]] =
+                        dict_reg[register["offset"]] = \
                         (slave.getInstanceName(), register["name"])
             display.msg("")
             display.msg("Mapping for interface " + master.getName() + ":")
