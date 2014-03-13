@@ -28,6 +28,7 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" Managing slave interfaces """
 
 __doc__ = ""
 __version__ = "1.0.0"
@@ -35,40 +36,43 @@ __versionTime__ = "06/06/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.error      import Error
+from periphondemand.bin.utils.error import Error
+
 
 class Slave(WrapperXml):
     """ Manage Slaves connection
     """
 
-    def __init__(self,parent,**keys):
+    def __init__(self, parent, **keys):
         """ init Slave,
             __init__(self,parent,node)
             __init__(self,parent,instancename,interfacename)
         """
         self.parent = parent
         if "node" in keys:
-            WrapperXml.__init__(self,node=keys["node"])
+            WrapperXml.__init__(self, node=keys["node"])
         elif "instancename" in keys:
-            WrapperXml.__init__(self,nodename="slave")
+            WrapperXml.__init__(self, nodename="slave")
             self.setInstanceName(keys["instancename"])
             self.setInterfaceName(keys["interfacename"])
         else:
-            raise Error("Keys unknowns in Slave init()",0)
+            raise Error("Keys unknowns in Slave init()", 0)
 
     def getInstanceName(self):
         return self.getAttributeValue("instancename")
-    def setInstanceName(self,instancename):
-        self.setAttribute("instancename",instancename)
+
+    def setInstanceName(self, instancename):
+        self.setAttribute("instancename", instancename)
 
     def getInterfaceName(self):
         return self.getAttributeValue("interfacename")
-    def setInterfaceName(self,interfacename):
-        self.setAttribute("interfacename",interfacename)
+
+    def setInterfaceName(self, interfacename):
+        self.setAttribute("interfacename", interfacename)
 
     def getInstance(self):
-        return self.getParent().getParent().getParent().getInstance(self.getInstanceName())
+        return self.getParent().getParent().getParent().getInstance(
+                self.getInstanceName())
 
     def getInterface(self):
         return self.getInstance().getInterface(self.getInterfaceName())
-

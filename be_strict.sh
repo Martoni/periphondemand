@@ -14,3 +14,4 @@ pep8 src/bin/core/platform.py
 pep8 src/bin/core/port.py
 pep8 src/bin/core/register.py
 pep8 src/bin/core/simulationlib.py
+pep8 src/bin/core/slave.py
