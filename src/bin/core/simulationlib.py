@@ -28,40 +28,42 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" Simulation library """
 
 __doc__ = ""
 __version__ = "1.0.0"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
-from periphondemand.bin.utils.error      import Error
-from periphondemand.bin.core.component   import Component
-from periphondemand.bin.utils.settings   import Settings
+from periphondemand.bin.utils.error import Error
+from periphondemand.bin.core.component import Component
+from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 
 settings = Settings()
+
 
 class SimulationLib(WrapperXml):
     """ describe simulation library
     """
 
-    def __init__(self,parent,**keys):
+    def __init__(self, parent, **keys):
         """ init Generic,
             __init__(self,parent,node)
             __init__(self,parent,nodestring)
         """
-        self.parent=parent
+        self.parent = parent
         if "node" in keys:
             self.__initnode(keys["node"])
         elif "nodestring" in keys:
             self.__initnodestring(keys["nodestring"])
         else:
-            raise Error("Keys unknown in SimulationLib init()",0)
+            raise Error("Keys unknown in SimulationLib init()", 0)
 
-    def __initnode(self,node):
-        WrapperXml.__init__(self,node=node)
-    def __initnodestring(self,nodestring):
-        WrapperXml.__init__(self,nodestring=nodestring)
+    def __initnode(self, node):
+        WrapperXml.__init__(self, node=node)
+
+    def __initnodestring(self, nodestring):
+        WrapperXml.__init__(self, nodestring=nodestring)
 
     def getFileName(self):
         return self.getAttributeValue("filename")
-
