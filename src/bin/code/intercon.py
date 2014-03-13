@@ -28,6 +28,7 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" Manage intercon """
 
 __doc__ = ""
 __version__ = "1.0.0"
@@ -35,32 +36,33 @@ __versionTime__ = "13/05/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import periphondemand.bin.define
-from   periphondemand.bin.define import *
+from periphondemand.bin.define import *
 
-from   periphondemand.bin.utils.settings import Settings
-from   periphondemand.bin.utils.error    import Error
-from   periphondemand.bin.utils          import wrappersystem as sy
-from   periphondemand.bin.utils.display  import Display
+from periphondemand.bin.utils.settings import Settings
+from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils import wrappersystem as sy
+from periphondemand.bin.utils.display import Display
 
-from   periphondemand.bin.core.component  import Component
-from   periphondemand.bin.core.port       import Port
-from   periphondemand.bin.core.interface  import Interface
-from   periphondemand.bin.core.hdl_file   import Hdl_file
+from periphondemand.bin.core.component import Component
+from periphondemand.bin.core.port import Port
+from periphondemand.bin.core.interface import Interface
+from periphondemand.bin.core.hdl_file import Hdl_file
 
 settings = Settings()
-display  = Display()
+display = Display()
+
 
 class Intercon(Component):
     """ Generate Intercon component
     """
 
-    def __init__(self,masterinterface,project):
+    def __init__(self, masterinterface, project):
         """ Init fonction
         """
         masterinstancename = masterinterface.getParent().getInstanceName()
         masterinterfacename = masterinterface.getName()
 
-        Component.__init__(self,project)
+        Component.__init__(self, project)
         self.interfaceslist = []
         self.addNode(nodename="component")
 
@@ -73,25 +75,23 @@ class Intercon(Component):
 
         masterinterface.getBus().generateIntercon(self)
 
-        display.msg("Intercon with name : "+self.getInstanceName()+" Done")
+        display.msg("Intercon with name : " + self.getInstanceName() + " Done")
 
-    def generateXML(self,masterinterface):
+    def generateXML(self, masterinterface):
         """ Generate intercon code
         """
         masterinstance = masterinterface.getParent()
 
         # set name and description
-        self.setName(str(masterinstance.getInstanceName()) \
-                     + "_" \
-                     + str(masterinterface.getName()))
-        self.setInstanceName(str(masterinstance.getInstanceName())\
-                             + "_"\
-                             +str(masterinterface.getName())\
-                             + "_intercon")
-        self.setDescription("Connect slaves to "\
-                            + masterinterface.getName()\
-                            + " from "\
-                            + masterinstance.getInstanceName())
+        self.setName(str(masterinstance.getInstanceName()) +
+                     "_" + str(masterinterface.getName()))
+        self.setInstanceName(str(masterinstance.getInstanceName()) +
+                             "_" + str(masterinterface.getName()) +
+                             "_intercon")
+        self.setDescription("Connect slaves to " +
+                            masterinterface.getName() +
+                            " from " +
+                            masterinstance.getInstanceName())
 
         # Save to make directories
         self.saveInstance()
@@ -110,8 +110,8 @@ class Intercon(Component):
             #######
             # bus (wishbone,...)
             bus = Interface(self,
-                            name=instance.getInstanceName()\
-                                    +"_"+interface.getName())
+                            name=instance.getInstanceName() +
+                                 "_" + interface.getName())
             bus.setClass("intercon")
             # Adding bus interface on intercon
             self.addInterface(bus)
@@ -119,8 +119,8 @@ class Intercon(Component):
             #Creating port with invert direction value
             for port in interface.getPortsList():
                 newport = Port(bus,
-                               name=instance.getInstanceName()\
-                                       +"_"+port.getName())
+                               name=instance.getInstanceName() +
+                                    "_" + port.getName())
                 newport.setDir(self.invertDir(port.getDir()))
                 newport.setSize(port.getSize())
                 # adding port on bus interface
@@ -128,9 +128,5 @@ class Intercon(Component):
                 #connect port new port on instance interface
                 port.connectAllPin(newport)
 
-
-
         bus.setClass("intercon")
         self.setNum("0")
-
-

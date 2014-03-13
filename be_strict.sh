@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# code
+pep8 src/bin/code/__init__.py
+pep8 src/bin/code/intercon.py
+
+# core
+pep8 src/bin/core/__init__.py
 pep8 src/bin/core/project.py
 pep8 src/bin/core/allocmem.py
 pep8 src/bin/core/bus.py
