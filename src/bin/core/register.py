@@ -28,59 +28,65 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" Manage registers """
 
 __doc__ = ""
 __version__ = "1.0.0"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.error      import Error
+from periphondemand.bin.utils.error import Error
+
 
 class Register(WrapperXml):
     """ Manage Register
         attributes:
     """
 
-    def __init__(self,parent,**keys):
+    def __init__(self, parent, **keys):
         """ Init register,
             __init__(self,parent,node)
             __init__(self,parent,nodestring)
             __init__(self,parent,register_name)
         """
         if "node" in keys:
-            WrapperXml.__init__(self,node=keys["node"])
+            WrapperXml.__init__(self, node=keys["node"])
         elif "nodestring" in keys:
-            WrapperXml.__init__(self,nodestring=keys["nodestring"])
+            WrapperXml.__init__(self, nodestring=keys["nodestring"])
         elif "register_name" in keys:
-            WrapperXml.__init__(self,nodename="register")
+            WrapperXml.__init__(self, nodename="register")
             self.setName(keys["register_name"])
         else:
-            raise Error("Keys not known in Register",0)
+            raise Error("Keys not known in Register", 0)
 
         self.parent = parent
 
     def getOffset(self):
         return self.getAttributeValue("offset")
-    def setOffset(self,offset):
+
+    def setOffset(self, offset):
         #TODO: check if offset is valid
-        self.setAttribute("offset",offset)
+        self.setAttribute("offset", offset)
+
     def getRows(self):
         return self.getAttributeValue("rows")
-    def setRows(self,rows):
-        self.setAttribute("rows",rows)
+
+    def setRows(self, rows):
+        self.setAttribute("rows", rows)
 
     def getAbsoluteAddr(self):
         """ return absolute address
         """
-        baseaddr = int(self.getParent().getBase(),16)
-        offset = int(self.getOffset(),16)
+        baseaddr = int(self.getParent().getBase(), 16)
+        offset = int(self.getOffset(), 16)
         if int(self.getSize()) == 8:
-            return "%02x"%(baseaddr+offset)
+            return "%02x" % (baseaddr + offset)
         elif int(self.getSize()) == 16:
-            return "%04x"%(baseaddr+offset*2)
+            return "%04x" % (baseaddr + offset * 2)
         elif int(self.getSize()) == 32:
-            return "%08x"%(baseaddr+offset*4)
+            return "%08x" % (baseaddr + offset * 4)
         else:
-            raise Error("Register size not supported for reg "+\
-                    str(self.getName())+" in component "+str(self.getParent().getParent().getName()))
-
+            raise Error("Register size not supported for reg " +
+                        str(self.getName()) +
+                        " in component " +
+                        str(self.getParent().getParent().getName()))
