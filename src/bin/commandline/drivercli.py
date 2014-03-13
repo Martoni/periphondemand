@@ -28,44 +28,45 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" Commandline for driver environnement """
 
-__doc__ = ""
 __version__ = "1.0.0"
 __versionTime__ = "16/07/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.define import *
-from periphondemand.bin.utils.basecli  import BaseCli
+from periphondemand.bin.utils.basecli import BaseCli
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error    import Error
-from periphondemand.bin.utils.display  import Display
-from periphondemand.bin.utils          import wrappersystem as sy
+from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.display import Display
+from periphondemand.bin.utils import wrappersystem as sy
 
-display  = Display()
+display = Display()
 settings = Settings()
+
 
 class DriverCli(BaseCli):
     """
     """
 
-    def __init__(self,parent):
-        BaseCli.__init__(self,parent)
+    def __init__(self, parent):
+        BaseCli.__init__(self, parent)
         self.driver = settings.active_project.driver
         self.project = settings.active_project
 
     def testIfToolChainSelected(self):
-        if self.driver==None:
+        if self.driver is None:
             raise Error("No toolchain selected (use selecttoolchain command)")
 
-    def complete_generateproject(self,text,line,begidx,endidx):
+    def complete_generateproject(self, text, line, begidx, endidx):
         toollist = []
         try:
-            toollist = self.completeargs(text,line,"[drivertoolchain]")
-        except Exception,e:
-            print e
+            toollist = self.completeargs(text, line, "[drivertoolchain]")
+        except Exception, error:
+            print error
         return toollist
 
-    def do_generateproject(self,line):
+    def do_generateproject(self, line):
         """\
 Usage : generateproject
 generate a project drivers directory with templates
@@ -74,13 +75,13 @@ generate a project drivers directory with templates
             self.testIfToolChainSelected()
             self.driver.generateProject()
             self.driver.fillAllTemplates()
-        except Error,e:
+        except Error, error:
             print display
-            print e
+            print error
             return
         print display
 
-    def do_filltemplates(self,line):
+    def do_filltemplates(self, line):
         """\
 Usage : filltemplates
 fill drivers templates
@@ -88,13 +89,13 @@ fill drivers templates
         try:
             self.testIfToolChainSelected()
             self.driver.fillAllTemplates()
-        except Error,e:
+        except Error, error:
             print display
-            print e
+            print error
             return
         print display
 
-    def do_copydrivers(self,line):
+    def do_copydrivers(self, line):
         """\
 Usage : copydrivers
 copy drivers file in software developpement tree. Developpement tree
@@ -103,25 +104,25 @@ directory must be selected with setprojecttree
         try:
             self.testIfToolChainSelected()
             self.driver.copyBSPDrivers()
-        except Error,e:
+        except Error, error:
             print display
-            print e
+            print error
             return
         print display
 
-    def complete_selectprojecttree(self,text,line,begidx,endidx):
+    def complete_selectprojecttree(self, text, line, begidx, endidx):
         """complete selectprojecttree command directories """
         path = line.split(" ")[1]
-        if path.find("/") == -1: # sub
+        if path.find("/") == -1:  # sub
             path = ""
-        elif text.split() == "": # sub/sub/
-            path = "/".join(path)+"/"
-        else: # sub/sub
+        elif text.split() == "":  # sub/sub/
+            path = "/".join(path) + "/"
+        else:  # sub/sub
             path = "/".join(path.split("/")[0:-1]) + "/"
         listdir = sy.listDirectory(path)
-        return self.completelist(line,text,listdir)
+        return self.completelist(line, text, listdir)
 
-    def do_selectprojecttree(self,line):
+    def do_selectprojecttree(self, line):
         """\
 Usage : setprojecttree [directory]
 select software developpement tree, to copy driver
@@ -129,37 +130,37 @@ select software developpement tree, to copy driver
         try:
             self.testIfToolChainSelected()
             self.driver.setBSPDirectory(line)
-        except Error,e:
+        except Error, error:
             print display
-            print e
+            print error
             return
         print display
 
-    def complete_selecttoolchain(self,text,line,begidx,endidx):
+    def complete_selecttoolchain(self, text, line, begidx, endidx):
         toolchainlist = []
         try:
-            toolchainlist = self.completeargs(text,line,"[drivertoolchain]")
-        except Exception,e:
-            print e
+            toolchainlist = self.completeargs(text, line, "[drivertoolchain]")
+        except Exception, error:
+            print error
         return toolchainlist
 
-    def do_selecttoolchain(self,line):
+    def do_selecttoolchain(self, line):
         """\
 Usage : selecttoolchain [drivertoolchain]
 select operating system to generate drivers
         """
         try:
-            self.checkargs(line,"[drivertoolchain]")
-        except Error,e:
+            self.checkargs(line, "[drivertoolchain]")
+        except Error, error:
             print display
-            print e
+            print error
             return
         if line.strip() == "":
-            if len(settings.active_project.getDriverToolChainList())==1:
+            if len(settings.active_project.getDriverToolChainList()) == 1:
                 settings.active_project.setDriverToolChain(
                     settings.active_project.getDriverToolChainList()[0])
             else:
-                if settings.active_project.getDriverToolChain() == None:
+                if settings.active_project.getDriverToolChain() is None:
                     print "Choose a toolchain\n"
                     for toolchain in \
                             settings.active_project.getDriverToolChainList():
@@ -168,9 +169,7 @@ select operating system to generate drivers
         else:
             try:
                 settings.active_project.setDriverToolChain(line)
-            except Error,e:
-                print e
+            except Error, error:
+                print error
                 return
         self.driver = settings.active_project.driver
-
-

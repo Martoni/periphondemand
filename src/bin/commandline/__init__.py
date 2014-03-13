@@ -34,6 +34,5 @@ __version__ = "1.0.0"
 __versionTime__ = "02/06/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
-from projectcli     import ProjectCli
-from synthesiscli   import SynthesisCli
-
+from synthesiscli import SynthesisCli
+from projectcli import ProjectCli

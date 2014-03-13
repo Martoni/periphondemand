@@ -7,6 +7,10 @@ pep8 src/bin/code/topgen.py
 pep8 src/bin/code/vhdl/__init__.py
 #pep8 src/bin/code/vhdl/topvhdl.py
 
+# commandeline
+pep8 src/bin/commandline/__init__.py
+pep8 src/bin/commandline/drivercli.py
+
 # core
 pep8 src/bin/core/__init__.py
 pep8 src/bin/core/project.py
