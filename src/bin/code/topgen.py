@@ -28,6 +28,7 @@
 # Date       By        Changes
 #
 #-----------------------------------------------------------------------------
+""" Generate top component """
 
 __doc__ = ""
 __version__ = "1.0.0"
@@ -35,17 +36,18 @@ __versionTime__ = "15/05/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import periphondemand.bin.define
-from   periphondemand.bin.define import *
-from   periphondemand.bin.utils import Settings
-from   periphondemand.bin.utils.error import Error
+from periphondemand.bin.define import *
+from periphondemand.bin.utils import Settings
+from periphondemand.bin.utils.error import Error
 
 settings = Settings()
+
 
 class TopGen:
     """ Generate Top component from a project
     """
 
-    def __init__(self,project):
+    def __init__(self, project):
         self.project = project
 
     def generate(self):
@@ -54,23 +56,23 @@ class TopGen:
         ## checking if all intercons are done
         for masterinterface in self.project.getInterfacesMaster():
             try:
-                self.project.getInstance(\
-                        masterinterface.getParent().getInstanceName()\
-                        +"_"\
-                        +masterinterface.getName()\
-                        +"_intercon")
-            except Error,e:
-                raise Error("Intercon missing, all intercon must be"+\
-                            "generated before generate top.\n"+str(e),0)
+                self.project.getInstance(
+                        masterinterface.getParent().getInstanceName() +
+                        "_" +
+                        masterinterface.getName() +
+                        "_intercon")
+            except Error, error:
+                raise Error("Intercon missing, all intercon must be" +
+                            "generated before generate top.\n" + str(error), 0)
 
         ########################
         # header
         out = self.header()
         ########################
         # entity
-        entityname = "top_"+self.project.getName()
-        portlist =  self.project.getPlatform().getConnectPortsList()
-        out = out + self.entity(entityname,portlist)
+        entityname = "top_" + self.project.getName()
+        portlist = self.project.getPlatform().getConnectPortsList()
+        out = out + self.entity(entityname, portlist)
         ########################
         # architecture head
         out = out + self.architectureHead(entityname)
@@ -79,9 +81,10 @@ class TopGen:
         out = out + self.declareComponents()
         ########################
         # declare signals
-        incompleteportslist = self.project.getPlatform().getIncompleteExternalPortsList()
+        incompleteportslist = \
+                self.project.getPlatform().getIncompleteExternalPortsList()
         out = out + self.declareSignals(self.project.getInstancesList(),
-                                                incompleteportslist)
+                                        incompleteportslist)
         ########################
         # begin
         out = out + self.architectureBegin()
@@ -90,10 +93,10 @@ class TopGen:
         out = out + self.connectForces(portlist)
         ########################
         # declare Instance
-        out =out+ self.declareInstance()
+        out = out + self.declareInstance()
         #######################
         # instance connection
-        out =out+ self.connectInstance(incompleteportslist)
+        out = out + self.connectInstance(incompleteportslist)
         ########################
         # architecture foot
         out = out + self.architectureFoot(entityname)
@@ -101,11 +104,10 @@ class TopGen:
         #######################
         # save file
         try:
-            file = open(settings.projectpath+SYNTHESISPATH+\
-                    "/top_"+ self.project.getName()+VHDLEXT,"w")
-        except IOError, e:
-            raise e
+            file = open(settings.projectpath + SYNTHESISPATH +
+                        "/top_" + self.project.getName() + VHDLEXT, "w")
+        except IOError, error:
+            raise error
         file.write(out)
         file.close()
         return out
-
