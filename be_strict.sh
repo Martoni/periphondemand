@@ -31,3 +31,7 @@ pep8 src/bin/core/port.py
 pep8 src/bin/core/register.py
 pep8 src/bin/core/simulationlib.py
 pep8 src/bin/core/slave.py
+
+# toolchain
+pep8 src/bin/toolchain/__init__.py
+pep8 src/bin/toolchain/driver.py

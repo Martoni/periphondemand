@@ -35,5 +35,5 @@ __versionTime__ = "02/06/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from simulation import Simulation
-from synthesis  import Synthesis
-from driver     import Driver
+from synthesis import Synthesis
+from driver import Driver
