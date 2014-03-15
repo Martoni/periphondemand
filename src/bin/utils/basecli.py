@@ -9,20 +9,6 @@
 # Created:  2008/01/17
 # Licence:  GPLv3 or newer
 #-----------------------------------------------------------------------------
-# Last commit info:
-# ----------------------------------
-# $LastChangedDate:: xxxx/xx/xx xx:xx:xx $
-# $Rev::                                 $
-# $Author::                              $
-#-----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       |By             |Changes
-#----------------------------------------------------
-# 2008/06/23 |Fabien Marteau |check if platform selected and project open
-# 2008/06/20 |Fabien Marteau |adding completion function
-#
-#-----------------------------------------------------------------------------
 
 __doc__ = "Basic Command Line Interface"
 __version__ = "1.0.0"
@@ -36,6 +22,7 @@ from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils import wrappersystem as sy
 
 settings = Settings()
+
 
 class BaseCli(cmd.Cmd):
     case_insensitive = True
@@ -345,43 +332,45 @@ class BaseCli(cmd.Cmd):
         """
         # read listargs (come from template)
         if len(listargs) > 0:
-            if listargs[0][0]=="masterinstancename" or\
-               listargs[0][0]=="slaveinstancename"  or\
-               listargs[0][0]=="instancename"       or\
-               listargs[0][0]=="instancesysconname":
+            if listargs[0][0] == "masterinstancename" or\
+               listargs[0][0] == "slaveinstancename"  or\
+               listargs[0][0] == "instancename"       or\
+               listargs[0][0] == "instancesysconname":
                 instance = settings.active_project.getInstance(listargs[0][1])
                 instancename = instance.getInstanceName()
-            elif listargs[0][0]=="platformlib":
+            elif listargs[0][0] == "platformlib":
                 platformlib = listargs[0][1]
-            elif listargs[0][0]=="libraryname":
+            elif listargs[0][0] == "libraryname":
                 libraryname = listargs[0][1]
-            elif listargs[0][0]=="componentname":
+            elif listargs[0][0] == "componentname":
                 componentname = listargs[0][1]
             else:
                 return []
         if len(listargs) > 1:
-            if listargs[1][0]=="interfacename":
+            if listargs[1][0] == "interfacename":
                 interface = instance.getInterface(listargs[1][1])
                 interfacename = interface.getName()
-            elif listargs[1][0]=="componentname":
+            elif listargs[1][0] == "componentname":
                 componentname = listargs[1][1]
-            elif listargs[1][0]=="componentversion":
+            elif listargs[1][0] == "componentversion":
                 componentversion = listargs[1][1]
             else:
                 return []
         if len(listargs) > 2:
-            if listargs[2][0]=="portname":
+            if listargs[2][0] == "portname":
                 port = interface = interface.getPort(listargs[2][1])
                 portname = port.getName()
             else:
                 return []
         # fill list
-        if   subargt == "masterinstancename":
+        if subargt == "masterinstancename":
             return [interface.getParent().getInstanceName()
-                    for interface in settings.active_project.getInterfacesMaster()]
+                    for interface in
+                        settings.active_project.getInterfacesMaster()]
         elif subargt == "slaveinstancename":
             return [interface.getParent().getInstanceName()
-                    for interface in settings.active_project.getInterfacesSlave()]
+                    for interface in
+                        settings.active_project.getInterfacesSlave()]
         elif subargt == "instancename":
             return [instance.getInstanceName()
                     for instance in settings.active_project.getInstancesList()]
@@ -389,20 +378,21 @@ class BaseCli(cmd.Cmd):
             return [interface.getParent().getInstanceName()
                     for interface in settings.active_project.getSysconsList()]
         elif subargt == "interfacename":
-            return [""+instancename+"."+interface.getName()
+            return ["" + instancename + "." + interface.getName()
                     for interface in instance.getInterfacesList()]
         elif subargt == "masterinterfacename":
-            return [""+instancename+"."+interface.getName()
+            return ["" + instancename + "." + interface.getName()
                     for interface in instance.getMasterInterfaceList()]
         elif subargt == "slaveinterfacename":
-            return [""+instancename+"."+interface.getName()
-                    for interface in instance.getSlaveInterfaceList()]
+            return ["" + instancename + "." + interface.getName()
+                     for interface in instance.getSlaveInterfaceList()]
         elif subargt == "portname":
-            return [""+instancename+"."+interfacename+"."+port.getName()
-                    for port in interface.getPortsList()]
+            return ["" + instancename + "." + interfacename + "." +
+                    port.getName() for port in interface.getPortsList()]
         elif subargt == "pinnum":
-            return [""+instancename+"."+interfacename+"."+portname+"."+str(i)
-                    for i in range(int(port.getSize()))]
+            return ["" + instancename + "." + interfacename +
+                    "." + portname + "." + str(i)
+                     for i in range(int(port.getSize()))]
         elif subargt == "libraryname":
             arglist = settings.active_project.library.listLibraries()
             return arglist
@@ -412,8 +402,10 @@ class BaseCli(cmd.Cmd):
             arglist.append("standard")
             return arglist
         elif subargt == "forcename":
-            arglist = [""+port.getName()
-                    for port in settings.active_project.getPlatform().getPlatformPortsList()]
+            arglist = [
+               "" + port.getName()
+                for port in
+                 settings.active_project.getPlatform().getPlatformPortsList()]
             return arglist
         elif subargt == "forcestate":
             return ["gnd", "vcc", "undef"]
@@ -423,8 +415,10 @@ class BaseCli(cmd.Cmd):
                 libraryname.lower()
             except:
                 return settings.active_library.listComponents()
-            arglist = [libraryname+"."+componentname for
-                    componentname in settings.active_library.listComponents(libraryname)]
+            arglist = [libraryname + "." + componentname
+                        for componentname in
+                            settings.active_library.listComponents(
+                                libraryname)]
             return arglist
         elif subargt == "componentversion":
             # XXX: beuhark!
@@ -432,21 +426,28 @@ class BaseCli(cmd.Cmd):
                 libraryname.lower()
             except:
                 libraryname = settings.active_library.getLibName()
-                return [componentname+"."+version for
-                        version in settings.active_project.getComponentVersionList(libraryname,componentname)]
-            return [libraryname+"."+componentname+"."+comp
-                    for comp in settings.active_project.getComponentVersionList(libraryname,componentname)]
+                return [componentname + "." + version
+                        for version in
+                            settings.active_project.getComponentVersionList(
+                                libraryname, componentname)]
+            return [libraryname + "." + componentname + "." + comp
+                    for comp in
+                        settings.active_project.getComponentVersionList(
+                            libraryname, componentname)]
 
         elif subargt == "platformname":
             if platformlib == "standard":
-                return ["standard."+name
-                        for name in settings.active_project.listAvailablePlatforms()]
+                return ["standard." + name
+                        for name in
+                            settings.active_project.listAvailablePlatforms()]
             else:
-                return [platformlib+"."+name
-                        for name in sy.listFiles(settings.getPlatformLibPath(platformlib))]
+                return [platformlib + "." + name
+                        for name in
+                            sy.listFiles(
+                                settings.getPlatformLibPath(platformlib))]
 
         elif subargt == "genericname":
-            return [""+instancename+"."+generic.getName()
+            return ["" + instancename + "." + generic.getName()
                     for generic in instance.getGenericsList()]
 
         elif subargt == "simulationtoolchain":
@@ -461,51 +462,56 @@ class BaseCli(cmd.Cmd):
         elif subargt == "drivertoolchain":
             return settings.active_project.getDriverToolChainList()
         elif subargt == "IO_name":
-            return [ port.getName() for port in settings.active_project.getIOlist()]
+            return [port.getName() for port in
+                    settings.active_project.getIOlist()]
         elif subargt == "fpga_attributes":
             platform = settings.active_project.getPlatform()
             return platform.getAttributeNameList("fpga")
         else:
             return []
 
-    def checkargs(self,line,template):
+    def checkargs(self, line, template):
         """ check line with template
         """
-        argline     = line.split(" ")
+        argline = line.split(" ")
         argtemplate = template.split(" ")
         try:
             argline.remove('')
         except ValueError:
             pass
-        if len(argline) < self.minArgNumber(template,' ') or \
-           len(argline) > self.maxArgNumber(template,' '):
-            raise Error("Wrong argument number:\n%s\n instead of\n %s"%(line,template),0)
+        if len(argline) < self.minArgNumber(template, ' ') or \
+           len(argline) > self.maxArgNumber(template, ' '):
+            raise Error(
+                    "Wrong argument number:\n%s\n instead of\n %s" % (line,
+                                                                  template), 0)
 
-        for argl,argt in zip(argline,argtemplate):
-            if re.match("^\.\.",argl):
+        for argl, argt in zip(argline, argtemplate):
+            if re.match("^\.\.", argl):
                 subargline = argl[2:].split(".")
-                subargline[0] = ".."+subargline[0]
-            elif re.match("^\.",argl):
+                subargline[0] = ".." + subargline[0]
+            elif re.match("^\.", argl):
                 subargline = argl[1:].split(".")
-                subargline[0] = "."+subargline[0]
+                subargline[0] = "." + subargline[0]
             else:
                 subargline = argl.split(".")
             subargtemplate = argt.split(".")
-            if (len(subargline) < self.minArgNumber(argt,'.')) or\
-                    (len(subargline) > self.maxArgNumber(argt,'.')):
-                raise Error("Wrong subargument:\n%s\ninstead of\n%s"%(argl,argt),0)
+            if (len(subargline) < self.minArgNumber(argt, '.')) or\
+                    (len(subargline) > self.maxArgNumber(argt, '.')):
+                raise Error(
+                        "Wrong subargument:\n%s\ninstead of\n%s" % (argl,
+                                                                    argt), 0)
 
-    def minArgNumber(self,template,separator):
+    def minArgNumber(self, template, separator):
         """ return the minimun argument number
         """
         argnumber = 0
         args = template.split(separator)
         for arg in args:
-            if re.match(r'^\<',arg):
+            if re.match(r'^\<', arg):
                 argnumber = argnumber + 1
         return argnumber
 
-    def maxArgNumber(self,template,separator):
+    def maxArgNumber(self, template, separator):
         """ return the maximum argument number
         """
         argnumber = 0
@@ -516,58 +522,62 @@ class BaseCli(cmd.Cmd):
         """ check if platform is selected, if not raise error """
         settings.active_project.getPlatform()
 
-    def do_history(self,args):
+    def do_history(self, args):
         """ history
         print command history
         """
         for line in settings.history:
-            print line
+            print(line)
 
-    def do_savehistory(self,line):
+    def do_savehistory(self, line):
         """ savehistory <filename>
         save history command
         """
         try:
-            self.checkargs(line,"<filename>")
-        except Error,e:
-            print e
+            self.checkargs(line, "<filename>")
+        except Error, error:
+            print(str(error)
             return
         # Create the file
         filename = line.split(" ")[-1]
         filename = filename + PODSCRIPTEXT
         try:
-            historyfile = open(filename,"w")
-        except IOError,e:
-            print e
+            historyfile = open(filename, "w")
+        except IOError, error:
+            print(str(error))
             return
         # suppress the last command (its savehistory itself)
         settings.history = settings.history[:-1]
         for line in settings.history:
             # do not write source or EOF command
-            if not (re.match(r'.*\.source',line) or re.match(r'.*EOF',line)):
+            if not (re.match(r'.*\.source', line) or re.match(r'.*EOF', line)):
                 # suppress POD root
                 wline = ".".join(line.split('.')[1:])
                 # suppress the project name
                 regexp = re.compile('(.*)\:(.*?)(\..*)')
-                wline = regexp.sub(r'\1\3',wline)
-                historyfile.write(wline+"\n")
-        print "History wrote"
+                wline = regexp.sub(r'\1\3', wline)
+                historyfile.write(wline + "\n")
+        print("History wrote")
 
-    def do_ls(self,line):
+    def do_ls(self, line):
       """ ls
       list files and directory in the current directory
       """
       sy.ls(line)
 
+
 class Statekeeper(object):
+
     def __init__(self, obj, attribs):
         self.obj = obj
         self.attrib_names = attribs
         self.attribs = {}
         self.save()
+
     def save(self):
         for attrib in self.attrib_names:
             self.attribs[attrib] = getattr(self.obj, attrib)
+
     def restore(self):
         for attrib in self.attrib_names:
             setattr(self.obj, attrib, self.attribs[attrib])

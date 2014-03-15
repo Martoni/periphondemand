@@ -37,3 +37,7 @@ pep8 src/bin/toolchain/__init__.py
 pep8 src/bin/toolchain/driver.py
 pep8 src/bin/toolchain/simulation.py
 pep8 src/bin/toolchain/synthesis.py
+
+# utils
+pep8 src/bin/utils/__init__.py
+pep8 src/bin/utils/basecli.py

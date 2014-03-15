@@ -34,9 +34,8 @@ __version__ = "1.0.0"
 __versionTime__ = "02/06/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
-from basecli       import BaseCli
-from error         import Error
-from settings      import Settings
+from basecli import BaseCli
+from error import Error
+from settings import Settings
 from wrappersystem import *
-from wrapperxml    import WrapperXml
-
+from wrapperxml import WrapperXml
