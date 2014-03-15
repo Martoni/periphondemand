@@ -11,6 +11,7 @@ pep8 src/bin/code/vhdl/__init__.py
 pep8 src/bin/commandline/__init__.py
 pep8 src/bin/commandline/drivercli.py
 pep8 src/bin/commandline/projectcli.py
+pep8 src/bin/commandline/simulationcli.py
 
 # core
 pep8 src/bin/core/__init__.py
