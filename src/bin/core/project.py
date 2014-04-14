@@ -266,7 +266,7 @@ class Project(WrapperXml):
     def addComponentLib(self, aPath):
         """ Adding a component library under the project """
         if sy.dirExist(aPath):
-            path = sy.pwd() + "/" + aPath
+            path = aPath
             if self.getNode("componentslibs") is None:
                 self.addNode(nodename="componentslibs")
             self.addSubNode(nodename="componentslibs",
