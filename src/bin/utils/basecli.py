@@ -536,7 +536,7 @@ class BaseCli(cmd.Cmd):
         try:
             self.checkargs(line, "<filename>")
         except Error, error:
-            print(str(error)
+            print(str(error))
             return
         # Create the file
         filename = line.split(" ")[-1]

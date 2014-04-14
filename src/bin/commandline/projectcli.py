@@ -277,7 +277,7 @@ Print FPGA speed grade information
             return
         print(str(display))
 
-    def complete_getfpgadevice(self, text, line, begidx, $endidx):
+    def complete_getfpgadevice(self, text, line, begidx, endidx):
         """ TODO """
         pass
 
