@@ -390,7 +390,7 @@ class Interface(WrapperXml):
                                     int(y.getOffset(), 16)))
             #display each register
             for register in self.registerslist:
-                listreg.append({"offset": int(register.getOfefset(), 16)
+                listreg.append({"offset": int(register.getOffset(), 16)
                                          * self.regStep() +
                                          int(self.getBase(), 16),
                                "name": register.getName()})
