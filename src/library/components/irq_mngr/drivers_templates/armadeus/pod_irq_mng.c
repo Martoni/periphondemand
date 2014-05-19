@@ -37,7 +37,7 @@
 static struct resource /*$instance_name$*/_resources[] = {
 	[0] = {
 		.start	= ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/,
-		.end	= ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/ + 0x8,
+		.end	= ARMADEUS_FPGA_BASE_ADDR + /*$registers_base_address:swb16$*/ + 0x7,
 		.flags	= IORESOURCE_MEM,
 	},
 	[1] = {
