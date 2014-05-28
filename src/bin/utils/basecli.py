@@ -12,10 +12,13 @@
 
 __doc__ = "Basic Command Line Interface"
 __version__ = "1.0.0"
-__author__ = "Fabrice MOUSSET <fabrice.mousset@laposte.net> "+\
+__author__ = "Fabrice MOUSSET <fabrice.mousset@laposte.net> " +\
              "and Fabien Marteau <fabien.marteau@armadeus.com>"
 
-import cmd, re, os, sys
+import cmd
+import re
+import os
+import sys
 from periphondemand.bin.define import *
 from periphondemand.bin.utils.error import Error
 from periphondemand.bin.utils.settings import Settings
@@ -27,7 +30,7 @@ settings = Settings()
 class BaseCli(cmd.Cmd):
     case_insensitive = True
     comment_marks = '#*'
-    exclude_from_history = ['EOF','source','savehistory']
+    exclude_from_history = ['EOF', 'source', 'savehistory']
     multiline_commands = []
     shortcuts = {'?': 'help', '!': 'shell'}
     terminators = ';\n'
@@ -35,7 +38,7 @@ class BaseCli(cmd.Cmd):
 
     def __init__(self, parent=None, *args, **kwargs):
         cmd.Cmd.__init__(self, *args, **kwargs)
-        self.parent=parent
+        self.parent = parent
         settings.history = settings.history[:-1]
 
         if parent is None:
@@ -79,7 +82,7 @@ class BaseCli(cmd.Cmd):
             if not len(line):
                 line = 'EOF'
             else:
-                if line[-1] == '\n': # this was always true in Cmd
+                if line[-1] == '\n':  # this was always true in Cmd
                     line = line[:-1]
         return line
 
@@ -89,7 +92,8 @@ class BaseCli(cmd.Cmd):
         the remainder of the line as argument.
         """
 
-        # An almost perfect copy from Cmd; however, the pseudo_raw_input portion
+        # An almost perfect copy from Cmd; however,
+        # the pseudo_raw_input portion
         # has been split out so that it can be called separately
 
         self.preloop()
@@ -98,14 +102,14 @@ class BaseCli(cmd.Cmd):
                 import readline
                 self.old_completer = readline.get_completer()
                 readline.set_completer(self.complete)
-                readline.parse_and_bind(self.completekey+": complete")
+                readline.parse_and_bind(self.completekey + ": complete")
             except ImportError:
                 pass
         try:
             if intro is not None:
                 self.intro = intro
             if self.intro:
-                self.stdout.write(str(self.intro)+"\n")
+                self.stdout.write(str(self.intro) + "\n")
             stop = None
             while not stop:
                 try:
@@ -119,9 +123,9 @@ class BaseCli(cmd.Cmd):
                         sys.exit(0)
                     if settings.isScript():
                         if settings.color():
-                            print "\033[38;1m$ "+line+"\033[0m"
+                            print "\033[38;1m$ " + line + "\033[0m"
                         else:
-                            print "$ "+line
+                            print "$ " + line
                     stop = self.onecmd(line)
                     stop = self.postcmd(stop, line)
                 except KeyboardInterrupt:
@@ -159,7 +163,8 @@ class BaseCli(cmd.Cmd):
         if shortcut and hasattr(self, 'do_%s' % shortcut):
             line = '%s %s' % (shortcut, line[1:])
         i, n = 0, len(line)
-        while i < n and line[i] in self.identchars: i = i+1
+        while i < n and line[i] in self.identchars:
+            i = i + 1
         cmd, arg = line[:i], line[i:].strip().strip(self.terminators)
         return cmd, arg, line
 
@@ -173,12 +178,12 @@ class BaseCli(cmd.Cmd):
         commands by the interpreter should stop.
         """
         try:
-            (command, args) = line.split(None,1)
+            (command, args) = line.split(None, 1)
         except ValueError:
             (command, args) = line, ''
 
         try:
-            (sub_cmd, end_cmd) = command.split('.',1)
+            (sub_cmd, end_cmd) = command.split('.', 1)
             command = sub_cmd
             args = ' '.join([end_cmd, args])
         except:
@@ -191,20 +196,22 @@ class BaseCli(cmd.Cmd):
             statement = self.finishStatement(statement)
         return cmd.Cmd.onecmd(self, statement)
 
-    ## Override methods in Cmd object ##
+    # Override methods in Cmd object #
     def preloop(self):
         """Initialization before prompting user for commands.
-           Despite the claims in the Cmd documentaion, Cmd.preloop() is not a stub.
+           Despite the claims in the Cmd documentaion,
+           Cmd.preloop() is not a stub.
         """
-        cmd.Cmd.preloop(self)   ## sets up command completion
-        self._locals  = {}      ## Initialize execution namespace for user
+        cmd.Cmd.preloop(self)  # sets up command completion
+        self._locals = {}  # Initialize execution namespace for user
         self._globals = {}
 
     def postloop(self):
         """Take care of any unfinished business.
-           Despite the claims in the Cmd documentaion, Cmd.postloop() is not a stub.
+           Despite the claims in the Cmd documentation,
+           Cmd.postloop() is not a stub.
         """
-        cmd.Cmd.postloop(self)   ## Clean up command completion
+        cmd.Cmd.postloop(self)  # Clean up command completion
         #print "Exiting..."
 
     def precmd(self, line):
@@ -220,7 +227,7 @@ class BaseCli(cmd.Cmd):
             return ""
 
         if line:
-            settings.history.append(self.base_prompt+"."+line.strip() )
+            settings.history.append(self.base_prompt + "." + line.strip())
         return line
 
     def default(self, line):
@@ -228,7 +235,8 @@ class BaseCli(cmd.Cmd):
            In that case we execute the line as Python code.
         """
 
-        self.stdout.write("*** Unknown Syntax : %s (type help for a list of valid command\n"%line)
+        self.stdout.write("*** Unknown Syntax : %s" % line +
+                          "(type help for a list of valid command\n")
 
         try:
             exec(line) in self._locals, self._globals
@@ -257,84 +265,89 @@ class BaseCli(cmd.Cmd):
 
     def do_help(self, args):
         """Get help on commands
-           'help' or '?' with no arguments prints a list of commands for which help is available
+           'help' or '?' with no arguments prints a list of
+            commands for which help is available
            'help <command>' or '? <command>' gives help on <command>
         """
-        ## The only reason to define this method is for the help text in the doc string
+        # The only reason to define this method is
+        # for the help text in the doc string
         cmd.Cmd.do_help(self, args)
 
     # Property to manage active projet
-    def setPrompt(self, prompt,name=None):
+    def setPrompt(self, prompt, name=None):
         """Update command line prompt and continuation prompt."""
         prompt = str(prompt).strip()
         if self.parent is None:
             self.base_prompt = prompt
         else:
-            self.base_prompt = self.parent.base_prompt+"."+prompt
+            self.base_prompt = self.parent.base_prompt + "." + prompt
         if name is not None:
-            self.prompt = self.base_prompt+":"+name+"> "
+            self.prompt = self.base_prompt + ":" + name + "> "
         else:
-            self.prompt = self.base_prompt+"> "
-        self.continuation_prompt = " "*len(self.base_prompt)+"> "
+            self.prompt = self.base_prompt + "> "
+        self.continuation_prompt = " " * len(self.base_prompt) + "> "
 
-    def completelist(self,line,text,list):
-        completion = [a for a in list if a.startswith(text)]
+    def completelist(self, line, text, alist):
+        completion = [a for a in alist if a.startswith(text)]
         return completion
 
-    def completeargs(self,text,line,template):
+    def completeargs(self, text, line, template):
         """ complete using template
         """
         # splitting lines
-        argline     = line.split(" ")[1:]
+        argline = line.split(" ")[1:]
         argtemplate = template.split(" ")
         # last line argument
         argl = argline[-1]
         argt = argtemplate[argline.index(argl)]
         # splitting subargs
-        subargline     = argl.split('.')
+        subargline = argl.split('.')
         subargtemplate = argt.split('.')
         #
         listargs = []
-        for subargl,subargt,i in zip(subargline,subargtemplate,range(len(subargline))):
-            m = re.match(r'^[\[|\<](.*?)[\]|\>]$',subargt)
+        for subargl, subargt, i in zip(subargline,
+                                       subargtemplate,
+                                       range(len(subargline))):
+            m = re.match(r'^[\[|\<](.*?)[\]|\>]$', subargt)
             subargt = m.group(1)
-            if i < len(subargline)-1:
-                listargs.append([subargt,subargl])
+            if i < len(subargline) - 1:
+                listargs.append([subargt, subargl])
             else:
-                return self.completelist(
-                            line,text,
-                            self.listcompletion(listargs,subargl,subargt))
+                return self.completelist(line, text,
+                            self.listcompletion(listargs, subargl, subargt))
 
-    def listcompletion(self,listargs,subargl,subargt):
+    def listcompletion(self, listargs, subargl, subargt):
         """ return a list of possibility using template:
-            [] optional argument
-            <> mandatory arguments
-            masterinstancename : give list of instances with master bus interface
-            slaveinstancename  : give list of instances with slave  bus interface
-            instancesysconname : give list of syscon instance in project
-            libraryname        : give list of available libraries
-            componentname      : give list of components available in library (for projectcli)
-            libcomponentname   : give list of components available in library (for librarycli)
-            componentversion   : give list of components version available in component
-            genericname        : give list of generic instance name
-            platformlib        : give list of platform library available
-            platformname       : give list of platform available
-            instancename       : give list of instances in project
-            interfacename      : give list of interface in instance
-            portname           : give list of port in interface
-            pinnum             : give list of num for a port
-            simulationtoolchain: give list of toolchain available for simulation
-            drivertoolchain    : give list of toolchain available for driver
-            synthesistoolchain : give list of toolchain available for synthesis
-            forcename          : give list of pin where value can be forced
-            IO_name            : give list of platform IO pin name
-            fpga_attributes    : give list of fpga attributes in platform
+[] optional argument
+<> mandatory arguments
+masterinstancename : give list of instances with master bus interface
+slaveinstancename  : give list of instances with slave  bus interface
+instancesysconname : give list of syscon instance in project
+libraryname        : give list of available libraries
+componentname      : give list of components available in library
+                     (for projectcli)
+libcomponentname   : give list of components available in library
+                     (for librarycli)
+componentversion   : give list of components version available in component
+genericname        : give list of generic instance name
+platformlib        : give list of platform library available
+platformname       : give list of platform available
+instancename       : give list of instances in project
+interfacename      : give list of interface in instance
+portname           : give list of port in interface
+pinnum             : give list of num for a port
+simulationtoolchain: give list of toolchain available for simulation
+drivertoolchain    : give list of toolchain available for driver
+synthesistoolchain : give list of toolchain available for synthesis
+forcename          : give list of pin where value can be forced
+IO_name            : give list of platform IO pin name
+fpga_attributes    : give list of fpga attributes in platform
         """
         # read listargs (come from template)
         if len(listargs) > 0:
             if listargs[0][0] == "masterinstancename" or\
-               listargs[0][0] == "slaveinstancename"  or\
-               listargs[0][0] == "instancename"       or\
+               listargs[0][0] == "slaveinstancename" or\
+               listargs[0][0] == "instancename" or\
                listargs[0][0] == "instancesysconname":
                 instance = settings.active_project.getInstance(listargs[0][1])
                 instancename = instance.getInstanceName()
@@ -560,10 +573,10 @@ class BaseCli(cmd.Cmd):
         print("History wrote")
 
     def do_ls(self, line):
-      """ ls
-      list files and directory in the current directory
-      """
-      sy.ls(line)
+        """ ls
+        list files and directory in the current directory
+        """
+        sy.ls(line)
 
 
 class Statekeeper(object):
