@@ -73,67 +73,75 @@ class TopVHDL(TopGen):
     def entity(self, entityname, portlist):
         """ return VHDL code for Top entity
         """
-        out = "entity "+entityname+" is\n"
-        out = out +"\n"+ TAB+ "port\n"+TAB+"(\n"
+        out = "entity " + entityname + " is\n"
+        out = out + "\n" + TAB + "port\n" + TAB + "(\n"
         for port in portlist:
             if port.forceDefined():
-                portname = "force_"+port.getName()
-                out = out + TAB*2 + portname + " : out std_logic;\n"
+                portname = "force_" + port.getName()
+                out = out + TAB * 2 + portname + " : out std_logic;\n"
             else:
                 portname = port.getName()
                 interfacename = port.getParent().getName()
                 instancename  = port.getParent().getParent().getInstanceName()
 
-                out = out + TAB + "-- "+instancename+"-"+interfacename+"\n"
+                out = out + TAB + "-- " + instancename +\
+                                  "-" + interfacename + "\n"
                 if port.isCompletelyConnected():
                     if (port.getDir() == "in") or (port.getDir() == "inout"):
                         same_connections_ports = port.getPortsWithSameConnection()
                         if same_connections_ports == []:
-                            raise Error(str(port.getExtendedName())+" is left unconnected", 0)
+                            raise Error(str(port.getExtendedName()) +
+                                        " is left unconnected")
                         elif len(same_connections_ports) == 1:
-                            out = out + TAB*2 +\
-                                    instancename+"_"+portname+\
-                                    " : " + port.getDir()
+                            out = out + TAB * 2 +\
+                                  instancename + "_" + portname +\
+                                  " : " + port.getDir()
                             if port.getMSBConnected() < 1:
                                 out = out + " std_logic;"
                             else:
-                                out = out + " std_logic_vector("+str(port.getMSBConnected())\
-                                        +" downto 0);"
+                                out = out + " std_logic_vector(" +\
+                                          str(port.getMSBConnected()) +\
+                                          " downto 0);"
                             out = out + "\n"
                         else:
                             same_connections_ports_names = \
-                                sorted([aport.getExtendedName() for aport in same_connections_ports])
-                            if port.getExtendedName() == same_connections_ports_names[0]:
+                                sorted([aport.getExtendedName() for\
+                                            aport in same_connections_ports])
+                            if port.getExtendedName() ==\
+                                    same_connections_ports_names[0]:
                                 out = out + TAB*2 +\
-                                        instancename+"_"+portname+\
+                                        instancename + "_" + portname +\
                                         " : " + port.getDir()
                                 if port.getMSBConnected() < 1:
                                     out = out + " std_logic;"
                                 else:
-                                    out = out + " std_logic_vector("+str(port.getMSBConnected())\
-                                            +" downto 0);"
+                                    out = out + " std_logic_vector(" +\
+                                              str(port.getMSBConnected()) +\
+                                              " downto 0);"
                                 out = out + "\n"
                     else:
                         # signal declaration
-                        out = out + TAB*2 +\
-                                instancename+"_"+portname+\
+                        out = out + TAB * 2 +\
+                                instancename + "_" + portname +\
                                 " : " + port.getDir()
                         if port.getMSBConnected() < 1:
                             out = out + " std_logic;"
                         else:
-                            out = out + " std_logic_vector("+str(port.getMSBConnected())\
-                                    +" downto 0);"
+                            out = out + " std_logic_vector(" +\
+                                    str(port.getMSBConnected()) +\
+                                    " downto 0);"
                         out = out + "\n"
                 else:
                     for pin in port.getPinsList():
                         if pin.isConnected():
-                            out = out + TAB*2 + \
-                                instancename+"_"+portname+"_pin"+str(pin.getNum())+\
-                                " : "+port.getDir()+" std_logic;\n"
+                            out = out + TAB * 2 + \
+                                instancename + "_" + portname + "_pin" +\
+                                str(pin.getNum()) + " : " +\
+                                port.getDir() + " std_logic;\n"
        # Suppress the #!@ last semicolon
         out = out[:-2]
 
-        out = out+"\n" +TAB+");\nend entity "+entityname+";\n\n"
+        out = out + "\n" + TAB + ");\nend entity " + entityname + ";\n\n"
         return out
 
     def architectureHead(self,entityname):
@@ -202,45 +210,45 @@ class TopVHDL(TopGen):
             out = out + TAB + "end component;\n"
         return out
 
-    def declareSignals(self,componentslist,incomplete_external_ports_list):
+    def declareSignals(self, componentslist, incomplete_external_ports_list):
         """ Declare signals ports
         """
         platformname = self.project.getPlatform().getInstanceName()
-        out =      TAB + "-------------------------\n"
-        out = out+ TAB + "-- Signals declaration\n"
-        out = out+ TAB + "-------------------------\n"
+        out =       TAB + "-------------------------\n"
+        out = out + TAB + "-- Signals declaration\n"
+        out = out + TAB + "-------------------------\n"
         for component in componentslist:
             if component.getName() != "platform":
-                out = out +"\n" + TAB + "-- " +component.getInstanceName()+"\n"
-
+                out = out + "\n" + TAB + "-- " + component.getInstanceName() + "\n"
                 for interface in component.getInterfacesList():
-                    out = out + TAB + "-- " + interface.getName()+"\n"
-
+                    out = out + TAB + "-- " + interface.getName() + "\n"
                     for port in interface.getPortsList():
-                        if len(port.getPinsList())!=0:
-                          if len(port.getPinsList()[0].getConnections())!=0:
-                            if port.getPinsList()[0].getConnections()[0]["instance_dest"]\
-                                                    !=platformname:
-                                out=out+TAB+"signal "+component.getInstanceName()\
-                                        +"_"+port.getName()\
-                                        +" : "
+                        if len(port.getPinsList()) != 0:
+                            connection_list = port.getPinsList()[0].getConnections()
+                          if len(connection_list) != 0:
+                            if connection_list[0]["instance_dest"] != platformname:
+                                out= out + TAB + "signal " +\
+                                        component.getInstanceName() +\
+                                        "_" + port.getName() +\
+                                        " : "
                                 if int(port.getSize()) == 1:
                                    out = out + " std_logic;\n"
                                 else:
                                    out = out + " std_logic_vector("\
-                                         +port.getMaxPinNum()\
-                                         +" downto "\
-                                         +port.getMinPinNum()\
-                                         +");\n"
-        out = out +"\n"+ TAB + "-- void pins\n"
+                                         + port.getMaxPinNum()\
+                                         + " downto "\
+                                         + port.getMinPinNum()\
+                                         + ");\n"
+        out = out + "\n" + TAB + "-- void pins\n"
 
         for port in incomplete_external_ports_list:
             if not port.forceDefined():
                 portname = port.getName()
                 interfacename = port.getParent().getName()
                 instancename = port.getParent().getParent().getInstanceName()
-                out = out +"\n"+TAB+"signal "+instancename+"_"+portname+": std_logic_vector("+\
-                                str(int(port.getRealSize())-1)+" downto 0);\n"
+                out = out + "\n" + TAB + "signal " + instancename +\
+                            "_" + portname + ": std_logic_vector(" +\
+                            str(int(port.getRealSize()) - 1) + " downto 0);\n"
         return out
 
     def declareInstance(self):
