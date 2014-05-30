@@ -68,7 +68,6 @@ class Interface(WrapperXml):
         self.registerslist = []
         self.portslist = []
         self.slaveslist = []
-        self.unique_id = None  # each slave bus has unique identifiant num
 
         if self.getClass() == "master":
             self.allocMem = AllocMem(self)
@@ -344,11 +343,14 @@ class Interface(WrapperXml):
 
     def setID(self, unique_id):
         """ Set the Identifiant number"""
-        self.unique_id = unique_id
+        self.setAttribute("unique_id", str(unique_id))
 
     def getID(self):
         """ Get the Identifiant number"""
-        return self.unique_id
+        try:
+            return self.getAttributeValue("unique_id")
+        except Error:
+            return None
 
     def autoconnectPin(self):
         """ autoconnect pin """
