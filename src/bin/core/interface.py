@@ -68,7 +68,7 @@ class Interface(WrapperXml):
         self.registerslist = []
         self.portslist = []
         self.slaveslist = []
-        self.id = None  # each slave bus has unique identifiant num
+        self.unique_id = None  # each slave bus has unique identifiant num
 
         if self.getClass() == "master":
             self.allocMem = AllocMem(self)
@@ -342,13 +342,13 @@ class Interface(WrapperXml):
         instanceslave.getGeneric(genericname="id").setValue(
                                     str(interfaceslave.getID()))
 
-    def setID(self, id):
+    def setID(self, unique_id):
         """ Set the Identifiant number"""
-        self.id = id
+        self.unique_id = unique_id
 
     def getID(self):
         """ Get the Identifiant number"""
-        return self.id
+        return self.unique_id
 
     def autoconnectPin(self):
         """ autoconnect pin """
