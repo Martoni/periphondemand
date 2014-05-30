@@ -54,8 +54,8 @@ class TopVHDL(TopGen):
     """ Generate VHDL Top component
     """
 
-    def __init__(self,project):
-        TopGen.__init__(self,project)
+    def __init__(self, project):
+        TopGen.__init__(self, project)
 
     def header(self):
         """ return vhdl header
@@ -131,9 +131,11 @@ class TopVHDL(TopGen):
                                     str(port.getMSBConnected()) +\
                                     " downto 0);"
                         out = out + "\n"
+
+                # port not completely connected
                 else:
                     for pin in port.getPinsList():
-                        if pin.isConnected():
+                        if pin.isConnectedToInstance(self.project.getPlatform()):
                             out = out + TAB * 2 + \
                                 instancename + "_" + portname + "_pin" +\
                                 str(pin.getNum()) + " : " +\
@@ -225,20 +227,20 @@ class TopVHDL(TopGen):
                     for port in interface.getPortsList():
                         if len(port.getPinsList()) != 0:
                             connection_list = port.getPinsList()[0].getConnections()
-                          if len(connection_list) != 0:
-                            if connection_list[0]["instance_dest"] != platformname:
-                                out= out + TAB + "signal " +\
-                                        component.getInstanceName() +\
-                                        "_" + port.getName() +\
-                                        " : "
-                                if int(port.getSize()) == 1:
-                                   out = out + " std_logic;\n"
-                                else:
-                                   out = out + " std_logic_vector("\
-                                         + port.getMaxPinNum()\
-                                         + " downto "\
-                                         + port.getMinPinNum()\
-                                         + ");\n"
+                            if len(connection_list) != 0:
+                                if connection_list[0]["instance_dest"] != platformname:
+                                    out= out + TAB + "signal " +\
+                                            component.getInstanceName() +\
+                                            "_" + port.getName() +\
+                                            " : "
+                                    if int(port.getSize()) == 1:
+                                       out = out + " std_logic;\n"
+                                    else:
+                                       out = out + " std_logic_vector("\
+                                             + port.getMaxPinNum()\
+                                             + " downto "\
+                                             + port.getMinPinNum()\
+                                             + ");\n"
         out = out + "\n" + TAB + "-- void pins\n"
 
         for port in incomplete_external_ports_list:
@@ -334,28 +336,32 @@ class TopVHDL(TopGen):
         out = out + TAB  + "-- instances connections --\n"
         out = out + TAB  + "---------------------------\n"
 
-        platformname = self.project.getPlatform().getInstanceName()
+        platform = self.project.getPlatform()
+        platformname = platform.getInstanceName()
         # connect incomplete_external_ports_list
         for port in incomplete_external_ports_list:
             if not port.forceDefined():
                 portname = port.getName()
                 interfacename = port.getParent().getName()
                 instancename = port.getParent().getParent().getInstanceName()
-                out = out+"\n"+TAB+"-- connect incomplete port "+str(portname)+"\n"
+                out = out + "\n" + TAB +\
+                        "-- connect incomplete external port " +\
+                        str(portname) + " pins\n"
                 for pinnum in range(int(port.getRealSize())):
-                    try:
-                        pin = port.getPin(pinnum)
-                        if pin.isConnected():
-                            if port.getDir() == "in":
-                                out = out+TAB+instancename+"_"+portname+"("+\
-                                        str(pinnum)+") <= "+instancename+"_"+portname+"_pin"+\
-                                        str(pinnum)+";\n"
-                            else:
-                                out = out+TAB+instancename+"_"+portname+"_pin"+\
-                                        str(pinnum)+" <= "+instancename+"_"+portname+"("+\
-                                        str(pinnum)+");\n"
-                    except:
-                        pass
+                    pin = port.getPin(pinnum)
+                    if pin.isConnectedToInstance(platform):
+                        if port.getDir() == "in":
+                            out = out + TAB + instancename + "_" +\
+                                  portname +"(" + str(pinnum) +\
+                                  ") <= " + instancename + "_" +\
+                                  portname + "_pin" +\
+                                  str(pinnum)+";\n"
+                        else:
+                            out = out + TAB + instancename + "_" +\
+                                    portname + "_pin" +\
+                                    str(pinnum) + " <= " + instancename +\
+                                    "_" + portname + "(" +\
+                                    str(pinnum) + ");\n"
 
         # connect all "in" ports pin
         for component in self.project.getInstancesList():
@@ -418,3 +424,4 @@ class TopVHDL(TopGen):
 
     def architectureBegin(self):
         return "\nbegin\n"
+
