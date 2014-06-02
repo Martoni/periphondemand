@@ -11,6 +11,7 @@
 --  Description   :  This is the top file of the IP
 -------------------------------------------------------------------------------
 --  Modifications :
+--  02/06/2012 : synchronize interrupts signals with two flip-flop
 --  20/10/2008 : Detected rising edge instead of high state
 --  Fabien Marteau <fabien.marteau@armadeus.com>
 --
@@ -60,6 +61,7 @@ constant ZERO : std_logic_vector(15 downto 0) := x"0000";
 
 signal irq_r    : std_logic_vector(irq_count-1 downto 0);
 signal irq_old  : std_logic_vector(irq_count-1 downto 0);
+signal irqport_asynch_buffer : std_logic_vector(irq_count-1 downto 0);
 
 signal irq_pend : std_logic_vector(irq_count-1 downto 0);
 signal irq_ack  : std_logic_vector(irq_count-1 downto 0);
@@ -78,10 +80,12 @@ begin
 process(wbs_clk, wbs_reset)
 begin
   if(wbs_reset='1') then
+    irqport_asynch_buffer <= (others => '0');
     irq_r <= (others => '0');
     irq_old <= (others => '0');
   elsif(rising_edge(wbs_clk)) then
-    irq_r <= irqport;
+    irqport_asynch_buffer <= irqport;
+    irq_r <= irqport_asynch_buffer;
     irq_old <= irq_r;
   end if;
 end process;
