@@ -241,7 +241,17 @@ class TopVHDL(TopGen):
                                              + " downto "\
                                              + port.getMinPinNum()\
                                              + ");\n"
-        out = out + "\n"
+
+        out = out + "\n" + TAB + "-- void pins\n"
+
+        for port in incomplete_external_ports_list:
+            if not port.forceDefined():
+                portname = port.getName()
+                interfacename = port.getParent().getName()
+                instancename = port.getParent().getParent().getInstanceName()
+                out = out + "\n" + TAB + "signal " + instancename +\
+                            "_" + portname + ": std_logic_vector(" +\
+                            str(int(port.getRealSize()) - 1) + " downto 0);\n"
 
         return out
 
