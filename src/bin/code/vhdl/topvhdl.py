@@ -220,38 +220,43 @@ class TopVHDL(TopGen):
         out = out + TAB + "-- Signals declaration\n"
         out = out + TAB + "-------------------------\n"
         for component in componentslist:
-            if component.getName() != "platform":
-                out = out + "\n" + TAB + "-- " + component.getInstanceName() + "\n"
-                for interface in component.getInterfacesList():
-                    out = out + TAB + "-- " + interface.getName() + "\n"
-                    for port in interface.getPortsList():
-                        if len(port.getPinsList()) != 0:
-                            connection_list = port.getPinsList()[0].getConnections()
-                            if len(connection_list) != 0:
-                                if connection_list[0]["instance_dest"] != platformname:
-                                    out= out + TAB + "signal " +\
-                                            component.getInstanceName() +\
-                                            "_" + port.getName() +\
-                                            " : "
-                                    if int(port.getSize()) == 1:
-                                       out = out + " std_logic;\n"
-                                    else:
-                                       out = out + " std_logic_vector("\
-                                             + port.getMaxPinNum()\
-                                             + " downto "\
-                                             + port.getMinPinNum()\
-                                             + ");\n"
+            if component.getName() == "platform":
+                continue
+            out = out + "\n" + TAB + "-- " + component.getInstanceName() + "\n"
+            for interface in component.getInterfacesList():
+                out = out + TAB + "-- " + interface.getName() + "\n"
+
+                for port in interface.getPortsList():
+                    if port in incomplete_external_ports_list:
+                        continue
+                    if len(port.getPinsList()) == 0:
+                        continue
+                    connection_list = port.getPinsList()[0].getConnections()
+                    if len(connection_list) == 0:
+                        continue
+                    if connection_list[0]["instance_dest"] == platformname:
+                        continue
+                    out= out + TAB + "signal " + component.getInstanceName() +\
+                               "_" + port.getName() + ": "
+                    if int(port.getSize()) == 1:
+                       out = out + " std_logic;\n"
+                    else:
+                       out = out +\
+                               " std_logic_vector(" +\
+                               port.getMaxPinNum() +\
+                               " downto " + port.getMinPinNum() + ");\n"
 
         out = out + "\n" + TAB + "-- void pins\n"
 
         for port in incomplete_external_ports_list:
-            if not port.forceDefined():
-                portname = port.getName()
-                interfacename = port.getParent().getName()
-                instancename = port.getParent().getParent().getInstanceName()
-                out = out + "\n" + TAB + "signal " + instancename +\
-                            "_" + portname + ": std_logic_vector(" +\
-                            str(int(port.getRealSize()) - 1) + " downto 0);\n"
+            if port.forceDefined():
+                continue
+            portname = port.getName()
+            interfacename = port.getParent().getName()
+            instancename = port.getParent().getParent().getInstanceName()
+            out = out + "\n" + TAB + "signal " + instancename +\
+                        "_" + portname + ": std_logic_vector(" +\
+                        str(int(port.getRealSize()) - 1) + " downto 0);\n"
 
         return out
 
