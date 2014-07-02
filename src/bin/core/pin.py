@@ -265,7 +265,8 @@ class Pin(WrapperXml):
             return False
 
     def isConnectedToInstance(self, instance):
-        """ Return True if pin is connected to instance given, else return False
+        """ Return True if pin is connected to instance given,
+        else return False
         """
         instance_name = instance.getInstanceName()
         for connexion in self.getConnections():
