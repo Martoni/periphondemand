@@ -17,12 +17,21 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import os
 import re
-from periphondemand.bin.define import *
+from periphondemand.bin.define import XMLEXT
+from periphondemand.bin.define import BINARYPROJECTPATH
+from periphondemand.bin.define import COMPONENTSPATH
+from periphondemand.bin.define import OBJSPATH
+from periphondemand.bin.define import SIMULATIONPATH
+from periphondemand.bin.define import SYNTHESISPATH
+from periphondemand.bin.define import DRIVERSPATH
+from periphondemand.bin.define import TOOLCHAINPATH
+from periphondemand.bin.define import PLATFORMPATH 
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.display import Display
-from periphondemand.bin.utils.error import *
+from periphondemand.bin.utils.error import Error
+
 from periphondemand.bin.utils import wrappersystem as sy
 
 from periphondemand.bin.core.component import Component
@@ -54,7 +63,7 @@ class Project(WrapperXml):
         self.void = void
         WrapperXml.__init__(self, nodename="void")
         self.instanceslist = []
-        self.vhdlVersion = "vhdl87"
+        self.vhdl_version = "vhdl87"
 
         self.simulation = None
         self.synthesis = None
@@ -142,7 +151,7 @@ class Project(WrapperXml):
             display.msg(str(error))
         try:
             self.simulation = Simulation(self)
-        except Error, e:
+        except Error, error:
             display.msg(str(error))
 
         # Set bus master-slave
@@ -276,11 +285,11 @@ class Project(WrapperXml):
         """ select vhdl version (VHDL '87 or '93) """
         if (version != "vhdl93") and (version != "vhdl87"):
             raise Error(str(version) + " is not acceptable version")
-        self.vhdlVersion = version
+        self.vhdl_version = version
         self.saveProject()
 
     def getVhdlVersion(self):
-        return self.vhdlVersion
+        return self.vhdl_version
 
     def addPlatformsLib(self, aPath):
         """ Adding a platforms library under the project """
@@ -621,8 +630,6 @@ class Project(WrapperXml):
         except Error:
             pass
         else:
-            print Error(instance_name + "_" + interface_name +
-                        " allready exists", INFO)
             self.delProjectInstance(intercon.getInstanceName())
 
         intercon = Intercon(
@@ -722,7 +729,7 @@ class Project(WrapperXml):
                                     interfaceslave.getName())
                     except Error, error:
                         error.setLevel(2)
-                        display.msg(str(e))
+                        display.msg(str(error))
 
         display.msg("Bus connected")
         self.saveProject()
