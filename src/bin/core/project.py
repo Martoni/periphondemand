@@ -69,8 +69,8 @@ class Project(WrapperXml):
                 try:
                     settings.projectpath = os.path.abspath(
                             os.path.dirname(projectpathname))
-                except IOError, e:
-                    raise Error(str(e), 0)
+                except IOError, error:
+                    raise Error(str(error), 0)
             else:
                 settings.projectpath = projectpathname
             settings.author = ""
@@ -138,12 +138,12 @@ class Project(WrapperXml):
         #           self.synthesis = Synthesis(self, node.getName())
         try:
             self.synthesis = Synthesis(self)
-        except Error, e:
-            display.msg(str(e))
+        except Error, error:
+            display.msg(str(error))
         try:
             self.simulation = Simulation(self)
         except Error, e:
-            display.msg(str(e))
+            display.msg(str(error))
 
         # Set bus master-slave
         for masterinterface in self.getInterfacesMaster():
@@ -173,10 +173,7 @@ class Project(WrapperXml):
         self.saveProject()
 
     def getSynthesisToolChain(self):
-        try:
-            return self.synthesis
-        except:
-            return None
+        return self.synthesis
 
     def getFpgaSpeedGrade(self):
         return self.getPlatform().getSpeed()
@@ -206,10 +203,7 @@ class Project(WrapperXml):
         self.saveProject()
 
     def getSimulationToolChain(self):
-        try:
-            return self.simulation
-        except:
-            return None
+        return self.simulation
 
     def setDriverToolChain(self, toolchainname):
         if toolchainname not in self.getDriverToolChainList():
@@ -464,7 +458,7 @@ class Project(WrapperXml):
                             for pin in port.getPinsList():
                                 if len(pin.getConnections()) == 1:
                                     connection = pin.getConnections()[0]
-                                    if connection["instance_dest"] ==\
+                                    if connection["instance_dest"] == \
                                             platformname:
                                         portlist.append(port)
         return portlist
@@ -475,10 +469,10 @@ class Project(WrapperXml):
         #suppress platform if already exists
         try:
             self.delPlatform()
-        except Error, e:
-            if e.getLevel() < 2:
-                raise e
-            print e
+        except Error, error:
+            if error.getLevel() < 2:
+                raise error
+            print error
 
         if platformlibname == "standard":
             platformdir = settings.path + PLATFORMPATH +\
@@ -726,8 +720,8 @@ class Project(WrapperXml):
                         # connect bus
                         master.connectBus(interfaceslave.getParent(),
                                     interfaceslave.getName())
-                    except Error, e:
-                        e.setLevel(2)
+                    except Error, error:
+                        error.setLevel(2)
                         display.msg(str(e))
 
         display.msg("Bus connected")
