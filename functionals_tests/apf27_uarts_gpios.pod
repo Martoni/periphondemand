@@ -1,0 +1,97 @@
+create apf27uartgpio
+
+selectplatform standard.apf27
+addinstance components.uart16750.wb16 uart0
+addinstance components.uart16750.wb16 uart1
+addinstance components.uart16750.wb16 uart2
+
+connectpin uart0.interrupt.int_o.0 irq_mngr00.irq.0
+connectpin uart0.interrupt.int_o.0 irq_mngr00.irq.irqport.0
+connectpin uart1.interrupt.int_o.0 irq_mngr00.irq.irqport.1
+connectpin uart2.interrupt.int_o.0 irq_mngr00.irq.irqport.2
+
+connectpin uart0.uart.stx_pad_o.0 apf27.fpga.IO_L08P_0.0
+connectpin uart0.uart.srx_pad_i.0 apf27.fpga.IO_L09N_0.0
+connectpin uart1.uart.srx_pad_i.0 apf27.fpga.IO_L10N_0
+connectpin uart1.uart.stx_pad_o.0 apf27.fpga.IO_L10P_0
+connectpin uart2.uart.stx_pad_o.0 apf27.fpga.IO_L11N_0.0
+
+addinstance components.pod_gpio.wb16 gpio0
+addinstance components.pod_gpio.wb16 gpio1
+addinstance components.pod_gpio.wb16 gpio2
+addinstance components.pod_gpio.wb16 gpio3
+
+connectpin gpio0.irq.interrupt.0 irq_mngr00.irq.irqport.3
+connectpin gpio1.irq.interrupt.0 irq_mngr00.irq.irqport.4
+connectpin gpio2.irq.interrupt.0 irq_mngr00.irq.irqport.5
+connectpin gpio3.irq.interrupt.0 irq_mngr00.irq.irqport.6
+
+connectpin gpio0.pod_gpio.gpio.0 apf27.fpga.IO_L01N_0
+connectpin gpio0.pod_gpio.gpio.1 apf27.fpga.IO_L02N_0
+connectpin gpio0.pod_gpio.gpio.2 apf27.fpga.IO_L01P_0
+connectpin gpio0.pod_gpio.gpio.3 apf27.fpga.IO_L02P_0
+connectpin gpio0.pod_gpio.gpio.4 apf27.fpga.IO_L03N_0
+connectpin gpio0.pod_gpio.gpio.5 apf27.fpga.IO_L04N_0
+connectpin gpio0.pod_gpio.gpio.6 apf27.fpga.IO_L03P_0
+connectpin gpio0.pod_gpio.gpio.7 apf27.fpga.IO_L04P_0
+connectpin gpio0.pod_gpio.gpio.8 apf27.fpga.IO_L07N_0
+connectpin gpio0.pod_gpio.gpio.9 apf27.fpga.IO_L08N_0
+connectpin gpio0.pod_gpio.gpio.10 apf27.fpga.IO_L07P_0
+connectpin gpio0.pod_gpio.gpio.11 apf27.fpga.IO_L12P_0
+connectpin gpio0.pod_gpio.gpio.12 apf27.fpga.IO_L15N_0
+connectpin gpio0.pod_gpio.gpio.13 apf27.fpga.IO_L16N_0
+connectpin gpio0.pod_gpio.gpio.14 apf27.fpga.IO_L15P_0
+connectpin gpio0.pod_gpio.gpio.15 apf27.fpga.IO_L16P_0
+
+connectpin gpio1.pod_gpio.gpio.0 apf27.fpga.IO_L17N_0
+connectpin gpio1.pod_gpio.gpio.1 apf27.fpga.IO_L18N_0
+connectpin gpio1.pod_gpio.gpio.2 apf27.fpga.IO_L17P_0
+connectpin gpio1.pod_gpio.gpio.3 apf27.fpga.IO_L18P_0
+connectpin gpio1.pod_gpio.gpio.4 apf27.fpga.IO_L19N_0
+connectpin gpio1.pod_gpio.gpio.5 apf27.fpga.IO_L20N_1
+connectpin gpio1.pod_gpio.gpio.6 apf27.fpga.IO_L24P_1
+connectpin gpio1.pod_gpio.gpio.7 apf27.fpga.IO_L20P_1
+connectpin gpio1.pod_gpio.gpio.8 apf27.fpga.IO_L24N_1
+connectpin gpio1.pod_gpio.gpio.9 apf27.fpga.IO_L23N_1
+connectpin gpio1.pod_gpio.gpio.10 apf27.fpga.IO_L22P_1
+connectpin gpio1.pod_gpio.gpio.11 apf27.fpga.IO_L23P_1
+connectpin gpio1.pod_gpio.gpio.12 apf27.fpga.IO_L22N_1
+connectpin gpio1.pod_gpio.gpio.13 apf27.fpga.IO_L24N_3
+connectpin gpio1.pod_gpio.gpio.14 apf27.fpga.IO_L24P_3
+connectpin gpio1.pod_gpio.gpio.15 apf27.fpga.IO_L23N_3
+
+connectpin gpio2.pod_gpio.gpio.0 apf27.fpga.IO_L23P_3
+connectpin gpio2.pod_gpio.gpio.1 apf27.fpga.IO_L22N_3
+connectpin gpio2.pod_gpio.gpio.2 apf27.fpga.IO_L22P_3
+connectpin gpio2.pod_gpio.gpio.3 apf27.fpga.IO_L20N_3
+connectpin gpio2.pod_gpio.gpio.4 apf27.fpga.IO_L20P_3
+connectpin gpio2.pod_gpio.gpio.5 apf27.fpga.IO_L15N_3
+connectpin gpio2.pod_gpio.gpio.6 apf27.fpga.IO_L15P_3
+connectpin gpio2.pod_gpio.gpio.7 apf27.fpga.IO_L14N_3
+connectpin gpio2.pod_gpio.gpio.8 apf27.fpga.IO_L14P_3
+connectpin gpio2.pod_gpio.gpio.9 apf27.fpga.IO_L12N_3
+connectpin gpio2.pod_gpio.gpio.10 apf27.fpga.IO_L12P_3
+connectpin gpio2.pod_gpio.gpio.11 apf27.fpga.IO_L11N_3
+connectpin gpio2.pod_gpio.gpio.12 apf27.fpga.IO_L11P_3
+connectpin gpio2.pod_gpio.gpio.13 apf27.fpga.IO_L08N_3
+connectpin gpio2.pod_gpio.gpio.14 apf27.fpga.IO_L08P_3
+connectpin gpio2.pod_gpio.gpio.15 apf27.fpga.IO_L03N_3
+
+connectpin gpio3.pod_gpio.gpio.0 apf27.fpga.IO_L03P_3
+connectpin gpio3.pod_gpio.gpio.1 apf27.fpga.IO_L02N_3
+connectpin gpio3.pod_gpio.gpio.2 apf27.fpga.IO_L02P_3
+connectpin gpio3.pod_gpio.gpio.3 apf27.fpga.IO_L01N_3
+connectpin gpio3.pod_gpio.gpio.4 apf27.fpga.IO_L01P_3
+connectpin gpio3.pod_gpio.gpio.5 apf27.fpga.IO_L12N_0
+connectpin gpio3.pod_gpio.gpio.6 apf27.fpga.IO_L11P_0
+
+autoconnectbus
+generateintercon imx27_wb16_wrapper00.mwb16
+generateintercon rstgen_syscon00.candroutput
+generatetop
+synthesis.selecttoolchain ise
+synthesis.generateproject
+synthesis.generatebitstream
+driver.selecttoolchain armadeus
+driver.generateproject
+exit
