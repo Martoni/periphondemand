@@ -23,71 +23,68 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-#-----------------------------------------------------------------------------
+""" Manage ~/.podrc like config file """
 
-__doc__ = ""
-__version__ = "1.0.0"
-__versionTime__ = "11/02/2009"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import os
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.error import Error
 
+
 class ConfigFile(WrapperXml):
     """ this class manage configuration file
     """
 
-    def __init__(self,filename):
+    def __init__(self, filename):
         self.filename = os.path.expanduser(filename)
+        self.configfile = None
         if os.path.exists(self.filename):
-            WrapperXml.__init__(self,file=self.filename)
+            WrapperXml.__init__(self, file=self.filename)
         else:
             print filename + " doesn't exist, be created"
-            WrapperXml.__init__(self,nodename="podconfig")
+            WrapperXml.__init__(self, nodename="podconfig")
             self.addNode(nodename="libraries")
             self.savefile()
         # fill library path list:
         try:
-            self.personal_lib_list =\
+            self.personal_lib_list = \
                 [node.getAttributeValue("path")
-                        for node in self.getSubNodeList("libraries","lib")]
+                        for node in self.getSubNodeList("libraries", "lib")]
         except:
             self.personal_lib_list = []
         try:
-            self.personal_platformlib_list =\
+            self.personal_platformlib_list = \
                 [node.getAttributeValue("path")
-                        for node in self.getSubNodeList("platforms","platform")]
+                        for node in self.getSubNodeList("platforms",
+                                                        "platform")]
         except:
             self.personal_platformlib_list = []
 
-    def delLibrary(self,path):
+    def delLibrary(self, path):
+        """ Delete library path in config file"""
         path = os.path.expanduser(path)
         path = os.path.abspath(path)
          # check if lib doesn't exists in config file
         libpathlist = [node.getAttributeValue("path") for node in
                 self.getSubNodeList(nodename="libraries", subnodename="lib")]
         if not (path in libpathlist):
-            raise Error("Library "+path+" doesn't exist in config",0)
+            raise Error("Library " + path + " doesn't exist in config", 0)
         self.delSubNode(nodename="libraries",
                         subnodename="lib",
                         attribute="path",
                         value=path)
         self.savefile()
 
-    def addLibrary(self,path):
+    def addLibrary(self, path):
+        """ Adding a library path in config file """
         path = os.path.expanduser(path)
         path = os.path.abspath(path)
         # check if lib doesn't exists in config file
         libpathlist = [node.getAttributeValue("path") for node in
                 self.getSubNodeList(nodename="libraries", subnodename="lib")]
         if path in libpathlist:
-            raise Error("This library is already in POD",0)
+            raise Error("This library is already in POD", 0)
         # check if directory exist then add it
         if os.path.exists(path):
             self.addSubNode(nodename="libraries",
@@ -97,28 +94,31 @@ class ConfigFile(WrapperXml):
             self.personal_lib_list.append(path)
             self.savefile()
         else:
-            raise Error("path "+path+" doesn't exist")
+            raise Error("path " + path + " doesn't exist")
 
     def getLibraries(self):
         """ return a list of library path """
         return self.personal_lib_list
+
     def getPlatformLibPath(self):
+        """ Return a list of platformlib path """
         return self.personal_platformlib_list
 
     def getSynthesisToolCommand(self):
+        """ Return the path to synthesis command """
         command_name = self.getAttributeValue(key="command",
                                               subnodename="tool")
         command_path = self.getAttributeValue(key="default_path",
                                               subnodename="tool")
         command_name = command_path + "/" + command_name
         if not sy.commandExist(command_name):
-            raise Error("Synthesis tool tcl shell command named "+\
-                        command_name+\
-                        " doesn't exist in .podrc");
+            raise Error("Synthesis tool tcl shell command named " +
+                        command_name +
+                        " doesn't exist in .podrc")
         return command_name
 
     def savefile(self):
-        self.file = open(self.filename,"w")
-        self.file.write(str(self))
-        self.file.close()
-
+        """ Write configuration file """
+        self.configfile = open(self.filename, "w")
+        self.configfile.write(str(self))
+        self.configfile.close()
