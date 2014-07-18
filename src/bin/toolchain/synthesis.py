@@ -64,6 +64,7 @@ class Synthesis(WrapperXml):
                         SYNTHESISPATH + "/" + self.getName())
 
     def save(self):
+        """ Save xml """
         self.saveXml(settings.projectpath +
                      "/synthesis/synthesis" + XMLEXT)
 
