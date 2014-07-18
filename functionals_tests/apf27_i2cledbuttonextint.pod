@@ -1,0 +1,25 @@
+create i2cledbuttonextint
+selectplatform standard.apf27
+addinstance components.button push
+addinstance components.led.wb16 blink
+addinstance components.i2cocore.wb16 i2c
+connectpin irq_mngr00.irq.irqport.0 i2c.irq.inta_o.0
+connectpin irq_mngr00.irq.irqport.1 push.int_button.irq.0
+connectpin irq_mngr00.irq.irqport.2 apf27.fpga.IO_L20N_1
+connectpin i2c.i2c.sda apf27.fpga.IO_L22P_1.0
+connectpin i2c.i2c.scl apf27.fpga.IO_L22N_1.0
+connectpin blink.int_led.led.0 apf27.fpga.IO_L24P_1
+connectpin push.int_button.button.0 apf27.fpga.IO_L24N_1
+connectbus imx27_wb16_wrapper00.mwb16 blink.swb16
+connectbus imx27_wb16_wrapper00.mwb16 push.swb16
+connectbus imx27_wb16_wrapper00.mwb16 i2c.swb16
+connectbus imx27_wb16_wrapper00.mwb16 irq_mngr00.swb16
+connectbus rstgen_syscon00.candroutput imx27_wb16_wrapper00.candrinput
+generateintercon imx27_wb16_wrapper00.mwb16
+generateintercon rstgen_syscon00.candroutput
+generatetop
+synthesis.selecttoolchain ise
+synthesis.generateproject
+synthesis.generatebitstream
+report
+exit
