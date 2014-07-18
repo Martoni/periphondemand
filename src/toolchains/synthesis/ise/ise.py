@@ -247,6 +247,7 @@ def generateTCL(self,filename=None):
     #        '_synthesis.vhd ../simulation/\n')
     # Run post place and route model generation
     tclfile.write('process run "Generate Post-Place & Route Simulation Model"\n')
+    tclfile.write('process run "Implement Design" -force rerun_all\n')
     tclfile.write('project close\n')
 
     display.msg("TCL script generated with name : "+\
