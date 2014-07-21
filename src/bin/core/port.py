@@ -376,7 +376,7 @@ class Port(WrapperXml):
             only works with inout port. If only this one port is
             connected to one pin, self port is returned.
         """
-        if (self.getDir() != "inout") and (self.getDir() != "in"):
+        if (self.getDir() != "inout"):
             raise Error("Function getPortsWithSameConnection work only" +
                         " with 'inout' port direction", 0)
         pin_dest_list = self.getPin(0).getConnectedPinList()
