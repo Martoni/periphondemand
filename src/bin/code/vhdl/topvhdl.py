@@ -30,17 +30,13 @@
 #-----------------------------------------------------------------------------
 """ Generating code for top component """
 
-__version__ = "1.0.0"
-__versionTime__ = "15/05/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
-
 import periphondemand.bin.define
-from   periphondemand.bin.define import *
-from   periphondemand.bin.code.topgen    import TopGen
-from   periphondemand.bin.utils.settings import Settings
-from   periphondemand.bin.utils.display  import Display
-from   periphondemand.bin.utils.error    import Error
-from   periphondemand.bin.utils          import wrappersystem as sy
+from periphondemand.bin.define import *
+from periphondemand.bin.code.topgen import TopGen
+from periphondemand.bin.utils.settings import Settings
+from periphondemand.bin.utils.display import Display
+from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils import wrappersystem as sy
 
 import time
 import datetime
@@ -48,7 +44,8 @@ import datetime
 TAB = "    "
 
 settings = Settings()
-display  = Display()
+display = Display()
+
 
 class TopVHDL(TopGen):
     """ Generate VHDL Top component
@@ -60,11 +57,13 @@ class TopVHDL(TopGen):
     def header(self):
         """ return vhdl header
         """
-        header = open(settings.path + TEMPLATESPATH+ "/"+HEADERTPL,"r").read()
-        header = header.replace("$tpl:author$",settings.author)
-        header = header.replace("$tpl:date$",str(datetime.date.today()))
-        header = header.replace("$tpl:filename$","Top_"\
-                +settings.active_project.getName()+".vhd")
+        header = open(settings.path + TEMPLATESPATH + "/" + HEADERTPL,
+                 "r").read()
+        header = header.replace("$tpl:author$", settings.author)
+        header = header.replace("$tpl:date$", str(datetime.date.today()))
+        header = header.replace("$tpl:filename$",
+                                "Top_" +
+                                settings.active_project.getName() + ".vhd")
         header = header.replace(
                     "$tpl:abstract$",
                     settings.active_project.getDescription())
@@ -82,7 +81,7 @@ class TopVHDL(TopGen):
             else:
                 portname = port.getName()
                 interfacename = port.getParent().getName()
-                instancename  = port.getParent().getParent().getInstanceName()
+                instancename = port.getParent().getParent().getInstanceName()
 
                 out = out + TAB + "-- " + instancename +\
                                   "-" + interfacename + "\n"
@@ -105,11 +104,11 @@ class TopVHDL(TopGen):
                             out = out + "\n"
                         else:
                             same_connections_ports_names = \
-                                sorted([aport.getExtendedName() for\
+                                sorted([aport.getExtendedName() for
                                             aport in same_connections_ports])
                             if port.getExtendedName() ==\
                                     same_connections_ports_names[0]:
-                                out = out + TAB*2 +\
+                                out = out + TAB * 2 +\
                                         instancename + "_" + portname +\
                                         " : " + port.getDir()
                                 if port.getMSBConnected() < 1:
@@ -146,16 +145,16 @@ class TopVHDL(TopGen):
         out = out + "\n" + TAB + ");\nend entity " + entityname + ";\n\n"
         return out
 
-    def architectureHead(self,entityname):
+    def architectureHead(self, entityname):
         """
         """
-        out = "architecture " + entityname+"_1 of "+entityname+" is\n"
+        out = "architecture " + entityname + "_1 of " + entityname + " is\n"
         return out
 
-    def architectureFoot(self,entityname):
+    def architectureFoot(self, entityname):
         """
         """
-        out = "\nend architecture "+entityname + "_1;\n"
+        out = "\nend architecture " + entityname + "_1;\n"
         return out
 
     def declareComponents(self):
@@ -163,7 +162,8 @@ class TopVHDL(TopGen):
         """
         if self.project.getVhdlVersion() == "vhdl93":
             return ""
-        out =       TAB + "-------------------------\n"
+        out = ""
+        out = out + TAB + "-------------------------\n"
         out = out + TAB + "-- declare components  --\n"
         out = out + TAB + "-------------------------\n"
         out = out + "\n"
@@ -177,38 +177,39 @@ class TopVHDL(TopGen):
 
         for compname in component:
             for component in self.project.getInstancesList():
-                if component.getName() == compname: break;
+                if component.getName() == compname:
+                    break
 
-            out = out +"\n"+ TAB + "component " +compname + "\n"
+            out = out + "\n" + TAB + "component " + compname + "\n"
             if component.getFPGAGenericsList() != []:
-                out = out + TAB*2 + "generic(\n"
+                out = out + TAB * 2 + "generic(\n"
                 for generic in component.getFPGAGenericsList():
-                    out = out + TAB*3\
-                            +generic.getName()+" : "\
-                            +generic.getType()+" := "\
-                            +str(generic.getValue())\
-                            +";\n"
+                    out = out + TAB * 3 +\
+                          generic.getName() + " : " +\
+                          generic.getType() + " := " +\
+                          str(generic.getValue()) +\
+                          ";\n"
                 # suppress comma
-                out = out[:-2]+"\n"
-                out = out + TAB*2 + ");\n"
+                out = out[:-2] + "\n"
+                out = out + TAB * 2 + ");\n"
 
-            out = out + TAB*2+"port (\n"
+            out = out + TAB * 2 + "port (\n"
             for interface in component.getInterfacesList():
-                out = out + TAB*3 + "-- " + interface.getName()+"\n"
+                out = out + TAB * 3 + "-- " + interface.getName() + "\n"
                 for port in interface.getPortsList():
-                    out = out + TAB*3\
-                            +port.getName()\
-                            +"  : "\
-                            +port.getDir()
+                    out = out + TAB * 3 +\
+                          port.getName() +\
+                          "  : " +\
+                          port.getDir()
                     if int(port.getSize()) == 1:
                         out = out + " std_logic;\n"
                     else:
-                        out = out + " std_logic_vector("\
-                                +str(int(port.getRealSize())-1)+\
-                                " downto "+port.getMinPinNum()+");\n"
+                        out = out + " std_logic_vector(" +\
+                              str(int(port.getRealSize()) - 1) +\
+                              " downto " + port.getMinPinNum() + ");\n"
             # Suppress the #!@ last semicolon
             out = out[:-2] + "\n"
-            out = out + TAB*2 + ");\n"
+            out = out + TAB * 2 + ");\n"
             out = out + TAB + "end component;\n"
         return out
 
@@ -216,7 +217,8 @@ class TopVHDL(TopGen):
         """ Declare signals ports
         """
         platformname = self.project.getPlatform().getInstanceName()
-        out =       TAB + "-------------------------\n"
+        out = ""
+        out = out + TAB + "-------------------------\n"
         out = out + TAB + "-- Signals declaration\n"
         out = out + TAB + "-------------------------\n"
         for component in componentslist:
@@ -236,12 +238,12 @@ class TopVHDL(TopGen):
                         continue
                     if connection_list[0]["instance_dest"] == platformname:
                         continue
-                    out= out + TAB + "signal " + component.getInstanceName() +\
+                    out = out + TAB + "signal " + component.getInstanceName() +\
                                "_" + port.getName() + ": "
                     if int(port.getSize()) == 1:
-                       out = out + " std_logic;\n"
+                        out = out + " std_logic;\n"
                     else:
-                       out = out +\
+                        out = out +\
                                " std_logic_vector(" +\
                                port.getMaxPinNum() +\
                                " downto " + port.getMinPinNum() + ");\n"
@@ -261,68 +263,72 @@ class TopVHDL(TopGen):
         return out
 
     def declareInstance(self):
-        out = TAB +       "-------------------------\n"
+        out = ""
+        out = out + TAB + "-------------------------\n"
         out = out + TAB + "-- declare instances\n"
         out = out + TAB + "-------------------------\n"
         for component in self.project.getInstancesList():
             if component.getName() != "platform":
-                out = out + "\n" + TAB+component.getInstanceName()\
-                        +" : "
+                out = out + "\n" + TAB + component.getInstanceName()\
+                        + " : "
                 if self.project.getVhdlVersion() == "vhdl93":
                     out = out + "entity work."
-                out = out + component.getName() +"\n"
+                out = out + component.getName() + "\n"
                 if component.getFPGAGenericsList() != []:
                     out = out + TAB + "generic map (\n"
                     for generic in component.getFPGAGenericsList():
-                        out = out + TAB*3\
-                                +generic.getName()+" => "\
-                                +str(generic.getValue())\
-                                +",\n"
+                        out = out + TAB * 3 +\
+                              generic.getName() + " => " +\
+                              str(generic.getValue()) +\
+                              ",\n"
                     # suppress comma
-                    out = out[:-2]+"\n"
-                    out = out + TAB*2 + ")\n"
+                    out = out[:-2] + "\n"
+                    out = out + TAB * 2 + ")\n"
 
                 out = out + TAB + "port map (\n"
                 for interface in component.getInterfacesList():
 
-                    out = out + TAB*3 + "-- " + interface.getName()+"\n"
+                    out = out + TAB * 3 + "-- " + interface.getName() + "\n"
                     for port in interface.getPortsList():
-                        if len(port.getPinsList())!=0:
+                        if len(port.getPinsList()) != 0:
                             if (port.getDir() != "inout") and (port.getDir() != "in"):
-                                out=  out + TAB*3 + port.getName() + " => "
+                                out = out + TAB * 3 + port.getName() + " => "
                                 out = out + port.getExtendedName() + ",\n"
                             else:
-                                out=out+TAB*3 + port.getName() + " => "
-                                out = out +\
+                                out = out + TAB * 3 + port.getName() + " => "
+                                out = out + \
                                     sorted(
-                                        [aport.getExtendedName() for aport in port.getPortsWithSameConnection()]
+                                        [aport.getExtendedName()
+                                                for aport in port.getPortsWithSameConnection()]
                                           )[0]
-                                out = out +",\n"
+                                out = out + ",\n"
                         else:
                             if int(port.getSize()) == 1:
                                 if port.getDir() == "out":
-                                    out=out+TAB*3+port.getName()\
-                                            +" => open,\n"
+                                    out = out + TAB * 3 + port.getName()\
+                                            + " => open,\n"
                                 else:
-                                    out=out + TAB*3+port.getName() +\
-                                            " => '"+\
+                                    out = out + TAB * 3 + port.getName() +\
+                                            " => '" +\
                                             str(port.getUnconnectedValue()) +\
                                             "',\n"
                             else:
                                 if port.getDir() == "out":
-                                    out=out+TAB*3+port.getName()\
-                                            +" => open,\n"
+                                    out = out + TAB * 3 + port.getName()\
+                                            + " => open,\n"
                                 else:
-                                    out=out + TAB*3 + port.getName() +\
+                                    out = out + TAB * 3 + port.getName() +\
                                             " => \"" +\
-                                            str(port.getUnconnectedValue())*int(port.getSize()) +\
+                                            str(port.getUnconnectedValue()) *\
+                                            int(port.getSize()) +\
                                             "\",\n"
 
                 # Suppress the #!@ last comma
                 out = out[:-2] + "\n"
-                out = out + TAB*3 + ");\n"
+                out = out + TAB * 3 + ");\n"
         out = out + "\n"
         return out
+
     def connectForces(self, portlist):
         out = "\n"
         out = out + TAB + "-------------------\n"
@@ -331,17 +337,18 @@ class TopVHDL(TopGen):
         for port in portlist:
             if port.forceDefined():
                 if port.getForce() == "gnd":
-                    out = out + TAB + "force_"+port.getName()+" <= '0';\n"
+                    out = out + TAB + "force_" + port.getName() + " <= '0';\n"
                 else:
-                    out = out + TAB + "force_"+port.getName()+" <= '1';\n"
-        return out+"\n"
+                    out = out + TAB + "force_" + port.getName() + " <= '1';\n"
+        return out + "\n"
 
     def connectInstance(self, incomplete_external_ports_list):
         """ Connect instances
         """
-        out =       TAB  + "---------------------------\n"
-        out = out + TAB  + "-- instances connections --\n"
-        out = out + TAB  + "---------------------------\n"
+        out = ""
+        out = out + TAB + "---------------------------\n"
+        out = out + TAB + "-- instances connections --\n"
+        out = out + TAB + "---------------------------\n"
 
         platform = self.project.getPlatform()
         platformname = platform.getInstanceName()
@@ -359,10 +366,10 @@ class TopVHDL(TopGen):
                     if pin.isConnectedToInstance(platform):
                         if port.getDir() == "in":
                             out = out + TAB + instancename + "_" +\
-                                  portname +"(" + str(pinnum) +\
+                                  portname + "(" + str(pinnum) +\
                                   ") <= " + instancename + "_" +\
                                   portname + "_pin" +\
-                                  str(pinnum)+";\n"
+                                  str(pinnum) + ";\n"
                         else:
                             out = out + TAB + instancename + "_" +\
                                     portname + "_pin" +\
@@ -372,63 +379,69 @@ class TopVHDL(TopGen):
 
         # connect all "in" ports pin
         for component in self.project.getInstancesList():
-            if component.getInstanceName() != platformname:
-                out = out + "\n"+TAB +"-- connect " +\
-                        component.getInstanceName() + "\n"
-                for interface in component.getInterfacesList():
-                    out = out + TAB*2 + "-- " + interface.getName()+"\n"
-                    for port in interface.getPortsList():
-                        if port.getDir() == "in":
-                            # Connect all pins port
-                            if len(port.getPinsList())!=0:
-                                portdest = port.getDestinationPort()
-                                if portdest != None and\
-                                       (portdest.getSize() == port.getSize()):
-                                    # If port is completely connected to one
-                                    # and only one other port
-                                    pin = port.getPinsList()[0]
-                                    connect =  pin.getConnections()[0]
-                                    if connect["instance_dest"] != platformname:
-                                        out = out + TAB*2\
-                                            + component.getInstanceName()+"_"+port.getName()\
-                                            + " <= "\
-                                            + connect["instance_dest"]+"_"+connect["port_dest"]\
-                                            + ";\n"
-                                else:
-                                    # If pins port are connected individualy to several other ports
-                                    for pin in port.getPinsList():
-                                        # Connect pin individualy
-                                        if pin.getNum() != None and len(pin.getConnections())!= 0:
-                                            connect = pin.getConnections()[0]
-                                            if connect["instance_dest"] != platformname:
-                                                out = out + TAB*2\
-                                                    + component.getInstanceName()+"_"+port.getName()
-                                                if int(port.getSize()) > 1:
-                                                    out = out + "("+ pin.getNum() +")"
-                                                out = out + " <= "+ connect["instance_dest"]+\
-                                                        "_"+connect["port_dest"]
-                                                # is destination vector or simple net ?
-                                                for comp in self.project.getInstancesList():
-                                                    if comp.getInstanceName() == connect["instance_dest"]:
-                                                        for inter in comp.getInterfacesList():
-                                                            if inter.getName() == connect["interface_dest"]:
-                                                                for port2 in inter.getPortsList():
-                                                                    if port2.getName() == connect["port_dest"]:
-                                                                        if int(port2.getSize()) > 1:
-                                                                            out = out +"("+\
-                                                                                    connect["pin_dest"]+")"
-                                                out = out + ";\n"
-                            # if port is void, connect '0' or open
+            if component.getInstanceName() == platformname:
+                continue
+            out = out + "\n" + TAB + "-- connect " +\
+                    component.getInstanceName() + "\n"
+            for interface in component.getInterfacesList():
+                out = out + TAB * 2 + "-- " + interface.getName() + "\n"
+                for port in interface.getPortsList():
+                    if port.getDir() == "in":
+                        # Connect all pins port
+                        if len(port.getPinsList()) != 0:
+                            portdest = port.getDestinationPort()
+                            if portdest is not None and\
+                                   (portdest.getSize() == port.getSize()):
+                                # If port is completely connected to one
+                                # and only one other port
+                                pin = port.getPinsList()[0]
+                                connect = pin.getConnections()[0]
+                                if connect["instance_dest"] != platformname:
+                                    out = out + TAB * 2 +\
+                                          component.getInstanceName() +\
+                                          "_" + port.getName() +\
+                                          " <= " +\
+                                          connect["instance_dest"] +\
+                                          "_" + connect["port_dest"] + ";\n"
                             else:
-                                message = "port "+ component.getInstanceName()\
-                                                    +"."+interface.getName()+"."\
-                                                    +port.getName()+" is void."\
-                                                    +" It will be set to '"+\
-                                                    str(port.getUnconnectedValue()+"'")
-                                display.msg(message, 2)
+                                # If pins port are connected individualy
+                                # to several other ports
+                                for pin in port.getPinsList():
+                                    # Connect pin individualy
+                                    if pin.getNum() is not None and\
+                                            len(pin.getConnections()) != 0:
+                                        connect = pin.getConnections()[0]
+                                        if connect["instance_dest"] != platformname:
+                                            out = out + TAB * 2 +\
+                                                  component.getInstanceName() +\
+                                                  "_" + port.getName()
+                                            if int(port.getSize()) > 1:
+                                                out = out + "(" + pin.getNum() + ")"
+                                            out = out + " <= " + connect["instance_dest"] +\
+                                                    "_" + connect["port_dest"]
+                                            # is destination vector or simple net ?
+                                            for comp in self.project.getInstancesList():
+                                                if comp.getInstanceName() != connect["instance_dest"]:
+                                                    continue
+                                                for inter in comp.getInterfacesList():
+                                                    if inter.getName() != connect["interface_dest"]:
+                                                        continue
+                                                    for port2 in inter.getPortsList():
+                                                        if port2.getName() == connect["port_dest"]:
+                                                            if int(port2.getSize()) > 1:
+                                                                out = out + "(" + \
+                                                                        connect["pin_dest"] + ")"
+                                            out = out + ";\n"
+                        # if port is void, connect '0' or open
+                        else:
+                            message = "port " + component.getInstanceName() +\
+                                      "." + interface.getName() + "." +\
+                                      port.getName() + " is void." +\
+                                      " It will be set to '" +\
+                                      str(port.getUnconnectedValue()) + "'"
+                            display.msg(message, 2)
 
         return out
 
     def architectureBegin(self):
         return "\nbegin\n"
-
