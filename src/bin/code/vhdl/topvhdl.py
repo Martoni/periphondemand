@@ -291,10 +291,7 @@ class TopVHDL(TopGen):
                     out = out + TAB * 3 + "-- " + interface.getName() + "\n"
                     for port in interface.getPortsList():
                         if len(port.getPinsList()) != 0:
-                            if (port.getDir() != "inout") and (port.getDir() != "in"):
-                                out = out + TAB * 3 + port.getName() + " => "
-                                out = out + port.getExtendedName() + ",\n"
-                            else:
+                            if (port.getDir() == "inout") or (port.getDir() == "in"):
                                 out = out + TAB * 3 + port.getName() + " => "
                                 out = out + \
                                     sorted(
@@ -302,6 +299,10 @@ class TopVHDL(TopGen):
                                                 for aport in port.getPortsWithSameConnection()]
                                           )[0]
                                 out = out + ",\n"
+                            else:
+                                out = out + TAB * 3 + port.getName() + " => "
+                                out = out + port.getExtendedName() + ",\n"
+
                         else:
                             if int(port.getSize()) == 1:
                                 if port.getDir() == "out":
