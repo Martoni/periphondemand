@@ -173,6 +173,10 @@ class Synthesis(WrapperXml):
         scriptpath = settings.projectpath +\
                      SYNTHESISPATH +\
                      "/" + tclscript_name
-        plugin.generateBitStream(self,
-                                 self.getSynthesisToolCommand(),
-                                 scriptpath)
+        try:
+            plugin.generateBitStream(self,
+                                     self.getSynthesisToolCommand(),
+                                     scriptpath)
+        except AttributeError:
+            raise Error("Can't generate bitstream for this synthesis" +
+                        " toolchain, not implemented")
