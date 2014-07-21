@@ -122,10 +122,7 @@ class BaseCli(cmd.Cmd):
                         import sys
                         sys.exit(0)
                     if settings.isScript():
-                        if settings.color():
-                            print "\033[38;1m$ " + line + "\033[0m"
-                        else:
-                            print "$ " + line
+                        print "$ " + line
                     stop = self.onecmd(line)
                     stop = self.postcmd(stop, line)
                 except KeyboardInterrupt:

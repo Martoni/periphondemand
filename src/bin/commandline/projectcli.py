@@ -1288,6 +1288,22 @@ Set fpga pin state in 'gnd', 'vcc'. To unset use 'undef' value
             print error
             return
 
+    def do_setcolor(self, line):
+        """\
+Usage: setcolor [0/1]
+Set 1 if you want color output, 0 else
+        """
+        arg = line.split(' ')
+        value = arg[-1].strip()
+
+        try:
+            settings.setColor(value)
+        except Error, error:
+            print display
+            print error
+            return
+
+
     def complete_source(self, text, line, begidx, endidx):
         """ complete load command with files under directory """
         path = line.split(" ")[1]

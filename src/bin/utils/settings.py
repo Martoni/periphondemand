@@ -93,7 +93,8 @@ class Settings(object):
 
     def color(self):
         return self.color_status
-    def setColor(self,value=1):
+
+    def setColor(self, value=1):
         self.color_status = value
 
     def getDir(self, sub_dir=None):
