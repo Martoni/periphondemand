@@ -1,3 +1,4 @@
+setcolor 0
 create apf27uartgpio
 
 selectplatform standard.apf27

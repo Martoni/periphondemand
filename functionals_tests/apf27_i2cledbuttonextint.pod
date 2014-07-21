@@ -1,3 +1,4 @@
+setcolor 0
 create i2cledbuttonextint
 selectplatform standard.apf27
 addinstance components.button push
