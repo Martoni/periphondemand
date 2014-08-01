@@ -291,8 +291,8 @@ class TopVHDL(TopGen):
                     out = out + TAB * 3 + "-- " + interface.getName() + "\n"
                     for port in interface.getPortsList():
                         if len(port.getPinsList()) != 0:
+                            out = out + TAB * 3 + port.getName() + " => "
                             if (port.getDir() == "inout") or (port.getDir() == "in"):
-                                out = out + TAB * 3 + port.getName() + " => "
                                 out = out + \
                                     sorted(
                                         [aport.getExtendedName()
@@ -300,26 +300,18 @@ class TopVHDL(TopGen):
                                           )[0]
                                 out = out + ",\n"
                             else:
-                                out = out + TAB * 3 + port.getName() + " => "
                                 out = out + port.getExtendedName() + ",\n"
 
                         else:
-                            if int(port.getSize()) == 1:
-                                if port.getDir() == "out":
-                                    out = out + TAB * 3 + port.getName()\
-                                            + " => open,\n"
-                                else:
-                                    out = out + TAB * 3 + port.getName() +\
-                                            " => '" +\
+                            if port.getDir() == "out":
+                                out = out + "open,\n"
+                            else:
+                                if int(port.getSize()) == 1:
+                                    out = out + "'" +\
                                             str(port.getUnconnectedValue()) +\
                                             "',\n"
-                            else:
-                                if port.getDir() == "out":
-                                    out = out + TAB * 3 + port.getName()\
-                                            + " => open,\n"
                                 else:
-                                    out = out + TAB * 3 + port.getName() +\
-                                            " => \"" +\
+                                    out = out + "\"" +\
                                             str(port.getUnconnectedValue()) *\
                                             int(port.getSize()) +\
                                             "\",\n"
