@@ -73,3 +73,31 @@ To launch periphondemand just type «pod»:
 
 ``$ pod``
 
+Tests
++++++
+
+Python mock package is required to run units-tests, in debian do :
+
+``$ sudo apt-get install python-mock``
+
+To run test do :
+
+``$ ./runtests.sh``
+
+Documentation
++++++++++++++
+
+To generate documentation python-sphinx module is required.
+In debian do :
+
+``$ sudo apt-get install python-sphinx``
+
+Then go to doc/ directory and type :
+
+``$ make latexpdf``
+
+To generate pdf document or :
+
+``$ make html``
+
+To generate static html website.
