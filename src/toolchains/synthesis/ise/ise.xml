@@ -4,5 +4,6 @@
         ISE Webpack, provided freely from Xilinx.
     </description>
     <tool name="ise" command="xtclsh"
-        default_path="/usr/local/ISE_DS/ISE/bin/lin/" />
+        default_path="$XILINX/bin/lin/" />
+/usr/local/opt/Xilinx/14.7/ISE_DS/ISE/
 </toolchain>
