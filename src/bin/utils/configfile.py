@@ -104,13 +104,14 @@ class ConfigFile(WrapperXml):
         """ Return a list of platformlib path """
         return self.personal_platformlib_list
 
-    def getSynthesisToolCommand(self):
+    def getSynthesisToolCommand(self, synthesisName):
         """ Return the path to synthesis command """
-        command_name = self.getAttributeValue(key="command",
-                                              subnodename="tool")
-        command_path = self.getAttributeValue(key="default_path",
-                                              subnodename="tool")
-        command_name = command_path + "/" + command_name
+        for i in self.getNode("tools").getNodeList("tool"):
+            if (i.getAttributeValue(key="name") == synthesisName):
+                command_name = i.getAttributeValue(key="command")
+                command_path = i.getAttributeValue(key="default_path")
+                command_name = command_path + "/" + command_name
+                break
         if not sy.commandExist(command_name):
             raise Error("Synthesis tool tcl shell command named " +
                         command_name +

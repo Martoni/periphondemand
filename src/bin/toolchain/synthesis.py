@@ -76,7 +76,7 @@ class Synthesis(WrapperXml):
         """ Test if command exist and return it """
         try:
             # try if .podrc exists
-            return settings.getSynthesisToolCommand()
+            return settings.getSynthesisToolCommand(self.getSynthesisToolName())
         except:
             # else use toolchain default
             command_name = self.getAttributeValue(key="command",
