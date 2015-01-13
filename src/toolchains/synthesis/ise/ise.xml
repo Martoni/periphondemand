@@ -5,5 +5,4 @@
     </description>
     <tool name="ise" command="xtclsh"
         default_path="$XILINX/bin/lin/" />
-/usr/local/opt/Xilinx/14.7/ISE_DS/ISE/
 </toolchain>
