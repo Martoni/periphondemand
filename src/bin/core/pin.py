@@ -106,7 +106,7 @@ class Pin(WrapperXml):
                 interface_dest =\
                        instance_dest.getInterface(connection["interface_dest"])
                 port_dest = interface_dest.getPort(connection["port_dest"])
-                pin_des = port_dest.getPin(connection["pin_dest"])
+                pin_dest = port_dest.getPin(connection["pin_dest"])
             except Error:
                 pass
             self.delConnectionForce(pin_dest)
