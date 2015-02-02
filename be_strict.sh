@@ -41,5 +41,6 @@ pep8 src/bin/toolchain/synthesis.py
 # utils
 pep8 src/bin/utils/__init__.py
 pep8 src/bin/utils/basecli.py
+pep8 src/bin/utils/wrappersystem.py
 
 pylint --rcfile=pylint.cfg src
