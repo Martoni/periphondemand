@@ -1,6 +1,6 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Name:     cli.py
 # Purpose:  Basic Command Line Interface for Orchestra elements
 #
@@ -8,7 +8,7 @@
 #
 # Created:  2008/01/17
 # Licence:  GPLv3 or newer
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 __doc__ = "Basic Command Line Interface"
 __version__ = "1.0.0"
@@ -55,7 +55,7 @@ class BaseCli(cmd.Cmd):
             statement = '%s\n%s' % (statement, inp)
         return statement
         # assembling a list of lines and joining them at the end would be
-        #faster,
+        # faster,
         # but statementHasEnded needs a string arg; anyway, we're getting
         # user input and users are slow.
 
@@ -139,8 +139,8 @@ class BaseCli(cmd.Cmd):
     statement_end_pattern = re.compile(r'[%s]\s*$' % terminators)
 
     def statementHasEnded(self, lines):
-        return bool(self.statement_end_pattern.search(lines)) \
-               or lines[-3:] == 'EOF'
+        return bool(self.statement_end_pattern.search(lines)) or\
+            lines[-3:] == 'EOF'
 
     def clean(self, s):
         """cleans up a string"""
@@ -209,13 +209,13 @@ class BaseCli(cmd.Cmd):
            Cmd.postloop() is not a stub.
         """
         cmd.Cmd.postloop(self)  # Clean up command completion
-        #print "Exiting..."
+        # print "Exiting..."
 
     def precmd(self, line):
         """ This method is called after the line has been input but before
             it has been interpreted.
         """
-        #settings.addHistory(line)
+        # settings.addHistory(line)
         # Remove comments lines
         try:
             if str(line)[0] in str(self.comment_marks):
@@ -311,7 +311,8 @@ class BaseCli(cmd.Cmd):
                 listargs.append([subargt, subargl])
             else:
                 return self.completelist(line, text,
-                            self.listcompletion(listargs, subargl, subargt))
+                                         self.listcompletion(listargs,
+                                                             subargl, subargt))
 
     def listcompletion(self, listargs, subargl, subargt):
         """ return a list of possibility using template:
@@ -376,11 +377,11 @@ fpga_attributes    : give list of fpga attributes in platform
         if subargt == "masterinstancename":
             return [interface.getParent().getInstanceName()
                     for interface in
-                        settings.active_project.getInterfacesMaster()]
+                    settings.active_project.getInterfacesMaster()]
         elif subargt == "slaveinstancename":
             return [interface.getParent().getInstanceName()
                     for interface in
-                        settings.active_project.getInterfacesSlave()]
+                    settings.active_project.getInterfacesSlave()]
         elif subargt == "instancename":
             return [instance.getInstanceName()
                     for instance in settings.active_project.getInstancesList()]
@@ -395,14 +396,14 @@ fpga_attributes    : give list of fpga attributes in platform
                     for interface in instance.getMasterInterfaceList()]
         elif subargt == "slaveinterfacename":
             return ["" + instancename + "." + interface.getName()
-                     for interface in instance.getSlaveInterfaceList()]
+                    for interface in instance.getSlaveInterfaceList()]
         elif subargt == "portname":
             return ["" + instancename + "." + interfacename + "." +
                     port.getName() for port in interface.getPortsList()]
         elif subargt == "pinnum":
             return ["" + instancename + "." + interfacename +
                     "." + portname + "." + str(i)
-                     for i in range(int(port.getSize()))]
+                    for i in range(int(port.getSize()))]
         elif subargt == "libraryname":
             arglist = settings.active_project.library.listLibraries()
             return arglist
@@ -412,10 +413,10 @@ fpga_attributes    : give list of fpga attributes in platform
             arglist.append("standard")
             return arglist
         elif subargt == "forcename":
-            arglist = [
-               "" + port.getName()
-                for port in
-                 settings.active_project.getPlatform().getPlatformPortsList()]
+            arglist = ["" + port.getName()
+                       for port in
+                       settings.active_project.getPlatform(
+                           ).getPlatformPortsList()]
             return arglist
         elif subargt == "forcestate":
             return ["gnd", "vcc", "undef"]
@@ -426,9 +427,9 @@ fpga_attributes    : give list of fpga attributes in platform
             except:
                 return settings.active_library.listComponents()
             arglist = [libraryname + "." + componentname
-                        for componentname in
-                            settings.active_library.listComponents(
-                                libraryname)]
+                       for componentname in
+                       settings.active_library.listComponents(
+                           libraryname)]
             return arglist
         elif subargt == "componentversion":
             # XXX: beuhark!
@@ -438,23 +439,23 @@ fpga_attributes    : give list of fpga attributes in platform
                 libraryname = settings.active_library.getLibName()
                 return [componentname + "." + version
                         for version in
-                            settings.active_project.getComponentVersionList(
-                                libraryname, componentname)]
-            return [libraryname + "." + componentname + "." + comp
-                    for comp in
                         settings.active_project.getComponentVersionList(
                             libraryname, componentname)]
+            return [libraryname + "." + componentname + "." + comp
+                    for comp in
+                    settings.active_project.getComponentVersionList(
+                        libraryname, componentname)]
 
         elif subargt == "platformname":
             if platformlib == "standard":
                 return ["standard." + name
                         for name in
-                            settings.active_project.listAvailablePlatforms()]
+                        settings.active_project.listAvailablePlatforms()]
             else:
                 return [platformlib + "." + name
                         for name in
-                            sy.listFiles(
-                                settings.getPlatformLibPath(platformlib))]
+                        sy.listFiles(
+                            settings.getPlatformLibPath(platformlib))]
 
         elif subargt == "genericname":
             return ["" + instancename + "." + generic.getName()
@@ -492,7 +493,7 @@ fpga_attributes    : give list of fpga attributes in platform
         if len(argline) < self.minArgNumber(template, ' ') or \
            len(argline) > self.maxArgNumber(template, ' '):
             raise Error(
-                    "Wrong argument number:\n%s\n instead of\n %s" % (line,
+                "Wrong argument number:\n%s\n instead of\n %s" % (line,
                                                                   template), 0)
 
         for argl, argt in zip(argline, argtemplate):
@@ -508,8 +509,8 @@ fpga_attributes    : give list of fpga attributes in platform
             if (len(subargline) < self.minArgNumber(argt, '.')) or\
                     (len(subargline) > self.maxArgNumber(argt, '.')):
                 raise Error(
-                        "Wrong subargument:\n%s\ninstead of\n%s" % (argl,
-                                                                    argt), 0)
+                    "Wrong subargument:\n%s\ninstead of\n%s" % (argl,
+                                                                argt), 0)
 
     def minArgNumber(self, template, separator):
         """ return the minimun argument number
