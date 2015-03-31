@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <toolchain name="quartus" version="1.0" type="synthesis" >
     <description></description>
-    <tool name="quartus"/>
+    <tool name="quartus" command="quartus_sh" 
+	 default_path="/opt/altera/14.0/quartus/bin" />
 </toolchain>
