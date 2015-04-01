@@ -85,7 +85,7 @@ def launchAShell(shell_name, commands_file_name):
     """ launch a shell named shell_name, with a
     command script named commands_file_name
     """
-    return os.popen("" + shell_name + " < " + commands_file_name)
+    return os.popen("" + shell_name + " " + commands_file_name)
 
 
 def dirExist(dirname):
