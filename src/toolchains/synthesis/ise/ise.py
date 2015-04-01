@@ -259,6 +259,7 @@ def generateBitStream(self, commandname, scriptname):
     pwd = sy.pwd()
     sy.deleteAll(settings.projectpath+OBJSPATH)
     sy.chdir(settings.projectpath+SYNTHESISPATH)
+    commandname = commandname + " < "
 
     for line in sy.launchAShell(commandname, scriptname):
         if settings.color()==1:
@@ -268,11 +269,11 @@ def generateBitStream(self, commandname, scriptname):
     try:
         sy.copyFile(settings.projectpath+OBJSPATH+"/"+\
                     BINARY_PREFIX+settings.active_project.getName()+\
-                    BITSTREAM_SUFFIX,
+                    XILINX_BITSTREAM_SUFFIX,
                     settings.projectpath+BINARYPROJECTPATH+"/")
         sy.copyFile(settings.projectpath+OBJSPATH+"/"+\
                     BINARY_PREFIX+settings.active_project.getName()+\
-                    BINARY_SUFFIX,
+                    XILINX_BINARY_SUFFIX,
                     settings.projectpath+BINARYPROJECTPATH+"/")
     except IOError:
         raise Error("Can't copy bitstream")
