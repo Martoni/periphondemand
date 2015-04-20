@@ -1,1 +1,10 @@
 POD
+---
+
+
+Library, Platform
+=================
+
+To add default libraries and platform do (in pod directory):
+git clone https://github.com/Martoni/pod_lib.git libraries
+
