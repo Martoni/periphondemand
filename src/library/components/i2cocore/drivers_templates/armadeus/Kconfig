@@ -1,6 +1,0 @@
-
-config ARMADEUS_FPGA_POD_I2C_OCORE_DRIVER
-	tristate "POD i2c driver"
-	default n
-	depends on POD_DRIVERS 
-	---help---

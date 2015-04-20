@@ -1,6 +1,0 @@
-
-config ARMADEUS_FPGA_POD_SJA1000_DRIVER
-	tristate "POD sja1000 driver"
-	default m
-	depends on POD_DRIVERS
-	---help---

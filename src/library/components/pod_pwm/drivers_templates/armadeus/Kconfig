@@ -1,7 +1,0 @@
-
-config ARMADEUS_FPGA_POD_PWM_DRIVER
-	tristate "pod_pwm_platform"
-	default n
-	depends on POD_DRIVERS 
-	select ARMADEUS_FPGA_VIRTUAL_COMPONENTS_PWM
-	---help---

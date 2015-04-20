@@ -1,3 +1,0 @@
-
-obj-$(CONFIG_ARMADEUS_FPGA_POD_BUTTON_DRIVER) += pod_buttons.o
-

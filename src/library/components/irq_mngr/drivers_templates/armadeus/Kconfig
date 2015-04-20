@@ -1,8 +1,0 @@
-
-config ARMADEUS_FPGA_POD_IRQ_MNGR_DRIVER
-	tristate "POD irq"
-	default m
-	depends on POD_DRIVERS
-	select ARMADEUS_FPGA_VIRTUAL_COMPONENTS
-	select ARMADEUS_FPGA_VIRTUAL_COMPONENTS_IRQ_MNGR
-	---help---

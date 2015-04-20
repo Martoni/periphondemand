@@ -1,7 +1,0 @@
-
-config ARMADEUS_FPGA_POD_ANYBUS_INTERFACE_DRIVER
-	tristate "POD anybus interface driver"
-	default n
-	depends on POD_DRIVERS 
-	select ARMADEUS_FPGA_VIRTUAL_COMPONENT_ANYBUS_INTERFACE
-	---help---
