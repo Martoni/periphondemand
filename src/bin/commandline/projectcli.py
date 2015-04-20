@@ -1,11 +1,11 @@
-#! /usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Name:     ProjectCli.py
 # Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  23/05/2008
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #  Copyright (2008)  Armadeus Systems
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,27 +22,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
-#-----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+""" Command line for project management """
 
-__doc__ = ""
-__version__ = "1.0.0"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
-
-import cmd
 import os
 
 from periphondemand.bin.define import *
 
-from periphondemand.bin.utils import wrapperxml, settings, error, basecli
+from periphondemand.bin.utils import settings
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.display import Display
 
-from periphondemand.bin.commandline import *
 from periphondemand.bin.commandline.synthesiscli import SynthesisCli
 from periphondemand.bin.commandline.simulationcli import SimulationCli
 from periphondemand.bin.commandline.drivercli import DriverCli
@@ -53,19 +43,12 @@ from periphondemand.bin.utils.basecli import BaseCli
 from periphondemand.bin.utils.error import Error
 
 from periphondemand.bin.core.project import Project
-from periphondemand.bin.core.component import Component
-from periphondemand.bin.core.platform import Platform
 from periphondemand.bin.core.library import Library
 
-from periphondemand.bin.code.intercon import Intercon
 from periphondemand.bin.code.vhdl.topvhdl import TopVHDL
 
-from periphondemand.bin.toolchain.synthesis import Synthesis
-from periphondemand.bin.toolchain.simulation import Simulation
-from periphondemand.bin.toolchain.driver import Driver
-
-settings = Settings()
-display = Display()
+SETTINGS = Settings()
+DISPLAY = Display()
 
 
 class ProjectCli(BaseCli):
@@ -73,11 +56,11 @@ class ProjectCli(BaseCli):
     """
     def __init__(self, parent=None):
         BaseCli.__init__(self, parent)
-        settings.active_project = Project("void", void=1)
-        if settings.active_project is None:
-            settings.active_project = Project("", void=1)
-        if settings.active_library is None:
-            settings.active_library = Library()
+        SETTINGS.active_project = Project("void", void=1)
+        if SETTINGS.active_project is None:
+            SETTINGS.active_project = Project("", void=1)
+        if SETTINGS.active_library is None:
+            SETTINGS.active_library = Library()
 
     def do_synthesis(self, arg):
         """\
@@ -171,13 +154,13 @@ create new project
             return 0
         else:
             try:
-                settings.active_project = Project(dirname, void=0)
+                SETTINGS.active_project = Project(dirname, void=0)
             except Error, error:
                 print(str(error))
                 return
 
-        self.setPrompt("POD", settings.active_project.getName())
-        print("Project " + settings.active_project.getName() + " created")
+        self.setPrompt("POD", SETTINGS.active_project.getName())
+        print("Project " + SETTINGS.active_project.getName() + " created")
 
     def complete_load(self, text, line, begidx, endidx):
         """ complete load command with files under directory """
@@ -210,15 +193,15 @@ Load a project
             print Error("File doesn't exists")
             return
         try:
-                settings.active_project = Project(line)
+                SETTINGS.active_project = Project(line)
         except Error, error:
             print(str(error))
             return
         except IOError, error:
             print(str(error))
             return
-        self.setPrompt("POD:" + settings.active_project.getName())
-        print(str(display))
+        self.setPrompt("POD:" + SETTINGS.active_project.getName())
+        print(str(DISPLAY))
 
     def complete_setspeedgrade(self, text, line, begidx, endidx):
         """ TOOD """
@@ -229,16 +212,16 @@ Load a project
             self.isProjectOpen()
             self.checkargs(line, "<speedgrade>")
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         try:
-            settings.active_project.setFpgaSpeedGrade(line)
+            SETTINGS.active_project.setFpgaSpeedGrade(line)
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
-        print(str(display))
+        print(str(DISPLAY))
 
     def complete_getspeedgrade(self, text, line, begidx, endidx):
         """ TODO """
@@ -250,9 +233,9 @@ Usage : getspeedgrade
 Print FPGA speed grade information
         """
         try:
-            speedgrade = settings.active_project.getFpgaSpeedGrade()
+            speedgrade = SETTINGS.active_project.getFpgaSpeedGrade()
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         print "FPGA speed grade : " + speedgrade
@@ -266,16 +249,16 @@ Print FPGA speed grade information
             self.isProjectOpen()
             self.checkargs(line, "<fpgatype>")
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         try:
-            platform = settings.active_project.setFpgaDevice(line)
+            platform = SETTINGS.active_project.setFpgaDevice(line)
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
-        print(str(display))
+        print(str(DISPLAY))
 
     def complete_getfpgadevice(self, text, line, begidx, endidx):
         """ TODO """
@@ -290,16 +273,16 @@ Print FPGA speed grade information
             self.isProjectOpen()
             self.checkargs(line, "<vhdlversion>")
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         try:
-            settings.active_project.setVhdlVersion(line)
+            SETTINGS.active_project.setVhdlVersion(line)
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
-        print display
+        print DISPLAY
 
     def do_getfpgadevice(self, line=None):
         """\
@@ -307,9 +290,9 @@ Usage : getfpgadevice
 Print FPGA device information
         """
         try:
-            fpgadevice = settings.active_project.getFpgaDevice()
+            fpgadevice = SETTINGS.active_project.getFpgaDevice()
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         print("FPGA model : " + fpgadevice)
@@ -323,16 +306,16 @@ Print FPGA device information
             self.isProjectOpen()
             self.checkargs(line, "<componentslibpath>")
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         try:
-            settings.active_project.addComponentLib(line)
+            SETTINGS.active_project.addComponentLib(line)
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
-        print(str(display))
+        print(str(DISPLAY))
 
     def complete_addplatformslib(self, text, line, begidx, endidx):
         """ TOOD """
@@ -343,16 +326,16 @@ Print FPGA device information
             self.isProjectOpen()
             self.checkargs(line, "<platformslibpath>")
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         try:
-            settings.active_project.addPlatformsLib(line)
+            SETTINGS.active_project.addPlatformsLib(line)
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
-        print(str(display))
+        print(str(DISPLAY))
 
     def complete_addinstance(self, text, line, begidx, endidx):
         componentlist = []
@@ -379,7 +362,7 @@ Add component in project
                     "<libraryname>.<componentname>.[componentversion] " +
                     "[newinstancename]")
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         arg = line.split(' ')
@@ -396,30 +379,30 @@ Add component in project
             if (instancename is not None):
                 sy.check_name(instancename)
             if (instancename is None) and (componentversion is None):
-                settings.active_project.addInstance(
+                SETTINGS.active_project.addInstance(
                         componentname=subarg[1],
                         libraryname=subarg[0])
             elif (instancename is not None) and (componentversion is None):
-                settings.active_project.addInstance(
+                SETTINGS.active_project.addInstance(
                         componentname=subarg[1],
                         libraryname=subarg[0],
                         instancename=instancename)
             elif (instancename is None) and (componentversion is not None):
-                settings.active_project.addInstance(
+                SETTINGS.active_project.addInstance(
                         componentname=subarg[1],
                         libraryname=subarg[0],
                         componentversion=componentversion)
             else:
-                settings.active_project.addInstance(
+                SETTINGS.active_project.addInstance(
                         componentname=subarg[1],
                         libraryname=subarg[0],
                         componentversion=componentversion,
                         instancename=instancename)
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
-        print display
+        print DISPLAY
 
     def complete_listcomponents(self, text, line, begidx, endidx):
         componentlist = []
@@ -435,16 +418,16 @@ Usage : listcomponents [libraryname]
 List components available in the library
         """
         if line.strip() == "":
-            return self.columnize(settings.active_library.listLibraries())
+            return self.columnize(SETTINGS.active_library.listLibraries())
         else:
             return self.columnize(
-                    settings.active_library.listComponents(line))
+                    SETTINGS.active_library.listComponents(line))
 
     def listinstances(self):
         try:
             self.isProjectOpen()
             return [comp.getInstanceName()
-                    for comp in settings.active_project.getInstancesList()]
+                    for comp in SETTINGS.active_project.getInstancesList()]
         except Error, error:
             print(str(error))
             return
@@ -483,13 +466,13 @@ Select the platform to use
             return
         try:
             args = line.strip().split(".")
-            settings.active_project.selectPlatform(args[1], args[0])
-            settings.active_project.saveProject()
+            SETTINGS.active_project.selectPlatform(args[1], args[0])
+            SETTINGS.active_project.saveProject()
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
-        print display
+        print DISPLAY
 
     def do_listplatforms(self, line):
         """\
@@ -503,7 +486,7 @@ List platform available
             return
         try:
             return self.columnize(
-                    settings.active_project.listAvailablePlatforms())
+                    SETTINGS.active_project.listAvailablePlatforms())
         except AttributeError, error:
             print(str(error))
 
@@ -526,12 +509,12 @@ List instance interface
             self.isProjectOpen()
             interfacelist = [interface.getName()
               for interface in
-                 settings.active_project.getInstance(line).getInterfacesList()]
+                 SETTINGS.active_project.getInstance(line).getInterfacesList()]
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
-        print(str(display))
+        print(str(DISPLAY))
         return self.columnize(interfacelist)
 
     def complete_connectpin(self, text, line, begidx, endidx):
@@ -558,7 +541,7 @@ Connect pin between instances
                     "<instancename>.<interfacename>.<portname>.[pinnum] " +
                     "<instancename>.<interfacename>.<portname>.[pinnum]")
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         arg = line.split(' ')
@@ -569,19 +552,19 @@ Connect pin between instances
         if len(dest) == 3:
             dest.append(0)
         try:
-            settings.active_project.connectPin_cmd(
-                    settings.active_project.getInstance(
+            SETTINGS.active_project.connectPin_cmd(
+                    SETTINGS.active_project.getInstance(
                         source[0]).getInterface(
                             source[1]).getPort(
                                 source[2]).getPin(source[3]),
-                    settings.active_project.getInstance(
+                    SETTINGS.active_project.getInstance(
                         dest[0]).getInterface(
                             dest[1]).getPort(dest[2]).getPin(dest[3]))
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
-        print display
+        print DISPLAY
 
     def complete_setunconnectedvalue(self, text, line, begidx, endidx):
         portlist = []
@@ -602,7 +585,7 @@ Force input port unconnected value
             self.checkargs(line,
                     "<instancename>.<interfacename>.<portname> <uvalue>")
         except Exception, error:
-            print display
+            print DISPLAY
             print(str(e))
             return
         arg = line.split(' ')
@@ -616,13 +599,13 @@ Force input port unconnected value
             print("source arguments error")
             return
         try:
-            settings.active_project.setUnconnectedValue(source[0], source[1],
+            SETTINGS.active_project.setUnconnectedValue(source[0], source[1],
                                                         source[2], uvalue)
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
-        print display
+        print DISPLAY
 
     def complete_connectport(self, text, line, begidx, endidx):
         portlist = []
@@ -647,7 +630,7 @@ Connect all pins of two same size ports.
                     "<instancename>.<interfacename>.<portname> " +
                     "<instancename>.<interfacename>.<portname>")
         except Exception, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
         arg = line.split(' ')
@@ -661,17 +644,17 @@ Connect all pins of two same size ports.
             print("Argument error")
             return
         try:
-            settings.active_project.connectPort(source[0],
+            SETTINGS.active_project.connectPort(source[0],
                                                 source[1],
                                                 source[2],
                                                 dest[0],
                                                 dest[1],
                                                 dest[2])
         except Error, e:
-            print display
+            print DISPLAY
             print e
             return
-        print display
+        print DISPLAY
 
     def complete_connectinterface(self, text, line, begidx, endix):
         buslist = []
@@ -696,7 +679,7 @@ Connect interface between two components
             self.checkargs(line,
                "<instancename>.<interfacename> <instancename>.<interfacename>")
         except Exception, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
         arg = line.split(' ')
@@ -706,17 +689,17 @@ Connect interface between two components
             print("Argument error")
             return
         try:
-            settings.active_project.connectInterface(source[0],
+            SETTINGS.active_project.connectInterface(source[0],
                                                      source[1],
                                                      dest[0],
                                                      dest[1])
         except Error, error:
             print("<<interface " + source[1] +
                   " and interface " + dest[1] + " are not compatible>>")
-            print display
+            print DISPLAY
             print(str(error))
             return
-        print display
+        print DISPLAY
 
     def complete_delbusconnection(self, text, line, begidx, endidx):
         connectlist = []
@@ -743,7 +726,7 @@ Suppress a pin connection
                     "<masterinstancename>.<masterinterfacename> " +
                     "<slaveinstancename>.<slaveinterfacename>")
         except Exception, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
         arg = line.split(' ')
@@ -753,15 +736,15 @@ Suppress a pin connection
             print("Argument error")
             return
         try:
-            settings.active_project.deleteBus(source[0],
+            SETTINGS.active_project.deleteBus(source[0],
                                               dest[0],
                                               source[1],
                                               dest[1])
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
-        print display
+        print DISPLAY
 
     def complete_connectbus(self, text, line, begidx, endidx):
         buslist = []
@@ -787,7 +770,7 @@ Connect slave to master bus
                 "<masterinstancename>.<masterinterfacename> " +
                 "<slaveinstancename>.<slaveinterfacename>")
         except Exception, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
         arg = line.split(' ')
@@ -797,15 +780,15 @@ Connect slave to master bus
             print("Argument error")
             return
         try:
-            settings.active_project.connectBus(source[0],
+            SETTINGS.active_project.connectBus(source[0],
                                                source[1],
                                                dest[0],
                                                dest[1])
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
-        print display
+        print DISPLAY
 
     def do_autoconnectbus(self, line):
         """\
@@ -814,12 +797,12 @@ Autoconnect bus if only one master in project
         """
         try:
             self.isProjectOpen()
-            settings.active_project.autoConnectBus()
+            SETTINGS.active_project.autoConnectBus()
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
-        print display
+        print DISPLAY
 
     def complete_delpinconnection(self, text, line, begidx, endidx):
         connectlist = []
@@ -847,7 +830,7 @@ Suppress a pin connection
                     "<instancename>.<interfacename>.<portname>.[pinnum] " +
                     "[instancename].[interfacename].[portname].[pinnum]")
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
         # get arguments
@@ -867,16 +850,16 @@ Suppress a pin connection
         if len(dest) == 3:
             dest.append(None)
         try:
-            settings.active_project.deletePinConnection_cmd(
+            SETTINGS.active_project.deletePinConnection_cmd(
                     source[0], source[1],
                     source[2], source[3],
                     dest[0], dest[1],
                     dest[2], dest[3])
         except Error, e:
-            print display
+            print DISPLAY
             print e
             return
-        print display
+        print DISPLAY
         print "Connection deleted"
 
     def complete_delinstance(self, text, line, begidx, endidx):
@@ -896,16 +879,16 @@ Suppress a component from project
             self.isProjectOpen()
             self.checkargs(line, "<instancename>")
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
         try:
-            settings.active_project.delProjectInstance(line)
+            SETTINGS.active_project.delProjectInstance(line)
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
-        print display
+        print DISPLAY
 
     def do_check(self, line):
         """\
@@ -914,11 +897,11 @@ Check the project before code generation
         """
         try:
             self.isProjectOpen()
-            settings.active_project.check()
+            SETTINGS.active_project.check()
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
-        print display
+        print DISPLAY
 
     def complete_setaddr(self, text, line, begidx, endidx):
         addrlist = []
@@ -941,32 +924,32 @@ Set the base address of slave interface
             self.checkargs(line,
                     "<slaveinstancename>.<slaveinterfacename> <addressinhexa>")
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
         arg = line.split(' ')
         names = arg[0].split('.')
         if len(names) < 2:
             masterinterface = \
-                    settings.active_project.getInstance(
+                    SETTINGS.active_project.getInstance(
                             names[0]).getSlaveInterfaceList()
             if len(masterinterface) != 1:
-                print display
+                print DISPLAY
                 print("Error, need a slave interface name")
                 return
             names.append(masterinterface[0].getName())
 
         try:
             interfaceslave = \
-                    settings.active_project.getInstance(
+                    SETTINGS.active_project.getInstance(
                             names[0]).getInterface(names[1])
             interfacemaster = interfaceslave.getMaster()
             interfacemaster.allocMem.setAddressSlave(interfaceslave, arg[1])
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
-        print display
+        print DISPLAY
         print("Base address " + arg[1] + " set")
 
     def do_listmasters(self, line):
@@ -977,12 +960,12 @@ List master interface
         try:
             self.isProjectOpen()
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
-        for master in settings.active_project.getInterfacesMaster():
+        for master in SETTINGS.active_project.getInterfacesMaster():
             print(master.parent.getInstanceName() + "." + master.getName())
-        print display
+        print DISPLAY
 
     def complete_getmapping(self, text, line, begidx, endidx):
         mappinglist = []
@@ -1003,20 +986,20 @@ Return mapping for a master interface
             self.isProjectOpen()
             self.checkargs(line, "<masterinstancename>.<masterinterfacename>")
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
         arg = line.split(' ')
         names = arg[0].split('.')
         try:
             masterinterface = \
-                    settings.active_project.getInstance(
+                    SETTINGS.active_project.getInstance(
                             names[0]).getInterface(names[1])
             print masterinterface.allocMem
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
-        print display
+        print DISPLAY
 
     def complete_printxml(self, text, line, begidx, endidx):
         printlist = []
@@ -1035,11 +1018,11 @@ Print instance in XML format
             self.isProjectOpen()
             self.checkargs(line, "<instancename>")
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
-        print settings.active_project.getInstance(line)
-        print display
+        print SETTINGS.active_project.getInstance(line)
+        print DISPLAY
 
     def complete_info(self, text, line, begidx, endidx):
         infolist = []
@@ -1057,9 +1040,9 @@ Print instance information
         try:
             self.isProjectOpen()
             self.checkargs(line, "<instancename>")
-            instance = settings.active_project.getInstance(line)
+            instance = SETTINGS.active_project.getInstance(line)
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
         print("Instance name :" + instance.getInstanceName())
@@ -1123,23 +1106,23 @@ Set generic parameter
             self.checkargs(line,
                            "<instancename>.<genericname> <genericvalue>")
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
         args = line.split(" ")
         names = args[0].split(".")
         try:
-            instance = settings.active_project.getInstance(names[0])
+            instance = SETTINGS.active_project.getInstance(names[0])
             generic = instance.getGeneric(names[1])
             if generic.isPublic() == "true":
                 generic.setValue(args[1])
             else:
                 raise Error("this generic can't be modified by user", 0)
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
-        print display
+        print DISPLAY
         print "Done"
 
     def do_description(self, line):
@@ -1147,8 +1130,8 @@ Set generic parameter
 Usage : description <some word for description>
 set the project description
         """
-        settings.active_project.setDescription(line)
-        print display
+        SETTINGS.active_project.setDescription(line)
+        print DISPLAY
         print("Description set : " + line)
         return
 
@@ -1160,11 +1143,11 @@ Close the project
         try:
             self.isProjectOpen()
         except Error, error:
-            print display
+            print DISPLAY
             print(str(error))
             return
-        settings.active_project = None
-        print display
+        SETTINGS.active_project = None
+        print DISPLAY
         print "Project closed"
 
     # Generate CODE
@@ -1195,11 +1178,11 @@ Generate intercon for master given in argument
             print "Arguments error"
             return
         try:
-            settings.active_project.generateIntercon(names[0], names[1])
+            SETTINGS.active_project.generateIntercon(names[0], names[1])
         except Error, error:
             print error
             return
-        print display
+        print DISPLAY
 
     def do_generatetop(self, line):
         """\
@@ -1208,15 +1191,15 @@ Generate top component
         """
         try:
             self.isProjectOpen()
-            settings.active_project.check()
-            top = TopVHDL(settings.active_project)
+            SETTINGS.active_project.check()
+            top = TopVHDL(SETTINGS.active_project)
             top.generate()
         except Error, error:
             print(str(error))
             return
-        print display
+        print DISPLAY
         print("Top generated with name : top_" +
-                settings.active_project.getName() + ".vhd")
+                SETTINGS.active_project.getName() + ".vhd")
 
     def do_report(self, line):
         """\
@@ -1225,19 +1208,19 @@ Generate a report of the project
         """
         try:
             self.isProjectOpen()
-            text = settings.active_project.generateReport()
+            text = SETTINGS.active_project.generateReport()
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
-        print display
+        print DISPLAY
         print "report : "
         print text
 
     def isProjectOpen(self):
         """ check if project is open, raise error if not
         """
-        if settings.active_project.isVoid():
+        if SETTINGS.active_project.isVoid():
             raise Error("No project open", 0)
 
     def do_listforce(self, line):
@@ -1246,12 +1229,12 @@ Usage : listforce
 List all force configured for this project
         """
         try:
-            for port in settings.active_project.getForcesList():
+            for port in SETTINGS.active_project.getForcesList():
                 print("port " + str(port.getName()) +
                       " is forced to " +
                       str(port.getForce()))
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
 
@@ -1273,7 +1256,7 @@ Set fpga pin state in 'gnd', 'vcc'. To unset use 'undef' value
             self.isProjectOpen()
             self.checkargs(line, "<forcename> <forcestate>")
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
 
@@ -1282,9 +1265,9 @@ Set fpga pin state in 'gnd', 'vcc'. To unset use 'undef' value
         state = arg[-1]
 
         try:
-            settings.active_project.setForce(portname, state)
+            SETTINGS.active_project.setForce(portname, state)
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
 
@@ -1297,9 +1280,9 @@ Set 1 if you want color output, 0 else
         value = arg[-1].strip()
 
         try:
-            settings.setColor(value)
+            SETTINGS.setColor(value)
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
 
@@ -1338,9 +1321,9 @@ Runs command(s) from a file.
                 return
         self.use_rawinput = False
         self.prompt = self.continuation_prompt = ''
-        settings.setScript(1)
+        SETTINGS.setScript(1)
         self.cmdloop()
-        settings.setScript(0)
+        SETTINGS.setScript(0)
         self.stdin.close()
         keepstate.restore()
         self.lastcmd = ''
@@ -1351,4 +1334,4 @@ Runs command(s) from a file.
 Usage : version
 Print the version of POD
         """
-        print "Peripherals On Demand version " + settings.version
+        print "Peripherals On Demand version " + SETTINGS.version
