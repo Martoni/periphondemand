@@ -146,13 +146,13 @@ class TopVHDL(TopGen):
         return out
 
     def architectureHead(self, entityname):
-        """
+        """ head of architecture
         """
         out = "architecture " + entityname + "_1 of " + entityname + " is\n"
         return out
 
     def architectureFoot(self, entityname):
-        """
+        """ architecture footer
         """
         out = "\nend architecture " + entityname + "_1;\n"
         return out
@@ -254,7 +254,6 @@ class TopVHDL(TopGen):
             if port.forceDefined():
                 continue
             portname = port.getName()
-            interfacename = port.getParent().getName()
             instancename = port.getParent().getParent().getInstanceName()
             out = out + "\n" + TAB + "signal " + instancename +\
                         "_" + portname + ": std_logic_vector(" +\
@@ -263,6 +262,7 @@ class TopVHDL(TopGen):
         return out
 
     def declareInstance(self):
+        """ Declaring instances """
         out = ""
         out = out + TAB + "-------------------------\n"
         out = out + TAB + "-- declare instances\n"
@@ -292,12 +292,14 @@ class TopVHDL(TopGen):
                     for port in interface.getPortsList():
                         out = out + TAB * 3 + port.getName() + " => "
                         if len(port.getPinsList()) != 0:
-                            if (port.getDir() == "inout") or (port.getDir() == "in"):
-                                out = out + \
+                            if (port.getDir() == "inout") or\
+                                    (port.getDir() == "in"):
+                                out = out +\
                                     sorted(
                                         [aport.getExtendedName()
-                                                for aport in port.getPortsWithSameConnection()]
-                                          )[0]
+                                            for aport in
+                                                port.getPortsWithSameConnection()]
+                                        )[0]
                                 out = out + ",\n"
                             else:
                                 out = out + port.getExtendedName() + ",\n"
@@ -323,6 +325,7 @@ class TopVHDL(TopGen):
         return out
 
     def connectForces(self, portlist):
+        """ Connecting Forces """
         out = "\n"
         out = out + TAB + "-------------------\n"
         out = out + TAB + "--  Set forces   --\n"
@@ -349,7 +352,6 @@ class TopVHDL(TopGen):
         for port in incomplete_external_ports_list:
             if not port.forceDefined():
                 portname = port.getName()
-                interfacename = port.getParent().getName()
                 instancename = port.getParent().getParent().getInstanceName()
                 out = out + "\n" + TAB +\
                         "-- connect incomplete external port " +\
@@ -437,4 +439,5 @@ class TopVHDL(TopGen):
         return out
 
     def architectureBegin(self):
+        """ Write architecture begin """
         return "\nbegin\n"
