@@ -30,21 +30,18 @@
 #-----------------------------------------------------------------------------
 """ Generating code for top component """
 
-import periphondemand.bin.define
 from periphondemand.bin.define import *
 from periphondemand.bin.code.topgen import TopGen
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.display import Display
 from periphondemand.bin.utils.error import Error
-from periphondemand.bin.utils import wrappersystem as sy
 
-import time
 import datetime
 
 TAB = "    "
 
-settings = Settings()
-display = Display()
+SETTINGS = Settings()
+DISPLAY = Display()
 
 
 class TopVHDL(TopGen):
@@ -54,16 +51,17 @@ class TopVHDL(TopGen):
     def __init__(self, project):
         TopGen.__init__(self, project)
 
-    def header(self):
+    @classmethod
+    def header(cls):
         """ return vhdl header
         """
-        header = open(settings.path + TEMPLATESPATH + "/" + HEADERTPL,
-                 "r").read()
-        header = header.replace("$tpl:author$", settings.author)
+        header = open(SETTINGS.path + TEMPLATESPATH +
+                      "/" + HEADERTPL, "r").read()
+        header = header.replace("$tpl:author$", SETTINGS.author)
         header = header.replace("$tpl:date$", str(datetime.date.today()))
         header = header.replace("$tpl:filename$",
                                 "Top_" +
-                                settings.active_project.getName() + ".vhd")
+                                SETTINGS.active_project.getName() + ".vhd")
         header = header.replace(
                     "$tpl:abstract$",
                     settings.active_project.getDescription())
@@ -87,7 +85,8 @@ class TopVHDL(TopGen):
                                   "-" + interfacename + "\n"
                 if port.isCompletelyConnected():
                     if (port.getDir() == "in") or (port.getDir() == "inout"):
-                        same_connections_ports = port.getPortsWithSameConnection()
+                        same_connections_ports =\
+                            port.getPortsWithSameConnection()
                         if same_connections_ports == []:
                             raise Error(str(port.getExtendedName()) +
                                         " is left unconnected")
@@ -134,7 +133,8 @@ class TopVHDL(TopGen):
                 # port not completely connected
                 else:
                     for pin in port.getPinsList():
-                        if pin.isConnectedToInstance(self.project.getPlatform()):
+                        if pin.isConnectedToInstance(
+                                self.project.getPlatform()):
                             out = out + TAB * 2 + \
                                 instancename + "_" + portname + "_pin" +\
                                 str(pin.getNum()) + " : " +\
@@ -145,13 +145,15 @@ class TopVHDL(TopGen):
         out = out + "\n" + TAB + ");\nend entity " + entityname + ";\n\n"
         return out
 
-    def architectureHead(self, entityname):
+    @classmethod
+    def architectureHead(cls, entityname):
         """ head of architecture
         """
         out = "architecture " + entityname + "_1 of " + entityname + " is\n"
         return out
 
-    def architectureFoot(self, entityname):
+    @classmethod
+    def architectureFoot(cls, entityname):
         """ architecture footer
         """
         out = "\nend architecture " + entityname + "_1;\n"
@@ -323,8 +325,8 @@ class TopVHDL(TopGen):
                 out = out + TAB * 3 + ");\n"
         out = out + "\n"
         return out
-
-    def connectForces(self, portlist):
+    @classmethod
+    def connectForces(cls, portlist):
         """ Connecting Forces """
         out = "\n"
         out = out + TAB + "-------------------\n"
@@ -434,10 +436,11 @@ class TopVHDL(TopGen):
                                       port.getName() + " is void." +\
                                       " It will be set to '" +\
                                       str(port.getUnconnectedValue()) + "'"
-                            display.msg(message, 2)
+                            DISPLAY.msg(message, 2)
 
         return out
 
-    def architectureBegin(self):
+    @classmethod
+    def architectureBegin(cls):
         """ Write architecture begin """
         return "\nbegin\n"
