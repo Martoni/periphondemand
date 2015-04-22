@@ -42,8 +42,8 @@ from periphondemand.bin.toolchain.simulation import Simulation
 from periphondemand.bin.toolchain.synthesis import Synthesis
 from periphondemand.bin.toolchain.driver import Driver
 
-settings = Settings()
-display = Display()
+SETTINGS = Settings()
+DISPLAY = Display()
 
 
 class Project(WrapperXml):
@@ -76,13 +76,13 @@ class Project(WrapperXml):
         if not self.isVoid():
             if projectpathname.find(XMLEXT) >= 0:
                 try:
-                    settings.projectpath =\
+                    SETTINGS.projectpath =\
                         os.path.abspath(os.path.dirname(projectpathname))
                 except IOError, error:
                     raise Error(str(error), 0)
             else:
-                settings.projectpath = projectpathname
-            settings.author = ""
+                SETTINGS.projectpath = projectpathname
+            SETTINGS.author = ""
             name = os.path.basename(projectpathname)
             if sy.fileExist(projectpathname):
                 self.loadProject(projectpathname)
@@ -90,21 +90,22 @@ class Project(WrapperXml):
                 self.createProject(name)
             self.setDescription(description)
 
-            settings.active_project = self
+            SETTINGS.active_project = self
 
     def createProject(self, name):
-        if sy.dirExist(settings.projectpath):
+        """ Create a project """
+        if sy.dirExist(SETTINGS.projectpath):
             raise Error("Can't create project, directory " + name +
                         " allready exists", 0)
-        sy.makeDirectory(settings.projectpath)
+        sy.makeDirectory(SETTINGS.projectpath)
 
-        sy.makeDirectory(settings.projectpath + BINARYPROJECTPATH)
-        sy.makeDirectory(settings.projectpath + COMPONENTSPATH)
-        sy.makeDirectory(settings.projectpath + OBJSPATH)
+        sy.makeDirectory(SETTINGS.projectpath + BINARYPROJECTPATH)
+        sy.makeDirectory(SETTINGS.projectpath + COMPONENTSPATH)
+        sy.makeDirectory(SETTINGS.projectpath + OBJSPATH)
 
-        sy.makeDirectory(settings.projectpath + SIMULATIONPATH)
-        sy.makeDirectory(settings.projectpath + SYNTHESISPATH)
-        sy.makeDirectory(settings.projectpath + DRIVERSPATH)
+        sy.makeDirectory(SETTINGS.projectpath + SIMULATIONPATH)
+        sy.makeDirectory(SETTINGS.projectpath + SYNTHESISPATH)
+        sy.makeDirectory(SETTINGS.projectpath + DRIVERSPATH)
 
         self.createXml("project")
         self.setName(name)
@@ -148,11 +149,11 @@ class Project(WrapperXml):
         try:
             self.synthesis = Synthesis(self)
         except Error, error:
-            display.msg(str(error))
+            DISPLAY.msg(str(error))
         try:
             self.simulation = Simulation(self)
         except Error, error:
-            display.msg(str(error))
+            DISPLAY.msg(str(error))
 
         # Set bus master-slave
         for masterinterface in self.getInterfacesMaster():
@@ -169,71 +170,82 @@ class Project(WrapperXml):
         self.void = 0
 
     def setSynthesisToolChain(self, toolchainname):
+        """ Set the synthesis toolchain """
         if toolchainname not in self.getSynthesisToolChainList():
             raise Error("No toolchain named " + toolchainname + " in POD")
-        sy.copyFile(settings.path + TOOLCHAINPATH + SYNTHESISPATH +
+        sy.copyFile(SETTINGS.path + TOOLCHAINPATH + SYNTHESISPATH +
                     "/" + toolchainname + "/" + toolchainname + XMLEXT,
-                    settings.projectpath + SYNTHESISPATH + "/")
-        sy.renameFile(settings.projectpath + SYNTHESISPATH +
+                    SETTINGS.projectpath + SYNTHESISPATH + "/")
+        sy.renameFile(SETTINGS.projectpath + SYNTHESISPATH +
                       "/" + toolchainname + XMLEXT,
-                      settings.projectpath + SYNTHESISPATH +
+                      SETTINGS.projectpath + SYNTHESISPATH +
                       "/synthesis" + XMLEXT)
         self.synthesis = Synthesis(self)
         self.saveProject()
 
     def getSynthesisToolChain(self):
+        """ Get synthesis toolchain """
         return self.synthesis
 
     def getFpgaSpeedGrade(self):
+        """ Get FPGA speedgrade """
         return self.getPlatform().getSpeed()
 
     def setFpgaSpeedGrade(self, speed):
+        """ Set FPGA speedgrade """
         self.getPlatform().setSpeed(speed)
         self.saveProject()
 
     def getFpgaDevice(self):
+        """ get fpgadevice """
         return self.getPlatform().getDevice()
 
     def setFpgaDevice(self, device):
+        """ set fpga device """
         self.getPlatform().setDevice(device)
         self.saveProject()
 
     def setSimulationToolChain(self, toolchainname):
+        """ Set simulation toolchain """
         if toolchainname not in self.getSimulationToolChainList():
             raise Error("No toolchain named " + toolchainname + " in POD")
-        sy.copyFile(settings.path + TOOLCHAINPATH + SIMULATIONPATH +
+        sy.copyFile(SETTINGS.path + TOOLCHAINPATH + SIMULATIONPATH +
                     "/" + toolchainname + "/" + toolchainname + XMLEXT,
-                    settings.projectpath + SIMULATIONPATH + "/")
-        sy.renameFile(settings.projectpath + SIMULATIONPATH +
+                    SETTINGS.projectpath + SIMULATIONPATH + "/")
+        sy.renameFile(SETTINGS.projectpath + SIMULATIONPATH +
                       "/" + toolchainname + XMLEXT,
-                      settings.projectpath + SIMULATIONPATH +
+                      SETTINGS.projectpath + SIMULATIONPATH +
                       "/simulation" + XMLEXT)
         self.simulation = Simulation(self)
         self.saveProject()
 
     def getSimulationToolChain(self):
+        """ get simulation toolchain """
         return self.simulation
 
     def setDriverToolChain(self, toolchainname):
+        """ set driver toolchain """
         if toolchainname not in self.getDriverToolChainList():
             raise Error("No toolchain named " + toolchainname + " in POD")
-        sy.copyFile(settings.path + TOOLCHAINPATH + DRIVERSPATH +
+        sy.copyFile(SETTINGS.path + TOOLCHAINPATH + DRIVERSPATH +
                     "/" + toolchainname + "/" + toolchainname + XMLEXT,
-                    settings.projectpath + DRIVERSPATH + "/")
-        sy.renameFile(settings.projectpath + DRIVERSPATH +
+                    SETTINGS.projectpath + DRIVERSPATH + "/")
+        sy.renameFile(SETTINGS.projectpath + DRIVERSPATH +
                       "/" + toolchainname + XMLEXT,
-                      settings.projectpath + DRIVERSPATH +
+                      SETTINGS.projectpath + DRIVERSPATH +
                       "/drivers" + XMLEXT)
         self.driver = Driver(self)
         self.saveProject()
 
     def getDriverToolChain(self):
+        """ get driver toolchain """
         try:
             return self.driver
         except:
             return None
 
     def setLanguage(self, language):
+        """ set language (VHDL, Verilog, ...)"""
         self.setAttribute("name", language, "language")
         self.saveProject()
 
@@ -248,6 +260,7 @@ class Project(WrapperXml):
         self.saveProject()
 
     def setForce(self, portname, state):
+        """ May the force be with you """
         platform = self.getPlatform()
         interfaces_list = platform.getInterfacesList()
         if len(interfaces_list) != 1:
@@ -365,7 +378,7 @@ class Project(WrapperXml):
             self.addSubNode(nodename="components",
                             subnodename="component",
                             attributedict=attrib)
-        display.msg("Component " + comp.getName() +
+        DISPLAY.msg("Component " + comp.getName() +
                     " added as " + instancename)
         self.saveProject()
 
@@ -484,12 +497,12 @@ class Project(WrapperXml):
             print error
 
         if platformlibname == "standard":
-            platformdir = settings.path + PLATFORMPATH +\
+            platformdir = SETTINGS.path + PLATFORMPATH +\
                 "/" + platformname + "/"
         else:
             # if not standard platform, try personnal platform
             try:
-                platformdir = settings.getPlatformLibPath(platformlibname) +\
+                platformdir = SETTINGS.getPlatformLibPath(platformlibname) +\
                     "/" + platformname + "/"
             except TypeError:
                 # if not personnal platform, try project specific
@@ -505,7 +518,7 @@ class Project(WrapperXml):
 
         if sy.fileExist(platformdir + SIMULATIONPATH):
             sy.copyAllFile(platformdir + SIMULATIONPATH,
-                           settings.projectpath + SIMULATIONPATH)
+                           SETTINGS.projectpath + SIMULATIONPATH)
         self.addInstance(component=platform)
         self.addNode(node=platform)
         # Adding platform default components
@@ -530,7 +543,7 @@ class Project(WrapperXml):
     def listAvailablePlatforms(self):
         """ List all supported platforms
         """
-        platformlist = sy.listDirectory(settings.path + PLATFORMPATH)
+        platformlist = sy.listDirectory(SETTINGS.path + PLATFORMPATH)
         return platformlist
 
     def delProjectInstance(self, instancename):
@@ -554,17 +567,18 @@ class Project(WrapperXml):
                         "name",
                         instance.getInstanceName())
         instance.delInstance()
-        display.msg("Component " + instancename + " deleted")
+        DISPLAY.msg("Component " + instancename + " deleted")
         self.saveProject()
 
     def saveProject(self):
+        """ Save the project """
         for comp in self.instanceslist:
             comp.saveInstance()
         if self.synthesis is not None:
             self.synthesis.save()
         if self.simulation is not None:
             self.simulation.save()
-        self.saveXml(settings.projectpath + "/" + self.getName() + XMLEXT)
+        self.saveXml(SETTINGS.projectpath + "/" + self.getName() + XMLEXT)
 
     def connectPin_cmd(self, pin_source, pin_dest):
         """ connect pin between two instances
@@ -731,9 +745,9 @@ class Project(WrapperXml):
                                           interfaceslave.getName())
                     except Error, error:
                         error.setLevel(2)
-                        display.msg(str(error))
+                        DISPLAY.msg(str(error))
 
-        display.msg("Bus connected")
+        DISPLAY.msg("Bus connected")
         self.saveProject()
 
     def check(self):
@@ -766,10 +780,10 @@ class Project(WrapperXml):
                         listslave.remove(slave2)
 
         for slave in listslave:
-            display.msg(slave.getParent().getInstanceName() +
+            DISPLAY.msg(slave.getParent().getInstanceName() +
                         " is not connected on a master bus", 1)
         if len(listslave) != 0:
-            display.msg("Some slave bus are not connected", 1)
+            DISPLAY.msg("Some slave bus are not connected", 1)
 
         ##########################################
         # Check bus address
@@ -782,7 +796,7 @@ class Project(WrapperXml):
             for slave in master.getSlavesList():
                 for register in slave.getInterface().getRegisterMap():
                     if register["offset"] in dict_reg:
-                        display.msg(
+                        DISPLAY.msg(
                             "Register conflict at " +
                             hex(register["offset"]) + " between " +
                             str(slave.getInstanceName()) + "." +
@@ -797,37 +811,37 @@ class Project(WrapperXml):
                     else:
                         dict_reg[register["offset"]] =\
                             (slave.getInstanceName(), register["name"])
-            display.msg("")
-            display.msg("Mapping for interface " + master.getName() + ":")
-            display.msg("Address  | instance.interface             |" +
+            DISPLAY.msg("")
+            DISPLAY.msg("Mapping for interface " + master.getName() + ":")
+            DISPLAY.msg("Address  | instance.interface             |" +
                         " size        ")
-            display.msg("-----------------------------" +
+            DISPLAY.msg("-----------------------------" +
                         "----------------------------")
             for register in master.allocMem.getMapping():
-                display.msg("%8s" % register[0] + " | " +
+                DISPLAY.msg("%8s" % register[0] + " | " +
                             "%30s" % register[1] +
                             " | " + "%10s" % register[2])
-            display.msg("----------------------------" +
+            DISPLAY.msg("----------------------------" +
                         "-----------------------------")
 
     def getSimulationToolChainList(self):
         """ list all toolchain availables
         """
-        filelist = sy.listDirectory(settings.path +
+        filelist = sy.listDirectory(SETTINGS.path +
                                     TOOLCHAINPATH + SIMULATIONPATH)
         return filelist
 
     def getSynthesisToolChainList(self):
         """ list all toolchains availables
         """
-        filelist = sy.listDirectory(settings.path +
+        filelist = sy.listDirectory(SETTINGS.path +
                                     TOOLCHAINPATH + SYNTHESISPATH)
         return filelist
 
     def getDriverToolChainList(self):
         """ list all toolchains availables
         """
-        filelist = sy.listDirectory(settings.path +
+        filelist = sy.listDirectory(SETTINGS.path +
                                     TOOLCHAINPATH + DRIVERSPATH)
         return filelist
 
@@ -863,7 +877,7 @@ class Project(WrapperXml):
         """ generate a project report """
         TAB = "    "
         if filename is None:
-            report_file = open(settings.projectpath +
+            report_file = open(SETTINGS.projectpath +
                                "/" + self.getName() +
                                "_report.txt", "w")
         else:
