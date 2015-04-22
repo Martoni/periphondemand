@@ -76,10 +76,10 @@ select toolchain used for simulation
 
         if line.strip() == "":
             if len(settings.active_project.getSimulationToolChainList()) == 1:
-                settings.active_project.setSimulationToolChain(
-                    settings.active_project.getSimulationToolChainList()[0])
+                settings.active_project.simulation_toolchain =\
+                    settings.active_project.getSimulationToolChainList()[0]
             else:
-                if settings.active_project.getSimulationToolChain() is None:
+                if settings.active_project.simulation_toolchain is None:
                     print "Choose a toolchain\n"
                     for toolchain in \
                           settings.active_project.getSimulationToolChainList():
@@ -107,7 +107,7 @@ Make projects files for simulation (makefile and testbench sources)
             print Error("Simulation toolchain must be selected before")
             return
 
-        if settings.active_project.getSimulationToolChain() is None:
+        if settings.active_project.simulation_toolchain is None:
             print Error("Choose a toolchain before", 0)
             for toolchain in \
                     settings.active_project.getSimulationToolChainList():

@@ -219,7 +219,7 @@ Setting speedgrade of FPGA
             print(str(error))
             return
         try:
-            SETTINGS.active_project.setFpgaSpeedGrade(line)
+            SETTINGS.active_project.fpga_speed_grade = line
         except Error, error:
             print(str(DISPLAY))
             print(str(error))
@@ -237,7 +237,7 @@ Usage : getspeedgrade
 Print FPGA speed grade information
         """
         try:
-            speedgrade = SETTINGS.active_project.getFpgaSpeedGrade()
+            speedgrade = SETTINGS.active_project.fpga_speed_grade
         except Error, error:
             print(str(DISPLAY))
             print(str(error))
@@ -261,7 +261,7 @@ Setting FPGA device
             print(str(error))
             return
         try:
-            SETTINGS.active_project.setFpgaDevice(line)
+            SETTINGS.active_project.fpga_device = line
         except Error, error:
             print(str(DISPLAY))
             print(str(error))
@@ -302,7 +302,7 @@ Usage : getfpgadevice
 Print FPGA device information
         """
         try:
-            fpgadevice = SETTINGS.active_project.getFpgaDevice()
+            fpgadevice = SETTINGS.active_project.fpga_device
         except Error, error:
             print(str(DISPLAY))
             print(str(error))

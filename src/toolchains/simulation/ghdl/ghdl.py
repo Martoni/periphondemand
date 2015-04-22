@@ -67,7 +67,9 @@ def include():
     for library in platform.getLibrariesList():
         for line in library.getDescription().split("\n"):
             include = include+"-- "+line+"\n"
-        include = include + "use "+settings.active_project.getSimulationToolChain().getLibrary()+"."+library.getFileName().replace(VHDLEXT,".all")+";\n"
+        include = include + "use " +\
+                  settings.active_project.simulation_toolchain.getLibrary() +\
+                  "." + library.getFileName().replace(VHDLEXT,".all") + ";\n"
     return include
 
 def entity():

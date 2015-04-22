@@ -85,14 +85,14 @@ class Project(WrapperXml):
             SETTINGS.author = ""
             name = os.path.basename(projectpathname)
             if sy.fileExist(projectpathname):
-                self.loadProject(projectpathname)
+                self.load_project(projectpathname)
             else:
-                self.createProject(name)
+                self.create_project(name)
             self.setDescription(description)
 
             SETTINGS.active_project = self
 
-    def createProject(self, name):
+    def create_project(self, name):
         """ Create a project """
         if sy.dirExist(SETTINGS.projectpath):
             raise Error("Can't create project, directory " + name +
@@ -113,7 +113,7 @@ class Project(WrapperXml):
         self.void = 0
         self.saveProject()
 
-    def loadProject(self, pathname):
+    def load_project(self, pathname):
         """ Load the  project
         """
         self.openXml(pathname)
@@ -169,7 +169,13 @@ class Project(WrapperXml):
                 nodename="bsp").getAttributeValue("directory")
         self.void = 0
 
-    def setSynthesisToolChain(self, toolchainname):
+    @property
+    def synthesis_toolchain(self):
+        """ Get synthesis toolchain """
+        return self.synthesis
+
+    @synthesis_toolchain.setter
+    def synthesis_toolchain(self, toolchainname):
         """ Set the synthesis toolchain """
         if toolchainname not in self.getSynthesisToolChainList():
             raise Error("No toolchain named " + toolchainname + " in POD")
@@ -183,29 +189,35 @@ class Project(WrapperXml):
         self.synthesis = Synthesis(self)
         self.saveProject()
 
-    def getSynthesisToolChain(self):
-        """ Get synthesis toolchain """
-        return self.synthesis
-
-    def getFpgaSpeedGrade(self):
+    @property
+    def fpga_speed_grade(self):
         """ Get FPGA speedgrade """
         return self.getPlatform().getSpeed()
 
-    def setFpgaSpeedGrade(self, speed):
+    @fpga_speed_grade.setter
+    def fpga_speed_grade(self, speed):
         """ Set FPGA speedgrade """
         self.getPlatform().setSpeed(speed)
         self.saveProject()
 
-    def getFpgaDevice(self):
+    @property
+    def fpga_device(self):
         """ get fpgadevice """
         return self.getPlatform().getDevice()
 
-    def setFpgaDevice(self, device):
+    @fpga_device.setter
+    def fpga_device(self, device):
         """ set fpga device """
         self.getPlatform().setDevice(device)
         self.saveProject()
 
-    def setSimulationToolChain(self, toolchainname):
+    @property
+    def simulation_toolchain(self):
+        """ get simulation toolchain """
+        return self.simulation
+
+    @simulation_toolchain.setter
+    def simulation_toolchain(self, toolchainname):
         """ Set simulation toolchain """
         if toolchainname not in self.getSimulationToolChainList():
             raise Error("No toolchain named " + toolchainname + " in POD")
@@ -219,10 +231,13 @@ class Project(WrapperXml):
         self.simulation = Simulation(self)
         self.saveProject()
 
-    def getSimulationToolChain(self):
-        """ get simulation toolchain """
-        return self.simulation
-
+    def getDriverToolChain(self):
+        """ get driver toolchain """
+        try:
+            return self.driver
+        except:
+            return None
+     
     def setDriverToolChain(self, toolchainname):
         """ set driver toolchain """
         if toolchainname not in self.getDriverToolChainList():
@@ -236,13 +251,6 @@ class Project(WrapperXml):
                       "/drivers" + XMLEXT)
         self.driver = Driver(self)
         self.saveProject()
-
-    def getDriverToolChain(self):
-        """ get driver toolchain """
-        try:
-            return self.driver
-        except:
-            return None
 
     def setLanguage(self, language):
         """ set language (VHDL, Verilog, ...)"""
