@@ -48,7 +48,7 @@ def XMLBeautifier(xml_data):
                     xml_ident += 4
     return xml_text
 
-class WrapperXml:
+class WrapperXml(object):
     """Simple class manage XML
         attributes:
             tree -- root tree xml component
