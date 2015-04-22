@@ -29,7 +29,6 @@ import os
 
 from periphondemand.bin.define import *
 
-from periphondemand.bin.utils import settings
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.display import Display
 
@@ -193,7 +192,7 @@ Load a project
             print Error("File doesn't exists")
             return
         try:
-                SETTINGS.active_project = Project(line)
+            SETTINGS.active_project = Project(line)
         except Error, error:
             print(str(error))
             return
@@ -208,6 +207,10 @@ Load a project
         pass
 
     def do_setspeedgrade(self, line):
+        """
+Usage : setspeedgrade <speedgrade>
+Setting speedgrade of FPGA
+        """
         try:
             self.isProjectOpen()
             self.checkargs(line, "<speedgrade>")
@@ -227,7 +230,8 @@ Load a project
         """ TODO """
         pass
 
-    def do_getspeedgrade(self, line=None):
+    @classmethod
+    def do_getspeedgrade(cls):
         """\
 Usage : getspeedgrade
 Print FPGA speed grade information
@@ -245,6 +249,10 @@ Print FPGA speed grade information
         pass
 
     def do_setfpgadevice(self, line):
+        """\
+Usage : setfpgadevice
+Setting FPGA device
+        """
         try:
             self.isProjectOpen()
             self.checkargs(line, "<fpgatype>")
@@ -253,7 +261,7 @@ Print FPGA speed grade information
             print(str(error))
             return
         try:
-            platform = SETTINGS.active_project.setFpgaDevice(line)
+            SETTINGS.active_project.setFpgaDevice(line)
         except Error, error:
             print(str(DISPLAY))
             print(str(error))
@@ -269,6 +277,10 @@ Print FPGA speed grade information
         pass
 
     def do_selectvhdlversion(self, line):
+        """\
+Usage : selectvhdlversion
+Select VHDL version
+        """
         try:
             self.isProjectOpen()
             self.checkargs(line, "<vhdlversion>")
@@ -284,7 +296,7 @@ Print FPGA speed grade information
             return
         print DISPLAY
 
-    def do_getfpgadevice(self, line=None):
+    def do_getfpgadevice(self):
         """\
 Usage : getfpgadevice
 Print FPGA device information
@@ -302,6 +314,10 @@ Print FPGA device information
         pass
 
     def do_addcomponentslib(self, line):
+        """\
+Usage : addcomponentslib <componentslibpath>
+Adding components library
+        """
         try:
             self.isProjectOpen()
             self.checkargs(line, "<componentslibpath>")
@@ -322,6 +338,10 @@ Print FPGA device information
         pass
 
     def do_addplatformslib(self, line):
+        """\
+Usage : addplatformslib <platformslibpath>
+Adding platforms library
+        """
         try:
             self.isProjectOpen()
             self.checkargs(line, "<platformslibpath>")
@@ -338,6 +358,7 @@ Print FPGA device information
         print(str(DISPLAY))
 
     def complete_addinstance(self, text, line, begidx, endidx):
+        """ Complete addinstance """
         componentlist = []
         try:
             componentlist = self.completeargs(text, line,
@@ -405,6 +426,7 @@ Add component in project
         print DISPLAY
 
     def complete_listcomponents(self, text, line, begidx, endidx):
+        """ Complete listcomponents """
         componentlist = []
         try:
             componentlist = self.completeargs(text, line, "[libraryname]")
