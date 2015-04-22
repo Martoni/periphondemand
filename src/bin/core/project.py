@@ -254,17 +254,17 @@ class Project(WrapperXml):
         self.driver = Driver(self)
         self.saveProject()
 
-    def setUnconnectedValue(self, instancename, interfacename,
+    def set_unconnected_value(self, instancename, interfacename,
                             portname, value):
         """ Set port unconnected value
         """
         port = self.getInstance(
             instancename).getInterface(
                 interfacename).getPort(portname)
-        port.setUnconnectedValue(value)
+        port.set_unconnected_value(value)
         self.saveProject()
 
-    def setForce(self, portname, state):
+    def set_force(self, portname, state):
         """ May the force be with you """
         platform = self.getPlatform()
         interfaces_list = platform.getInterfacesList()
@@ -276,10 +276,11 @@ class Project(WrapperXml):
         if port.getDir() == "in":
             raise Error("The value of this port can't be set " +
                         "because of it's direction (in)")
-        port.setForce(state)
+        port.force = state
         self.saveProject()
 
-    def getForcesList(self):
+    @property
+    def forced_ports(self):
         """ List FPGA forced FPGA pin """
         platform = self.getPlatform()
         return platform.getForcesList()
@@ -401,7 +402,8 @@ class Project(WrapperXml):
                     interfacelist.append(interface)
         return interfacelist
 
-    def getInterfacesSlave(self):
+    @property
+    def interfaces_slave(self):
         """ Return a list of slave interface
         """
         interfacelist = []
@@ -740,7 +742,7 @@ class Project(WrapperXml):
                                     masters[i].getBusName() +
                                     " bus connection must be made by hand", 0)
         # find slaves bus
-        slaves = self.getInterfacesSlave()
+        slaves = self.interfaces_slave
         if len(slaves) == 0:
             raise Error(" No slave bus in project", 0)
 
@@ -777,7 +779,7 @@ class Project(WrapperXml):
         ###########################################
         # check Busses, all slaves bus need a master
         listmaster = self.interfaces_master
-        listslave = self.getInterfacesSlave()
+        listslave = self.interfaces_slave
 
         # Delete all slaves component from listslave
         for master in listmaster:

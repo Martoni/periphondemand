@@ -621,8 +621,8 @@ Force input port unconnected value
             print("source arguments error")
             return
         try:
-            SETTINGS.active_project.setUnconnectedValue(source[0], source[1],
-                                                        source[2], uvalue)
+            SETTINGS.active_project.set_unconnected_value(source[0], source[1],
+                                                          source[2], uvalue)
         except Error, error:
             print DISPLAY
             print(str(error))
@@ -1253,8 +1253,7 @@ List all force configured for this project
         try:
             for port in SETTINGS.active_project.getForcesList():
                 print("port " + str(port.getName()) +
-                      " is forced to " +
-                      str(port.getForce()))
+                      " is forced to " + port.force)
         except Error, error:
             print DISPLAY
             print error
@@ -1287,7 +1286,7 @@ Set fpga pin state in 'gnd', 'vcc'. To unset use 'undef' value
         state = arg[-1]
 
         try:
-            SETTINGS.active_project.setForce(portname, state)
+            SETTINGS.active_project.set_force(portname, state)
         except Error, error:
             print DISPLAY
             print error

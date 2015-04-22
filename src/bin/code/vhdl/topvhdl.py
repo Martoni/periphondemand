@@ -334,7 +334,7 @@ class TopVHDL(TopGen):
         out = out + TAB + "-------------------\n"
         for port in portlist:
             if port.forceDefined():
-                if port.getForce() == "gnd":
+                if port.force == "gnd":
                     out = out + TAB + "force_" + port.getName() + " <= '0';\n"
                 else:
                     out = out + TAB + "force_" + port.getName() + " <= '1';\n"

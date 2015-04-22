@@ -157,7 +157,7 @@ class Port(WrapperXml):
         except Error:
             return "0"
 
-    def setUnconnectedValue(self, value):
+    def set_unconnected_value(self, value):
         if self.getDir() != "in":
             raise Error("Unconnected Value can be set only on 'in' port", 0)
         if str(value).isdigit():
@@ -191,10 +191,13 @@ class Port(WrapperXml):
     def getDrive(self):
         return self.getAttributeValue("drive")
 
-    def getForce(self):
+    @property
+    def force(self):
         return self.getAttributeValue("force")
 
-    def setForce(self, force):
+    @force.setter
+    def force(self, force):
+        """ Setting force for this port """
         listofpins = self.getPinsList()
         if len(listofpins) > 1:
             raise Error("Force multiple pin port is not implemented")
@@ -209,7 +212,7 @@ class Port(WrapperXml):
 
     def forceDefined(self):
         try:
-            force = self.getForce()
+            force = self.force
         except Error:
             return False
         forcevalues = ["gnd", "vcc"]

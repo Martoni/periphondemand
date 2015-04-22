@@ -7,7 +7,7 @@
 # Copyright (2014)  Armadeus Systems
 # Licence:  GPLv3 or newer
 #-----------------------------------------------------------------------------
-""" class test_project
+""" class test_port
 """
 
 import sys
@@ -20,31 +20,25 @@ from mock import Mock
 from datetime import datetime
 
 from periphondemand.bin.utils.error import Error
-from periphondemand.bin.core import project
+from periphondemand.bin.core import Port
 
-class test_project(unittest.TestCase):
+class test_port(unittest.TestCase):
     """ unit tests bin.core.project.py
     """
 
-    def test_initproject(self):
-        """ Just instanciate project """
-        projectname = "UnitTest"
-        os.system("rm -rf " + projectname)
-        aproject = project.Project(projectname)
-        os.system("rm -rf " + projectname)
+    def test_initport(self):
+        """ Just instanciate a port """
+        aport = Port(None, name="simpleport")
 
-    def test_vhdl_version(self):
-        """ test vhdl version property """
-        projectname = "UnitTest"
-        os.system("rm -rf " + projectname)
-        aproject = project.Project(projectname)
-        self.assertEqual(aproject.vhdl_version, "vhdl87")
-        aproject.vhdl_version = "vhdl93"
-        self.assertEqual(aproject.vhdl_version, "vhdl93")
+    def test_force(self):
+        """ Just instanciate a port """
+        aport = Port(None, name="simpleport")
+        aport.force = "gnd"
+        aport.force = "vcc"
+        aport.force = "undef"
+        self.assertEqual(aport.force, "undef")
         with self.assertRaises(Error):
-            aproject.vhdl_version = "puet"
-        os.system("rm -rf " + projectname)
-
+            aport.force = "pouet"
 
 if __name__ == "__main__":
     print "test_project class test\n"

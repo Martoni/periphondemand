@@ -381,7 +381,7 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "slaveinstancename":
             return [interface.getParent().getInstanceName()
                     for interface in
-                    settings.active_project.getInterfacesSlave()]
+                    settings.active_project.interfaces_slave]
         elif subargt == "instancename":
             return [instance.getInstanceName()
                     for instance in settings.active_project.getInstancesList()]
