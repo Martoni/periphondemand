@@ -1,11 +1,11 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Name:     SimulationCli.py
 # Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  08/07/2008
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #  Copyright (2008)  Armadeus Systems
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,19 +22,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
-#-----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+""" Command line for simulation environement """
 
-__version__ = "1.0.0"
-__versionTime__ = "08/07/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
-
-import periphondemand.bin.define
-from periphondemand.bin.define import *
 from periphondemand.bin.utils.basecli import BaseCli
 
 from periphondemand.bin.utils.error import Error
@@ -43,25 +33,25 @@ from periphondemand.bin.utils.display import Display
 
 from periphondemand.bin.toolchain.simulation import Simulation
 
-settings = Settings()
-display = Display()
+SETTINGS = Settings()
+DISPLAY = Display()
 
 
 class SimulationCli(BaseCli):
-    """
+    """ Commands line for simulation environment
     """
 
     def __init__(self, parent=None):
         BaseCli.__init__(self, parent)
 
     def complete_selecttoolchain(self, text, line, begidx, endidx):
-        list = []
+        alist = []
         try:
-            list = self.completeargs(text, line,
-                                     "[simulationtoolchain]")
-        except Exception, error:
+            alist = self.completeargs(text, line,
+                                      "[simulationtoolchain]")
+        except Error, error:
             print(str(error))
-        return list
+        return alist
 
     def do_selecttoolchain(self, line):
         """\
@@ -75,19 +65,19 @@ select toolchain used for simulation
             return
 
         if line.strip() == "":
-            if len(settings.active_project.getSimulationToolChainList()) == 1:
-                settings.active_project.simulation_toolchain =\
-                    settings.active_project.getSimulationToolChainList()[0]
+            if len(SETTINGS.active_project.getSimulationToolChainList()) == 1:
+                SETTINGS.active_project.simulation_toolchain =\
+                    SETTINGS.active_project.getSimulationToolChainList()[0]
             else:
-                if settings.active_project.simulation_toolchain is None:
+                if SETTINGS.active_project.simulation_toolchain is None:
                     print "Choose a toolchain\n"
                     for toolchain in \
-                          settings.active_project.getSimulationToolChainList():
+                          SETTINGS.active_project.getSimulationToolChainList():
                         print(str(toolchain))
                     return
         else:
             try:
-                settings.active_project.setSimulationToolChain(line)
+                SETTINGS.active_project.simulation_toolchain = line
             except Error, error:
                 print(str(error))
                 return
@@ -103,23 +93,23 @@ Make projects files for simulation (makefile and testbench sources)
             except Error, error:
                 print(str(error))
                 return
-        elif settings.active_project.simulation is None:
+        elif SETTINGS.active_project.simulation is None:
             print Error("Simulation toolchain must be selected before")
             return
 
-        if settings.active_project.simulation_toolchain is None:
+        if SETTINGS.active_project.simulation_toolchain is None:
             print Error("Choose a toolchain before", 0)
             for toolchain in \
-                    settings.active_project.getSimulationToolChainList():
+                    SETTINGS.active_project.getSimulationToolChainList():
                 print(str(toolchain.getName()))
             return
         try:
-            filename = settings.active_project.simulation.generateTemplate()
-            filename = settings.active_project.simulation.generateMakefile()
+            filename = SETTINGS.active_project.simulation.generateTemplate()
+            filename = SETTINGS.active_project.simulation.generateMakefile()
         except Error, error:
             print(str(error))
             return
-        print(str(display))
+        print(str(DISPLAY))
         print("Testbench with name : " + filename + " Done")
         print("Makefile generated with name : " + filename + " Done")
 
