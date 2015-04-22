@@ -289,7 +289,7 @@ Select VHDL version
             print(str(error))
             return
         try:
-            SETTINGS.active_project.setVhdlVersion(line)
+            SETTINGS.active_project.vhdl_version = line
         except Error, error:
             print(str(DISPLAY))
             print(str(error))
@@ -985,7 +985,7 @@ List master interface
             print DISPLAY
             print(str(error))
             return
-        for master in SETTINGS.active_project.getInterfacesMaster():
+        for master in SETTINGS.active_project.interfaces_master:
             print(master.parent.getInstanceName() + "." + master.getName())
         print DISPLAY
 

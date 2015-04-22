@@ -19,6 +19,7 @@ from mock import MagicMock
 from mock import Mock
 from datetime import datetime
 
+from periphondemand.bin.utils.error import Error
 from periphondemand.bin.core import project
 
 class test_project(unittest.TestCase):
@@ -28,7 +29,20 @@ class test_project(unittest.TestCase):
     def test_initproject(self):
         """ Just instanciate project """
         projectname = "UnitTest"
+        os.system("rm -rf " + projectname)
         aproject = project.Project(projectname)
+        os.system("rm -rf " + projectname)
+
+    def test_vhdl_version(self):
+        """ test vhdl version property """
+        projectname = "UnitTest"
+        os.system("rm -rf " + projectname)
+        aproject = project.Project(projectname)
+        self.assertEqual(aproject.vhdl_version, "vhdl87")
+        aproject.vhdl_version = "vhdl93"
+        self.assertEqual(aproject.vhdl_version, "vhdl93")
+        with self.assertRaises(Error):
+            aproject.vhdl_version = "puet"
         os.system("rm -rf " + projectname)
 
 if __name__ == "__main__":

@@ -63,7 +63,7 @@ class Project(WrapperXml):
         self.void = void
         WrapperXml.__init__(self, nodename="void")
         self.instanceslist = []
-        self.vhdl_version = "vhdl87"
+        self._vhdl_version = "vhdl87"
 
         self.simulation = None
         self.synthesis = None
@@ -156,7 +156,7 @@ class Project(WrapperXml):
             DISPLAY.msg(str(error))
 
         # Set bus master-slave
-        for masterinterface in self.getInterfacesMaster():
+        for masterinterface in self.interfaces_master:
             for slave in masterinterface.getSlavesList():
                 slaveinterface = slave.getInterface()
                 # FIXME: allocMem change address
@@ -231,14 +231,16 @@ class Project(WrapperXml):
         self.simulation = Simulation(self)
         self.saveProject()
 
-    def getDriverToolChain(self):
+    @property
+    def driver_toolchain(self):
         """ get driver toolchain """
         try:
             return self.driver
         except:
             return None
-     
-    def setDriverToolChain(self, toolchainname):
+
+    @driver_toolchain.setter
+    def driver_toolchain(self, toolchainname):
         """ set driver toolchain """
         if toolchainname not in self.getDriverToolChainList():
             raise Error("No toolchain named " + toolchainname + " in POD")
@@ -250,11 +252,6 @@ class Project(WrapperXml):
                       SETTINGS.projectpath + DRIVERSPATH +
                       "/drivers" + XMLEXT)
         self.driver = Driver(self)
-        self.saveProject()
-
-    def setLanguage(self, language):
-        """ set language (VHDL, Verilog, ...)"""
-        self.setAttribute("name", language, "language")
         self.saveProject()
 
     def setUnconnectedValue(self, instancename, interfacename,
@@ -302,15 +299,18 @@ class Project(WrapperXml):
             raise Error("ComponentsLib directory " +
                         str(aPath) + " doesn't exists")
 
-    def setVhdlVersion(self, version):
+    @property
+    def vhdl_version(self):
+        """ get vhdl version (VHDL '87 or '93) """
+        return self._vhdl_version
+
+    @vhdl_version.setter
+    def vhdl_version(self, version):
         """ select vhdl version (VHDL '87 or '93) """
         if (version != "vhdl93") and (version != "vhdl87"):
             raise Error(str(version) + " is not acceptable version")
-        self.vhdl_version = version
+        self._vhdl_version = version
         self.saveProject()
-
-    def getVhdlVersion(self):
-        return self.vhdl_version
 
     def addPlatformsLib(self, aPath):
         """ Adding a platforms library under the project """
@@ -390,7 +390,8 @@ class Project(WrapperXml):
                     " added as " + instancename)
         self.saveProject()
 
-    def getInterfacesMaster(self):
+    @property
+    def interfaces_master(self):
         """ Return a list of master interface
         """
         interfacelist = []
@@ -724,7 +725,7 @@ class Project(WrapperXml):
     def autoConnectBus(self):
         """ autoconnect bus
         """
-        masters = self.getInterfacesMaster()
+        masters = self.interfaces_master
         # autoconnection can be made only if they are 1 master interface
         if len(masters) < 1:
             raise Error("No bus master in project", 0)
@@ -775,7 +776,7 @@ class Project(WrapperXml):
 
         ###########################################
         # check Busses, all slaves bus need a master
-        listmaster = self.getInterfacesMaster()
+        listmaster = self.interfaces_master
         listslave = self.getInterfacesSlave()
 
         # Delete all slaves component from listslave
@@ -891,7 +892,7 @@ class Project(WrapperXml):
         else:
             report_file = open(filename, "w")
         text = "* Master interfaces mapping:\n"
-        for master in self.getInterfacesMaster():
+        for master in self.interfaces_master:
             masterinstance = master.getParent()
             text += "\n  " + masterinstance.getInstanceName() + "." +\
                     master.getName() + ":\n"

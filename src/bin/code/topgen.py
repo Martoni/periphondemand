@@ -54,7 +54,7 @@ class TopGen:
         """ generate code for top component
         """
         ## checking if all intercons are done
-        for masterinterface in self.project.getInterfacesMaster():
+        for masterinterface in self.project.interfaces_master:
             try:
                 self.project.getInstance(
                         masterinterface.getParent().getInstanceName() +
