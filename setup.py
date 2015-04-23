@@ -71,8 +71,6 @@ package_files_list.extend(getTree("busses"))
 package_files_list.extend(getTree("toolchains"))
 package_files_list.extend(getTree("tests"))
 
-datafiles = [('bin', ['src/bin/pod'])]
-
 setup(name='PeriphOnDemand',
       version=getVersion(),
       url='https://sourceforge.net/projects/periphondemand',
@@ -92,6 +90,6 @@ setup(name='PeriphOnDemand',
                 'periphondemand.bin.utils',
                 ],
       package_data={'periphondemand': package_files_list},
-      data_files=datafiles,
+      scripts=['src/bin/pod'],
       license='GPL',
 )
