@@ -420,7 +420,8 @@ class Project(WrapperXml):
     def instances(self):
         return self._instanceslist
 
-    def getVariablePortsList(self):
+    @property
+    def variable_ports(self):
         """ Get list of all variable ports available in project
         """
         variable_ports_list = []
@@ -763,7 +764,7 @@ class Project(WrapperXml):
 
         ##########################################
         # Check connections on variable ports
-        for port in self.getVariablePortsList():
+        for port in self.variable_ports:
             if port.checkVariablePort() is False:
                 raise Error(
                     "Pin connections on port " +
