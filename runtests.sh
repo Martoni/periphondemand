@@ -2,7 +2,7 @@
 rm -rf htmlcov
 rm -rf .coverage
 rm -rf coverage.xml
-ln -s src periphondemand
+ln -s periphondemand src
 export PYTHONPATH=./:$PYTHONPATH
 python-coverage run -a --source periphondemand --branch units_tests/test_project.py
 python-coverage run -a --source periphondemand --branch units_tests/test_port.py
