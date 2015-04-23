@@ -56,7 +56,7 @@ class TopGen:
         ## checking if all intercons are done
         for masterinterface in self.project.interfaces_master:
             try:
-                self.project.getInstance(
+                self.project.get_instance(
                         masterinterface.getParent().getInstanceName() +
                         "_" +
                         masterinterface.getName() +

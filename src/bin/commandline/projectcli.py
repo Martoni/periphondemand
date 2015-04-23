@@ -326,7 +326,7 @@ Adding components library
             print(str(error))
             return
         try:
-            SETTINGS.active_project.addComponentLib(line)
+            SETTINGS.active_project.add_component_lib(line)
         except Error, error:
             print(str(DISPLAY))
             print(str(error))
@@ -350,7 +350,7 @@ Adding platforms library
             print(str(error))
             return
         try:
-            SETTINGS.active_project.addPlatformsLib(line)
+            SETTINGS.active_project.add_platforms_lib(line)
         except Error, error:
             print(str(DISPLAY))
             print(str(error))
@@ -400,21 +400,21 @@ Add component in project
             if (instancename is not None):
                 sy.check_name(instancename)
             if (instancename is None) and (componentversion is None):
-                SETTINGS.active_project.addInstance(
+                SETTINGS.active_project.add_instance(
                         componentname=subarg[1],
                         libraryname=subarg[0])
             elif (instancename is not None) and (componentversion is None):
-                SETTINGS.active_project.addInstance(
+                SETTINGS.active_project.add_instance(
                         componentname=subarg[1],
                         libraryname=subarg[0],
                         instancename=instancename)
             elif (instancename is None) and (componentversion is not None):
-                SETTINGS.active_project.addInstance(
+                SETTINGS.active_project.add_instance(
                         componentname=subarg[1],
                         libraryname=subarg[0],
                         componentversion=componentversion)
             else:
-                SETTINGS.active_project.addInstance(
+                SETTINGS.active_project.add_instance(
                         componentname=subarg[1],
                         libraryname=subarg[0],
                         componentversion=componentversion,
@@ -531,7 +531,7 @@ List instance interface
             self.isProjectOpen()
             interfacelist = [interface.getName()
               for interface in
-                 SETTINGS.active_project.getInstance(line).getInterfacesList()]
+                 SETTINGS.active_project.get_instance(line).getInterfacesList()]
         except Error, error:
             print(str(DISPLAY))
             print(str(error))
@@ -575,11 +575,11 @@ Connect pin between instances
             dest.append(0)
         try:
             SETTINGS.active_project.connectPin_cmd(
-                    SETTINGS.active_project.getInstance(
+                    SETTINGS.active_project.get_instance(
                         source[0]).getInterface(
                             source[1]).getPort(
                                 source[2]).getPin(source[3]),
-                    SETTINGS.active_project.getInstance(
+                    SETTINGS.active_project.get_instance(
                         dest[0]).getInterface(
                             dest[1]).getPort(dest[2]).getPin(dest[3]))
         except Error, error:
@@ -953,7 +953,7 @@ Set the base address of slave interface
         names = arg[0].split('.')
         if len(names) < 2:
             masterinterface = \
-                    SETTINGS.active_project.getInstance(
+                    SETTINGS.active_project.get_instance(
                             names[0]).getSlaveInterfaceList()
             if len(masterinterface) != 1:
                 print DISPLAY
@@ -963,7 +963,7 @@ Set the base address of slave interface
 
         try:
             interfaceslave = \
-                    SETTINGS.active_project.getInstance(
+                    SETTINGS.active_project.get_instance(
                             names[0]).getInterface(names[1])
             interfacemaster = interfaceslave.getMaster()
             interfacemaster.allocMem.setAddressSlave(interfaceslave, arg[1])
@@ -1015,7 +1015,7 @@ Return mapping for a master interface
         names = arg[0].split('.')
         try:
             masterinterface = \
-                    SETTINGS.active_project.getInstance(
+                    SETTINGS.active_project.get_instance(
                             names[0]).getInterface(names[1])
             print masterinterface.allocMem
         except Error, error:
@@ -1043,7 +1043,7 @@ Print instance in XML format
             print DISPLAY
             print(str(error))
             return
-        print SETTINGS.active_project.getInstance(line)
+        print SETTINGS.active_project.get_instance(line)
         print DISPLAY
 
     def complete_info(self, text, line, begidx, endidx):
@@ -1062,7 +1062,7 @@ Print instance information
         try:
             self.isProjectOpen()
             self.checkargs(line, "<instancename>")
-            instance = SETTINGS.active_project.getInstance(line)
+            instance = SETTINGS.active_project.get_instance(line)
         except Error, error:
             print DISPLAY
             print error
@@ -1134,7 +1134,7 @@ Set generic parameter
         args = line.split(" ")
         names = args[0].split(".")
         try:
-            instance = SETTINGS.active_project.getInstance(names[0])
+            instance = SETTINGS.active_project.get_instance(names[0])
             generic = instance.getGeneric(names[1])
             if generic.isPublic() == "true":
                 generic.setValue(args[1])

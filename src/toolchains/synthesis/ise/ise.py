@@ -128,13 +128,13 @@ def generatepinout(self,filename=None):
                     else:
                         connect = connect[0]
 
-                    instancedest = self.project.getInstance(connect["instance_dest"])
+                    instancedest = self.project.get_instance(connect["instance_dest"])
                     interfacedest = instancedest.getInterface(connect["interface_dest"])
                     portdest = interfacedest.getPort(connect["port_dest"])
 
                     out = out+'NET "'\
                             +connect["instance_dest"] + "_" + connect["port_dest"]
-                    if self.project.getInstance(
+                    if self.project.get_instance(
                             connect["instance_dest"]).getInterface(
                                     connect["interface_dest"]).getPort(
                                             connect["port_dest"]).getSize() != "1":

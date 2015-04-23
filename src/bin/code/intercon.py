@@ -66,7 +66,7 @@ class Intercon(Component):
         self.interfaceslist = []
         self.addNode(nodename="component")
 
-        masterinstance = self.parent.getInstance(masterinstancename)
+        masterinstance = self.parent.get_instance(masterinstancename)
         masterinterface = masterinstance.getInterface(masterinterfacename)
 
         # Write xml description

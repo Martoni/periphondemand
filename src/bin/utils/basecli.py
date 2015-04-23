@@ -347,7 +347,7 @@ fpga_attributes    : give list of fpga attributes in platform
                listargs[0][0] == "slaveinstancename" or\
                listargs[0][0] == "instancename" or\
                listargs[0][0] == "instancesysconname":
-                instance = settings.active_project.getInstance(listargs[0][1])
+                instance = settings.active_project.get_instance(listargs[0][1])
                 instancename = instance.getInstanceName()
             elif listargs[0][0] == "platformlib":
                 platformlib = listargs[0][1]

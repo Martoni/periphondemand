@@ -60,7 +60,7 @@ def generatepinoutContent(self):
                             port.getPosition() + " -to " + \
                             connect[0]["instance_dest"] + "_" + \
                             connect[0]["port_dest"]
-                        if self.project.getInstance(
+                        if self.project.get_instance(
                             connect[0]["instance_dest"]).getInterface(
                                 connect[0]["interface_dest"]).getPort(
                                     connect[0]["port_dest"]).getSize() != "1":

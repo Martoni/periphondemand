@@ -98,7 +98,7 @@ def connectClockandReset(masterinterface,intercon):
 
     out = "\n"+ TAB + "-- Clock and Reset connection\n"
     for slave in masterinterface.getSlavesList():
-        slaveinstance = slave.getInstance()
+        slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
         slaveinstancename = slave.getInstanceName()
         slaveresetname = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("slave","reset")).getName()

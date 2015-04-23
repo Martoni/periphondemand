@@ -234,10 +234,7 @@ class Project(WrapperXml):
     @property
     def driver_toolchain(self):
         """ get driver toolchain """
-        try:
-            return self.driver
-        except:
-            return None
+        return self.driver
 
     @driver_toolchain.setter
     def driver_toolchain(self, toolchainname):
@@ -255,10 +252,10 @@ class Project(WrapperXml):
         self.saveProject()
 
     def set_unconnected_value(self, instancename, interfacename,
-                            portname, value):
+                              portname, value):
         """ Set port unconnected value
         """
-        port = self.getInstance(
+        port = self.get_instance(
             instancename).getInterface(
                 interfacename).getPort(portname)
         port.set_unconnected_value(value)
@@ -285,21 +282,6 @@ class Project(WrapperXml):
         platform = self.getPlatform()
         return platform.getForcesList()
 
-    def addComponentLib(self, aPath):
-        """ Adding a component library under the project """
-        if sy.dirExist(aPath):
-            path = aPath
-            if self.getNode("componentslibs") is None:
-                self.addNode(nodename="componentslibs")
-            self.addSubNode(nodename="componentslibs",
-                            subnodename="componentslib",
-                            attributename="path",
-                            value=path)
-            self.saveProject()
-        else:
-            raise Error("ComponentsLib directory " +
-                        str(aPath) + " doesn't exists")
-
     @property
     def vhdl_version(self):
         """ get vhdl version (VHDL '87 or '93) """
@@ -313,10 +295,23 @@ class Project(WrapperXml):
         self._vhdl_version = version
         self.saveProject()
 
-    def addPlatformsLib(self, aPath):
+    def add_component_lib(self, path):
+        """ Adding a component library under the project """
+        if sy.dirExist(path):
+            if self.getNode("componentslibs") is None:
+                self.addNode(nodename="componentslibs")
+            self.addSubNode(nodename="componentslibs",
+                            subnodename="componentslib",
+                            attributename="path",
+                            value=path)
+            self.saveProject()
+        else:
+            raise Error("ComponentsLib directory " +
+                        str(path) + " doesn't exists")
+
+    def add_platforms_lib(self, path):
         """ Adding a platforms library under the project """
-        if sy.dirExist(aPath):
-            path = sy.pwd() + "/" + aPath
+        if sy.dirExist(path):
             if self.getNode("platformlibs") is None:
                 self.addNode(nodename="platformlibs")
             self.addSubNode(nodename="platformlibs",
@@ -325,17 +320,17 @@ class Project(WrapperXml):
                             value=path)
             self.saveProject()
         else:
-            raise Error("ComponentsLib directory " + str(aPath) +
+            raise Error("ComponentsLib directory " + str(path) +
                         " doesn't exists")
 
-    def addInstance(self, **keys):
+    def add_instance(self, **keys):
         """ Add a component in project
 
-        addInstance(self, component)
-        addInstance(self, libraryname, componentname)
-        addInstance(self, libraryname, componentname, instancename)
-        addInstance(self, libraryname, componentname, componentversion)
-        addInstance(self, libraryname, componentname,
+        add_instance(self, component)
+        add_instance(self, libraryname, componentname)
+        add_instance(self, libraryname, componentname, instancename)
+        add_instance(self, libraryname, componentname, componentversion)
+        add_instance(self, libraryname, componentname,
                             componentversion, instancename)
         """
         if "component" in keys:
@@ -373,7 +368,7 @@ class Project(WrapperXml):
                                  instancename)
             comp.setNum(self.getInstanceAvailability(componentname))
         else:
-            raise Error("Key not known in addInstance", 0)
+            raise Error("Key not known in add_instance", 0)
 
         # Add component to project
         self.instanceslist.append(comp)
@@ -413,7 +408,7 @@ class Project(WrapperXml):
                     interfacelist.append(interface)
         return interfacelist
 
-    def getInstance(self, instancename):
+    def get_instance(self, instancename):
         """ Return the instance by name
         """
         for instance in self.getInstancesList():
@@ -517,7 +512,7 @@ class Project(WrapperXml):
                     "/" + platformname + "/"
             except TypeError:
                 # if not personnal platform, try project specific
-                # platform (added with addplatformslib cmd)
+                # platform (added with add_platforms_lib cmd)
                 platformdir = ""
                 for node in self.getSubNodeList("platformlibs", "platformlib"):
                     apath = node.getAttributeValue("path")
@@ -530,11 +525,11 @@ class Project(WrapperXml):
         if sy.fileExist(platformdir + SIMULATIONPATH):
             sy.copyAllFile(platformdir + SIMULATIONPATH,
                            SETTINGS.projectpath + SIMULATIONPATH)
-        self.addInstance(component=platform)
+        self.add_instance(component=platform)
         self.addNode(node=platform)
         # Adding platform default components
         for component in platform.getComponentsList():
-            self.addInstance(libraryname=component["type"],
+            self.add_instance(libraryname=component["type"],
                              componentname=component["name"])
         self.saveProject()
 
@@ -560,7 +555,7 @@ class Project(WrapperXml):
     def delProjectInstance(self, instancename):
         """ Remove instance from project
         """
-        instance = self.getInstance(instancename)
+        instance = self.get_instance(instancename)
         # remove pins connections from project instances to this instancename
         for interface in instance.getInterfacesList():
             for port in interface.getPortsList():
@@ -610,7 +605,7 @@ class Project(WrapperXml):
                                 port_dest_name, pin_dest_num):
         """ delete pin between two instances
         """
-        instance_source = self.getInstance(instance_source_name)
+        instance_source = self.get_instance(instance_source_name)
         interface_source = instance_source.getInterface(interface_source_name)
         port_source = interface_source.getPort(port_source_name)
         if pin_source_num is None:
@@ -625,7 +620,7 @@ class Project(WrapperXml):
            (interface_dest_name is not None) and\
            (port_dest_name is not None) and\
            (pin_dest_num is not None):
-            instance_dest = self.getInstance(instance_dest_name)
+            instance_dest = self.get_instance(instance_dest_name)
             interface_dest = instance_dest.getInterface(interface_dest_name)
             port_dest = interface_dest.getPort(port_dest_name)
             pin_dest = port_dest.getPin(pin_dest_num)
@@ -635,7 +630,7 @@ class Project(WrapperXml):
             # if only instance_source given,
         else:  # delete all connection from this instance_source
             for connection in pin_source.getConnections():
-                instance_dest = self.getInstance(connection["instance_dest"])
+                instance_dest = self.get_instance(connection["instance_dest"])
                 interface_dest =\
                     instance_dest.getInterface(connection["interface_dest"])
                 port_dest = interface_dest.getPort(connection["port_dest"])
@@ -650,17 +645,17 @@ class Project(WrapperXml):
         # test if intercon already exists
         from periphondemand.bin.code.intercon import Intercon
         try:
-            intercon = self.getInstance(instance_name + "_" +
+            intercon = self.get_instance(instance_name + "_" +
                                         interface_name + "_intercon")
         except Error:
             pass
         else:
             self.delProjectInstance(intercon.getInstanceName())
 
-        intercon = Intercon(self.getInstance(
+        intercon = Intercon(self.get_instance(
                             instance_name).getInterface(interface_name),
                             self)
-        self.addInstance(component=intercon)
+        self.add_instance(component=intercon)
         self.saveProject()
 
     def connectPort(self,
@@ -671,11 +666,11 @@ class Project(WrapperXml):
         """ Connect all pins of a port source on all pins of
             port dest
         """
-        instance_source = self.getInstance(instance_source_name)
+        instance_source = self.get_instance(instance_source_name)
         interface_source = instance_source.getInterface(interface_source_name)
         port_source = interface_source.getPort(port_source_name)
 
-        instance_dest = self.getInstance(instance_dest_name)
+        instance_dest = self.get_instance(instance_dest_name)
         interface_dest = instance_dest.getInterface(interface_dest_name)
         port_dest = interface_dest.getPort(port_dest_name)
 
@@ -686,9 +681,9 @@ class Project(WrapperXml):
                          instance_name2, interface_name2):
         """ Connect an interface between two components
         """
-        instance_src = self.getInstance(instance_name1)
+        instance_src = self.get_instance(instance_name1)
         interface_src = instance_src.getInterface(interface_name1)
-        instance_dest = self.getInstance(instance_name2)
+        instance_dest = self.get_instance(instance_name2)
         interface_dest = instance_dest.getInterface(interface_name2)
         interface_src.connectInterface(interface_dest)
         self.saveProject()
@@ -697,9 +692,9 @@ class Project(WrapperXml):
                    instanceslave, interfaceslave):
         """ Connect a master bus to a slave bus
         """
-        instance = self.getInstance(instancemaster)
+        instance = self.get_instance(instancemaster)
         instance.connectBus(interfacemaster,
-                            self.getInstance(instanceslave),
+                            self.get_instance(instanceslave),
                             interfaceslave)
         self.saveProject()
 
@@ -707,7 +702,7 @@ class Project(WrapperXml):
                   interfacemaster=None, interfaceslave=None):
         """ Delete a slave bus connection
         """
-        instance = self.getInstance(instancemaster)
+        instance = self.get_instance(instancemaster)
         instance.deleteBus(instanceslave, interfacemaster, interfaceslave)
         self.saveProject()
 

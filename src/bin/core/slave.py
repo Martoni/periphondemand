@@ -70,9 +70,9 @@ class Slave(WrapperXml):
     def setInterfaceName(self, interfacename):
         self.setAttribute("interfacename", interfacename)
 
-    def getInstance(self):
-        return self.getParent().getParent().getParent().getInstance(
+    def get_instance(self):
+        return self.getParent().getParent().getParent().get_instance(
                 self.getInstanceName())
 
     def getInterface(self):
-        return self.getInstance().getInterface(self.getInterfaceName())
+        return self.get_instance().getInterface(self.getInterfaceName())

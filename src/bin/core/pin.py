@@ -101,7 +101,7 @@ class Pin(WrapperXml):
         """
         for connection in self.getConnections():
             try:
-                instance_dest = settings.active_project.getInstance(
+                instance_dest = settings.active_project.get_instance(
                                                   connection["instance_dest"])
                 interface_dest =\
                        instance_dest.getInterface(connection["interface_dest"])
@@ -145,7 +145,7 @@ class Pin(WrapperXml):
         project = self.getParent().getParent().getParent().getParent()
         pinlist = []
         for connect in self.getConnections():
-            pinlist.append(project.getInstance(
+            pinlist.append(project.get_instance(
                 connect["instance_dest"]).getInterface(
                     connect["interface_dest"]).getPort(
                         connect["port_dest"]).getPin(
@@ -246,7 +246,7 @@ class Pin(WrapperXml):
         pindest_list = []
         for connection in self.getConnections():
             if connection["instance_dest"] == project.getPlatformName():
-                pin_dest = project.getInstance(
+                pin_dest = project.get_instance(
                         connection["instance_dest"]).getInterface(
                                 connection["interface_dest"]).getPort(
                                         connection["port_dest"]).getPin(

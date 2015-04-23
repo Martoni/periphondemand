@@ -108,7 +108,7 @@ def connectClockandReset(masterinterface,intercon):
     out = "\n"+ TAB + "-- Clock and Reset connection\n"
 
     for slave in masterinterface.getSlavesList():
-        slaveinstance = slave.getInstance()
+        slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
         slaveinstancename = slave.getInstanceName()
         slaveresetname = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("slave","reset")).getName()
@@ -140,7 +140,7 @@ def addressdecoding(masterinterface,masterinstancename,intercon):
     out = "\n"+TAB + "-- Address decoding  --\n"
     out = out + TAB + "-----------------------\n"
     for slave in masterinterface.getSlavesList():
-        slaveinstance  = slave.getInstance()
+        slaveinstance  = slave.get_instance()
         slaveinterface = slave.getInterface()
         slavesizeaddr  = slave.getInterface().getAddressSize()
         slavebase_address   = slaveinterface.getBaseInt()
@@ -164,7 +164,7 @@ def addressdecoding(masterinterface,masterinstancename,intercon):
     #initialize
     out = out+TAB*2+"if "+rst_name+"='1' then\n"
     for slave in masterinterface.getSlavesList():
-        slaveinstance = slave.getInstance()
+        slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
         chipselectname = slaveinstance.getInstanceName()+"_"+\
                 slaveinterface.getName()+"_cs"
@@ -172,7 +172,7 @@ def addressdecoding(masterinterface,masterinstancename,intercon):
     out = out+TAB*2+"elsif rising_edge("+clk_name+") then\n"
 
     for slave in masterinterface.getSlavesList():
-        slaveinstance  = slave.getInstance()
+        slaveinstance  = slave.get_instance()
         slaveinterface = slave.getInterface()
         chipselectname = slaveinstance.getInstanceName()+"_"+\
                 slaveinterface.getName()+"_cs"
@@ -216,7 +216,7 @@ def controlslave(masterinterface,intercon):
     out = out + TAB + "-----------------------------\n"
 
     for slave in masterinterface.getSlavesList():
-        slaveinstance = slave.getInstance()
+        slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
         slaveinstancename = slave.getInstanceName()
         slavestrobename = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("slave","strobe")).getName()
@@ -306,7 +306,7 @@ def controlmaster(masterinterface,intercon):
     out = out + " <= "
     #READDATA
     for slave in masterinterface.getSlavesList():
-        slaveinstance = slave.getInstance()
+        slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
         slaveinterfacename = slaveinterface.getName()
         slaveinstancename = slave.getInstanceName()
@@ -326,7 +326,7 @@ def controlmaster(masterinterface,intercon):
     count = 0
     if masterinterface.getSlavesList() :
         for slave in masterinterface.getSlavesList():
-            slaveinstance = slave.getInstance()
+            slaveinstance = slave.get_instance()
             slaveinterface = slave.getInterface()
             slaveinterfacename = slaveinterface.getName()
             slaveinstancename = slave.getInstanceName()
@@ -367,7 +367,7 @@ def generateIntercon(masterinterface,intercon):
 
     listslave = masterinterface.getSlavesList()
     listinterfacesyscon = []
-    for slaveinstance in [slave.getInstance() for slave in listslave]:
+    for slaveinstance in [slave.get_instance() for slave in listslave]:
         listinterfacesyscon.append(slaveinstance.getSysconInterface())
     listinterfacesyscon.append(masterinstance.getSysconInterface())
 
