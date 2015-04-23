@@ -83,7 +83,7 @@ class TopGen:
         # declare signals
         incompleteportslist = \
                 self.project.getPlatform().getIncompleteExternalPortsList()
-        out = out + self.declareSignals(self.project.getInstancesList(),
+        out = out + self.declareSignals(self.project.instances,
                                         incompleteportslist)
         ########################
         # begin

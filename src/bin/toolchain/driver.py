@@ -65,7 +65,7 @@ class Driver(WrapperXml):
         os = self.getName()
         if os is None:
             raise Error("Operating system must be selected", 0)
-        for component in project.getInstancesList():
+        for component in project.instances:
             if component.getNum() == "0":
                 driverT = component.getDriver_Template(os)
                 if driverT is not None:
@@ -91,7 +91,7 @@ class Driver(WrapperXml):
         os = self.getName()
         if os is None:
             raise Error("Operating system must be selected", 0)
-        for component in project.getInstancesList():
+        for component in project.instances:
             if component.getNum() == "0":
                 driverT = component.getDriver_Template(os)
                 if driverT is not None:

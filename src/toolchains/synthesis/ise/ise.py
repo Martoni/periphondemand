@@ -57,7 +57,7 @@ def generatelibraryconstraints(self):
         multiplier, etc. or clock informations about PLL output signals
     """
     out = "# components constraints \n"
-    for instance in self.project.getInstancesList():
+    for instance in self.project.instances:
         if instance.getConstraintsList() != []:
             for constraint in instance.getConstraintsList():
                 instanceName = instance.getInstanceName()

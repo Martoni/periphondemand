@@ -454,7 +454,7 @@ List components available in the library
         try:
             self.isProjectOpen()
             return [comp.getInstanceName()
-                    for comp in SETTINGS.active_project.getInstancesList()]
+                    for comp in SETTINGS.active_project.instances]
         except Error, error:
             print(str(error))
             return

@@ -91,7 +91,7 @@ def constant(clockhalfperiode):
     """ return constant declaration
     """
     constant = TAB+"CONSTANT HALF_PERIODE : time := "+str(clockhalfperiode)+" ns;  -- Half clock period\n"
-    for instance in settings.active_project.getInstancesList():
+    for instance in settings.active_project.instances:
         for interface in instance.getInterfacesList():
             for register in interface.getRegisterList():
                 constant = constant + TAB +\
@@ -253,7 +253,7 @@ def generateMakefile():
     platform = settings.active_project.getPlatform()
     projectname = "top_"+settings.active_project.getName()
     srclist.append(".."+SYNTHESISPATH+"/top_"+settings.active_project.getName()+VHDLEXT)
-    for component in settings.active_project.getInstancesList():
+    for component in settings.active_project.instances:
         if component.getNum() == "0":
             compdir = ".."+SYNTHESISPATH+"/"+component.getName()+"/"
             for hdlfile in component.getHdl_filesList():

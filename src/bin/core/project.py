@@ -62,7 +62,7 @@ class Project(WrapperXml):
         """
         self.void = void
         WrapperXml.__init__(self, nodename="void")
-        self.instanceslist = []
+        self._instanceslist = []
         self._vhdl_version = "vhdl87"
 
         self.simulation = None
@@ -135,7 +135,7 @@ class Project(WrapperXml):
                                 node.getAttributeValue("name") + " directory",
                                 0)
                 else:
-                    self.instanceslist.append(comp)
+                    self._instanceslist.append(comp)
 
         # load toolchains
         # toolchains = self.getNode("toolchain")
@@ -347,7 +347,7 @@ class Project(WrapperXml):
                                 "automatic instance name generation :" +
                                 instancename, 0)
                 # check instance availability
-                for instance in self.getInstancesList():
+                for instance in self.instances:
                     if instance.getName() == instancename:
                         raise Error("This instance name already exists", 0)
             else:
@@ -371,7 +371,7 @@ class Project(WrapperXml):
             raise Error("Key not known in add_instance", 0)
 
         # Add component to project
-        self.instanceslist.append(comp)
+        self._instanceslist.append(comp)
         if comp.getName() != "platform":
             self.addSubNode(nodename="components",
                             subnodename="component",
@@ -391,7 +391,7 @@ class Project(WrapperXml):
         """ Return a list of master interface
         """
         interfacelist = []
-        for instance in self.getInstancesList():
+        for instance in self.instances:
             for interface in instance.getInterfacesList():
                 if interface.getClass() == "master":
                     interfacelist.append(interface)
@@ -402,7 +402,7 @@ class Project(WrapperXml):
         """ Return a list of slave interface
         """
         interfacelist = []
-        for instance in self.getInstancesList():
+        for instance in self.instances:
             for interface in instance.getInterfacesList():
                 if interface.getClass() == "slave":
                     interfacelist.append(interface)
@@ -411,13 +411,14 @@ class Project(WrapperXml):
     def get_instance(self, instancename):
         """ Return the instance by name
         """
-        for instance in self.getInstancesList():
+        for instance in self.instances:
             if instance.getInstanceName() == instancename:
                 return instance
         raise Error("Instance " + instancename + " doesn't exists")
 
-    def getInstancesList(self):
-        return self.instanceslist
+    @property
+    def instances(self):
+        return self._instanceslist
 
     def getVariablePortsList(self):
         """ Get list of all variable ports available in project
@@ -432,7 +433,7 @@ class Project(WrapperXml):
         """ Get list of all ports available in project
         """
         ports_list = []
-        for instance in self.getInstancesList():
+        for instance in self.instances:
             for interface in instance.getInterfacesList():
                 for port in interface.getPortsList():
                     ports_list.append(port)
@@ -441,7 +442,7 @@ class Project(WrapperXml):
     def getInstanceListofComponent(self, componentname):
         """ return a list of instances for a componentname """
         listinstance = []
-        for instance in self.getInstancesList():
+        for instance in self.instances:
             if instance.getName() == componentname:
                 listinstance.append(instance)
         return listinstance
@@ -452,7 +453,7 @@ class Project(WrapperXml):
         cmpt = 0
         if self.getNode("components") is None:
             return 0
-        for element in self.getInstancesList():
+        for element in self.instances:
             if element.getName() == componentname:
                 cmpt = cmpt + 1
         return cmpt
@@ -460,7 +461,7 @@ class Project(WrapperXml):
     def getPlatform(self):
         """ return component instance platform
         """
-        for component in self.getInstancesList():
+        for component in self.instances:
             if component.getName() == "platform":
                 return component
         raise Error("No platform in project", 1)
@@ -476,7 +477,7 @@ class Project(WrapperXml):
         # with type="CLK" and "in" direction
         portlist = []
         platformname = self.getPlatform().getInstanceName()
-        for instance in self.getInstancesList():
+        for instance in self.instances:
             if not instance.isPlatform():
                 for interface in instance.getInterfacesList():
                     for port in interface.getPortsList():
@@ -562,11 +563,11 @@ class Project(WrapperXml):
                 for pin in port.getPinsList():
                     pin.delAllConnections()
         # remove busses connections from project instances to this instancename
-        for comp in self.getInstancesList():
+        for comp in self.instances:
             if comp.getName() != "platform":
                 comp.deleteBus(instanceslavename=instancename)
         # Remove components from project
-        self.instanceslist.remove(instance)
+        self._instanceslist.remove(instance)
         self.reNum(instance.getName())
         self.delSubNode("components",
                         "component",
@@ -578,7 +579,7 @@ class Project(WrapperXml):
 
     def saveProject(self):
         """ Save the project """
-        for comp in self.instanceslist:
+        for comp in self._instanceslist:
             comp.saveInstance()
         if self.synthesis is not None:
             self.synthesis.save()
@@ -710,7 +711,7 @@ class Project(WrapperXml):
         """ Renum all instances in the correct order
         """
         complist = []
-        for comp in self.instanceslist:
+        for comp in self._instanceslist:
             if comp.getName() == componentname:
                 complist.append(comp)
         num = 0

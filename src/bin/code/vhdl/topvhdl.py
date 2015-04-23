@@ -170,7 +170,7 @@ class TopVHDL(TopGen):
         out = out + TAB + "-------------------------\n"
         out = out + "\n"
         component = []
-        for comp in self.project.getInstancesList():
+        for comp in self.project.instances:
             if comp.getName() != "platform":
                 component.append(comp.getName())
 
@@ -178,7 +178,7 @@ class TopVHDL(TopGen):
         component = set(component)
 
         for compname in component:
-            for component in self.project.getInstancesList():
+            for component in self.project.instances:
                 if component.getName() == compname:
                     break
 
@@ -269,7 +269,7 @@ class TopVHDL(TopGen):
         out = out + TAB + "-------------------------\n"
         out = out + TAB + "-- declare instances\n"
         out = out + TAB + "-------------------------\n"
-        for component in self.project.getInstancesList():
+        for component in self.project.instances:
             if component.getName() != "platform":
                 out = out + "\n" + TAB + component.getInstanceName()\
                         + " : "
@@ -375,7 +375,7 @@ class TopVHDL(TopGen):
                                     str(pinnum) + ");\n"
 
         # connect all "in" ports pin
-        for component in self.project.getInstancesList():
+        for component in self.project.instances:
             if component.getInstanceName() == platformname:
                 continue
             out = out + "\n" + TAB + "-- connect " +\
@@ -417,7 +417,7 @@ class TopVHDL(TopGen):
                                             out = out + " <= " + connect["instance_dest"] +\
                                                     "_" + connect["port_dest"]
                                             # is destination vector or simple net ?
-                                            for comp in self.project.getInstancesList():
+                                            for comp in self.project.instances:
                                                 if comp.getInstanceName() != connect["instance_dest"]:
                                                     continue
                                                 for inter in comp.getInterfacesList():

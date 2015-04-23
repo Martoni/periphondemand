@@ -92,7 +92,7 @@ class Synthesis(WrapperXml):
     def generateProject(self):
         """ copy all hdl file in synthesis project directory
         """
-        for component in self.parent.getInstancesList():
+        for component in self.parent.instances:
             if component.getNum() == "0":
                 # Make directory
                 compdir = settings.projectpath +\

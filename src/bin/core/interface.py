@@ -409,7 +409,7 @@ class Interface(WrapperXml):
     def getSysconInstance(self):
         """ Return syscon instance that drive master interface
         """
-        for instance in self.getParent().getParent().getInstancesList():
+        for instance in self.getParent().getParent().instances:
             for interface in instance.getInterfacesList():
                 if interface.getClass() == "clk_rst":
                     for slave in interface.getSlavesList():
