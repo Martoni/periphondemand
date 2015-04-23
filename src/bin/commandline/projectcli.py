@@ -29,6 +29,9 @@
 
 import os
 
+from periphondemand.bin.define import XMLEXT
+from periphondemand.bin.define import PODSCRIPTEXT
+
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.display import Display
 
@@ -447,6 +450,7 @@ List components available in the library
                     SETTINGS.active_library.listComponents(line))
 
     def listinstances(self):
+        """ List instances in project completion"""
         try:
             self.isProjectOpen()
             return [comp.getInstanceName()
