@@ -117,7 +117,7 @@ class Intercon(Component):
             self.addInterface(bus)
 
             #Creating port with invert direction value
-            for port in interface.getPortsList():
+            for port in interface.ports:
                 newport = Port(bus,
                                name=instance.getInstanceName() +
                                     "_" + port.getName())

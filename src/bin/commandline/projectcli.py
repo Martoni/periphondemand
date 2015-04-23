@@ -1094,7 +1094,7 @@ Print instance information
             else:
                 print("%-15s :" % interface.getName())
 
-            for port in interface.getPortsList():
+            for port in interface.ports:
                 print(" " * 5 + "%-15s" % port.getName() +
                       " s" + port.getSize())
                 for pin in port.getPinsList():

@@ -399,7 +399,7 @@ fpga_attributes    : give list of fpga attributes in platform
                     for interface in instance.getSlaveInterfaceList()]
         elif subargt == "portname":
             return ["" + instancename + "." + interfacename + "." +
-                    port.getName() for port in interface.getPortsList()]
+                    port.getName() for port in interface.ports]
         elif subargt == "pinnum":
             return ["" + instancename + "." + interfacename +
                     "." + portname + "." + str(i)

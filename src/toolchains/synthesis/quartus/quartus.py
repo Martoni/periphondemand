@@ -47,7 +47,7 @@ TAB = "    "
 def generatepinoutContent(self):
     out = ""
     for interface in self.project.getPlatform().getInterfacesList():
-        for port in interface.getPortsList():
+        for port in interface.ports:
             if port.forceDefined():
                 out = out + TAB + 'set_location_assignment ' + \
                     str(port.getPosition()) + \

@@ -425,18 +425,19 @@ class Project(WrapperXml):
         """ Get list of all variable ports available in project
         """
         variable_ports_list = []
-        for port in self.getPortsList():
+        for port in self.ports:
             if port.isvariable():
                 variable_ports_list.append(port)
         return variable_ports_list
 
-    def getPortsList(self):
+    @property
+    def ports(self):
         """ Get list of all ports available in project
         """
         ports_list = []
         for instance in self.instances:
             for interface in instance.getInterfacesList():
-                for port in interface.getPortsList():
+                for port in interface.ports:
                     ports_list.append(port)
         return ports_list
 
@@ -481,7 +482,7 @@ class Project(WrapperXml):
         for instance in self.instances:
             if not instance.isPlatform():
                 for interface in instance.getInterfacesList():
-                    for port in interface.getPortsList():
+                    for port in interface.ports:
                         if (port.getDir() == "in") and \
                             (port.getSize() == "1") and \
                                 (port.getType() == "CLK"):
@@ -560,7 +561,7 @@ class Project(WrapperXml):
         instance = self.get_instance(instancename)
         # remove pins connections from project instances to this instancename
         for interface in instance.getInterfacesList():
-            for port in interface.getPortsList():
+            for port in interface.ports:
                 for pin in port.getPinsList():
                     pin.delAllConnections()
         # remove busses connections from project instances to this instancename
@@ -856,7 +857,7 @@ class Project(WrapperXml):
     def getIOlist(self):
         """ return a list of IOs avaiable in platform """
         platform = self.getPlatform()
-        return platform.getInterfacesList()[0].getPortsList()
+        return platform.getInterfacesList()[0].ports
 
     def getIO(self, io_name):
         """ return IO with io_name given """

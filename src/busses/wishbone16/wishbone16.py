@@ -68,7 +68,7 @@ def entity(intercon):
     entity = entity + TAB + "port\n" + TAB +"(\n"
     for interface in intercon.getInterfacesList():
         entity = entity+"\n"+TAB*2+"-- "+interface.getName()+" connection\n"
-        for port in interface.getPortsList():
+        for port in interface.ports:
             entity = entity+TAB*2+"%-40s"%port.getName()+" : "+\
                     "%-5s"%port.getDir()
             if port.getSize() == "1":

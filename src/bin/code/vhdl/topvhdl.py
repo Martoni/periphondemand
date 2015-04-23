@@ -198,7 +198,7 @@ class TopVHDL(TopGen):
             out = out + TAB * 2 + "port (\n"
             for interface in component.getInterfacesList():
                 out = out + TAB * 3 + "-- " + interface.getName() + "\n"
-                for port in interface.getPortsList():
+                for port in interface.ports:
                     out = out + TAB * 3 +\
                           port.getName() +\
                           "  : " +\
@@ -230,7 +230,7 @@ class TopVHDL(TopGen):
             for interface in component.getInterfacesList():
                 out = out + TAB + "-- " + interface.getName() + "\n"
 
-                for port in interface.getPortsList():
+                for port in interface.ports:
                     if port in incomplete_external_ports_list:
                         continue
                     if len(port.getPinsList()) == 0:
@@ -291,7 +291,7 @@ class TopVHDL(TopGen):
                 for interface in component.getInterfacesList():
 
                     out = out + TAB * 3 + "-- " + interface.getName() + "\n"
-                    for port in interface.getPortsList():
+                    for port in interface.ports:
                         out = out + TAB * 3 + port.getName() + " => "
                         if len(port.getPinsList()) != 0:
                             if (port.getDir() == "inout") or\
@@ -382,7 +382,7 @@ class TopVHDL(TopGen):
                     component.getInstanceName() + "\n"
             for interface in component.getInterfacesList():
                 out = out + TAB * 2 + "-- " + interface.getName() + "\n"
-                for port in interface.getPortsList():
+                for port in interface.ports:
                     if port.getDir() == "in":
                         # Connect all pins port
                         if len(port.getPinsList()) != 0:
@@ -423,7 +423,7 @@ class TopVHDL(TopGen):
                                                 for inter in comp.getInterfacesList():
                                                     if inter.getName() != connect["interface_dest"]:
                                                         continue
-                                                    for port2 in inter.getPortsList():
+                                                    for port2 in inter.ports:
                                                         if port2.getName() == connect["port_dest"]:
                                                             if int(port2.getSize()) > 1:
                                                                 out = out + "(" + \

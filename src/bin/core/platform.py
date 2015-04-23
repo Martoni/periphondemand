@@ -86,7 +86,7 @@ class Platform(Component):
             raise Error("I found " + str(len(interfaces_list)) +
                         " FPGAs (" + str(interfaces_list) +
                         ") and multiple FPGA project is not implemented yet.")
-        for port in interfaces_list[0].getPortsList():
+        for port in interfaces_list[0].ports:
             if port.forceDefined():
                 forcelist.append(port)
         return forcelist
@@ -133,7 +133,7 @@ class Platform(Component):
         portlist = []
         # loop for each connection in platform interface
         for interface in self.getInterfacesList():
-            for port in interface.getPortsList():
+            for port in interface.ports:
                 # add forced port in list
                 if port.forceDefined():
                     portlist.append(port)
@@ -188,6 +188,6 @@ class Platform(Component):
         """ Get all port in platform """
         portslist = []
         for interface in self.getInterfacesList():
-            for port in interface.getPortsList():
+            for port in interface.ports:
                 portslist.append(port)
         return portslist

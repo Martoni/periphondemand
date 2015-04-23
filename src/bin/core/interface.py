@@ -193,7 +193,8 @@ class Interface(WrapperXml):
             return False
         return True
 
-    def getPortsList(self):
+    @property
+    def ports(self):
         """ get the ports list of interface"""
         return self.portslist
 
@@ -222,7 +223,7 @@ class Interface(WrapperXml):
         """ Delete all interface pins
         """
         if portsource is None:
-            for port in self.getPortsList():
+            for port in self.ports:
                 port.deletePin(instancedest=instancedest)
         else:
             port = self.getPort(portsource)
@@ -263,12 +264,12 @@ class Interface(WrapperXml):
     def connectInterface(self, interface_dest):
         """ Connect an interface between two components
         """
-        if len(interface_dest.getPortsList()) != len(self.getPortsList()):
+        if len(interface_dest.ports) != len(self.ports):
             raise Error(self.getParent().getName() + "." + self.getName() +
                         " and " + interface_dest.getParent().getName() +
                         "." + interface_dest.getName() +
                         "are not the same number of ports")
-        for port in self.getPortsList():
+        for port in self.ports:
             if port.getType() is None:
                 raise Error(self.getParent().getName() + "." +
                             self.getName() + "." +
@@ -295,7 +296,7 @@ class Interface(WrapperXml):
                             "." + port.getName() +
                             " is already connected")
 
-        for port in self.getPortsList():
+        for port in self.ports:
             port_dst = interface_dest.getPortByType(port.getType())
             port.connectPort(port_dst)
 
@@ -354,7 +355,7 @@ class Interface(WrapperXml):
 
     def autoconnectPin(self):
         """ autoconnect pin """
-        for port in self.getPortsList():
+        for port in self.ports:
             port.autoconnectPin()
 
     def connectClkDomain(self, instancedestname, interfacedestname):

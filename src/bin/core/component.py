@@ -424,7 +424,7 @@ class Component(WrapperXml):
         hdltop = self.getHDLTop()
         if not hdltop:
             raise Error("No HDL top file in component " + str(self.getName()))
-        portlist = hdltop.getPortsList()
+        portlist = hdltop.ports
         if not portname in [port.getName() for port in portlist]:
             raise Error("Port named " + portname + " can't be found in " +
                          hdltop.getFileName())
@@ -447,7 +447,7 @@ class Component(WrapperXml):
         """
         interfaceslist = self.getInterfacesList()
         for interface in interfaceslist:
-            portlist = interface.getPortsList()
+            portlist = interface.ports
             for port in portlist:
                 if port.getName() == portname:
                     return (0, interface.getName())
@@ -455,14 +455,15 @@ class Component(WrapperXml):
 
     def getFreePortsList(self):
         """ return not assignated ports list """
-        ports_list = self.getHDLTop().getPortsList()
+        ports_list = self.getHDLTop().ports
         freeportlist = []
         for port in ports_list:
             if self.portIsInFreeList(port.getName()):
                 freeportlist.append(port)
         return freeportlist
 
-    def getPortsList(self):
+    @property
+    def ports(self):
         """ return list of ports in component
             display_port = list of:
                 {"interfacename":[portname1,portname2]}
@@ -470,13 +471,13 @@ class Component(WrapperXml):
         display_port = {}
         tophdlfile = self.getHDLTop()
         notassignedports = [port.getName() for
-                            port in tophdlfile.getPortsList()]
+                            port in tophdlfile.ports]
         interfacelist = self.getInterfacesList()
         for interface in interfacelist:
             key = interface.getName()
             display_port[key] = []
             port_name_list = [port.getName() for
-                              port in interface.getPortsList()]
+                              port in interface.ports]
             for port_name in port_name_list:
                 try:
                     notassignedports.remove(port_name)
