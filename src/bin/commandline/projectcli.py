@@ -23,11 +23,11 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
+#
+# pylint: disable=W0613
 """ Command line for project management """
 
 import os
-
-from periphondemand.bin.define import *
 
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.display import Display
@@ -361,7 +361,8 @@ Adding platforms library
         """ Complete addinstance """
         componentlist = []
         try:
-            componentlist = self.completeargs(text, line,
+            componentlist = self.completeargs(
+                    text, line,
                     "<libraryname>.<componentname>.[componentversion] " +
                     "[newinstancename]")
         except Exception, error:
@@ -370,8 +371,7 @@ Adding platforms library
 
     def do_addinstance(self, line):
         """\
-Usage :
-addinstance \\
+Usage : addinstance \\
         <libraryname>.<componentname>.[componentversion] \\
         [newinstancename]
 Add component in project
@@ -379,7 +379,8 @@ Add component in project
         try:
             self.isProjectOpen()
             self.isPlatformSelected()
-            self.checkargs(line,
+            self.checkargs(
+                    line,
                     "<libraryname>.<componentname>.[componentversion] " +
                     "[newinstancename]")
         except Error, error:
@@ -542,7 +543,8 @@ List instance interface
     def complete_connectpin(self, text, line, begidx, endidx):
         pinlist = []
         try:
-            pinlist = self.completeargs(text, line,
+            pinlist = self.completeargs(
+                    text, line,
                     "<instancename>.<interfacename>.<portname>.<pinnum> " +
                     "<instancename>.<interfacename>.<portname>.<pinnum>")
         except Exception, error:
