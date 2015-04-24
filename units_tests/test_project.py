@@ -45,6 +45,15 @@ class test_project(unittest.TestCase):
             aproject.vhdl_version = "puet"
         os.system("rm -rf " + projectname)
 
+    def test_availables_platforms(self):
+        projectname = "UnitTest"
+        os.system("rm -rf " + projectname)
+        aproject = project.Project(projectname)
+        print("DEBUG : " + str(aproject.availables_plat()))
+        self.assertTrue("apf27" in aproject.availables_plat())
+        os.system("rm -rf " + projectname)
+
+
 
 if __name__ == "__main__":
     print "test_project class test\n"
