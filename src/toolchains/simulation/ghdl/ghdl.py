@@ -63,7 +63,7 @@ def header():
 
 def include():
     include = ""
-    platform = settings.active_project.getPlatform()
+    platform = settings.active_project.platform
     for library in platform.getLibrariesList():
         for line in library.getDescription().split("\n"):
             include = include+"-- "+line+"\n"
@@ -220,7 +220,7 @@ def generateTemplate():
     freq = clockport.getDestinationPort().getFreq()
     clockhalfperiode= (1000/float(freq))/2
     out = out + constant(clockhalfperiode)
-    portlist =  settings.active_project.getPlatform().getConnectPortsList()
+    portlist =  settings.active_project.platform.getConnectPortsList()
     out = out + signals(portlist)
     out = out + declareTop(portlist)
     out = out + beginarch()
@@ -250,7 +250,7 @@ def generateMakefile():
     """
     # include file list:
     srclist =[]
-    platform = settings.active_project.getPlatform()
+    platform = settings.active_project.platform
     projectname = "top_"+settings.active_project.getName()
     srclist.append(".."+SYNTHESISPATH+"/top_"+settings.active_project.getName()+VHDLEXT)
     for component in settings.active_project.instances:

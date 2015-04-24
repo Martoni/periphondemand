@@ -46,7 +46,7 @@ TAB = "    "
 
 def generatepinoutContent(self):
     out = ""
-    for interface in self.project.getPlatform().getInterfacesList():
+    for interface in self.project.platform.getInterfacesList():
         for port in interface.ports:
             if port.forceDefined():
                 out = out + TAB + 'set_location_assignment ' + \
@@ -107,7 +107,7 @@ def generateTCL(self, filename=None):
                   " top_" + settings.active_project.getName() +
                   " top_" + settings.active_project.getName() + "\n")
     tclfile.write("# configure platform params\n")
-    platform = settings.active_project.getPlatform()
+    platform = settings.active_project.platform
     tclfile.write("set_global_assignment -name FAMILY \"" +
                   platform.getFamily() + "\"\n")
     tclfile.write("set_global_assignment -name DEVICE " +

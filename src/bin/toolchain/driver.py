@@ -223,7 +223,7 @@ class Driver(WrapperXml):
                                         line)
                 # main clock speed
                 if re.search(r'\/\*\$main_clock\$\*\/', line) is not None:
-                    frequency = project.getPlatform().getMainClock()
+                    frequency = project.platform.getMainClock()
                     line = re.sub('\/\*\$main_clock\$\*\/', frequency, line)
                 destfile.write(line)
             elif state == "FOREACH_INSTANCE":

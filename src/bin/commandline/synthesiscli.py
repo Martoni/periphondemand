@@ -391,7 +391,7 @@ Set fpga attributes
         att_name = arg[0]
         att_value = arg[1]
         try:
-            platform = settings.active_project.getPlatform()
+            platform = settings.active_project.platform
             platform.setAttribute(att_name, att_value, "fpga")
         except Error, error:
             print(str(display))
@@ -421,7 +421,7 @@ get fpga attributes values
         arg = line.split(' ')
         att_name = arg[0]
         try:
-            platform = settings.active_project.getPlatform()
+            platform = settings.active_project.platform
             print(str(platform.getAttributeValue(att_name, "fpga")))
         except Error, error:
             print(str(display))

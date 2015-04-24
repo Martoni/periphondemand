@@ -134,7 +134,7 @@ class TopVHDL(TopGen):
                 else:
                     for pin in port.getPinsList():
                         if pin.isConnectedToInstance(
-                                self.project.getPlatform()):
+                                self.project.platform):
                             out = out + TAB * 2 + \
                                 instancename + "_" + portname + "_pin" +\
                                 str(pin.getNum()) + " : " +\
@@ -218,7 +218,7 @@ class TopVHDL(TopGen):
     def declareSignals(self, componentslist, incomplete_external_ports_list):
         """ Declare signals ports
         """
-        platformname = self.project.getPlatform().getInstanceName()
+        platformname = self.project.platform.getInstanceName()
         out = ""
         out = out + TAB + "-------------------------\n"
         out = out + TAB + "-- Signals declaration\n"
@@ -348,7 +348,7 @@ class TopVHDL(TopGen):
         out = out + TAB + "-- instances connections --\n"
         out = out + TAB + "---------------------------\n"
 
-        platform = self.project.getPlatform()
+        platform = self.project.platform
         platformname = platform.getInstanceName()
         # connect incomplete_external_ports_list
         for port in incomplete_external_ports_list:

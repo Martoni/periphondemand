@@ -71,7 +71,7 @@ class TopGen:
         ########################
         # entity
         entityname = "top_" + self.project.getName()
-        portlist = self.project.getPlatform().getConnectPortsList()
+        portlist = self.project.platform.getConnectPortsList()
         out = out + self.entity(entityname, portlist)
         ########################
         # architecture head
@@ -82,7 +82,7 @@ class TopGen:
         ########################
         # declare signals
         incompleteportslist = \
-                self.project.getPlatform().getIncompleteExternalPortsList()
+                self.project.platform.getIncompleteExternalPortsList()
         out = out + self.declareSignals(self.project.instances,
                                         incompleteportslist)
         ########################

@@ -192,23 +192,23 @@ class Project(WrapperXml):
     @property
     def fpga_speed_grade(self):
         """ Get FPGA speedgrade """
-        return self.getPlatform().getSpeed()
+        return self.platform.getSpeed()
 
     @fpga_speed_grade.setter
     def fpga_speed_grade(self, speed):
         """ Set FPGA speedgrade """
-        self.getPlatform().setSpeed(speed)
+        self.platform.setSpeed(speed)
         self.saveProject()
 
     @property
     def fpga_device(self):
         """ get fpgadevice """
-        return self.getPlatform().getDevice()
+        return self.platform.getDevice()
 
     @fpga_device.setter
     def fpga_device(self, device):
         """ set fpga device """
-        self.getPlatform().setDevice(device)
+        self.platform.setDevice(device)
         self.saveProject()
 
     @property
@@ -263,7 +263,7 @@ class Project(WrapperXml):
 
     def set_force(self, portname, state):
         """ May the force be with you """
-        platform = self.getPlatform()
+        platform = self.platform
         interfaces_list = platform.getInterfacesList()
         if len(interfaces_list) != 1:
             raise Error("I found " + str(len(interfaces_list)) +
@@ -279,7 +279,7 @@ class Project(WrapperXml):
     @property
     def forced_ports(self):
         """ List FPGA forced FPGA pin """
-        platform = self.getPlatform()
+        platform = self.platform
         return platform.getForcesList()
 
     @property
@@ -453,7 +453,8 @@ class Project(WrapperXml):
                 listinstance.append(instance)
         return listinstance
 
-    def getPlatform(self):
+    @property 
+    def platform(self):
         """ return component instance platform
         """
         for component in self.instances:
@@ -471,7 +472,7 @@ class Project(WrapperXml):
         # looking for port connected to platform
         # with type="CLK" and "in" direction
         portlist = []
-        platformname = self.getPlatform().getInstanceName()
+        platformname = self.platform.getInstanceName()
         for instance in self.instances:
             if not instance.isPlatform():
                 for interface in instance.getInterfacesList():
@@ -534,7 +535,7 @@ class Project(WrapperXml):
         """
         # find platform in components list
         try:
-            platform = self.getPlatform()
+            platform = self.platform
         except Error:
             raise Error("No platform in project", 2)
 
@@ -849,7 +850,7 @@ class Project(WrapperXml):
 
     def getIOlist(self):
         """ return a list of IOs avaiable in platform """
-        platform = self.getPlatform()
+        platform = self.platform
         return platform.getInterfacesList()[0].ports
 
     def getIO(self, io_name):

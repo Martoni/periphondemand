@@ -415,8 +415,7 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "forcename":
             arglist = ["" + port.getName()
                        for port in
-                       settings.active_project.getPlatform(
-                           ).getPlatformPortsList()]
+                       settings.active_project.platform.getPlatformPortsList()]
             return arglist
         elif subargt == "forcestate":
             return ["gnd", "vcc", "undef"]
@@ -476,7 +475,7 @@ fpga_attributes    : give list of fpga attributes in platform
             return [port.getName() for port in
                     settings.active_project.getIOlist()]
         elif subargt == "fpga_attributes":
-            platform = settings.active_project.getPlatform()
+            platform = settings.active_project.platform
             return platform.getAttributeNameList("fpga")
         else:
             return []
@@ -531,7 +530,7 @@ fpga_attributes    : give list of fpga attributes in platform
 
     def isPlatformSelected(self):
         """ check if platform is selected, if not raise error """
-        settings.active_project.getPlatform()
+        settings.active_project.platform
 
     def do_history(self, args):
         """ history
