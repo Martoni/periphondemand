@@ -442,7 +442,7 @@ class Project(WrapperXml):
                     ports_list.append(port)
         return ports_list
 
-    def getInstanceListofComponent(self, componentname):
+    def get_instances_list_of_component(self, componentname):
         """ return a list of instances for a componentname """
         listinstance = []
         for instance in self.instances:

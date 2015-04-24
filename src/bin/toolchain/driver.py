@@ -119,7 +119,7 @@ class Driver(WrapperXml):
         project = self.project
         out = ""
         for instance in \
-                project.getInstanceListofComponent(component.getName()):
+                project.get_instances_list_of_component(component.getName()):
             for writeline in template.split("\n"):
                 # instance_name
                 writeline = re.sub(r'\/\*\$instance_name\$\*\/',
@@ -216,7 +216,7 @@ class Driver(WrapperXml):
                 if re.search(r'\/\*\$number_of_instances\$\*\/',
                              line) is not None:
                     listOfInstances = \
-                            project.getInstanceListofComponent(
+                            project.get_instances_list_of_component(
                                     component.getName())
                     line = re.sub(r'\/\*\$number_of_instances\$\*\/',
                                         str(len(listOfInstances)),
