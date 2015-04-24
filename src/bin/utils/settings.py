@@ -33,7 +33,7 @@ from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.define import *
 from periphondemand.bin.utils.configfile import ConfigFile
 from periphondemand.bin.utils.error import Error
-from periphondemand.bin.define import PODPATH
+from periphondemand.bin.define import POD_PATH
 
 class Settings(object):
     """Settings class implements a Singleton design pattern to share the same
@@ -59,7 +59,7 @@ class Settings(object):
             self.history = []
             self.historyroot = []
             self.__script_dir = os.path.abspath(pathname)
-            self.path = PODPATH
+            self.path = POD_PATH
             self.projectpath = sy.pwd()
             self.headertpl = "/headervhdl.tpl"
             self.script = 0
