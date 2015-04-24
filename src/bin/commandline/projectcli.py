@@ -911,7 +911,7 @@ Suppress a component from project
             print(str(error))
             return
         try:
-            SETTINGS.active_project.delProjectInstance(line)
+            SETTINGS.active_project.del_instance(line)
         except Error, error:
             print DISPLAY
             print error
