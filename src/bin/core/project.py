@@ -495,7 +495,7 @@ class Project(WrapperXml):
         """
         # suppress platform if already exists
         try:
-            self.delPlatform()
+            self.del_platform()
         except Error, error:
             if error.getLevel() < 2:
                 raise error
@@ -529,10 +529,10 @@ class Project(WrapperXml):
         # Adding platform default components
         for component in platform.getComponentsList():
             self.add_instance(libraryname=component["type"],
-                             componentname=component["name"])
+                              componentname=component["name"])
         self.saveProject()
 
-    def delPlatform(self):
+    def del_platform(self):
         """ Suppress platform from project
         """
         # find platform in components list
