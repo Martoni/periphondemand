@@ -494,7 +494,7 @@ Select the platform to use
         try:
             args = line.strip().split(".")
             SETTINGS.active_project.select_platform(args[1], args[0])
-            SETTINGS.active_project.saveProject()
+            SETTINGS.active_project.save()
         except Error, error:
             print(str(DISPLAY))
             print(str(error))
