@@ -449,7 +449,7 @@ fpga_attributes    : give list of fpga attributes in platform
             if platformlib == "standard":
                 return ["standard." + name
                         for name in
-                        settings.active_project.listAvailablePlatforms()]
+                        settings.active_project.availables_platforms]
             else:
                 return [platformlib + "." + name
                         for name in

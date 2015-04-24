@@ -513,7 +513,7 @@ List platform available
             return
         try:
             return self.columnize(
-                    SETTINGS.active_project.listAvailablePlatforms())
+                    SETTINGS.active_project.availables_platforms)
         except AttributeError, error:
             print(str(error))
 

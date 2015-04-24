@@ -545,7 +545,9 @@ class Project(WrapperXml):
         self.delNode("platform")
         self.saveProject()
 
-    def listAvailablePlatforms(self):
+   
+    @property
+    def availables_platforms(self):
         """ List all supported platforms
         """
         platformlist = sy.listDirectory(SETTINGS.path + PLATFORMPATH)
