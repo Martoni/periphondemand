@@ -490,7 +490,7 @@ class Project(WrapperXml):
                                         portlist.append(port)
         return portlist
 
-    def selectPlatform(self, platformname,  platformlibname):
+    def select_platform(self, platformname, platformlibname):
         """ Select a platform for the project
         """
         # suppress platform if already exists
