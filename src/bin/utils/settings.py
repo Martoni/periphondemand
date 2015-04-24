@@ -29,10 +29,11 @@ __author__ = "Fabrice MOUSSET <fabrice.mousset@laposte.net> and "+\
              "Fabien MARTEAU <fabien.marteau@armadeus.com>"
 
 import cmd, re, os, sys
-from   periphondemand.bin.utils  import wrappersystem as sy
-from   periphondemand.bin.define import *
-from   periphondemand.bin.utils.configfile import ConfigFile
-from   periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils import wrappersystem as sy
+from periphondemand.bin.define import *
+from periphondemand.bin.utils.configfile import ConfigFile
+from periphondemand.bin.utils.error import Error
+from periphondemand.bin.define import PODPATH
 
 class Settings(object):
     """Settings class implements a Singleton design pattern to share the same
@@ -58,7 +59,7 @@ class Settings(object):
             self.history = []
             self.historyroot = []
             self.__script_dir = os.path.abspath(pathname)
-            self.path = None
+            self.path = PODPATH
             self.projectpath = sy.pwd()
             self.headertpl = "/headervhdl.tpl"
             self.script = 0

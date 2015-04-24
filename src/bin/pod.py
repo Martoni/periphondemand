@@ -38,7 +38,6 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 from periphondemand.bin.commandline.projectcli import ProjectCli
 from periphondemand.bin.utils         import Settings
 from periphondemand.bin.utils         import wrappersystem as sy
-from periphondemand.bin.define        import POD_PATH
 from periphondemand.bin               import version as ver
 import sys,os,getopt
 
@@ -81,7 +80,6 @@ def main(argv):
 
     CLI = ProjectCli()
     SETTINGS = Settings()
-    SETTINGS.path = POD_PATH
     SETTINGS.projectpath = sy.pwd()
     SETTINGS.version = ver.getVersion()
 
