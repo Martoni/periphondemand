@@ -467,7 +467,8 @@ class Project(WrapperXml):
         """ return platform name """
         return self.getNode("platform").getAttributeValue("name")
 
-    def getListClockPorts(self):
+    @property
+    def clock_ports(self):
         """ return a list of external clock port
         """
         # looking for port connected to platform

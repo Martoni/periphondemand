@@ -35,6 +35,7 @@ __versionTime__ = "24/07/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.define import *
+from periphondemand.bin.define import VHDLEXT
 
 from periphondemand.bin.code.topgen    import TopGen
 
@@ -202,8 +203,10 @@ def endarch():
 def generateTemplate():
     """ generate Template Testbench
     """
-    filename = settings.projectpath+SIMULATIONPATH+"/top_"+ settings.active_project.getName()+"_tb"+VHDLEXT
-    clockportlist = settings.active_project.getListClockPorts()
+    filename = settings.projectpath + SIMULATIONPATH +\
+               "/top_" + settings.active_project.getName() +\
+               "_tb" + VHDLEXT
+    clockportlist = settings.active_project.clock_ports
     if len(clockportlist) == 0:
         raise Error("No external clock signal found",0)
     if len(clockportlist) != 1:
