@@ -245,7 +245,7 @@ class Pin(WrapperXml):
         project = self.getParent().getParent().getParent().getParent()
         pindest_list = []
         for connection in self.getConnections():
-            if connection["instance_dest"] == project.getPlatformName():
+            if connection["instance_dest"] == project.platform_name:
                 pin_dest = project.get_instance(
                         connection["instance_dest"]).getInterface(
                                 connection["interface_dest"]).getPort(

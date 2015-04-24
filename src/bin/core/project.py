@@ -462,7 +462,8 @@ class Project(WrapperXml):
                 return component
         raise Error("No platform in project", 1)
 
-    def getPlatformName(self):
+    @property 
+    def platform_name(self):
         """ return platform name """
         return self.getNode("platform").getAttributeValue("name")
 
