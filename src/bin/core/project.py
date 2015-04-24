@@ -351,8 +351,10 @@ class Project(WrapperXml):
                     if instance.getName() == instancename:
                         raise Error("This instance name already exists", 0)
             else:
-                instancename = componentname +\
-                    "%02d" % self.getInstanceAvailability(componentname)
+                instancename =\
+                       componentname +\
+                       "%02d" %\
+                       len(self.get_instances_list_of_component(componentname))
             if "componentversion" in keys:
                 componentversion = keys["componentversion"]
             else:
@@ -366,7 +368,8 @@ class Project(WrapperXml):
                                  componentname,
                                  componentversion,
                                  instancename)
-            comp.setNum(self.getInstanceAvailability(componentname))
+            comp.setNum(
+                    len(self.get_instances_list_of_component(componentname)))
         else:
             raise Error("Key not known in add_instance", 0)
 
@@ -449,17 +452,6 @@ class Project(WrapperXml):
             if instance.getName() == componentname:
                 listinstance.append(instance)
         return listinstance
-
-    def getInstanceAvailability(self, componentname):
-        """ Return the number of the same component in project
-        """
-        cmpt = 0
-        if self.getNode("components") is None:
-            return 0
-        for element in self.instances:
-            if element.getName() == componentname:
-                cmpt = cmpt + 1
-        return cmpt
 
     def getPlatform(self):
         """ return component instance platform

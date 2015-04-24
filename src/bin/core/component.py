@@ -103,8 +103,10 @@ class Component(WrapperXml):
                 except IndexError:
                     raise Error("No xml description of component", 0)
         if instancename is None:
-                instancename = componentname +\
-                        "%02d" % project.getInstanceAvailability(componentname)
+                instancename =\
+                        componentname +\
+                        "%02d" %\
+                        len(project.get_instances_list_of_component(componentname))
 
         #copy and rename directory
         sy.copyDirectory(project.library.getLibraryPath(libraryname) +
