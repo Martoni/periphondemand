@@ -418,6 +418,7 @@ class Project(WrapperXml):
 
     @property
     def instances(self):
+        """ Get instances list of project """
         return self._instanceslist
 
     @property
