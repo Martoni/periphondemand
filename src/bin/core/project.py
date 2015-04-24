@@ -453,7 +453,7 @@ class Project(WrapperXml):
                 listinstance.append(instance)
         return listinstance
 
-    @property 
+    @property
     def platform(self):
         """ return component instance platform
         """
@@ -462,7 +462,7 @@ class Project(WrapperXml):
                 return component
         raise Error("No platform in project", 1)
 
-    @property 
+    @property
     def platform_name(self):
         """ return platform name """
         return self.getNode("platform").getAttributeValue("name")
