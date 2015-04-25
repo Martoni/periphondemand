@@ -20,21 +20,20 @@ Optional
 * *ISE Webpack* : to generate synthesis project for Xilinx.
 * *Quartus* : to generate synthesis project for Altera.
 * *ARMadeus SDK* : to generate driver project for the Armadeus boards.
+* *python-coverage* : for unittest and functionnal test.
 
 From GIT
 ++++++++
 
 **For developpers**
 
-If you are a developper you need a user login to pull code with :
+Checkout the source code of periphondemand with the following command (git is needed):
 
-``$ git clone ssh://USER@git.code.sf.net/p/periphondemand/code periphondemand``
+``$ git clone https://github.com/Martoni/fpgarchitect.git periphondemand``
 
-For all
+Then checkout the standard library:
 
-Checkout the source code with the following command (git is needed):
-
-``$ git clone git://git.code.sf.net/p/periphondemand/code periphondemand``
+``$ git clone https://github.com/Martoni/pod_lib.git libraries``
 
 **Install it**
 
