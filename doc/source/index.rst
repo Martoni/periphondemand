@@ -9,6 +9,12 @@ POD overview
 .. toctree::
     overview.rst
 
+POD roadmap
+===========
+
+.. toctree::
+    roadmap.rst
+
 Installation guide
 ==================
 

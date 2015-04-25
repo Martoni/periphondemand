@@ -1,0 +1,44 @@
+.. This is the roadmap of POD
+
+POD 1.0 :
++++++++++
+
+* VHDL Intercon generation
+* VHDL top generation
+* ARMadeus 4.0 templates available for multiple instances of a component 
+
+POD 1.1 :
++++++++++
+
+* Platform and library out of POD repository
+* Manage FPGA IOs settings with FPGA configuration files for each type of FPGA
+* Library documentation generator
+* Functionals tests
+* Unit tests
+* Improve code quality according to Pylint and PEP8
+
+POD 1.2 :
++++++++++
+
+* Improve wishbone management
+
+  * Fusion of all wishbone bus (wb8, wb16, wb32)
+  * Generate intercon that adapte slave size according to master
+  * Manage wait states
+
+* Adding Quartus in generatebitstream
+* Improve code quality according to Pylint and PEP8
+* More unit tests
+
+POD 1.3 :
++++++++++
+
+* Code quality good according to pylint and PEP8 (no warning)
+* 100% code test coverage
+
+POD 2.0 :
++++++++++
+
+* Adding Verilog HDL language
+* Generate SystemC testbench
+
