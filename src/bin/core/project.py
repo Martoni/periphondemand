@@ -598,7 +598,7 @@ class Project(WrapperXml):
         pin_source.connectPin(pin_dest)
         self.save()
 
-    def deletePinConnection_cmd(self,
+    def delete_pin_connection_cmd(self,
                                 instance_source_name, interface_source_name,
                                 port_source_name, pin_source_num,
                                 instance_dest_name, interface_dest_name,

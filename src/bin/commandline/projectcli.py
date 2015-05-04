@@ -878,7 +878,7 @@ Suppress a pin connection
         if len(dest) == 3:
             dest.append(None)
         try:
-            SETTINGS.active_project.deletePinConnection_cmd(
+            SETTINGS.active_project.delete_pin_connection_cmd(
                     source[0], source[1],
                     source[2], source[3],
                     dest[0], dest[1],
