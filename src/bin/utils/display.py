@@ -30,10 +30,17 @@
 #-----------------------------------------------------------------------------
 """ Managing printing messages """
 
-from periphondemand.bin.define import *
+from periphondemand.bin.define import COLOR_ERROR
+from periphondemand.bin.define import COLOR_END
+from periphondemand.bin.define import COLOR_ERROR_MESSAGE
+from periphondemand.bin.define import COLOR_WARNING_MESSAGE
+from periphondemand.bin.define import COLOR_WARNING
+from periphondemand.bin.define import COLOR_INFO_MESSAGE
+from periphondemand.bin.define import COLOR_INFO
+
 from periphondemand.bin.utils.settings import Settings
 
-settings = Settings()
+SETTINGS = Settings()
 
 
 class Display(object):
@@ -45,7 +52,8 @@ class Display(object):
     """
     instance = None
 
-    class __Display:
+    class __Display(object):
+        """ Singleton object of display class """
         def __init__(self):
             self.msglist = []
             self.val = None
@@ -55,7 +63,7 @@ class Display(object):
             for msg in self.msglist:
                 if msg[1] == 0:
                     try:
-                        if settings.color() == 1:
+                        if SETTINGS.color() == 1:
                             out = out + COLOR_ERROR + "[ERROR]" +\
                                     COLOR_END + "  : " +\
                                     COLOR_ERROR_MESSAGE + msg[0].strip() +\
@@ -66,7 +74,7 @@ class Display(object):
                         out = out + "[ERROR]  : " + msg[0].strip() + "\n"
                 elif msg[1] == 1:
                     try:
-                        if settings.color() == 1:
+                        if SETTINGS.color() == 1:
                             out = out + COLOR_WARNING + "[WARNING]" +\
                                     COLOR_END + ": " +\
                                     COLOR_WARNING_MESSAGE + msg[0].strip() +\
@@ -77,7 +85,7 @@ class Display(object):
                         out = out + "[WARNING]: " + msg[0].strip() + "\n"
                 elif msg[1] == 2:
                     try:
-                        if settings.color() == 1:
+                        if SETTINGS.color() == 1:
                             out = out + COLOR_INFO + "[INFO]" +\
                                     COLOR_END + " : " +\
                                     COLOR_INFO_MESSAGE + msg[0].strip() +\
@@ -93,11 +101,12 @@ class Display(object):
             return out
 
         def msg(self, msg, level=3):
+            """ message printer """
             self.msglist.append((msg, level))
 
-    def __new__(c):  # _new_ is always class method
+    def __new__(cls):  # _new_ is always class method
         if not Display.instance:
-                Display.instance = Display.__Display()
+            Display.instance = Display.__Display()
         return Display.instance
 
     def __getattr__(self, attr):
