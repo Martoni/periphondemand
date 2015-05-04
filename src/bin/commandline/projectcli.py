@@ -580,7 +580,7 @@ Connect pin between instances
         if len(dest) == 3:
             dest.append(0)
         try:
-            SETTINGS.active_project.connectPin_cmd(
+            SETTINGS.active_project.connect_pin_cmd(
                     SETTINGS.active_project.get_instance(
                         source[0]).getInterface(
                             source[1]).getPort(

@@ -586,7 +586,7 @@ class Project(WrapperXml):
             self.simulation.save()
         self.saveXml(SETTINGS.projectpath + "/" + self.getName() + XMLEXT)
 
-    def connectPin_cmd(self, pin_source, pin_dest):
+    def connect_pin_cmd(self, pin_source, pin_dest):
         """ connect pin between two instances
         """
         if pin_source.getParent().getParent().isBus():
