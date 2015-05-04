@@ -54,3 +54,5 @@ COLOR_INFO_MESSAGE="\033[34;1m"    # blue on white
 COLOR_SHELL="\033[33;3m"           # green on black
 COLOR_END="\033[0m"
 
+#For generated HDL
+ONETAB = "    "

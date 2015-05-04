@@ -26,6 +26,7 @@ from periphondemand.bin.define import SYNTHESISPATH
 from periphondemand.bin.define import DRIVERSPATH
 from periphondemand.bin.define import TOOLCHAINPATH
 from periphondemand.bin.define import PLATFORMPATH
+from periphondemand.bin.define import ONETAB
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
@@ -881,7 +882,6 @@ class Project(WrapperXml):
 
     def generateReport(self, filename=None):
         """ generate a project report """
-        TAB = "    "
         if filename is None:
             report_file = open(SETTINGS.projectpath +
                                "/" + self.getName() +
@@ -896,11 +896,11 @@ class Project(WrapperXml):
             for slave in master.getSlavesList():
                 interfaceslave = slave.getInterface()
                 instance = interfaceslave.getParent()
-                text += TAB + instance.getInstanceName() +\
+                text += ONETAB + instance.getInstanceName() +\
                     "." + interfaceslave.getName() + ":\n"
                 try:
                     for reg in interfaceslave.getRegisterMap():
-                        text += TAB + "  " + "0x%02x : %s\n" % (reg["offset"],
+                        text += ONETAB + "  " + "0x%02x : %s\n" % (reg["offset"],
                                                                 reg["name"])
                 except Error:
                     text += "\n"
