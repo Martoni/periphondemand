@@ -298,7 +298,7 @@ class Interface(WrapperXml):
 
         for port in self.ports:
             port_dst = interface_dest.getPortByType(port.getType())
-            port.connectPort(port_dst)
+            port.connect_port(port_dst)
 
     def connectBus(self, instanceslave, interfaceslavename):
         """ Connect an interfaceslave to an interface bus master

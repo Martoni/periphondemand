@@ -320,7 +320,7 @@ class Port(WrapperXml):
             raise Error("incompatible pin : " +
                         self.getDir() + " => " + portdest.getDir(), 0)
 
-    def connectPort(self, port_dest):
+    def connect_port(self, port_dest):
         """ Connect all pins of a port on all pin on same size port dest
         """
         size = self.getSize()

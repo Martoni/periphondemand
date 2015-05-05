@@ -659,7 +659,7 @@ class Project(WrapperXml):
         self.add_instance(component=intercon)
         self.save()
 
-    def connectPort(self,
+    def connect_port(self,
                     instance_source_name, interface_source_name,
                     port_source_name,
                     instance_dest_name, interface_dest_name,
@@ -675,7 +675,7 @@ class Project(WrapperXml):
         interface_dest = instance_dest.getInterface(interface_dest_name)
         port_dest = interface_dest.getPort(port_dest_name)
 
-        port_source.connectPort(port_dest)
+        port_source.connect_port(port_dest)
         self.save()
 
     def connectInterface(self, instance_name1, interface_name1,
