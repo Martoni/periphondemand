@@ -564,7 +564,7 @@ class Project(WrapperXml):
         # remove busses connections from project instances to this instancename
         for comp in self.instances:
             if comp.getName() != "platform":
-                comp.deleteBus(instanceslavename=instancename)
+                comp.del_bus(instanceslavename=instancename)
         # Remove components from project
         self._instanceslist.remove(instance)
         self.reorder_instances(instance.getName())
@@ -698,12 +698,12 @@ class Project(WrapperXml):
                             interfaceslave)
         self.save()
 
-    def deleteBus(self, instancemaster, instanceslave,
+    def del_bus(self, instancemaster, instanceslave,
                   interfacemaster=None, interfaceslave=None):
         """ Delete a slave bus connection
         """
         instance = self.get_instance(instancemaster)
-        instance.deleteBus(instanceslave, interfacemaster, interfaceslave)
+        instance.del_bus(instanceslave, interfacemaster, interfaceslave)
         self.save()
 
     def reorder_instances(self, componentname):

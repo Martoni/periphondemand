@@ -246,7 +246,7 @@ class Interface(WrapperXml):
                         {"instancename": slave.getInstanceName(),
                          "interfacename": slave.getInterfaceName()})
 
-    def deleteBus(self, instanceslavename, interfaceslavename=None):
+    def del_bus(self, instanceslavename, interfaceslavename=None):
         """ delete slave bus connection
         """
         for slave in self.getSlavesList():

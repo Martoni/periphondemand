@@ -761,10 +761,8 @@ Suppress a pin connection
             print("Argument error")
             return
         try:
-            SETTINGS.active_project.deleteBus(source[0],
-                                              dest[0],
-                                              source[1],
-                                              dest[1])
+            SETTINGS.active_project.del_bus(source[0], dest[0],
+                                            source[1], dest[1])
         except Error, error:
             print DISPLAY
             print(str(error))

@@ -399,19 +399,19 @@ class Component(WrapperXml):
             raise Error(interfacemaster + " is not a bus", 1)
         interface.connectBus(instanceslave, interfaceslave)
 
-    def deleteBus(self, instanceslavename, interfacemaster=None,
-                        interfaceslavename=None):
+    def del_bus(self, instanceslavename, interfacemaster=None,
+                interfaceslavename=None):
         """ Delete bus connection that refer to instanceslavename
         """
         if interfacemaster is None:
             for interface in self.getInterfacesList():
                 try:
-                    interface.deleteBus(instanceslavename)
+                    interface.del_bus(instanceslavename)
                 except Error:
                     pass
         else:
             interface = self.getInterface(interfacemaster)
-            interface.deleteBus(instanceslavename, interfaceslavename)
+            interface.del_bus(instanceslavename, interfaceslavename)
 
     def connectClkDomain(self, instancedestname, interfacesourcename,
                                interfacedestname):
