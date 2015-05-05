@@ -261,7 +261,7 @@ class Interface(WrapperXml):
                     " -> " + str(instanceslavename) + "." +
                     str(interfaceslavename) + " doesn't exist", 0)
 
-    def connectInterface(self, interface_dest):
+    def connect_interface(self, interface_dest):
         """ Connect an interface between two components
         """
         if len(interface_dest.ports) != len(self.ports):

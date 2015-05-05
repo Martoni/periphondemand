@@ -677,7 +677,7 @@ class Project(WrapperXml):
         port_source.connect_port(port_dest)
         self.save()
 
-    def connectInterface(self, instance_name1, interface_name1,
+    def connect_interface(self, instance_name1, interface_name1,
                          instance_name2, interface_name2):
         """ Connect an interface between two components
         """
@@ -685,7 +685,7 @@ class Project(WrapperXml):
         interface_src = instance_src.getInterface(interface_name1)
         instance_dest = self.get_instance(instance_name2)
         interface_dest = instance_dest.getInterface(interface_name2)
-        interface_src.connectInterface(interface_dest)
+        interface_src.connect_interface(interface_dest)
         self.save()
 
     def connect_bus(self, instancemaster, interfacemaster,
