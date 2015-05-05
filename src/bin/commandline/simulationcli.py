@@ -65,14 +65,14 @@ select toolchain used for simulation
             return
 
         if line.strip() == "":
-            if len(SETTINGS.active_project.getSimulationToolChainList()) == 1:
+            if len(SETTINGS.active_project.get_simulation_toolchains()) == 1:
                 SETTINGS.active_project.simulation_toolchain =\
-                    SETTINGS.active_project.getSimulationToolChainList()[0]
+                    SETTINGS.active_project.get_simulation_toolchains()[0]
             else:
                 if SETTINGS.active_project.simulation_toolchain is None:
                     print "Choose a toolchain\n"
                     for toolchain in \
-                          SETTINGS.active_project.getSimulationToolChainList():
+                          SETTINGS.active_project.get_simulation_toolchains():
                         print(str(toolchain))
                     return
         else:
@@ -100,7 +100,7 @@ Make projects files for simulation (makefile and testbench sources)
         if SETTINGS.active_project.simulation_toolchain is None:
             print Error("Choose a toolchain before", 0)
             for toolchain in \
-                    SETTINGS.active_project.getSimulationToolChainList():
+                    SETTINGS.active_project.get_simulation_toolchains():
                 print(str(toolchain.getName()))
             return
         try:

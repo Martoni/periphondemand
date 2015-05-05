@@ -461,7 +461,7 @@ fpga_attributes    : give list of fpga attributes in platform
                     for generic in instance.getGenericsList()]
 
         elif subargt == "simulationtoolchain":
-            return settings.active_project.getSimulationToolChainList()
+            return settings.active_project.get_simulation_toolchains()
 
         elif subargt == "libcomponentname":
             libraryname = settings.active_library.getActiveLibName()

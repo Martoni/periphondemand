@@ -219,7 +219,7 @@ class Project(WrapperXml):
     @simulation_toolchain.setter
     def simulation_toolchain(self, toolchainname):
         """ Set simulation toolchain """
-        if toolchainname not in self.getSimulationToolChainList():
+        if toolchainname not in self.get_simulation_toolchains():
             raise Error("No toolchain named " + toolchainname + " in POD")
         sy.copyFile(SETTINGS.path + TOOLCHAINPATH + SIMULATIONPATH +
                     "/" + toolchainname + "/" + toolchainname + XMLEXT,
@@ -830,7 +830,8 @@ class Project(WrapperXml):
             DISPLAY.msg("----------------------------" +
                         "-----------------------------")
 
-    def getSimulationToolChainList(self):
+    @classmethod
+    def get_simulation_toolchains(cls):
         """ list all toolchain availables """
         filelist = sy.listDirectory(SETTINGS.path +
                                     TOOLCHAINPATH + SIMULATIONPATH)
