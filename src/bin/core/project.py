@@ -239,7 +239,7 @@ class Project(WrapperXml):
     @driver_toolchain.setter
     def driver_toolchain(self, toolchainname):
         """ set driver toolchain """
-        if toolchainname not in self.getDriverToolChainList():
+        if toolchainname not in self.get_driver_toolchains():
             raise Error("No toolchain named " + toolchainname + " in POD")
         sy.copyFile(SETTINGS.path + TOOLCHAINPATH + DRIVERSPATH +
                     "/" + toolchainname + "/" + toolchainname + XMLEXT,
@@ -831,22 +831,20 @@ class Project(WrapperXml):
                         "-----------------------------")
 
     def getSimulationToolChainList(self):
-        """ list all toolchain availables
-        """
+        """ list all toolchain availables """
         filelist = sy.listDirectory(SETTINGS.path +
                                     TOOLCHAINPATH + SIMULATIONPATH)
         return filelist
 
     def getSynthesisToolChainList(self):
-        """ list all toolchains availables
-        """
+        """ list all toolchains availables """
         filelist = sy.listDirectory(SETTINGS.path +
                                     TOOLCHAINPATH + SYNTHESISPATH)
         return filelist
 
-    def getDriverToolChainList(self):
-        """ list all toolchains availables
-        """
+    @classmethod
+    def get_driver_toolchains(cls):
+        """ list all toolchains availables """
         filelist = sy.listDirectory(SETTINGS.path +
                                     TOOLCHAINPATH + DRIVERSPATH)
         return filelist

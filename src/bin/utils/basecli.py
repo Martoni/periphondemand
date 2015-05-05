@@ -470,7 +470,7 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "synthesistoolchain":
             return settings.active_project.getSynthesisToolChainList()
         elif subargt == "drivertoolchain":
-            return settings.active_project.getDriverToolChainList()
+            return settings.active_project.get_driver_toolchains()
         elif subargt == "IO_name":
             return [port.getName() for port in
                     settings.active_project.get_ios()]

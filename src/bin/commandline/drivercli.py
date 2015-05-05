@@ -156,14 +156,14 @@ select operating system to generate drivers
             print error
             return
         if line.strip() == "":
-            if len(settings.active_project.getDriverToolChainList()) == 1:
+            if len(settings.active_project.get_driver_toolchains()) == 1:
                 settings.active_project.driver_toolchain =\
-                    settings.active_project.getDriverToolChainList()[0]
+                    settings.active_project.get_driver_toolchains()[0]
             else:
                 if settings.active_project.driver_toolchain is None:
                     print "Choose a toolchain\n"
                     for toolchain in \
-                            settings.active_project.getDriverToolChainList():
+                            settings.active_project.get_driver_toolchains():
                         print toolchain
                     return
         else:
