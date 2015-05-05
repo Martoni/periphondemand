@@ -375,7 +375,7 @@ def architectureFoot(intercon):
     out = "\nend architecture "+intercon.getName()+"_1;\n"
     return out
 
-def generateIntercon(masterinterface,intercon):
+def generate_intercon(masterinterface,intercon):
     """Generate intercon VHDL code for wishbone16 bus
     """
     masterinstance = masterinterface.getParent()

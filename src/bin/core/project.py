@@ -641,7 +641,7 @@ class Project(WrapperXml):
                 pin_dest.delConnection(pin_source)
         self.save()
 
-    def generateIntercon(self, instance_name, interface_name):
+    def generate_intercon(self, instance_name, interface_name):
         """ generate intercon for interface interface_name """
         # test if intercon already exists
         from periphondemand.bin.code.intercon import Intercon

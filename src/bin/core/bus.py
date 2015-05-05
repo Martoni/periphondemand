@@ -73,7 +73,7 @@ class Bus(WrapperXml):
                         return signal.getAttributeValue("name")
         return None
 
-    def generateIntercon(self, intercon):
+    def generate_intercon(self, intercon):
         """ generate intercon
         """
         masterinterface = self.getParent()
@@ -83,4 +83,4 @@ class Bus(WrapperXml):
         plugin = __import__(self.getName())
         sys.path.remove(settings.path + BUSPATH + "/" + self.getName())
 
-        plugin.generateIntercon(masterinterface, intercon)
+        plugin.generate_intercon(masterinterface, intercon)

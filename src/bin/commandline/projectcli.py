@@ -1206,7 +1206,7 @@ Generate intercon for master given in argument
             print "Arguments error"
             return
         try:
-            SETTINGS.active_project.generateIntercon(names[0], names[1])
+            SETTINGS.active_project.generate_intercon(names[0], names[1])
         except Error, error:
             print error
             return

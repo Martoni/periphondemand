@@ -73,7 +73,7 @@ class Intercon(Component):
         self.generateXML(masterinterface)
         # Write Code for component
 
-        masterinterface.getBus().generateIntercon(self)
+        masterinterface.getBus().generate_intercon(self)
 
         display.msg("Intercon with name : " + self.getInstanceName() + " Done")
 
