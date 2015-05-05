@@ -607,7 +607,8 @@ class Project(WrapperXml):
                             "port":"name", "num":"num"}
         """
         instance_source = self.get_instance(sourcedict["instance"])
-        interface_source = instance_source.getInterface(sourcedict["interface"])
+        interface_source =\
+                instance_source.getInterface(sourcedict["interface"])
         port_source = interface_source.getPort(sourcedict["port"])
         if sourcedict["num"] is None:
             if(port_source.getSize()) == 1:
