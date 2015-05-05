@@ -473,7 +473,7 @@ fpga_attributes    : give list of fpga attributes in platform
             return settings.active_project.getDriverToolChainList()
         elif subargt == "IO_name":
             return [port.getName() for port in
-                    settings.active_project.getIOlist()]
+                    settings.active_project.get_ios()]
         elif subargt == "fpga_attributes":
             platform = settings.active_project.platform
             return platform.getAttributeNameList("fpga")

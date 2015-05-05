@@ -851,14 +851,14 @@ class Project(WrapperXml):
                                     TOOLCHAINPATH + DRIVERSPATH)
         return filelist
 
-    def getIOlist(self):
+    def get_ios(self):
         """ return a list of IOs avaiable in platform """
         platform = self.platform
         return platform.getInterfacesList()[0].ports
 
     def get_io(self, io_name):
         """ return IO with io_name given """
-        for an_io in self.getIOlist():
+        for an_io in self.get_ios():
             if an_io.getName() == io_name:
                 return an_io
         raise Error("No IO with name " + str(io_name))
