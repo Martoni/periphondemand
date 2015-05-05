@@ -688,14 +688,14 @@ class Project(WrapperXml):
         interface_src.connectInterface(interface_dest)
         self.save()
 
-    def connectBus(self, instancemaster, interfacemaster,
-                   instanceslave, interfaceslave):
+    def connect_bus(self, instancemaster, interfacemaster,
+                    instanceslave, interfaceslave):
         """ Connect a master bus to a slave bus
         """
         instance = self.get_instance(instancemaster)
-        instance.connectBus(interfacemaster,
-                            self.get_instance(instanceslave),
-                            interfaceslave)
+        instance.connect_bus(interfacemaster,
+                             self.get_instance(instanceslave),
+                             interfaceslave)
         self.save()
 
     def del_bus(self, instancemaster, instanceslave,
@@ -745,8 +745,8 @@ class Project(WrapperXml):
                 if interfaceslave.getBusName() == master.getBusName():
                     try:
                         # connect bus
-                        master.connectBus(interfaceslave.getParent(),
-                                          interfaceslave.getName())
+                        master.connect_bus(interfaceslave.getParent(),
+                                           interfaceslave.getName())
                     except Error, error:
                         error.setLevel(2)
                         DISPLAY.msg(str(error))

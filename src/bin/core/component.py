@@ -391,13 +391,13 @@ class Component(WrapperXml):
                                 portsource,
                                 pinsource)
 
-    def connectBus(self, interfacemaster, instanceslave, interfaceslave):
+    def connect_bus(self, interfacemaster, instanceslave, interfaceslave):
         """ Connect an interface bus master to slave
         """
         interface = self.getInterface(interfacemaster)
         if interface.getName() is None:
             raise Error(interfacemaster + " is not a bus", 1)
-        interface.connectBus(instanceslave, interfaceslave)
+        interface.connect_bus(instanceslave, interfaceslave)
 
     def del_bus(self, instanceslavename, interfacemaster=None,
                 interfaceslavename=None):

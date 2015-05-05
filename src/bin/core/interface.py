@@ -300,7 +300,7 @@ class Interface(WrapperXml):
             port_dst = interface_dest.getPortByType(port.getType())
             port.connect_port(port_dst)
 
-    def connectBus(self, instanceslave, interfaceslavename):
+    def connect_bus(self, instanceslave, interfaceslavename):
         """ Connect an interfaceslave to an interface bus master
         """
         interfaceslave = instanceslave.getInterface(interfaceslavename)

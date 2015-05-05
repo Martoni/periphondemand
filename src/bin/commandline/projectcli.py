@@ -803,10 +803,8 @@ Connect slave to master bus
             print("Argument error")
             return
         try:
-            SETTINGS.active_project.connectBus(source[0],
-                                               source[1],
-                                               dest[0],
-                                               dest[1])
+            SETTINGS.active_project.connect_bus(source[0], source[1],
+                                                dest[0], dest[1])
         except Error, error:
             print DISPLAY
             print(str(error))
