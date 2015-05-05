@@ -856,11 +856,11 @@ class Project(WrapperXml):
         platform = self.platform
         return platform.getInterfacesList()[0].ports
 
-    def getIO(self, io_name):
+    def get_io(self, io_name):
         """ return IO with io_name given """
-        for io in self.getIOlist():
-            if io.getName() == io_name:
-                return io
+        for an_io in self.getIOlist():
+            if an_io.getName() == io_name:
+                return an_io
         raise Error("No IO with name " + str(io_name))
 
     def get_components_versions(self, libraryname, componentname):
