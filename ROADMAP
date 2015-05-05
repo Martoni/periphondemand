@@ -21,9 +21,10 @@
   
     * Fusion of all wishbone bus (wb8, wb16, wb32)
     * Generate intercon that adapte slave size according to master
-    * Manage wait states
+    * Manage wait states compatibility master-slave
   
   * Adding Quartus in generatebitstream
+  * Busses documentation
   * Improve code quality according to Pylint and PEP8
   * More unit tests
   
@@ -34,6 +35,7 @@
   
 * **POD 2.0 :**
   
-  * Adding Verilog HDL language
-  * Generate SystemC testbench
+  * Adding Verilog HDL language with VHDL component-top generation
+  * Adding Others HDL language like Migen and Chisel
+  * GUI
 
