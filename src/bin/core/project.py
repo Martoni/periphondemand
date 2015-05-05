@@ -707,8 +707,7 @@ class Project(WrapperXml):
         self.save()
 
     def reNum(self, componentname):
-        """ Renum all instances in the correct order
-        """
+        """ Renum all instances in the correct order """
         complist = []
         for comp in self._instanceslist:
             if comp.getName() == componentname:
@@ -719,9 +718,8 @@ class Project(WrapperXml):
             num = num + 1
         self.save()
 
-    def autoConnectBus(self):
-        """ autoconnect bus
-        """
+    def auto_connect_busses(self):
+        """ autoconnect busses """
         masters = self.interfaces_master
         # autoconnection can be made only if they are 1 master interface
         if len(masters) < 1:

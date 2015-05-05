@@ -822,7 +822,7 @@ Autoconnect bus if only one master in project
         """
         try:
             self.isProjectOpen()
-            SETTINGS.active_project.autoConnectBus()
+            SETTINGS.active_project.auto_connect_busses()
         except Error, error:
             print DISPLAY
             print(str(error))
