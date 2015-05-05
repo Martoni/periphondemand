@@ -880,7 +880,7 @@ class Project(WrapperXml):
                 outlist.append(name)
         return outlist
 
-    def generateReport(self, filename=None):
+    def generate_report(self, filename=None):
         """ generate a project report """
         if filename is None:
             report_file = open(SETTINGS.projectpath +

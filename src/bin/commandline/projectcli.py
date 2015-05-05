@@ -1233,7 +1233,7 @@ Generate a report of the project
         """
         try:
             self.isProjectOpen()
-            text = SETTINGS.active_project.generateReport()
+            text = SETTINGS.active_project.generate_report()
         except Error, error:
             print DISPLAY
             print error
