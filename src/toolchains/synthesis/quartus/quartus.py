@@ -28,7 +28,17 @@
 import time
 import datetime
 
-from periphondemand.bin.define import *
+from periphondemand.bin.define import ONETAB
+from periphondemand.bin.define import SYNTHESISPATH
+from periphondemand.bin.define import TCLEXT
+from periphondemand.bin.define import OBJSPATH
+from periphondemand.bin.define import VHDLEXT
+from periphondemand.bin.define import COLOR_SHELL
+from periphondemand.bin.define import COLOR_END
+from periphondemand.bin.define import BINARY_PREFIX
+from periphondemand.bin.define import ALTERA_BITSTREAM_SUFFIX
+from periphondemand.bin.define import BINARYPROJECTPATH
+
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.error import Error
 from periphondemand.bin.utils.display import Display
@@ -41,7 +51,7 @@ from periphondemand.bin.core.hdl_file import Hdl_file
 
 settings = Settings()
 display = Display()
-TAB = "    "
+ONETAB = "    "
 
 
 def generatepinoutContent(self):
@@ -49,14 +59,14 @@ def generatepinoutContent(self):
     for interface in self.project.platform.getInterfacesList():
         for port in interface.ports:
             if port.forceDefined():
-                out = out + TAB + 'set_location_assignment ' + \
+                out = out + ONETAB + 'set_location_assignment ' + \
                     str(port.getPosition()) + \
                     ' -to force_' + str(port.getName()) + ";\n"
             else:
                 for pin in port.getPinsList():
                     if pin.getConnections() != []:
                         connect = pin.getConnections()
-                        out = out + TAB + 'set_location_assignment ' + \
+                        out = out + ONETAB + 'set_location_assignment ' + \
                             port.getPosition() + " -to " + \
                             connect[0]["instance_dest"] + "_" + \
                             connect[0]["port_dest"]
