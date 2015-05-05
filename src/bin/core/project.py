@@ -567,7 +567,7 @@ class Project(WrapperXml):
                 comp.deleteBus(instanceslavename=instancename)
         # Remove components from project
         self._instanceslist.remove(instance)
-        self.reNum(instance.getName())
+        self.reorder_instances(instance.getName())
         self.delSubNode("components",
                         "component",
                         "name",
@@ -706,7 +706,7 @@ class Project(WrapperXml):
         instance.deleteBus(instanceslave, interfacemaster, interfaceslave)
         self.save()
 
-    def reNum(self, componentname):
+    def reorder_instances(self, componentname):
         """ Renum all instances in the correct order """
         complist = []
         for comp in self._instanceslist:
