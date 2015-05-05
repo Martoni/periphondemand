@@ -90,15 +90,15 @@ class Component(WrapperXml):
 
         #test if several componentversion
         if componentversion is None:
-            if len(project.getComponentVersionList(
+            if len(project.get_components_versions(
                             libraryname, componentname)) > 1:
                 raise Error("Component version must be chosen :" +
-                            str(project.getComponentVersionList(
+                            str(project.get_components_versions(
                                 libraryname, componentname)),
                             0)
             else:
                 try:
-                    componentversion = project.getComponentVersionList(
+                    componentversion = project.get_components_versions(
                             libraryname, componentname)[0]
                 except IndexError:
                     raise Error("No xml description of component", 0)

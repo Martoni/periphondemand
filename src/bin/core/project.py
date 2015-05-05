@@ -863,7 +863,7 @@ class Project(WrapperXml):
                 return io
         raise Error("No IO with name " + str(io_name))
 
-    def getComponentVersionList(self, libraryname, componentname):
+    def get_components_versions(self, libraryname, componentname):
         """ list component version name in archive
         """
         filelist = sy.listFiles(self.library.getLibraryPath(libraryname) +

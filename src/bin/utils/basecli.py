@@ -438,11 +438,11 @@ fpga_attributes    : give list of fpga attributes in platform
                 libraryname = settings.active_library.getLibName()
                 return [componentname + "." + version
                         for version in
-                        settings.active_project.getComponentVersionList(
+                        settings.active_project.get_components_versions(
                             libraryname, componentname)]
             return [libraryname + "." + componentname + "." + comp
                     for comp in
-                    settings.active_project.getComponentVersionList(
+                    settings.active_project.get_components_versions(
                         libraryname, componentname)]
 
         elif subargt == "platformname":
