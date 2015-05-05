@@ -160,7 +160,6 @@ class Project(WrapperXml):
         for masterinterface in self.interfaces_master:
             for slave in masterinterface.getSlavesList():
                 slaveinterface = slave.getInterface()
-                # FIXME: allocMem change address
                 masterinterface.allocMem.addInterfaceSlave(slaveinterface)
                 slaveinterface.setMaster(masterinterface)
 
@@ -343,7 +342,7 @@ class Project(WrapperXml):
             if "instancename" in keys:
                 instancename = keys["instancename"]
                 # check if instancename is not <componentname><number><number>
-                if re.match(r'^' + componentname + '\d{2}$', instancename):
+                if re.match(r'^' + componentname + r'\d{2}$', instancename):
                     raise Error("Instance name forbiden, it's reserved for " +
                                 "automatic instance name generation :" +
                                 instancename, 0)
@@ -353,9 +352,9 @@ class Project(WrapperXml):
                         raise Error("This instance name already exists", 0)
             else:
                 instancename =\
-                       componentname +\
-                       "%02d" %\
-                       len(self.get_instances_list_of_component(componentname))
+                    componentname +\
+                    "%02d" %\
+                    len(self.get_instances_list_of_component(componentname))
             if "componentversion" in keys:
                 componentversion = keys["componentversion"]
             else:
@@ -370,7 +369,7 @@ class Project(WrapperXml):
                                  componentversion,
                                  instancename)
             comp.setNum(
-                    len(self.get_instances_list_of_component(componentname)))
+                len(self.get_instances_list_of_component(componentname)))
         else:
             raise Error("Key not known in add_instance", 0)
 
@@ -600,10 +599,10 @@ class Project(WrapperXml):
         self.save()
 
     def delete_pin_connection_cmd(self,
-                                instance_source_name, interface_source_name,
-                                port_source_name, pin_source_num,
-                                instance_dest_name, interface_dest_name,
-                                port_dest_name, pin_dest_num):
+                                  instance_source_name, interface_source_name,
+                                  port_source_name, pin_source_num,
+                                  instance_dest_name, interface_dest_name,
+                                  port_dest_name, pin_dest_num):
         """ delete pin between two instances
         """
         instance_source = self.get_instance(instance_source_name)
@@ -660,10 +659,10 @@ class Project(WrapperXml):
         self.save()
 
     def connect_port(self,
-                    instance_source_name, interface_source_name,
-                    port_source_name,
-                    instance_dest_name, interface_dest_name,
-                    port_dest_name):
+                     instance_source_name, interface_source_name,
+                     port_source_name,
+                     instance_dest_name, interface_dest_name,
+                     port_dest_name):
         """ Connect all pins of a port source on all pins of
             port dest
         """
@@ -729,11 +728,11 @@ class Project(WrapperXml):
             raise Error("No bus master in project", 0)
         elif len(masters) > 1:
             for i in range(len(masters) - 1):
-                for ii in range(i + 1, len(masters)):
-                    if (masters[i].getBusName() == masters[ii].getBusName()):
+                for j in range(i + 1, len(masters)):
+                    if (masters[i].getBusName() == masters[j].getBusName()):
                         raise Error(masters[i].getParent().getInstanceName() +
                                     " and " +
-                                    masters[ii].getParent().getInstanceName() +
+                                    masters[j].getParent().getInstanceName() +
                                     " has the same bus type : , " +
                                     masters[i].getBusName() +
                                     " bus connection must be made by hand", 0)
@@ -901,7 +900,7 @@ class Project(WrapperXml):
                 try:
                     for reg in interfaceslave.getRegisterMap():
                         text += ONETAB + "  " +\
-                                "0x%02x : %s\n" % (reg["offset"], reg["name"])
+                            "0x%02x : %s\n" % (reg["offset"], reg["name"])
                 except Error:
                     text += "\n"
         report_file.write(text)
