@@ -1,12 +1,13 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Name:     SynthesisCli.py
 # Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  30/05/2008
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #  Copyright (2008)  Armadeus Systems
+# ----------------------------------------------------------------------------
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,20 +22,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-#
-#-----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+""" Command line for synthesis environment """
 
-__doc__ = ""
-__version__ = "1.0.0"
-__versionTime__ = "30/05/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
-from periphondemand.bin.define import *
+from periphondemand.bin.define import TOOLCHAINPATH 
+from periphondemand.bin.define import SYNTHESISPATH 
 
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.basecli import BaseCli
@@ -44,8 +37,8 @@ from periphondemand.bin.utils import wrappersystem as sy
 
 from periphondemand.bin.toolchain.synthesis import Synthesis
 
-settings = Settings()
-display = Display()
+SETTINGS = Settings()
+DISPLAY = Display()
 
 
 class SynthesisCli(BaseCli):
@@ -76,19 +69,19 @@ select toolchain used for simulation
             return
 
         if line.strip() == "":
-            if len(settings.active_project.getSynthesisToolChainList()) == 1:
-                settings.active_project.synthesis_toolchain =\
-                    settings.active_project.getSynthesisToolChainList()[0]
+            if len(SETTINGS.active_project.getSynthesisToolChainList()) == 1:
+                SETTINGS.active_project.synthesis_toolchain =\
+                    SETTINGS.active_project.getSynthesisToolChainList()[0]
             else:
-                if settings.active_project.synthesis_toolchain is None:
+                if SETTINGS.active_project.synthesis_toolchain is None:
                     print("Choose a toolchain\n")
                     for toolchain in \
-                           settings.active_project.getSynthesisToolChainList():
+                           SETTINGS.active_project.getSynthesisToolChainList():
                         print(str(toolchain))
                     return
         else:
             try:
-                settings.active_project.synthesis_toolchain = line
+                SETTINGS.active_project.synthesis_toolchain = line
             except Error, error:
                 print(str(error))
                 return
@@ -119,21 +112,21 @@ generate the project for synthesis tool
             except Error, error:
                 print(str(error))
                 return
-        elif settings.active_project.synthesis is None:
+        elif SETTINGS.active_project.synthesis is None:
             print(str(Error("Toolchain must be selected before")))
             return
 
         # generate project
         try:
-            settings.active_project.synthesis.generateProject()
-            print(str(display))
-            pinoutfile = settings.active_project.synthesis.generatePinout(None)
-            print(str(display))
-            tclname = settings.active_project.synthesis.generateTCL(None)
+            SETTINGS.active_project.synthesis.generateProject()
+            print(str(DISPLAY))
+            pinoutfile = SETTINGS.active_project.synthesis.generatePinout(None)
+            print(str(DISPLAY))
+            tclname = SETTINGS.active_project.synthesis.generateTCL(None)
         except Error, error:
             print(str(error))
             return
-        print(str(display))
+        print(str(DISPLAY))
 
     def do_generatetcl(self, line):
         """\
@@ -142,20 +135,20 @@ Made a tcl script for synthesis,tools supported are:
 ise
         """
 
-        if settings.active_project.synthesis is None:
+        if SETTINGS.active_project.synthesis is None:
             print Error("Select toolchain before")
             return
         if line.strip() != "":
-            filename = settings.path + TOOLCHAINPATH +\
+            filename = SETTINGS.path + TOOLCHAINPATH +\
                        SYNTHESISPATH + "/" + line.strip()
         else:
             filename = None
         try:
-            settings.active_project.synthesis.generateTCL(filename)
+            SETTINGS.active_project.synthesis.generateTCL(filename)
         except Error, error:
             print(str(error))
             return
-        print display
+        print DISPLAY
 
     def do_generatepinout(self, line):
         """\
@@ -163,35 +156,35 @@ Usage : generatepinout [filename]
 generate ucf file, tool supported are :
 ise
         """
-        if settings.active_project.synthesis is None:
+        if SETTINGS.active_project.synthesis is None:
             print(str(Error("Select toolchain before")))
             return
         if line.strip() != "":
-            filename = settings.path + TOOLCHAINPATH +\
+            filename = SETTINGS.path + TOOLCHAINPATH +\
                        SYNTHESISPATH + "/" + line.strip()
         else:
             filename = None
         try:
-            settings.active_project.synthesis.generatePinout(filename)
+            SETTINGS.active_project.synthesis.generatePinout(filename)
         except Error, error:
             print(str(error))
             return
-        print(str(display))
+        print(str(DISPLAY))
 
     def do_generatebitstream(self, line):
         """\
 Usage : generatebitstream
 generate the bitstream for fpga configuration
         """
-        if settings.active_project.synthesis is None:
+        if SETTINGS.active_project.synthesis is None:
             print Error("Select toolchain before")
             return
         try:
-            settings.active_project.synthesis.generateBitStream()
+            SETTINGS.active_project.synthesis.generateBitStream()
         except Error, error:
             print(str(error))
             return
-        print display
+        print DISPLAY
 
     def complete_setiostandard(self, text, line, begidx, endidx):
         IOlist = []
@@ -209,16 +202,16 @@ set IO standard value
         try:
             self.checkargs(line, "<IO_name> <standard_value>")
         except Exception, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         arg = line.split(' ')
         io_name = arg[0]
         standard_value = arg[1]
         try:
-            settings.active_project.getIO(io_name).setStandard(standard_value)
+            SETTINGS.active_project.getIO(io_name).setStandard(standard_value)
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
 
@@ -238,18 +231,18 @@ get IO standard value
         try:
             self.checkargs(line, "<IO_name>")
         except Exception, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print settings.active_project.getIO(io_name).getStandard()
+            print SETTINGS.active_project.getIO(io_name).getStandard()
         except Error, e:
-            print display
+            print DISPLAY
             print e
             return
-        print display
+        print DISPLAY
 
     def complete_setportoption(self, text, line, begidx, endidx):
         IOlist = []
@@ -267,17 +260,17 @@ set IO standard value
         try:
             self.checkargs(line, "<IO_name> <port_option_value>")
         except Exception, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         arg = line.split(' ')
         io_name = arg[0]
         port_option_value = arg[1]
         try:
-            settings.active_project.getIO(
+            SETTINGS.active_project.getIO(
                     io_name).setPortOption(port_option_value)
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
 
@@ -297,18 +290,18 @@ get IO Port option value
         try:
             self.checkargs(line, "<IO_name>")
         except Exception, e:
-            print display
+            print DISPLAY
             print e
             return
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print settings.active_project.getIO(io_name).getPortOption()
+            print SETTINGS.active_project.getIO(io_name).getPortOption()
         except Error, e:
-            print display
+            print DISPLAY
             print e
             return
-        print display
+        print DISPLAY
 
     def complete_setiodrive(self, text, line, begidx, endidx):
         IOlist = []
@@ -326,16 +319,16 @@ set IO drive value
         try:
             self.checkargs(line, "<IO_name> <drive_value>")
         except Exception, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(errror))
             return
         arg = line.split(' ')
         io_name = arg[0]
         drive_value = arg[1]
         try:
-            settings.active_project.getIO(io_name).setDrive(drive_value)
+            SETTINGS.active_project.getIO(io_name).setDrive(drive_value)
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
 
@@ -355,18 +348,18 @@ get IO drive value
         try:
             self.checkargs(line, "<IO_name>")
         except Exception, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print settings.active_project.getIO(io_name).getDrive()
+            print SETTINGS.active_project.getIO(io_name).getDrive()
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
-        print(str(display))
+        print(str(DISPLAY))
 
     def complete_setfpga(self, text, line, begidx, endidx):
         attributes = []
@@ -384,20 +377,20 @@ Set fpga attributes
         try:
             self.checkargs(line, "<fpga_attributes> <attribute_value>")
         except Exception, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         arg = line.split(' ')
         att_name = arg[0]
         att_value = arg[1]
         try:
-            platform = settings.active_project.platform
+            platform = SETTINGS.active_project.platform
             platform.setAttribute(att_name, att_value, "fpga")
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
-        print(str(display))
+        print(str(DISPLAY))
 
     def complete_getfpga(self, text, line, begidx, endidx):
         attributes = []
@@ -415,16 +408,16 @@ get fpga attributes values
         try:
             self.checkargs(line, "<fpga_attributes>")
         except Exception, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
         arg = line.split(' ')
         att_name = arg[0]
         try:
-            platform = settings.active_project.platform
+            platform = SETTINGS.active_project.platform
             print(str(platform.getAttributeValue(att_name, "fpga")))
         except Error, error:
-            print(str(display))
+            print(str(DISPLAY))
             print(str(error))
             return
-        print(str(display))
+        print(str(DISPLAY))
