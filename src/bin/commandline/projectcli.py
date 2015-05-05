@@ -672,9 +672,11 @@ Connect all pins of two same size ports.
             print("Argument error")
             return
         try:
-            SETTINGS.active_project.connect_port(source[0], source[1],
-                                                 source[2], dest[0],
-                                                 dest[1], dest[2])
+            SETTINGS.active_project.connect_port(
+                    {"instance": source[0], "interface": source[1],
+                     "port": source[2]},
+                    {"instance": dest[0], "interface": dest[1],
+                     "port": dest[2]})
         except Error, e:
             print DISPLAY
             print e

@@ -662,21 +662,21 @@ class Project(WrapperXml):
         self.save()
 
     #TODO:  function parameters in dict
-    def connect_port(self,
-                     instance_source_name, interface_source_name,
-                     port_source_name,
-                     instance_dest_name, interface_dest_name,
-                     port_dest_name):
+    def connect_port(self, sourcedict, destdict):
         """ Connect all pins of a port source on all pins of
             port dest
+            sourcedict = {"instance": "name", "interface": "name",
+                          "port": "name"}
+            destdict = {"instance": "name", "interface": "name",
+                        "port": "name"}
         """
-        instance_source = self.get_instance(instance_source_name)
-        interface_source = instance_source.getInterface(interface_source_name)
-        port_source = interface_source.getPort(port_source_name)
+        instance_source = self.get_instance(sourcedict["instance"])
+        interface_source = instance_source.getInterface(sourcedict["interface"])
+        port_source = interface_source.getPort(sourcedict["port"])
 
-        instance_dest = self.get_instance(instance_dest_name)
-        interface_dest = instance_dest.getInterface(interface_dest_name)
-        port_dest = interface_dest.getPort(port_dest_name)
+        instance_dest = self.get_instance(destdict["instance"])
+        interface_dest = instance_dest.getInterface(destdict["interface"])
+        port_dest = interface_dest.getPort(destdict["port"])
 
         port_source.connect_port(port_dest)
         self.save()
