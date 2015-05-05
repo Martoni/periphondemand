@@ -468,7 +468,7 @@ fpga_attributes    : give list of fpga attributes in platform
             return settings.active_library.listComponents(libraryname)
 
         elif subargt == "synthesistoolchain":
-            return settings.active_project.getSynthesisToolChainList()
+            return settings.active_project.get_synthesis_toolchains()
         elif subargt == "drivertoolchain":
             return settings.active_project.get_driver_toolchains()
         elif subargt == "IO_name":

@@ -69,14 +69,14 @@ select toolchain used for simulation
             return
 
         if line.strip() == "":
-            if len(SETTINGS.active_project.getSynthesisToolChainList()) == 1:
+            if len(SETTINGS.active_project.get_synthesis_toolchains()) == 1:
                 SETTINGS.active_project.synthesis_toolchain =\
-                    SETTINGS.active_project.getSynthesisToolChainList()[0]
+                    SETTINGS.active_project.get_synthesis_toolchains()[0]
             else:
                 if SETTINGS.active_project.synthesis_toolchain is None:
                     print("Choose a toolchain\n")
                     for toolchain in \
-                           SETTINGS.active_project.getSynthesisToolChainList():
+                           SETTINGS.active_project.get_synthesis_toolchains():
                         print(str(toolchain))
                     return
         else:

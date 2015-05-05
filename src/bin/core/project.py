@@ -177,7 +177,7 @@ class Project(WrapperXml):
     @synthesis_toolchain.setter
     def synthesis_toolchain(self, toolchainname):
         """ Set the synthesis toolchain """
-        if toolchainname not in self.getSynthesisToolChainList():
+        if toolchainname not in self.get_synthesis_toolchains():
             raise Error("No toolchain named " + toolchainname + " in POD")
         sy.copyFile(SETTINGS.path + TOOLCHAINPATH + SYNTHESISPATH +
                     "/" + toolchainname + "/" + toolchainname + XMLEXT,
@@ -836,7 +836,8 @@ class Project(WrapperXml):
                                     TOOLCHAINPATH + SIMULATIONPATH)
         return filelist
 
-    def getSynthesisToolChainList(self):
+    @classmethod
+    def get_synthesis_toolchains(cls):
         """ list all toolchains availables """
         filelist = sy.listDirectory(SETTINGS.path +
                                     TOOLCHAINPATH + SYNTHESISPATH)
