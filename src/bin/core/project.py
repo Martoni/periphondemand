@@ -678,7 +678,7 @@ class Project(WrapperXml):
         self.save()
 
     def connect_interface(self, instance_name1, interface_name1,
-                         instance_name2, interface_name2):
+                          instance_name2, interface_name2):
         """ Connect an interface between two components
         """
         instance_src = self.get_instance(instance_name1)
@@ -699,7 +699,7 @@ class Project(WrapperXml):
         self.save()
 
     def del_bus(self, instancemaster, instanceslave,
-                  interfacemaster=None, interfaceslave=None):
+                interfacemaster=None, interfaceslave=None):
         """ Delete a slave bus connection
         """
         instance = self.get_instance(instancemaster)
