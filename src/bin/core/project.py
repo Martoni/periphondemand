@@ -251,6 +251,7 @@ class Project(WrapperXml):
         self.driver = Driver(self)
         self.save()
 
+    #TODO:  function parameters in dict
     def set_unconnected_value(self, instancename, interfacename,
                               portname, value):
         """ Set port unconnected value
@@ -640,6 +641,7 @@ class Project(WrapperXml):
                 pin_dest.delConnection(pin_source)
         self.save()
 
+    #TODO:  function parameters in dict
     def generate_intercon(self, instance_name, interface_name):
         """ generate intercon for interface interface_name """
         # test if intercon already exists
@@ -658,6 +660,7 @@ class Project(WrapperXml):
         self.add_instance(component=intercon)
         self.save()
 
+    #TODO:  function parameters in dict
     def connect_port(self,
                      instance_source_name, interface_source_name,
                      port_source_name,
@@ -677,6 +680,7 @@ class Project(WrapperXml):
         port_source.connect_port(port_dest)
         self.save()
 
+    #TODO:  function parameters in dict
     def connect_interface(self, instance_name1, interface_name1,
                           instance_name2, interface_name2):
         """ Connect an interface between two components
@@ -688,6 +692,7 @@ class Project(WrapperXml):
         interface_src.connect_interface(interface_dest)
         self.save()
 
+    #TODO:  function parameters in dict
     def connect_bus(self, instancemaster, interfacemaster,
                     instanceslave, interfaceslave):
         """ Connect a master bus to a slave bus
@@ -698,6 +703,7 @@ class Project(WrapperXml):
                              interfaceslave)
         self.save()
 
+    #TODO:  function parameters in dict
     def del_bus(self, instancemaster, instanceslave,
                 interfacemaster=None, interfaceslave=None):
         """ Delete a slave bus connection
