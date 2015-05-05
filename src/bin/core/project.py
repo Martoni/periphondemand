@@ -598,32 +598,32 @@ class Project(WrapperXml):
         pin_source.connectPin(pin_dest)
         self.save()
 
-    def delete_pin_connection_cmd(self,
-                                  instance_source_name, interface_source_name,
-                                  port_source_name, pin_source_num,
-                                  instance_dest_name, interface_dest_name,
-                                  port_dest_name, pin_dest_num):
+    def delete_pin_connection_cmd(self, sourcedict, destdict):
         """ delete pin between two instances
+            sourcedict = {"instance":"name", "interface":name,
+                            "port":"name", "num":"num"}
+            destdict =  {"instance":"name", "interface":name,
+                            "port":"name", "num":"num"}
         """
-        instance_source = self.get_instance(instance_source_name)
-        interface_source = instance_source.getInterface(interface_source_name)
-        port_source = interface_source.getPort(port_source_name)
-        if pin_source_num is None:
+        instance_source = self.get_instance(sourcedict["instance"])
+        interface_source = instance_source.getInterface(sourcedict["interface"])
+        port_source = interface_source.getPort(sourcedict["port"])
+        if sourcedict["num"] is None:
             if(port_source.getSize()) == 1:
-                pin_source_num = "0"
+                sourcedict["num"] = "0"
             else:
                 raise Error("Source pin number not given, and port size > 1")
-        pin_source = port_source.getPin(pin_source_num)
+        pin_source = port_source.getPin(sourcedict["num"])
 
         # test if destination given
-        if (instance_dest_name is not None) and\
-           (interface_dest_name is not None) and\
-           (port_dest_name is not None) and\
-           (pin_dest_num is not None):
-            instance_dest = self.get_instance(instance_dest_name)
-            interface_dest = instance_dest.getInterface(interface_dest_name)
-            port_dest = interface_dest.getPort(port_dest_name)
-            pin_dest = port_dest.getPin(pin_dest_num)
+        if (destdict["instance"] is not None) and\
+           (destdict["interface"] is not None) and\
+           (destdict["port"] is not None) and\
+           (destdict["num"] is not None):
+            instance_dest = self.get_instance(destdict["instance"])
+            interface_dest = instance_dest.getInterface(destdict["interface"])
+            port_dest = interface_dest.getPort(destdict["port"])
+            pin_dest = port_dest.getPin(destdict["num"])
 
             pin_source.delConnection(pin_dest)
             pin_dest.delConnection(pin_source)

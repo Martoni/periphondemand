@@ -870,10 +870,10 @@ Suppress a pin connection
             dest.append(None)
         try:
             SETTINGS.active_project.delete_pin_connection_cmd(
-                    source[0], source[1],
-                    source[2], source[3],
-                    dest[0], dest[1],
-                    dest[2], dest[3])
+                    {"instance":source[0], "interface":source[1],
+                     "port":source[2], "num":source[3]},
+                    {"instance":dest[0], "interface":dest[1],
+                     "port":dest[2], "num":dest[3]})
         except Error, e:
             print DISPLAY
             print e
