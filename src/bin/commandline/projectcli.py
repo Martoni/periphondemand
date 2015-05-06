@@ -627,8 +627,10 @@ Force input port unconnected value
             print("source arguments error")
             return
         try:
-            SETTINGS.active_project.set_unconnected_value(source[0], source[1],
-                                                          source[2], uvalue)
+            portdict = { "instance": source[0],
+                         "interface": source[1],
+                         "port": source[2] }
+            SETTINGS.active_project.set_unconnected_value(portdict, uvalue)
         except Error, error:
             print DISPLAY
             print(str(error))

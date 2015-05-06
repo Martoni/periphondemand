@@ -252,13 +252,13 @@ class Project(WrapperXml):
         self.save()
 
     # TODO:  function parameters in dict
-    def set_unconnected_value(self, instancename, interfacename,
-                              portname, value):
+    def set_unconnected_value(self, portdict, value):
         """ Set port unconnected value
+            portdict = {"instance":"name", "interface":"name", "port":name"}
         """
-        port = self.get_instance(
-            instancename).getInterface(
-                interfacename).getPort(portname)
+        instance = self.get_instance(portdict["instance"])
+        interface = instance.getInterface(portdict["interface"])
+        port = interface.getPort(portdict["port"])
         port.set_unconnected_value(value)
         self.save()
 
@@ -661,7 +661,6 @@ class Project(WrapperXml):
         self.add_instance(component=intercon)
         self.save()
 
-    # TODO:  function parameters in dict
     def connect_port(self, sourcedict, destdict):
         """ Connect all pins of a port source on all pins of
             port dest
@@ -671,7 +670,8 @@ class Project(WrapperXml):
                         "port": "name"}
         """
         instance_source = self.get_instance(sourcedict["instance"])
-        interface_source = instance_source.getInterface(sourcedict["interface"])
+        interface_source =\
+            instance_source.getInterface(sourcedict["interface"])
         port_source = interface_source.getPort(sourcedict["port"])
 
         instance_dest = self.get_instance(destdict["instance"])
