@@ -9,25 +9,25 @@
 # Created:  2008/01/17
 # Licence:  GPLv3 or newer
 # ----------------------------------------------------------------------------
-
-__doc__ = "Basic Command Line Interface"
-__version__ = "1.0.0"
-__author__ = "Fabrice MOUSSET <fabrice.mousset@laposte.net> " +\
-             "and Fabien Marteau <fabien.marteau@armadeus.com>"
+"""Basic Command Line Interface"""
 
 import cmd
 import re
 import os
 import sys
-from periphondemand.bin.define import *
+import readline
+
+from periphondemand.bin.define import PODSCRIPTEXT
+
 from periphondemand.bin.utils.error import Error
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils import wrappersystem as sy
 
-settings = Settings()
+SETTINGS = Settings()
 
 
 class BaseCli(cmd.Cmd):
+    """ Command line management """
     case_insensitive = True
     comment_marks = '#*'
     exclude_from_history = ['EOF', 'source', 'savehistory']
@@ -35,11 +35,12 @@ class BaseCli(cmd.Cmd):
     shortcuts = {'?': 'help', '!': 'shell'}
     terminators = ';\n'
     default_extension = 'txt'
+    old_completer = None
 
     def __init__(self, parent=None, *args, **kwargs):
         cmd.Cmd.__init__(self, *args, **kwargs)
         self.parent = parent
-        settings.history = settings.history[:-1]
+        SETTINGS.history = SETTINGS.history[:-1]
 
         if parent is None:
             self.setPrompt("POD")
@@ -49,6 +50,7 @@ class BaseCli(cmd.Cmd):
             self.use_rawinput = parent.use_rawinput
 
     def finishStatement(self, firstline):
+        """ finish the statement """
         statement = firstline
         while not self.statementHasEnded(statement):
             inp = self.pseudo_raw_input(self.continuation_prompt)
@@ -60,9 +62,11 @@ class BaseCli(cmd.Cmd):
         # user input and users are slow.
 
     def write(self, message):
+        """ Write a message """
         self.stdout.write(message)
 
     def readline(self):
+        """ Read a line """
         return self.stdin.readline()
 
     def pseudo_raw_input(self, prompt):
@@ -119,9 +123,8 @@ class BaseCli(cmd.Cmd):
                         line = self.pseudo_raw_input(self.prompt)
                     line = self.precmd(line)
                     if line == "exit":
-                        import sys
                         sys.exit(0)
-                    if settings.isScript():
+                    if SETTINGS.isScript():
                         print "$ " + line
                     stop = self.onecmd(line)
                     stop = self.postcmd(stop, line)
@@ -131,7 +134,6 @@ class BaseCli(cmd.Cmd):
         finally:
             if self.use_rawinput and self.completekey:
                 try:
-                    import readline
                     readline.set_completer(self.old_completer)
                 except ImportError:
                     pass
@@ -139,14 +141,15 @@ class BaseCli(cmd.Cmd):
     statement_end_pattern = re.compile(r'[%s]\s*$' % terminators)
 
     def statementHasEnded(self, lines):
+        """ statement has ended """
         return bool(self.statement_end_pattern.search(lines)) or\
             lines[-3:] == 'EOF'
 
-    def clean(self, s):
+    def clean(self, astring):
         """cleans up a string"""
         if self.case_insensitive:
-            return s.strip().lower()
-        return s.strip()
+            return astring.strip().lower()
+        return astring.strip()
 
     def parseline(self, line):
         """Parse the line into a command name and a string containing
@@ -159,11 +162,11 @@ class BaseCli(cmd.Cmd):
         shortcut = self.shortcuts.get(line[0])
         if shortcut and hasattr(self, 'do_%s' % shortcut):
             line = '%s %s' % (shortcut, line[1:])
-        i, n = 0, len(line)
-        while i < n and line[i] in self.identchars:
+        i, number = 0, len(line)
+        while i < number and line[i] in self.identchars:
             i = i + 1
-        cmd, arg = line[:i], line[i:].strip().strip(self.terminators)
-        return cmd, arg, line
+        command, arg = line[:i], line[i:].strip().strip(self.terminators)
+        return command, arg, line
 
     def onecmd(self, line):
         """Interpret the argument as though it had been typed in response
@@ -215,7 +218,7 @@ class BaseCli(cmd.Cmd):
         """ This method is called after the line has been input but before
             it has been interpreted.
         """
-        # settings.addHistory(line)
+        # SETTINGS.addHistory(line)
         # Remove comments lines
         try:
             if str(line)[0] in str(self.comment_marks):
@@ -224,7 +227,7 @@ class BaseCli(cmd.Cmd):
             return ""
 
         if line:
-            settings.history.append(self.base_prompt + "." + line.strip())
+            SETTINGS.history.append(self.base_prompt + "." + line.strip())
         return line
 
     def default(self, line):
@@ -237,8 +240,8 @@ class BaseCli(cmd.Cmd):
 
         try:
             exec(line) in self._locals, self._globals
-        except Exception, e:
-            print e.__class__, ":", e
+        except Exception, error:
+            print error.__class__, ":", e
 
     def do_shell(self, arg):
         """Pass command to a system shell when line begins with '!'."""
@@ -347,7 +350,7 @@ fpga_attributes    : give list of fpga attributes in platform
                listargs[0][0] == "slaveinstancename" or\
                listargs[0][0] == "instancename" or\
                listargs[0][0] == "instancesysconname":
-                instance = settings.active_project.get_instance(listargs[0][1])
+                instance = SETTINGS.active_project.get_instance(listargs[0][1])
                 instancename = instance.getInstanceName()
             elif listargs[0][0] == "platformlib":
                 platformlib = listargs[0][1]
@@ -377,17 +380,17 @@ fpga_attributes    : give list of fpga attributes in platform
         if subargt == "masterinstancename":
             return [interface.getParent().getInstanceName()
                     for interface in
-                    settings.active_project.interfaces_master]
+                    SETTINGS.active_project.interfaces_master]
         elif subargt == "slaveinstancename":
             return [interface.getParent().getInstanceName()
                     for interface in
-                    settings.active_project.interfaces_slave]
+                    SETTINGS.active_project.interfaces_slave]
         elif subargt == "instancename":
             return [instance.getInstanceName()
-                    for instance in settings.active_project.instances]
+                    for instance in SETTINGS.active_project.instances]
         elif subargt == "instancesysconname":
             return [interface.getParent().getInstanceName()
-                    for interface in settings.active_project.getSysconsList()]
+                    for interface in SETTINGS.active_project.getSysconsList()]
         elif subargt == "interfacename":
             return ["" + instancename + "." + interface.getName()
                     for interface in instance.getInterfacesList()]
@@ -405,17 +408,17 @@ fpga_attributes    : give list of fpga attributes in platform
                     "." + portname + "." + str(i)
                     for i in range(int(port.getSize()))]
         elif subargt == "libraryname":
-            arglist = settings.active_project.library.listLibraries()
+            arglist = SETTINGS.active_project.library.listLibraries()
             return arglist
 
         elif subargt == "platformlib":
-            arglist = settings.personal_platformlib_name_list
+            arglist = SETTINGS.personal_platformlib_name_list
             arglist.append("standard")
             return arglist
         elif subargt == "forcename":
             arglist = ["" + port.getName()
                        for port in
-                       settings.active_project.platform.getPlatformPortsList()]
+                       SETTINGS.active_project.platform.getPlatformPortsList()]
             return arglist
         elif subargt == "forcestate":
             return ["gnd", "vcc", "undef"]
@@ -424,10 +427,10 @@ fpga_attributes    : give list of fpga attributes in platform
             try:
                 libraryname.lower()
             except:
-                return settings.active_library.listComponents()
+                return SETTINGS.active_library.listComponents()
             arglist = [libraryname + "." + componentname
                        for componentname in
-                       settings.active_library.listComponents(
+                       SETTINGS.active_library.listComponents(
                            libraryname)]
             return arglist
         elif subargt == "componentversion":
@@ -435,47 +438,47 @@ fpga_attributes    : give list of fpga attributes in platform
             try:
                 libraryname.lower()
             except:
-                libraryname = settings.active_library.getLibName()
+                libraryname = SETTINGS.active_library.getLibName()
                 return [componentname + "." + version
                         for version in
-                        settings.active_project.get_components_versions(
+                        SETTINGS.active_project.get_components_versions(
                             libraryname, componentname)]
             return [libraryname + "." + componentname + "." + comp
                     for comp in
-                    settings.active_project.get_components_versions(
+                    SETTINGS.active_project.get_components_versions(
                         libraryname, componentname)]
 
         elif subargt == "platformname":
             if platformlib == "standard":
                 return ["standard." + name
                         for name in
-                        settings.active_project.availables_plat()]
+                        SETTINGS.active_project.availables_plat()]
             else:
                 return [platformlib + "." + name
                         for name in
                         sy.listFiles(
-                            settings.getPlatformLibPath(platformlib))]
+                            SETTINGS.getPlatformLibPath(platformlib))]
 
         elif subargt == "genericname":
             return ["" + instancename + "." + generic.getName()
                     for generic in instance.getGenericsList()]
 
         elif subargt == "simulationtoolchain":
-            return settings.active_project.get_simulation_toolchains()
+            return SETTINGS.active_project.get_simulation_toolchains()
 
         elif subargt == "libcomponentname":
-            libraryname = settings.active_library.getActiveLibName()
-            return settings.active_library.listComponents(libraryname)
+            libraryname = SETTINGS.active_library.getActiveLibName()
+            return SETTINGS.active_library.listComponents(libraryname)
 
         elif subargt == "synthesistoolchain":
-            return settings.active_project.get_synthesis_toolchains()
+            return SETTINGS.active_project.get_synthesis_toolchains()
         elif subargt == "drivertoolchain":
-            return settings.active_project.get_driver_toolchains()
+            return SETTINGS.active_project.get_driver_toolchains()
         elif subargt == "IO_name":
             return [port.getName() for port in
-                    settings.active_project.get_ios()]
+                    SETTINGS.active_project.get_ios()]
         elif subargt == "fpga_attributes":
-            platform = settings.active_project.platform
+            platform = SETTINGS.active_project.platform
             return platform.getAttributeNameList("fpga")
         else:
             return []
@@ -530,13 +533,13 @@ fpga_attributes    : give list of fpga attributes in platform
 
     def isPlatformSelected(self):
         """ check if platform is selected, if not raise error """
-        settings.active_project.platform
+        SETTINGS.active_project.platform
 
     def do_history(self, args):
         """ history
         print command history
         """
-        for line in settings.history:
+        for line in SETTINGS.history:
             print(line)
 
     def do_savehistory(self, line):
@@ -557,8 +560,8 @@ fpga_attributes    : give list of fpga attributes in platform
             print(str(error))
             return
         # suppress the last command (its savehistory itself)
-        settings.history = settings.history[:-1]
-        for line in settings.history:
+        SETTINGS.history = SETTINGS.history[:-1]
+        for line in SETTINGS.history:
             # do not write source or EOF command
             if not (re.match(r'.*\.source', line) or re.match(r'.*EOF', line)):
                 # suppress POD root
