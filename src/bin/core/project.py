@@ -96,8 +96,9 @@ class Project(WrapperXml):
     def create_project(self, name):
         """ Create a project """
         if sy.dirExist(SETTINGS.projectpath):
-            raise Error("Can't create project, directory " + name +
-                        " allready exists", 0)
+            raise Error("Can't create project, directory " +
+                        SETTINGS.projectpath +
+                        " already exists", 0)
         sy.makeDirectory(SETTINGS.projectpath)
 
         sy.makeDirectory(SETTINGS.projectpath + BINARYPROJECTPATH)
