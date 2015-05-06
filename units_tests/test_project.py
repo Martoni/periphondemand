@@ -49,7 +49,6 @@ class test_project(unittest.TestCase):
         projectname = "UnitTest"
         os.system("rm -rf " + projectname)
         aproject = project.Project(projectname)
-        print("DEBUG : " + str(aproject.availables_plat()))
         self.assertTrue("apf27" in aproject.availables_plat())
         os.system("rm -rf " + projectname)
 
