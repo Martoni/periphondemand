@@ -679,15 +679,13 @@ class Project(WrapperXml):
         port_source.connect_port(port_dest)
         self.save()
 
-    # TODO:  function parameters in dict
-    def connect_interface(self, instance_name1, interface_name1,
-                          instance_name2, interface_name2):
+    def connect_interface(self, sourcedict, destdict):
         """ Connect an interface between two components
         """
-        instance_src = self.get_instance(instance_name1)
-        interface_src = instance_src.getInterface(interface_name1)
-        instance_dest = self.get_instance(instance_name2)
-        interface_dest = instance_dest.getInterface(interface_name2)
+        instance_src = self.get_instance(sourcedict["instance"])
+        interface_src = instance_src.getInterface(sourcedict["interface"])
+        instance_dest = self.get_instance(destdict["instance"])
+        interface_dest = instance_dest.getInterface(destdict["interface"])
         interface_src.connect_interface(interface_dest)
         self.save()
 

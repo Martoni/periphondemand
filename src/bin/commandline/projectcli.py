@@ -718,8 +718,9 @@ Connect interface between two components
             print("Argument error")
             return
         try:
-            SETTINGS.active_project.connect_interface(source[0], source[1],
-                                                     dest[0], dest[1])
+            sourcedict = {"instance": source[0], "interface": source[1]}
+            destdict = {"instance": dest[0], "interface": dest[1]}
+            SETTINGS.active_project.connect_interface(sourcedict, destdict)
         except Error, error:
             print("<<interface " + source[1] +
                   " and interface " + dest[1] + " are not compatible>>")
