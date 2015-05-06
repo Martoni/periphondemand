@@ -689,15 +689,13 @@ class Project(WrapperXml):
         interface_src.connect_interface(interface_dest)
         self.save()
 
-    # TODO:  function parameters in dict
-    def connect_bus(self, instancemaster, interfacemaster,
-                    instanceslave, interfaceslave):
+    def connect_bus(self, masterdict, slavedict):
         """ Connect a master bus to a slave bus
         """
-        instance = self.get_instance(instancemaster)
-        instance.connect_bus(interfacemaster,
-                             self.get_instance(instanceslave),
-                             interfaceslave)
+        instance = self.get_instance(masterdict["instance"])
+        instance.connect_bus(masterdict["interface"],
+                             self.get_instance(slavedict["instance"]),
+                             slavedict["interface"])
         self.save()
 
     # TODO:  function parameters in dict
