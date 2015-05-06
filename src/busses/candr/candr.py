@@ -1,12 +1,12 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Name:     candr.py
 # Purpose:
 # Authors:   Fabien Marteau <fabien.marteau@armadeus.com>
 #            Gwenhael Goavec-Merou <gwenhael.goavec-merou@armadeus.com>
 # Created:  29/04/2011
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #  Copyright (2011)  Armadeus Systems
 #
 # This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 __doc__ = ""
 __version__ = "1.0.0"

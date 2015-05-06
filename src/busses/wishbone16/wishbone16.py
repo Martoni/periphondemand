@@ -1,11 +1,11 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Name:     wishbone16.py
 # Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  13/05/2008
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #  Copyright (2008)  Armadeus Systems
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,13 +22,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Revision list :
 #
 # Date         By               Changes
 # 28 july 2008 Fabien Marteau   No glue logic if only one slave
 #
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 __doc__ = ""
 __version__ = "1.0.0"

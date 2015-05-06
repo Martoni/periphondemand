@@ -1,11 +1,11 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Name:     Driver_Templates.py
 # Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  04/08/2008
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #  Copyright (2008)  Armadeus Systems
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,12 +22,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Revision list :
 #
 # Date       By        Changes
 #
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 """ Class that manage driver templates """
 
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
