@@ -251,7 +251,6 @@ class Project(WrapperXml):
         self.driver = Driver(self)
         self.save()
 
-    # TODO:  function parameters in dict
     def set_unconnected_value(self, portdict, value):
         """ Set port unconnected value
             portdict = {"instance":"name", "interface":"name", "port":name"}
@@ -642,22 +641,21 @@ class Project(WrapperXml):
                 pin_dest.delConnection(pin_source)
         self.save()
 
-    # TODO:  function parameters in dict
-    def generate_intercon(self, instance_name, interface_name):
+    def generate_intercon(self, interfacedict):
         """ generate intercon for interface interface_name """
         # test if intercon already exists
         from periphondemand.bin.code.intercon import Intercon
         try:
-            intercon = self.get_instance(instance_name + "_" +
-                                         interface_name + "_intercon")
+            intercon = self.get_instance(interfacedict["instance"] + "_" +
+                                         interfacedict["interface"] + "_intercon")
         except Error:
             pass
         else:
             self.del_instance(intercon.getInstanceName())
 
-        intercon = Intercon(self.get_instance(
-                            instance_name).getInterface(interface_name),
-                            self)
+        instance = self.get_instance(interfacedict["instance"])
+        interface = instance.getInterface(interfacedict["interface"])
+        intercon = Intercon(interface, self)
         self.add_instance(component=intercon)
         self.save()
 

@@ -1201,7 +1201,8 @@ Generate intercon for master given in argument
             print "Arguments error"
             return
         try:
-            SETTINGS.active_project.generate_intercon(names[0], names[1])
+            interfacedict = {"instance": names[0], "interface": names[1]}
+            SETTINGS.active_project.generate_intercon(interfacedict)
         except Error, error:
             print error
             return
