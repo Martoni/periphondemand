@@ -1,11 +1,11 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Name:     Error.py
 # Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  30/04/2008
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #  Copyright (2008)  Armadeus Systems
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,18 +21,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-#
-#-----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+""" Error class """
 
-__doc__ = ""
-__version__ = "1.0.0"
-#__versionTime__ = "30/04/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
+from periphondemand.bin.define import COLOR_INFO
+from periphondemand.bin.define import COLOR_INFO_MESSAGE
+from periphondemand.bin.define import COLOR_END
+from periphondemand.bin.define import COLOR_WARNING
+from periphondemand.bin.define import COLOR_WARNING_MESSAGE
+from periphondemand.bin.define import COLOR_ERROR
+from periphondemand.bin.define import COLOR_ERROR_MESSAGE
 
 INFO    = 2
 WARNING = 1
@@ -64,7 +62,7 @@ class Error(Exception):
         if self.level == 0:
             standardmsg = "[ERROR] : " + self.message
             try:
-                if settings.color()==1:
+                if SETTINGS.color()==1:
                     return COLOR_ERROR+"[ERROR]"+COLOR_END+"  : "+\
                             COLOR_ERROR_MESSAGE+self.message+\
                             COLOR_END
@@ -75,7 +73,7 @@ class Error(Exception):
         elif self.level == 1:
             standardmsg = "[WARNING] : " + self.message
             try:
-                if settings.color()==1:
+                if SETTINGS.color()==1:
                     return COLOR_WARNING+"[WARNING]"+COLOR_END\
                             +": "+COLOR_WARNING_MESSAGE + self.message+\
                             COLOR_END
@@ -86,7 +84,7 @@ class Error(Exception):
         else:
             standardmsg = "[INFO] : " + self.message
             try:
-                if settings.color()==1:
+                if SETTINGS.color()==1:
                     return COLOR_INFO+"[INFO]"+COLOR_END+"   : "+\
                             COLOR_INFO_MESSAGE+self.message+COLOR_END
                 else:
@@ -100,7 +98,4 @@ class Error(Exception):
         return self.level
 
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.define import *
-
-settings = Settings()
-
+SETTINGS = Settings()
