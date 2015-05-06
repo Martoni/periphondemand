@@ -36,9 +36,9 @@
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.commandline.projectcli import ProjectCli
-from periphondemand.bin.utils         import Settings
-from periphondemand.bin.utils         import wrappersystem as sy
-from periphondemand.bin               import version as ver
+from periphondemand.bin.utils.settings import Settings
+from periphondemand.bin.utils import wrappersystem as sy
+from periphondemand.bin import version as ver
 import sys,os,getopt
 
 __version__ = ver.getVersion()
