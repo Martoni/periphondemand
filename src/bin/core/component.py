@@ -15,11 +15,10 @@
 #
 # ----------------------------------------------------------------------------
 """ Manage component class """
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import os
-import re
-from periphondemand.bin.define import *
+from periphondemand.bin.define import COMPONENTSPATH
+from periphondemand.bin.define import XMLEXT
 
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.wrapperxml import WrapperXml
@@ -32,8 +31,8 @@ from periphondemand.bin.core.hdl_file import Hdl_file
 from periphondemand.bin.core.driver_templates import Driver_Templates
 from periphondemand.bin.core.generic import Generic
 
-settings = Settings()
-display = Display()
+SETTINGS = Settings()
+DISPLAY = Display()
 
 
 class Component(WrapperXml):
@@ -111,19 +110,19 @@ class Component(WrapperXml):
         #copy and rename directory
         sy.copyDirectory(project.library.getLibraryPath(libraryname) +
                          "/" + componentname,
-                         settings.projectpath + COMPONENTSPATH)
+                         SETTINGS.projectpath + COMPONENTSPATH)
         try:
-            sy.renameDirectory(settings.projectpath +
+            sy.renameDirectory(SETTINGS.projectpath +
                                COMPONENTSPATH + "/" + componentname,
-                               settings.projectpath + COMPONENTSPATH +
+                               SETTINGS.projectpath + COMPONENTSPATH +
                                "/" + instancename)
         except Error:  # if directory exist
             pass
         #Rename xml file
-        sy.renameFile(settings.projectpath +
+        sy.renameFile(SETTINGS.projectpath +
                 COMPONENTSPATH + "/" + instancename +
                 "/" + componentversion + XMLEXT,
-                settings.projectpath + COMPONENTSPATH +
+                SETTINGS.projectpath + COMPONENTSPATH +
                 "/" + instancename + "/" + instancename + XMLEXT)
 
         #load component
@@ -135,7 +134,7 @@ class Component(WrapperXml):
         """ Load an instance from project directory
         """
         # load xml file
-        WrapperXml.__init__(self, file=settings.projectpath +
+        WrapperXml.__init__(self, file=SETTINGS.projectpath +
                                        COMPONENTSPATH + "/" + instancename +
                                        "/" + instancename + XMLEXT)
 
@@ -231,7 +230,7 @@ class Component(WrapperXml):
             generic_list = hdl_file_object.getGenericsList()
             for generic in generic_list:
                 self.addGeneric(generic)
-                display.msg(
+                DISPLAY.msg(
                         str(Error("Generic " + generic.getName() +
                                   " added in component", 2)))
 
@@ -243,7 +242,7 @@ class Component(WrapperXml):
     def getComponentPath(self):
         """ return path of component in system
         """
-        librarypath = settings.active_library.getLibraryPath()
+        librarypath = SETTINGS.active_library.getLibraryPath()
         return os.path.join(librarypath, self.getName())
 
     def getInterruptList(self):
@@ -333,11 +332,11 @@ class Component(WrapperXml):
     def saveInstance(self):
         """ Save component in project directory files
         """
-        if not sy.dirExist(settings.projectpath + COMPONENTSPATH +
+        if not sy.dirExist(SETTINGS.projectpath + COMPONENTSPATH +
                            "/" + self.getInstanceName()):
-            sy.makeDirectory(settings.projectpath + COMPONENTSPATH +
+            sy.makeDirectory(SETTINGS.projectpath + COMPONENTSPATH +
                              "/" + self.getInstanceName())
-        self.saveXml(settings.projectpath + COMPONENTSPATH + "/" +
+        self.saveXml(SETTINGS.projectpath + COMPONENTSPATH + "/" +
                      self.getInstanceName() + "/" +
                      self.getInstanceName() + ".xml")
 
@@ -345,7 +344,7 @@ class Component(WrapperXml):
         """ suppress component instance
         """
         if not self.isPlatform():
-            sy.delDirectory(settings.projectpath + COMPONENTSPATH + "/" +
+            sy.delDirectory(SETTINGS.projectpath + COMPONENTSPATH + "/" +
                             self.getInstanceName())
 
     def getInstanceName(self):
