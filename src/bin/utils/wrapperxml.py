@@ -22,8 +22,8 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import os
 import xml.etree.cElementTree as ET
+
 from periphondemand.bin.utils.error import Error
-from periphondemand.bin.utils import wrappersystem as sy
 
 def XMLBeautifier(xml_data):
     """
