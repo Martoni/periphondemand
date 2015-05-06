@@ -647,7 +647,8 @@ class Project(WrapperXml):
         from periphondemand.bin.code.intercon import Intercon
         try:
             intercon = self.get_instance(interfacedict["instance"] + "_" +
-                                         interfacedict["interface"] + "_intercon")
+                                         interfacedict["interface"] +
+                                         "_intercon")
         except Error:
             pass
         else:
