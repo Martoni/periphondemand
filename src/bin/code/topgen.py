@@ -37,11 +37,9 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import periphondemand.bin.define
 from periphondemand.bin.define import *
-from periphondemand.bin.utils import Settings
 from periphondemand.bin.utils.error import Error
-
-settings = Settings()
-
+from periphondemand.bin.utils.settings import Settings
+SETTINGS = Settings()
 
 class TopGen:
     """ Generate Top component from a project
@@ -104,10 +102,12 @@ class TopGen:
         #######################
         # save file
         try:
-            file = open(settings.projectpath + SYNTHESISPATH +
+            file = open(SETTINGS.projectpath + SYNTHESISPATH +
                         "/top_" + self.project.getName() + VHDLEXT, "w")
         except IOError, error:
             raise error
         file.write(out)
         file.close()
         return out
+
+
