@@ -27,7 +27,6 @@
 
 
 import os
-from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.error import Error
 
@@ -106,6 +105,7 @@ class ConfigFile(WrapperXml):
 
     def getSynthesisToolCommand(self, synthesisName):
         """ Return the path to synthesis command """
+        from periphondemand.bin.utils import wrappersystem as sy
         for i in self.getNode("tools").getNodeList("tool"):
             if (i.getAttributeValue(key="name") == synthesisName):
                 command_name = i.getAttributeValue(key="command")
@@ -123,3 +123,4 @@ class ConfigFile(WrapperXml):
         self.configfile = open(self.filename, "w")
         self.configfile.write(str(self))
         self.configfile.close()
+
