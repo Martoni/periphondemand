@@ -764,8 +764,9 @@ Suppress a pin connection
             print("Argument error")
             return
         try:
-            SETTINGS.active_project.del_bus(source[0], dest[0],
-                                            source[1], dest[1])
+            masterdict = {"instance": source[0], "interface": source[1]}
+            slavedict = {"instance": dest[0], "interface": dest[1]}
+            SETTINGS.active_project.del_bus(masterdict, slavedict)
         except Error, error:
             print DISPLAY
             print(str(error))

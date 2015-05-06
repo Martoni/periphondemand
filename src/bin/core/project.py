@@ -698,13 +698,13 @@ class Project(WrapperXml):
                              slavedict["interface"])
         self.save()
 
-    # TODO:  function parameters in dict
-    def del_bus(self, instancemaster, instanceslave,
-                interfacemaster=None, interfaceslave=None):
+    def del_bus(self, masterdict, slavedict):
         """ Delete a slave bus connection
         """
-        instance = self.get_instance(instancemaster)
-        instance.del_bus(instanceslave, interfacemaster, interfaceslave)
+        instance = self.get_instance(masterdict["instance"])
+        instance.del_bus(slavedict["instance"],
+                         masterdict["interface"],
+                         slavedict["interface"])
         self.save()
 
     def reorder_instances(self, componentname):
