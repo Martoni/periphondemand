@@ -32,8 +32,9 @@ import sys
 import shutil
 from os.path import join, splitext, split, exists
 import glob
-from periphondemand.bin.define import *
 from periphondemand.bin.utils.error import Error
+from periphondemand.bin.define import COLOR_DEBUG
+from periphondemand.bin.define import COLOR_END
 
 
 def inttobin(n, size):
