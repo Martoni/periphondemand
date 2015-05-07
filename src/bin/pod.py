@@ -39,7 +39,7 @@ from periphondemand.bin.commandline.projectcli import ProjectCli
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin import version as ver
-import sys,os,getopt
+import sys, os, getopt
 
 __version__ = ver.getVersion()
 
@@ -59,6 +59,7 @@ Report bugs to http://periphondemand.sourceforge.net/
 """
 
 def main(argv):
+    """ Main command line prog for pod """
     try:
         opts, args = getopt.getopt(argv[1:],
                     "hvs:l:",
@@ -116,5 +117,4 @@ def main(argv):
     CLI.cmdloop()
 
 if __name__ == "__main__":
-    main()
-
+    main(sys.argv)
