@@ -614,7 +614,7 @@ Force input port unconnected value
                     "<instancename>.<interfacename>.<portname> <uvalue>")
         except Exception, error:
             print DISPLAY
-            print(str(e))
+            print(str(error))
             return
         arg = line.split(' ')
         source = arg[0].split('.')
@@ -1256,7 +1256,7 @@ Usage : listforce
 List all force configured for this project
         """
         try:
-            for port in SETTINGS.active_project.getForcesList():
+            for port in SETTINGS.active_project.forced_ports:
                 print("port " + str(port.getName()) +
                       " is forced to " + port.force)
         except Error, error:
