@@ -11,6 +11,7 @@
 """
 
 import sys
+sys.path.append("./")
 import xmlrunner
 import unittest
 import os
@@ -20,7 +21,7 @@ from mock import Mock
 from datetime import datetime
 
 from periphondemand.bin.utils.error import Error
-from periphondemand.bin.core import Port
+from periphondemand.bin.core.port import Port
 
 class test_port(unittest.TestCase):
     """ unit tests bin.core.project.py

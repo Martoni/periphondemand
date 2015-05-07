@@ -10,6 +10,7 @@
 """
 
 import sys
+sys.path.append("./")
 import xmlrunner
 import unittest
 import os
