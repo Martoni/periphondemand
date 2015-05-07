@@ -326,8 +326,6 @@ slaveinstancename  : give list of instances with slave  bus interface
 libraryname        : give list of available libraries
 componentname      : give list of components available in library
                      (for projectcli)
-libcomponentname   : give list of components available in library
-                     (for librarycli)
 componentversion   : give list of components version available in component
 genericname        : give list of generic instance name
 platformlib        : give list of platform library available
@@ -460,10 +458,6 @@ fpga_attributes    : give list of fpga attributes in platform
 
         elif subargt == "simulationtoolchain":
             return SETTINGS.active_project.get_simulation_toolchains()
-
-        elif subargt == "libcomponentname":
-            libraryname = SETTINGS.active_library.getActiveLibName()
-            return SETTINGS.active_library.listComponents(libraryname)
 
         elif subargt == "synthesistoolchain":
             return SETTINGS.active_project.get_synthesis_toolchains()
