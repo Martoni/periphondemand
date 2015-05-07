@@ -241,7 +241,7 @@ class BaseCli(cmd.Cmd):
         try:
             exec(line) in self._locals, self._globals
         except Exception, error:
-            print error.__class__, ":", e
+            print error.__class__, ":", error
 
     def do_shell(self, arg):
         """Pass command to a system shell when line begins with '!'."""
@@ -323,7 +323,6 @@ class BaseCli(cmd.Cmd):
 <> mandatory arguments
 masterinstancename : give list of instances with master bus interface
 slaveinstancename  : give list of instances with slave  bus interface
-instancesysconname : give list of syscon instance in project
 libraryname        : give list of available libraries
 componentname      : give list of components available in library
                      (for projectcli)
@@ -348,8 +347,7 @@ fpga_attributes    : give list of fpga attributes in platform
         if len(listargs) > 0:
             if listargs[0][0] == "masterinstancename" or\
                listargs[0][0] == "slaveinstancename" or\
-               listargs[0][0] == "instancename" or\
-               listargs[0][0] == "instancesysconname":
+               listargs[0][0] == "instancename":
                 instance = SETTINGS.active_project.get_instance(listargs[0][1])
                 instancename = instance.getInstanceName()
             elif listargs[0][0] == "platformlib":
@@ -388,9 +386,6 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "instancename":
             return [instance.getInstanceName()
                     for instance in SETTINGS.active_project.instances]
-        elif subargt == "instancesysconname":
-            return [interface.getParent().getInstanceName()
-                    for interface in SETTINGS.active_project.getSysconsList()]
         elif subargt == "interfacename":
             return ["" + instancename + "." + interface.getName()
                     for interface in instance.getInterfacesList()]
