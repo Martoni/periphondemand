@@ -33,7 +33,13 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com> and Gwenhael Goavec-M
 import time
 import datetime
 
-from periphondemand.bin.define import *
+from periphondemand.bin.define import ONETAB
+from periphondemand.bin.define import TEMPLATESPATH
+from periphondemand.bin.define import HEADERTPL
+from periphondemand.bin.define import COMPONENTSPATH
+from periphondemand.bin.define import HDLDIR
+from periphondemand.bin.define import VHDLEXT
+
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.error    import Error
 from periphondemand.bin.utils          import wrappersystem as sy
@@ -43,79 +49,87 @@ from periphondemand.bin.core.port       import Port
 from periphondemand.bin.core.interface  import Interface
 from periphondemand.bin.core.hdl_file   import Hdl_file
 
-settings = Settings()
-TAB = "    "
+SETTINGS = Settings()
 
 def header(author,intercon):
     """ return vhdl header
     """
-    header = open(settings.path + TEMPLATESPATH+"/"+HEADERTPL,"r").read()
-    header = header.replace("$tpl:author$",__author__)
-    header = header.replace("$tpl:date$",str(datetime.date.today()))
-    header = header.replace("$tpl:filename$",intercon.getName()+VHDLEXT)
-    header = header.replace("$tpl:abstract$",intercon.getDescription())
+    header = open(SETTINGS.path + TEMPLATESPATH + "/" + HEADERTPL, "r").read()
+    header = header.replace("$tpl:author$", __author__)
+    header = header.replace("$tpl:date$", str(datetime.date.today()))
+    header = header.replace("$tpl:filename$", intercon.getName() + VHDLEXT)
+    header = header.replace("$tpl:abstract$", intercon.getDescription())
     return header
 
 def entity(intercon):
     """ generate entity
     """
-    entity = "Entity "+intercon.getName()+" is\n"
-    entity = entity + TAB + "port\n" + TAB +"(\n"
+    entity = "Entity " + intercon.getName() + " is\n"
+    entity = entity + ONETAB + "port\n" + ONETAB +"(\n"
     for interface in intercon.getInterfacesList():
-        entity = entity+"\n"+TAB*2+"-- "+interface.getName()+" connection\n"
+        entity = entity + "\n" + ONETAB * 2 + "-- " +\
+                interface.getName() + " connection\n"
         for port in interface.ports:
-            entity = entity+TAB*2+"%-40s"%port.getName()+" : "+\
-                    "%-5s"%port.getDir()
+            entity = entity + ONETAB * 2 + "%-40s" % port.getName() + " : " +\
+                    "%-5s" % port.getDir()
             if port.getSize() == "1":
                 entity = entity + "std_logic;\n"
             else:
-                entity = entity + "std_logic_vector("+port.getMaxPinNum()+\
-                        " downto "+port.getMinPinNum() +");\n"
+                entity = entity + "std_logic_vector(" + port.getMaxPinNum() +\
+                        " downto " + port.getMinPinNum() + ");\n"
     # Suppress the #!@ last semicolon
     entity = entity[:-2]
     entity = entity + "\n"
 
-    entity = entity + TAB + ");\n" + "end entity;\n\n"
+    entity = entity + ONETAB + ");\n" + "end entity;\n\n"
     return entity
 
-def architectureHead(masterinterface,intercon):
+def architectureHead(masterinterface, intercon):
     """ Generate the head architecture
     """
-    archead = "architecture "+intercon.getName()+"_1 of "\
-               +intercon.getName()+" is\n"
+    archead = "architecture " + intercon.getName() + "_1 of "\
+               + intercon.getName() + " is\n"
     archead = archead + "begin\n"
     return archead
 
-def connectClockandReset(masterinterface,intercon):
+def connectClockandReset(masterinterface, intercon):
     """ Connect clock and reset
     """
     bus = masterinterface.getBus()
     masterinstance = masterinterface.getParent()
     masterinstancename = masterinstance.getInstanceName()
     masterinterfacename = masterinterface.getName()
-    masterresetname = masterinstancename+"_"+masterinterface.getPortByType(bus.getSignalName("master","reset")).getName()
-    masterclockname  = masterinstancename+"_"+masterinterface.getPortByType(bus.getSignalName("master","clock")).getName()
+    masterresetname = masterinstancename + "_" +\
+            masterinterface.getPortByType(bus.getSignalName("master",
+                                                            "reset")).getName()
+    masterclockname  = masterinstancename + "_" +\
+            masterinterface.getPortByType(bus.getSignalName("master",
+                                                            "clock")).getName()
 
-    out = "\n"+ TAB + "-- Clock and Reset connection\n"
+    out = "\n" + ONETAB + "-- Clock and Reset connection\n"
     for slave in masterinterface.getSlavesList():
         slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
         slaveinstancename = slave.getInstanceName()
-        slaveresetname = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("slave","reset")).getName()
-        slaveclockname  = slaveinstancename+"_"+slaveinterface.getPortByType(bus.getSignalName("slave","clock")).getName()
+        slaveresetname = slaveinstancename + "_" +\
+            slaveinterface.getPortByType(
+                bus.getSignalName("slave", "reset")).getName()
+        slaveclockname  = slaveinstancename + "_" +\
+            slaveinterface.getPortByType(
+                bus.getSignalName("slave","clock")).getName()
 
-        out=out+"\n"+TAB+"-- for "+slaveinstancename+"\n"
+        out = out + "\n" + ONETAB + "-- for " + slaveinstancename + "\n"
         #reset
-        out=out+TAB+slaveresetname+" <= "+masterresetname+";\n"
+        out = out + ONETAB + slaveresetname + " <= " + masterresetname + ";\n"
         #clock
-        out=out+TAB+slaveclockname+" <= "+ masterclockname+";\n"
+        out = out + ONETAB + slaveclockname + " <= " + masterclockname + ";\n"
 
     return out
 
 def architectureFoot(intercon):
         """ Write foot architecture code
         """
-        out = "\nend architecture "+intercon.getName()+"_1;\n"
+        out = "\nend architecture " + intercon.getName() + "_1;\n"
         return out
 
 def generate_intercon(masterinterface, intercon):
@@ -126,35 +140,34 @@ def generate_intercon(masterinterface, intercon):
 
     ###########################
     #comment and header
-    VHDLcode = header(settings.author,intercon)
+    VHDLcode = header(SETTINGS.author, intercon)
     ###########################
     #entity
     VHDLcode = VHDLcode + entity(intercon)
     VHDLcode = VHDLcode + architectureHead(masterinterface, intercon)
     ###########################
     #Clock and Reset connection
-    VHDLcode = VHDLcode + connectClockandReset(masterinterface,intercon)
+    VHDLcode = VHDLcode + connectClockandReset(masterinterface, intercon)
 
     #Foot
     VHDLcode = VHDLcode + architectureFoot(intercon)
 
     ###########################
     # saving
-    if not sy.dirExist(settings.projectpath +
-                       COMPONENTSPATH+"/"+
-                       intercon.getInstanceName()+"/"+HDLDIR):
-        sy.makeDirectory(settings.projectpath+
-                        COMPONENTSPATH+"/"+
-                        intercon.getInstanceName()+"/"+HDLDIR)
-    file = open(settings.projectpath +COMPONENTSPATH+"/"+
-            intercon.getInstanceName()+
-            "/"+HDLDIR+"/"+intercon.getInstanceName()+VHDLEXT,"w")
+    if not sy.dirExist(SETTINGS.projectpath +
+                       COMPONENTSPATH + "/" +
+                       intercon.getInstanceName() + "/" + HDLDIR):
+        sy.makeDirectory(SETTINGS.projectpath +
+                        COMPONENTSPATH + "/" +
+                        intercon.getInstanceName() + "/" + HDLDIR)
+    file = open(SETTINGS.projectpath + COMPONENTSPATH + "/" +
+            intercon.getInstanceName() +
+            "/" + HDLDIR + "/" + intercon.getInstanceName() + VHDLEXT, "w")
     file.write(VHDLcode)
     file.close()
     #hdl file path
     hdl = Hdl_file(intercon,
-            filename=intercon.getInstanceName()+VHDLEXT,
-            istop=1,scope="both")
+            filename=intercon.getInstanceName() + VHDLEXT,
+            istop=1, scope="both")
     intercon.addHdl_file(hdl)
     return VHDLcode
-
