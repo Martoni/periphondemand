@@ -23,25 +23,18 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
 """ Managing list of hdl files """
-
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import os
 
-from periphondemand.bin.define import *
+from periphondemand.bin.define import HDLEXT
 
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.error import Error
 
-settings = Settings()
+SETTINGS = Settings()
 
 
 class Hdl_file(WrapperXml):
@@ -82,7 +75,7 @@ class Hdl_file(WrapperXml):
 
     def getFilePath(self):
         """ return an open file pointer of HDL file """
-        librarypath = settings.active_library.getLibraryPath()
+        librarypath = SETTINGS.active_library.getLibraryPath()
         componentname = self.getParent().getName()
         filepath = os.path.join(librarypath, componentname,
                                 "hdl", self.getFileName())
@@ -104,8 +97,8 @@ class Hdl_file(WrapperXml):
         return self.getAttributeValue("scope")
 
     def setScope(self, scope):
-        SCOPE = ["both", "fpga", "driver"]
-        if scope.lower() in SCOPE:
+        lscope = ["both", "fpga", "driver"]
+        if scope.lower() in lscope:
             self.setAttribute("scope", scope)
         else:
             raise Error("Unknown scope " + str(scope))
