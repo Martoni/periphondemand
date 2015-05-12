@@ -23,27 +23,23 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
-
-__doc__ = ""
-__version__ = "1.0.0"
-__versionTime__ = "16/07/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
+""" Manage driver code generation """
 
 import re
-from periphondemand.bin.define import *
+
+from periphondemand.bin.define import XMLEXT
+from periphondemand.bin.define import RIVERSPATH
+from periphondemand.bin.define import OMPONENTSPATH
+from periphondemand.bin.define import RIVERS_TEMPLATES_PATH
+
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.error import Error
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.display import Display
 
-settings = Settings()
-display = Display()
+SETTINGS = Settings()
+DISPLAY = Display()
 
 
 class Driver(WrapperXml):
@@ -52,7 +48,7 @@ class Driver(WrapperXml):
 
     def __init__(self, project):
         self.project = project
-        filepath = settings.projectpath + "/" +\
+        filepath = SETTINGS.projectpath + "/" +\
                    DRIVERSPATH + "/drivers" + XMLEXT
         if not sy.fileExist(filepath):
             raise Error("No driver project found", 3)
@@ -69,21 +65,21 @@ class Driver(WrapperXml):
             if component.getNum() == "0":
                 driverT = component.getDriver_Template(os)
                 if driverT is not None:
-                    if sy.dirExist(settings.projectpath + DRIVERSPATH +
+                    if sy.dirExist(SETTINGS.projectpath + DRIVERSPATH +
                                     "/" + component.getName()):
-                        display.msg("Driver directory for " +
+                        DISPLAY.msg("Driver directory for " +
                                     component.getName() +
                                     " allready exist. suppressing it")
-                        sy.delDirectory(settings.projectpath + DRIVERSPATH +
+                        sy.delDirectory(SETTINGS.projectpath + DRIVERSPATH +
                                         "/" + component.getName())
-                    display.msg("Create directory for " +
+                    DISPLAY.msg("Create directory for " +
                                 component.getName() + " driver")
                     # create component directory
-                    sy.makeDirectory(settings.projectpath +
+                    sy.makeDirectory(SETTINGS.projectpath +
                                      DRIVERSPATH + "/" +
                                      component.getName())
                 else:
-                    display.msg("No driver for " + component.getName())
+                    DISPLAY.msg("No driver for " + component.getName())
 
     def fillAllTemplates(self):
         """ fill template """
@@ -95,17 +91,17 @@ class Driver(WrapperXml):
             if component.getNum() == "0":
                 driverT = component.getDriver_Template(os)
                 if driverT is not None:
-                    display.msg("Copy and fill template for " +
+                    DISPLAY.msg("Copy and fill template for " +
                                 component.getName())
                     for templatefile in driverT.getTemplatesList():
                         try:
                             template = open(
-                                    settings.projectpath + COMPONENTSPATH +
+                                    SETTINGS.projectpath + COMPONENTSPATH +
                                     "/" + component.getInstanceName() + "/" +
                                     DRIVERS_TEMPLATES_PATH + "/" + os + "/" +
                                     templatefile, "r")
                             destfile = open(
-                                    settings.projectpath + DRIVERSPATH + "/" +
+                                    SETTINGS.projectpath + DRIVERSPATH + "/" +
                                     component.getName() + "/" + templatefile,
                                     "w")
                         except IOError, error:
@@ -172,7 +168,7 @@ class Driver(WrapperXml):
                         raise Error("No interruption port in " +
                                     instance.getInstanceName(), 0)
                     elif len(interruptlist) > 1:
-                        display.msg("More than one interrupt port in " +
+                        DISPLAY.msg("More than one interrupt port in " +
                                 instance.getInstanceName() +
                                 ". " + interruptlist[0].getName() + " is used")
                     interruptport = interruptlist[0]
@@ -189,7 +185,7 @@ class Driver(WrapperXml):
                         raise Error("Interrupt " + interruptport.getName() +
                                     " is not connected", 0)
                     elif len(connect) > 1:
-                        display.msg(
+                        DISPLAY.msg(
                         "More than one connection for interruption port " +
                         interruptport.getName() + ". " +
                         connect[0]["port_dest"] + " is used")
@@ -248,8 +244,8 @@ class Driver(WrapperXml):
         # deleting all directory in POD dir
         sy.deleteAllDir(bspdir)
         for directory in \
-                sy.listDirectory(settings.projectpath + DRIVERSPATH + "/"):
-            sy.copyDirectory(settings.projectpath + DRIVERSPATH +
+                sy.listDirectory(SETTINGS.projectpath + DRIVERSPATH + "/"):
+            sy.copyDirectory(SETTINGS.projectpath + DRIVERSPATH +
                              "/" + directory,
                              self.getBSPDirectory())
 
