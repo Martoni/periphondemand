@@ -29,6 +29,7 @@ import sys
 from periphondemand.bin.define import SYNTHESISPATH
 from periphondemand.bin.define import XMLEXT
 from periphondemand.bin.define import TOOLCHAINPATH
+from periphondemand.bin.define import COMPONENTSPATH
 
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.wrapperxml import WrapperXml
