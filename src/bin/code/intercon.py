@@ -23,22 +23,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
 """ Manage intercon """
 
-__doc__ = ""
-__version__ = "1.0.0"
-__versionTime__ = "13/05/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
-
-import periphondemand.bin.define
-from periphondemand.bin.define import *
-
-from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.error import Error
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.display import Display
@@ -48,8 +34,7 @@ from periphondemand.bin.core.port import Port
 from periphondemand.bin.core.interface import Interface
 from periphondemand.bin.core.hdl_file import Hdl_file
 
-settings = Settings()
-display = Display()
+DISPLAY = Display()
 
 
 class Intercon(Component):
@@ -75,7 +60,7 @@ class Intercon(Component):
 
         masterinterface.getBus().generate_intercon(self)
 
-        display.msg("Intercon with name : " + self.getInstanceName() + " Done")
+        DISPLAY.msg("Intercon with name : " + self.getInstanceName() + " Done")
 
     def generateXML(self, masterinterface):
         """ Generate intercon code
