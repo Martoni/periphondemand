@@ -23,87 +23,88 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
+""" Generate simulation code for GHDL """
 
-__doc__ = ""
-__version__ = "1.0.0"
-__versionTime__ = "24/07/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
-
-from periphondemand.bin.define import *
 from periphondemand.bin.define import VHDLEXT
+from periphondemand.bin.define import ONETAB
+from periphondemand.bin.define import SIMULATIONPATH
+from periphondemand.bin.define import SYNTHESISPATH
+from periphondemand.bin.define import TEMPLATESPATH
+from periphondemand.bin.define import HEADERTPL
 
-from periphondemand.bin.code.topgen    import TopGen
+from periphondemand.bin.code.topgen import TopGen
 
-from periphondemand.bin.utils          import wrappersystem as sy
+from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.display  import Display
-from periphondemand.bin.utils.error    import Error
+from periphondemand.bin.utils.display import Display
+from periphondemand.bin.utils.error import Error
 
 import time
 import datetime
 
-TAB = "    "
-MAKEFILETEMPLATE="ghdlsimulationmakefile"
-settings = Settings()
-display  = Display()
+MAKEFILETEMPLATE = "ghdlsimulationmakefile"
+SETTINGS = Settings()
+DISPLAY = Display()
+
 
 def header():
     """ return vhdl header
     """
-    header = open(settings.path + TEMPLATESPATH+ "/"+HEADERTPL,"r").read()
-    header = header.replace("$tpl:author$",settings.author)
-    header = header.replace("$tpl:date$",str(datetime.date.today()))
-    header = header.replace("$tpl:filename$","Top_"+settings.active_project.getName()+"_tb.vhd")
-    header = header.replace("$tpl:abstract$",settings.active_project.getDescription())
+    header = open(SETTINGS.path + TEMPLATESPATH + "/" + HEADERTPL, "r").read()
+    header = header.replace("$tpl:author$", SETTINGS.author)
+    header = header.replace("$tpl:date$", str(datetime.date.today()))
+    header = header.replace("$tpl:filename$", "Top_" +
+                            SETTINGS.active_project.getName() + "_tb.vhd")
+    header = header.replace("$tpl:abstract$",
+                            SETTINGS.active_project.getDescription())
     return header
+
 
 def include():
     include = ""
-    platform = settings.active_project.platform
+    platform = SETTINGS.active_project.platform
     for library in platform.getLibrariesList():
         for line in library.getDescription().split("\n"):
-            include = include+"-- "+line+"\n"
+            include = include + "-- " + line + "\n"
         include = include + "use " +\
-                  settings.active_project.simulation_toolchain.getLibrary() +\
-                  "." + library.getFileName().replace(VHDLEXT,".all") + ";\n"
+            SETTINGS.active_project.simulation_toolchain.getLibrary() +\
+            "." + library.getFileName().replace(VHDLEXT, ".all") + ";\n"
     return include
+
 
 def entity():
     """ return entity code
     """
-    entity = "\nentity "+"top_"+\
-            settings.active_project.getName()+"_tb is\n"
-    entity = entity + "end entity top_"+settings.active_project.getName()+"_tb;\n\n"
+    entity = "\nentity " + "top_" +\
+        SETTINGS.active_project.getName() + "_tb is\n"
+    entity = entity + "end entity top_" +\
+        SETTINGS.active_project.getName() + "_tb;\n\n"
     return entity
+
 
 def architecturehead():
     """ return architecture head VHDL code
     """
-    arch = "architecture RTL of "+"top_"+settings.active_project.getName()+\
-            "_tb is\n\n"
+    arch = "architecture RTL of " + "top_" +\
+        SETTINGS.active_project.getName() + "_tb is\n\n"
     return arch
 
-def constant(clockhalfperiode):
+
+def constant(clockhalfperiod):
     """ return constant declaration
     """
-    constant = TAB+"CONSTANT HALF_PERIODE : time := "+str(clockhalfperiode)+" ns;  -- Half clock period\n"
-    for instance in settings.active_project.instances:
+    constant = ONETAB + "CONSTANT HALF_PERIODE : time := " +\
+        str(clockhalfperiod) + " ns;  -- Half clock period\n"
+    for instance in SETTINGS.active_project.instances:
         for interface in instance.getInterfacesList():
             for register in interface.getRegisterList():
-                constant = constant + TAB +\
-                        "CONSTANT "+\
-                        instance.getInstanceName().upper()+\
-                        "_"+\
-                        register.getName().upper()+\
-                        " : std_logic_vector := x\""+\
-                        register.getAbsoluteAddr()+"\";"+\
-                        "\n"
+                constant = constant + ONETAB + "CONSTANT " +\
+                    instance.getInstanceName().upper() + "_" +\
+                    register.getName().upper() +\
+                    " : std_logic_vector := x\"" + register.getAbsoluteAddr() +\
+                    "\";\n"
     return constant
+
 
 def signals(portlist):
     """ return signal declaration
@@ -113,50 +114,52 @@ def signals(portlist):
         portname = port.getName()
         interfacename = port.getParent().getName()
         instancename = port.getParent().getParent().getInstanceName()
-
-        out = out + TAB +"signal  "+\
-                instancename+"_"+portname +\
-                " : "
-        if port.getMSBConnected() <1:
+        out = out + ONETAB + "signal  " +\
+            instancename + "_" + portname + " : "
+        if port.getMSBConnected() < 1:
             out = out + " std_logic;"
         else:
-            out = out + " std_logic_vector("+str(port.getMSBConnected())\
-                    +" downto 0);"
+            out = out + " std_logic_vector(" + str(port.getMSBConnected()) +\
+                " downto 0);"
         out = out + "\n"
     return out
+
 
 def declareTop(portlist):
     """ declare top component
     """
 
-    out = "\n"+TAB+"component top_"+settings.active_project.getName()
-    out = out + "\n" + TAB + "port ("
+    out = "\n" + ONETAB + "component top_" + SETTINGS.active_project.getName()
+    out = out + "\n" + ONETAB + "port ("
 
     for port in portlist:
         portname = port.getName()
         interfacename = port.getParent().getName()
         instancename = port.getParent().getParent().getInstanceName()
-
-        out = out + TAB*2 +\
-                instancename+"_"+portname+\
-                " : " + port.getDir()
-        if port.getMSBConnected()  < 1:
+        out = out + ONETAB * 2 +\
+            instancename + "_" + portname + \
+            " : " + port.getDir()
+        if port.getMSBConnected() < 1:
             out = out + " std_logic;"
         else:
-            out = out + " std_logic_vector("+str(port.getMSBConnected())+" downto 0);"
+            out = out + " std_logic_vector(" +\
+                str(port.getMSBConnected()) + " downto 0);"
         out = out + "\n"
     # Suppress the #!@ last semicolon
     out = out[:-2]
-    out = out + "\n"+TAB + ");\n"
-    out = out + TAB + "end component top_"+settings.active_project.getName()+";\n"
+    out = out + "\n" + ONETAB + ");\n"
+    out = out + ONETAB + "end component top_" +\
+        SETTINGS.active_project.getName() + ";\n"
     return out
+
 
 def beginarch():
     return "\nbegin\n\n"
 
+
 def connectTop(portlist):
-    out = TAB+"top : top_"+settings.active_project.getName()+"\n"
-    out = out + TAB+"port map(\n"
+    out = ONETAB + "top : top_" + SETTINGS.active_project.getName() + "\n"
+    out = out + ONETAB + "port map(\n"
 
     for port in portlist:
         portname = port.getName()
@@ -164,26 +167,25 @@ def connectTop(portlist):
         instancename = port.getParent().getParent().getInstanceName()
 
         # sig declaration
-        out = out + TAB*2 +\
-                instancename+"_"+portname +\
-                " => " +\
-                instancename+"_"+portname +\
-                ",\n"
+        out = out + ONETAB * 2 + instancename + "_" + portname +\
+            " => " + instancename + "_" + portname + ", \n"
     # Suppress the #!@ last comma
     out = out[:-2]
-    out = out + "\n"+TAB + ");\n"
+    out = out + "\n" + ONETAB + ");\n"
     return out
 
+
 def clock(clockname):
-   """ write clock process
-   """
-   clock = TAB+"clockp : process\n"+TAB+"begin\n"
-   clock = clock+TAB*2+clockname+" <= '1';\n"
-   clock = clock+TAB*2+"wait for HALF_PERIODE;\n"
-   clock = clock+TAB*2+clockname+" <= '0';\n"
-   clock = clock+TAB*2+"wait for HALF_PERIODE;\n"
-   clock = clock+TAB+"end process clockp;\n"
-   return clock
+    """ write clock process
+    """
+    clock = ONETAB + "clockp : process\n" + ONETAB + "begin\n"
+    clock = clock + ONETAB * 2 + clockname + " <= '1';\n"
+    clock = clock + ONETAB * 2 + "wait for HALF_PERIODE;\n"
+    clock = clock + ONETAB * 2 + clockname + " <= '0';\n"
+    clock = clock + ONETAB * 2 + "wait for HALF_PERIODE;\n"
+    clock = clock + ONETAB + "end process clockp;\n"
+    return clock
+
 
 def stimulis():
     """ write a template stimulis processus
@@ -197,22 +199,25 @@ def stimulis():
     end process stimulis;
     """
 
+
 def endarch():
         return "end architecture RTL;\n"
+
 
 def generateTemplate():
     """ generate Template Testbench
     """
-    filename = settings.projectpath + SIMULATIONPATH +\
-               "/top_" + settings.active_project.getName() +\
-               "_tb" + VHDLEXT
-    clockportlist = settings.active_project.clock_ports
+    filename = SETTINGS.projectpath + SIMULATIONPATH +\
+        "/top_" + SETTINGS.active_project.getName() +\
+        "_tb" + VHDLEXT
+    clockportlist = SETTINGS.active_project.clock_ports
     if len(clockportlist) == 0:
-        raise Error("No external clock signal found",0)
+        raise Error("No external clock signal found", 0)
     if len(clockportlist) != 1:
-        display.msg("More than one external clock in design",1)
+        DISPLAY.msg("More than one external clock in design", 1)
     clockport = clockportlist[0]
-    clockname = clockport.getParent().getParent().getInstanceName()+"_"+clockport.getName()
+    clockname = clockport.getParent().getParent().getInstanceName() +\
+        "_" + clockport.getName()
 
     ###################
     # header
@@ -221,9 +226,9 @@ def generateTemplate():
     out = out + entity()
     out = out + architecturehead()
     freq = clockport.getDestinationPort().getFreq()
-    clockhalfperiode= (1000/float(freq))/2
-    out = out + constant(clockhalfperiode)
-    portlist =  settings.active_project.platform.getConnectPortsList()
+    clockhalfperiod = (1000 / float(freq)) / 2
+    out = out + constant(clockhalfperiod)
+    portlist = SETTINGS.active_project.platform.getConnectPortsList()
     out = out + signals(portlist)
     out = out + declareTop(portlist)
     out = out + beginarch()
@@ -238,43 +243,46 @@ def generateTemplate():
     #######################
     # save file
     if sy.fileExist(filename):
-        display.msg("[WARNING] File exist, file renamed in "+filename+"old",0)
-        sy.renameFile(filename,filename+"old")
+        DISPLAY.msg("[WARNING] File exist, file renamed in " +
+                    filename + "old", 0)
+        sy.renameFile(filename, filename + "old")
     try:
-        file = open(filename,"w")
-    except IOError, e:
-        raise e
-    file.write(out)
-    file.close()
+        afile = open(filename, "w")
+    except IOError, error:
+        raise error
+    afile.write(out)
+    afile.close()
     return filename
+
 
 def generateMakefile():
     """ generate makefile for ghdl
     """
     # include file list:
-    srclist =[]
-    platform = settings.active_project.platform
-    projectname = "top_"+settings.active_project.getName()
-    srclist.append(".."+SYNTHESISPATH+"/top_"+settings.active_project.getName()+VHDLEXT)
-    for component in settings.active_project.instances:
+    srclist = []
+    platform = SETTINGS.active_project.platform
+    projectname = "top_" + SETTINGS.active_project.getName()
+    srclist.append(".." + SYNTHESISPATH + "/top_" +
+                   SETTINGS.active_project.getName() + VHDLEXT)
+    for component in SETTINGS.active_project.instances:
         if component.getNum() == "0":
-            compdir = ".."+SYNTHESISPATH+"/"+component.getName()+"/"
+            compdir = ".." + SYNTHESISPATH + "/" + component.getName() + "/"
             for hdlfile in component.getHdl_filesList():
-                srclist.append(compdir+hdlfile.getFileName().split("/")[-1])
+                srclist.append(compdir + hdlfile.getFileName().split("/")[-1])
 
     librarylist = []
     for library in platform.getLibrariesList():
         srclist.append(library.getFileName())
         librarylist.append(library.getFileName())
 
-    makefile = open(settings.path + TEMPLATESPATH+ "/"+MAKEFILETEMPLATE,"r").read()
-    makefile = makefile.replace(r'$tpl:projectname$',projectname)
-    makefile = makefile.replace(r'$tpl:files$'," ".join(srclist))
-    makefile = makefile.replace(r'$tpl:library$'," ".join(librarylist))
+    makefile = open(SETTINGS.path + TEMPLATESPATH +
+                    "/" + MAKEFILETEMPLATE, "r").read()
+    makefile = makefile.replace(r'$tpl:projectname$', projectname)
+    makefile = makefile.replace(r'$tpl:files$', " ".join(srclist))
+    makefile = makefile.replace(r'$tpl:library$', " ".join(librarylist))
 
-    makefilename = settings.projectpath+SIMULATIONPATH+"/Makefile"
-    file = open(makefilename,"w")
-    file.write(makefile)
-    file.close()
+    makefilename = SETTINGS.projectpath + SIMULATIONPATH + "/Makefile"
+    afile = open(makefilename, "w")
+    afile.write(makefile)
+    afile.close()
     return makefilename
-
