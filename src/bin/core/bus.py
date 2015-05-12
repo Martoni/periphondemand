@@ -23,23 +23,15 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
 """ Manage busses """
 
-__doc__ = ""
-__version__ = "1.0.0"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
+from periphondemand.bin.define import BUSPATH
 
-from periphondemand.bin.define import *
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.error import Error
 
-settings = Settings()
+SETTINGS = Settings()
 
 
 class Bus(WrapperXml):
@@ -48,11 +40,9 @@ class Bus(WrapperXml):
             settings --
     """
 
-    def __init__(self, parent, name, setting=settings):
+    def __init__(self, parent, name):
         self.parent = parent
-        self.setting = setting
-        WrapperXml.__init__(self,
-                            file=(setting.path + BUSPATH + "/" +
+        WrapperXml.__init__(self, file=(SETTINGS.path + BUSPATH + "/" +
                                   name + "/" + name + ".xml"))
 
     def getDataSize(self):
@@ -79,8 +69,8 @@ class Bus(WrapperXml):
         masterinterface = self.getParent()
         import sys
         # load module path
-        sys.path.append(settings.path + BUSPATH + "/" + self.getName())
+        sys.path.append(SETTINGS.path + BUSPATH + "/" + self.getName())
         plugin = __import__(self.getName())
-        sys.path.remove(settings.path + BUSPATH + "/" + self.getName())
+        sys.path.remove(SETTINGS.path + BUSPATH + "/" + self.getName())
 
         plugin.generate_intercon(masterinterface, intercon)
