@@ -28,9 +28,9 @@
 import re
 
 from periphondemand.bin.define import XMLEXT
-from periphondemand.bin.define import RIVERSPATH
-from periphondemand.bin.define import OMPONENTSPATH
-from periphondemand.bin.define import RIVERS_TEMPLATES_PATH
+from periphondemand.bin.define import DRIVERSPATH
+from periphondemand.bin.define import COMPONENTSPATH
+from periphondemand.bin.define import DRIVERS_TEMPLATES_PATH
 
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.error import Error
@@ -49,7 +49,7 @@ class Driver(WrapperXml):
     def __init__(self, project):
         self.project = project
         filepath = SETTINGS.projectpath + "/" +\
-                   DRIVERSPATH + "/drivers" + XMLEXT
+            DRIVERSPATH + "/drivers" + XMLEXT
         if not sy.fileExist(filepath):
             raise Error("No driver project found", 3)
         WrapperXml.__init__(self, file=filepath)
@@ -58,15 +58,15 @@ class Driver(WrapperXml):
     def generateProject(self):
         """ copy template drivers files """
         project = self.project
-        os = self.getName()
-        if os is None:
+        op_sys = self.getName()
+        if op_sys is None:
             raise Error("Operating system must be selected", 0)
         for component in project.instances:
             if component.getNum() == "0":
-                driverT = component.getDriver_Template(os)
+                driverT = component.getDriver_Template(op_sys)
                 if driverT is not None:
                     if sy.dirExist(SETTINGS.projectpath + DRIVERSPATH +
-                                    "/" + component.getName()):
+                                   "/" + component.getName()):
                         DISPLAY.msg("Driver directory for " +
                                     component.getName() +
                                     " allready exist. suppressing it")
@@ -84,26 +84,27 @@ class Driver(WrapperXml):
     def fillAllTemplates(self):
         """ fill template """
         project = self.project
-        os = self.getName()
-        if os is None:
+        op_sys = self.getName()
+        if op_sys is None:
             raise Error("Operating system must be selected", 0)
         for component in project.instances:
             if component.getNum() == "0":
-                driverT = component.getDriver_Template(os)
+                driverT = component.getDriver_Template(op_sys)
                 if driverT is not None:
                     DISPLAY.msg("Copy and fill template for " +
                                 component.getName())
                     for templatefile in driverT.getTemplatesList():
                         try:
                             template = open(
-                                    SETTINGS.projectpath + COMPONENTSPATH +
-                                    "/" + component.getInstanceName() + "/" +
-                                    DRIVERS_TEMPLATES_PATH + "/" + os + "/" +
-                                    templatefile, "r")
+                                SETTINGS.projectpath + COMPONENTSPATH +
+                                "/" + component.getInstanceName() + "/" +
+                                DRIVERS_TEMPLATES_PATH + "/" +
+                                op_sys + "/" +
+                                templatefile, "r")
                             destfile = open(
-                                    SETTINGS.projectpath + DRIVERSPATH + "/" +
-                                    component.getName() + "/" + templatefile,
-                                    "w")
+                                SETTINGS.projectpath + DRIVERSPATH + "/" +
+                                component.getName() + "/" + templatefile,
+                                "w")
                         except IOError, error:
                             raise Error(str(error), 0)
                         self.fillTemplate(template, destfile, component)
@@ -119,8 +120,8 @@ class Driver(WrapperXml):
             for writeline in template.split("\n"):
                 # instance_name
                 writeline = re.sub(r'\/\*\$instance_name\$\*\/',
-                            instance.getInstanceName().upper(),
-                            writeline)
+                                   instance.getInstanceName().upper(),
+                                   writeline)
                 # instance_num
                 writeline = re.sub(r'\/\*\$instance_num\$\*\/',
                                    instance.getNum(),
@@ -129,37 +130,37 @@ class Driver(WrapperXml):
                 exp = re.compile(r'\/\*\$generic\:(.*?)\$\*\/')
                 iterator = exp.finditer(writeline)
                 for generic in iterator:
-                    writeline = re.sub(r'\/\*\$generic:' +
-                                       generic.group(1) + r'\$\*\/',
-                              instance.getGeneric(generic.group(1)).getValue(),
-                              writeline)
+                    writeline = re.sub(
+                        r'\/\*\$generic:' + generic.group(1) + r'\$\*\/',
+                        instance.getGeneric(generic.group(1)).getValue(),
+                        writeline)
                 # register_base_address:interface_name
                 exp = re.compile(r'\/\*\$registers_base_address:(.*?)\$\*\/')
                 iterator = exp.finditer(writeline)
                 for interface in iterator:
-                    writeline = re.sub(r'\/\*\$registers_base_address:' +
-                                       interface.group(1) + '\$\*\/',
-                                        instance.getInterface(
-                                            interface.group(1)).getBase(),
-                                            writeline)
+                    writeline = re.sub(
+                        r'\/\*\$registers_base_address:' +
+                        interface.group(1) + '\$\*\/',
+                        instance.getInterface(interface.group(1)).getBase(),
+                        writeline)
                 # register:interfacename:registername:attribute
                 exp = re.compile(r'\/\*\$register:(.*?):(.*?):(.*?)\$\*\/')
                 iterator = exp.finditer(writeline)
                 for match in iterator:
                     attributevalue = instance.getInterface(
-                            match.group(1)).getRegister(
-                                    match.group(2)).getAttributeValue(
-                                            match.group(3))
+                        match.group(1)).getRegister(
+                            match.group(2)).getAttributeValue(
+                                match.group(3))
                     if not attributevalue:
                         raise Error(
-                                "Wrong register value -> " +
-                                match.group(1) + ":" + match.group(2) +
-                                ":" + match.group(3) + "\n", 0)
+                            "Wrong register value -> " +
+                            match.group(1) + ":" + match.group(2) +
+                            ":" + match.group(3) + "\n", 0)
                     writeline = re.sub(
-                            r'\/\*\$register:' + match.group(1) +
-                            ':' + match.group(2) + ':' +
-                            match.group(3) + '\$\*\/',
-                            attributevalue, writeline)
+                        r'\/\*\$register:' + match.group(1) +
+                        ':' + match.group(2) + ':' +
+                        match.group(3) + '\$\*\/',
+                        attributevalue, writeline)
                 # interrupt_number
                 if re.search(r'\/\*\$interrupt_number\$\*\/',
                              writeline) is not None:
@@ -168,30 +169,32 @@ class Driver(WrapperXml):
                         raise Error("No interruption port in " +
                                     instance.getInstanceName(), 0)
                     elif len(interruptlist) > 1:
-                        DISPLAY.msg("More than one interrupt port in " +
-                                instance.getInstanceName() +
-                                ". " + interruptlist[0].getName() + " is used")
+                        DISPLAY.msg(
+                            "More than one interrupt port in " +
+                            instance.getInstanceName() +
+                            "." + interruptlist[0].getName() + " is used")
                     interruptport = interruptlist[0]
 
                     try:
                         connect = interruptport.getPin(0).getConnections()
                     except Error, error:
                         raise Error(
-                     "Interrupt " + interruptport.getName() +
-                     " not connected in " +
-                     interruptport.getParent().getParent().getInstanceName() +
-                     "." + interruptport.getParent().getName(), 0)
+                            "Interrupt " + interruptport.getName() +
+                            " not connected in " +
+                            interruptport.getParent(
+                                ).getParent().getInstanceName() +
+                            "." + interruptport.getParent().getName(), 0)
                     if len(connect) == 0:
                         raise Error("Interrupt " + interruptport.getName() +
                                     " is not connected", 0)
                     elif len(connect) > 1:
                         DISPLAY.msg(
-                        "More than one connection for interruption port " +
-                        interruptport.getName() + ". " +
-                        connect[0]["port_dest"] + " is used")
+                            "More than one connection for interruption port " +
+                            interruptport.getName() + ". " +
+                            connect[0]["port_dest"] + " is used")
                     writeline = re.sub(r'\/\*\$interrupt_number\$\*\/',
-                                connect[0]["pin_dest"],
-                                writeline)
+                                       connect[0]["pin_dest"],
+                                       writeline)
                 out = out + writeline + "\n"
         return out
 
@@ -211,12 +214,12 @@ class Driver(WrapperXml):
                 # number_of_instances
                 if re.search(r'\/\*\$number_of_instances\$\*\/',
                              line) is not None:
-                    listOfInstances = \
-                            project.get_instances_list_of_component(
-                                    component.getName())
+                    listOfInstances =\
+                        project.get_instances_list_of_component(
+                            component.getName())
                     line = re.sub(r'\/\*\$number_of_instances\$\*\/',
-                                        str(len(listOfInstances)),
-                                        line)
+                                  str(len(listOfInstances)),
+                                  line)
                 # main clock speed
                 if re.search(r'\/\*\$main_clock\$\*\/', line) is not None:
                     frequency = project.platform.getMainClock()
@@ -227,9 +230,8 @@ class Driver(WrapperXml):
                 if endtag is not None:
                     state = "STANDARD"
                     destfile.write(
-                            self.fillTemplateForEachInstance(
-                                foreach_template,
-                                component))
+                        self.fillTemplateForEachInstance(foreach_template,
+                                                         component))
                 else:
                     foreach_template = foreach_template + line
             else:
@@ -253,9 +255,9 @@ class Driver(WrapperXml):
         """ set the directory where driver will be copied"""
         self.setBSPDirectory(tree)
 
-    def setOperatingSystem(self, os):
+    def setOperatingSystem(self, op_sys):
         """ select operating system  """
-        self.setBSPOperatingSystem(os)
+        self.setBSPOperatingSystem(op_sys)
 
     def getBSPDirectory(self):
         """ return the directory where drivers files are copied """
