@@ -23,28 +23,21 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
-
-__doc__ = ""
-__version__ = "1.0.0"
-__versionTime__ = "30/05/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import sys
+
+from periphondemand.bin.define import SYNTHESISPATH
+from periphondemand.bin.define import XMLEXT
+from periphondemand.bin.define import TOOLCHAINPATH
+
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.error import Error
 from periphondemand.bin.utils.display import Display
 
-from periphondemand.bin.define import *
-
-settings = Settings()
-display = Display()
+SETTINGS = Settings()
+DISPLAY = Display()
 
 
 class Synthesis(WrapperXml):
@@ -53,19 +46,19 @@ class Synthesis(WrapperXml):
 
     def __init__(self, parent):
         self.parent = parent
-        filepath = settings.projectpath +\
+        filepath = SETTINGS.projectpath +\
                    "/" + SYNTHESISPATH +\
                    "/synthesis" + XMLEXT
         if not sy.fileExist(filepath):
             raise Error("No synthesis project found", 3)
         WrapperXml.__init__(self, file=filepath)
         # adding path for toolchain plugin
-        sys.path.append(settings.path + TOOLCHAINPATH +
+        sys.path.append(SETTINGS.path + TOOLCHAINPATH +
                         SYNTHESISPATH + "/" + self.getName())
 
     def save(self):
         """ Save xml """
-        self.saveXml(settings.projectpath +
+        self.saveXml(SETTINGS.projectpath +
                      "/synthesis/synthesis" + XMLEXT)
 
     def getSynthesisToolName(self):
@@ -76,7 +69,7 @@ class Synthesis(WrapperXml):
         """ Test if command exist and return it """
         try:
             # try if .podrc exists
-            return settings.getSynthesisToolCommand(self.getSynthesisToolName())
+            return SETTINGS.getSynthesisToolCommand(self.getSynthesisToolName())
         except:
             # else use toolchain default
             command_name = self.getAttributeValue(key="command",
@@ -95,19 +88,19 @@ class Synthesis(WrapperXml):
         for component in self.parent.instances:
             if component.getNum() == "0":
                 # Make directory
-                compdir = settings.projectpath +\
+                compdir = SETTINGS.projectpath +\
                           SYNTHESISPATH + "/" +\
                           component.getName()
                 if sy.dirExist(compdir):
-                    display.msg("Directory " + compdir +
+                    DISPLAY.msg("Directory " + compdir +
                                 " exist, will be deleted")
                     sy.delDirectory(compdir)
                 sy.makeDirectory(compdir)
-                display.msg("Make directory for " + component.getName())
+                DISPLAY.msg("Make directory for " + component.getName())
                 # copy hdl files
                 for hdlfile in component.getHdl_filesList():
                     try:
-                        sy.copyFile(settings.projectpath +
+                        sy.copyFile(SETTINGS.projectpath +
                                     COMPONENTSPATH +
                                     "/" +
                                     component.getInstanceName() +
@@ -115,7 +108,7 @@ class Synthesis(WrapperXml):
                                     hdlfile.getFileName(),
                                     compdir + "/")
                     except IOError, error:
-                        print display
+                        print DISPLAY
                         raise Error(str(error), 0)
 
     def generateTCL(self, filename=None):
@@ -123,10 +116,10 @@ class Synthesis(WrapperXml):
         try:
             plugin = __import__(self.getName())
         except ImportError, error:
-            sys.path.remove(settings.path + TOOLCHAINPATH +
+            sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                             SYNTHESISPATH + "/" + self.getName())
             raise Error(str(error), 0)
-        sys.path.append(settings.path + TOOLCHAINPATH +
+        sys.path.append(SETTINGS.path + TOOLCHAINPATH +
                         SYNTHESISPATH + "/" + self.getName())
         filename = plugin.generateTCL(self)
         self.setTCLScriptName(str(filename))
@@ -154,10 +147,10 @@ class Synthesis(WrapperXml):
         try:
             plugin = __import__(self.getName())
         except ImportError, error:
-            sy.delFile(settings.path + TOOLCHAINPATH +
+            sy.delFile(SETTINGS.path + TOOLCHAINPATH +
                        SYNTHESISPATH + "/" + self.getName())
             raise Error(str(e), 0)
-        sy.delFile(settings.path + TOOLCHAINPATH +
+        sy.delFile(SETTINGS.path + TOOLCHAINPATH +
                    SYNTHESISPATH + "/" + self.getName())
 
         plugin.generatepinout(self, filename)
@@ -170,7 +163,7 @@ class Synthesis(WrapperXml):
         except ImportError, e:
             raise Error(str(e), 0)
         tclscript_name = self.getTCLScriptName()
-        scriptpath = settings.projectpath +\
+        scriptpath = SETTINGS.projectpath +\
                      SYNTHESISPATH +\
                      "/" + tclscript_name
         try:
