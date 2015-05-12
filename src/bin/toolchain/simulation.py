@@ -23,26 +23,19 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
 
-__doc__ = ""
-__version__ = "1.0.0"
-__versionTime__ = "16/07/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
+from periphondemand.bin.define import XMLEXT
+from periphondemand.bin.define import SIMULATIONPATH
+from periphondemand.bin.define import TOOLCHAINPATH
 
-from periphondemand.bin.define import *
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.display import Display
 from periphondemand.bin.utils.error import Error
 
-settings = Settings()
-display = Display()
+SETTINGS = Settings()
+DISPLAY = Display()
 
 
 class Simulation(WrapperXml):
@@ -51,14 +44,14 @@ class Simulation(WrapperXml):
 
     def __init__(self, parent):
         self.parent = parent
-        filepath = settings.projectpath + "/" +\
+        filepath = SETTINGS.projectpath + "/" +\
                    SIMULATIONPATH + "/simulation" + XMLEXT
         if not sy.fileExist(filepath):
             raise Error("No simulation project found", 3)
         WrapperXml.__init__(self, file=filepath)
 
     def generateProject(self):
-        display.msg("TODO")
+        DISPLAY.msg("TODO")
         pass
 
     def getLibrary(self):
@@ -69,32 +62,32 @@ class Simulation(WrapperXml):
 
     def generateTemplate(self):
         import sys
-        sys.path.append(settings.path + TOOLCHAINPATH +
+        sys.path.append(SETTINGS.path + TOOLCHAINPATH +
                         SIMULATIONPATH + "/" + self.getName())
         try:
             plugin = __import__(self.getName())
         except ImportError, error:
-            sys.path.remove(settings.path + TOOLCHAINPATH +
+            sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                             SIMULATIONPATH + "/" + self.getName())
             raise Error(str(error), 0)
-        sys.path.remove(settings.path + TOOLCHAINPATH +
+        sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                         SIMULATIONPATH + "/" + self.getName())
         return plugin.generateTemplate()
 
     def generateMakefile(self):
         import sys
-        sys.path.append(settings.path + TOOLCHAINPATH +
+        sys.path.append(SETTINGS.path + TOOLCHAINPATH +
                         SIMULATIONPATH + "/" + self.getName())
         try:
             plugin = __import__(self.getName())
         except ImportError, error:
-            sys.path.remove(settings.path + TOOLCHAINPATH +
+            sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                             SIMULATIONPATH + "/" + self.getName())
             raise Error(str(error), 0)
-        sys.path.remove(settings.path + TOOLCHAINPATH +
+        sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                         SIMULATIONPATH + "/" + self.getName())
         return plugin.generateMakefile()
 
     def save(self):
-        self.saveXml(settings.projectpath +
+        self.saveXml(SETTINGS.projectpath +
                      "/simulation/simulation" + XMLEXT)
