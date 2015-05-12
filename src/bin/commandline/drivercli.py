@@ -23,26 +23,16 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
 """ Commandline for driver environnement """
 
-__version__ = "1.0.0"
-__versionTime__ = "16/07/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
-
-from periphondemand.bin.define import *
 from periphondemand.bin.utils.basecli import BaseCli
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.error import Error
 from periphondemand.bin.utils.display import Display
 from periphondemand.bin.utils import wrappersystem as sy
 
-display = Display()
-settings = Settings()
+DISPLAY = Display()
+SETTINGS = Settings()
 
 
 class DriverCli(BaseCli):
@@ -51,8 +41,8 @@ class DriverCli(BaseCli):
 
     def __init__(self, parent):
         BaseCli.__init__(self, parent)
-        self.driver = settings.active_project.driver
-        self.project = settings.active_project
+        self.driver = SETTINGS.active_project.driver
+        self.project = SETTINGS.active_project
 
     def testIfToolChainSelected(self):
         if self.driver is None:
@@ -76,10 +66,10 @@ generate a project drivers directory with templates
             self.driver.generateProject()
             self.driver.fillAllTemplates()
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
-        print display
+        print DISPLAY
 
     def do_filltemplates(self, line):
         """\
@@ -90,10 +80,10 @@ fill drivers templates
             self.testIfToolChainSelected()
             self.driver.fillAllTemplates()
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
-        print display
+        print DISPLAY
 
     def do_copydrivers(self, line):
         """\
@@ -105,10 +95,10 @@ directory must be selected with setprojecttree
             self.testIfToolChainSelected()
             self.driver.copyBSPDrivers()
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
-        print display
+        print DISPLAY
 
     def complete_selectprojecttree(self, text, line, begidx, endidx):
         """complete selectprojecttree command directories """
@@ -131,10 +121,10 @@ select software developpement tree, to copy driver
             self.testIfToolChainSelected()
             self.driver.setBSPDirectory(line)
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
-        print display
+        print DISPLAY
 
     def complete_selecttoolchain(self, text, line, begidx, endidx):
         toolchainlist = []
@@ -152,24 +142,24 @@ select operating system to generate drivers
         try:
             self.checkargs(line, "[drivertoolchain]")
         except Error, error:
-            print display
+            print DISPLAY
             print error
             return
         if line.strip() == "":
-            if len(settings.active_project.get_driver_toolchains()) == 1:
-                settings.active_project.driver_toolchain =\
-                    settings.active_project.get_driver_toolchains()[0]
+            if len(SETTINGS.active_project.get_driver_toolchains()) == 1:
+                SETTINGS.active_project.driver_toolchain =\
+                    SETTINGS.active_project.get_driver_toolchains()[0]
             else:
-                if settings.active_project.driver_toolchain is None:
+                if SETTINGS.active_project.driver_toolchain is None:
                     print "Choose a toolchain\n"
                     for toolchain in \
-                            settings.active_project.get_driver_toolchains():
+                            SETTINGS.active_project.get_driver_toolchains():
                         print toolchain
                     return
         else:
             try:
-                settings.active_project.driver_toolchain = line
+                SETTINGS.active_project.driver_toolchain = line
             except Error, error:
                 print error
                 return
-        self.driver = settings.active_project.driver
+        self.driver = SETTINGS.active_project.driver
