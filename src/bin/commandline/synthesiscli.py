@@ -26,29 +26,28 @@
 """ Command line for synthesis environment """
 
 
-from periphondemand.bin.define import TOOLCHAINPATH 
-from periphondemand.bin.define import SYNTHESISPATH 
+from periphondemand.bin.define import TOOLCHAINPATH
+from periphondemand.bin.define import SYNTHESISPATH
 
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.basecli import BaseCli
 from periphondemand.bin.utils.error import Error
 from periphondemand.bin.utils.display import Display
-from periphondemand.bin.utils import wrappersystem as sy
-
-from periphondemand.bin.toolchain.synthesis import Synthesis
 
 SETTINGS = Settings()
 DISPLAY = Display()
 
 
 class SynthesisCli(BaseCli):
-    """
-    """
+    """ Manage synthesis command line environment """
 
     def __init__(self, parent):
         BaseCli.__init__(self, parent)
 
     def complete_selecttoolchain(self, text, line, begidx, endidx):
+        """ Select toolchain completion """
+        del begidx
+        del endidx
         toolchainlist = []
         try:
             toolchainlist = self.completeargs(text, line,
@@ -75,8 +74,8 @@ select toolchain used for simulation
             else:
                 if SETTINGS.active_project.synthesis_toolchain is None:
                     print("Choose a toolchain\n")
-                    for toolchain in \
-                           SETTINGS.active_project.get_synthesis_toolchains():
+                    for toolchain in\
+                            SETTINGS.active_project.get_synthesis_toolchains():
                         print(str(toolchain))
                     return
         else:
@@ -87,6 +86,9 @@ select toolchain used for simulation
                 return
 
     def complete_generateproject(self, text, line, begidx, endidx):
+        """ generateproject commande completion """
+        del begidx
+        del endidx
         toollist = []
         try:
             toollist = self.completeargs(text, line,
@@ -120,15 +122,16 @@ generate the project for synthesis tool
         try:
             SETTINGS.active_project.synthesis.generateProject()
             print(str(DISPLAY))
-            pinoutfile = SETTINGS.active_project.synthesis.generatePinout(None)
+            SETTINGS.active_project.synthesis.generatePinout(None)
             print(str(DISPLAY))
-            tclname = SETTINGS.active_project.synthesis.generateTCL(None)
+            SETTINGS.active_project.synthesis.generateTCL(None)
         except Error, error:
             print(str(error))
             return
         print(str(DISPLAY))
 
-    def do_generatetcl(self, line):
+    @classmethod
+    def do_generatetcl(cls, line):
         """\
 Usage : generatetcl [filename]
 Made a tcl script for synthesis,tools supported are:
@@ -140,7 +143,7 @@ ise
             return
         if line.strip() != "":
             filename = SETTINGS.path + TOOLCHAINPATH +\
-                       SYNTHESISPATH + "/" + line.strip()
+                SYNTHESISPATH + "/" + line.strip()
         else:
             filename = None
         try:
@@ -161,7 +164,7 @@ ise
             return
         if line.strip() != "":
             filename = SETTINGS.path + TOOLCHAINPATH +\
-                       SYNTHESISPATH + "/" + line.strip()
+                SYNTHESISPATH + "/" + line.strip()
         else:
             filename = None
         try:
@@ -187,12 +190,15 @@ generate the bitstream for fpga configuration
         print DISPLAY
 
     def complete_setiostandard(self, text, line, begidx, endidx):
-        IOlist = []
+        """ setiostandard command completion """
+        del begidx
+        del endidx
+        iolist = []
         try:
-            IOlist = self.completeargs(text, line, "<IO_name>")
-        except Exception, e:
-            print e
-        return IOlist
+            iolist = self.completeargs(text, line, "<IO_name>")
+        except Exception, error:
+            print error
+        return iolist
 
     def do_setiostandard(self, line):
         """\
@@ -216,12 +222,15 @@ set IO standard value
             return
 
     def complete_getiostandard(self, text, line, begidx, endidx):
-        IOlist = []
+        """ getiostandard command completion """
+        del begidx
+        del endidx
+        iolist = []
         try:
-            IOlist = self.completeargs(text, line, "<IO_name>")
+            iolist = self.completeargs(text, line, "<IO_name>")
         except Exception, error:
             print(str(error))
-        return IOlist
+        return iolist
 
     def do_getiostandard(self, line):
         """\
@@ -245,12 +254,15 @@ get IO standard value
         print DISPLAY
 
     def complete_setportoption(self, text, line, begidx, endidx):
-        IOlist = []
+        """ setportoption command completion """
+        del begidx
+        del endidx
+        iolist = []
         try:
-            IOlist = self.completeargs(text, line, "<IO_name>")
+            iolist = self.completeargs(text, line, "<IO_name>")
         except Exception, error:
             print(str(error))
-        return IOlist
+        return iolist
 
     def do_setportoption(self, line):
         """\
@@ -268,19 +280,22 @@ set IO standard value
         port_option_value = arg[1]
         try:
             SETTINGS.active_project.get_io(
-                    io_name).setPortOption(port_option_value)
+                io_name).setPortOption(port_option_value)
         except Error, error:
             print(str(DISPLAY))
             print(str(error))
             return
 
     def complete_getportoption(self, text, line, begidx, endidx):
-        IOlist = []
+        """ getportoption command completion """
+        del begidx
+        del endidx
+        iolist = []
         try:
-            IOlist = self.completeargs(text, line, "<IO_name>")
+            iolist = self.completeargs(text, line, "<IO_name>")
         except Exception, error:
             print(str(error))
-        return IOlist
+        return iolist
 
     def do_getportoption(self, line):
         """\
@@ -304,12 +319,15 @@ get IO Port option value
         print DISPLAY
 
     def complete_setiodrive(self, text, line, begidx, endidx):
-        IOlist = []
+        """ setiodrive command completion """
+        del begidx
+        del endidx
+        iolist = []
         try:
-            IOlist = self.completeargs(text, line, "<IO_name>")
+            iolist = self.completeargs(text, line, "<IO_name>")
         except Exception, error:
             print(str(error))
-        return IOlist
+        return iolist
 
     def do_setiodrive(self, line):
         """\
@@ -333,12 +351,15 @@ set IO drive value
             return
 
     def complete_getiodrive(self, text, line, begidx, endidx):
-        IOlist = []
+        """ getiodrive command completion """
+        del begidx
+        del endidx
+        iolist = []
         try:
-            IOlist = self.completeargs(text, line, "<IO_name>")
+            iolist = self.completeargs(text, line, "<IO_name>")
         except Exception, error:
             print(str(error))
-        return IOlist
+        return iolist
 
     def do_getiodrive(self, line):
         """\
@@ -362,6 +383,9 @@ get IO drive value
         print(str(DISPLAY))
 
     def complete_setfpga(self, text, line, begidx, endidx):
+        """ setfpga command completion """
+        del begidx
+        del endidx
         attributes = []
         try:
             attributes = self.completeargs(text, line, "<fpga_attributes>")
@@ -393,6 +417,9 @@ Set fpga attributes
         print(str(DISPLAY))
 
     def complete_getfpga(self, text, line, begidx, endidx):
+        """ getfpga command completion """
+        del begidx
+        del endidx
         attributes = []
         try:
             attributes = self.completeargs(text, line, "<fpga_attributes>")
