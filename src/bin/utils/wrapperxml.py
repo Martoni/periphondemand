@@ -22,30 +22,6 @@ import xml.etree.cElementTree as ET
 from periphondemand.bin.utils.error import Error
 
 
-def xml_beautifier(xml_data):
-    """
-    This function make XML output looks better and more readable.
-    Fabrice Mousset <fabrice.mousset@laposte.net>
-
-    Can be done with "indent" function in ElementTree
-    """
-    xml_text = ""
-    xml_ident = 0
-    for xml_line in xml_data.split('<'):
-        xml_line = xml_line.strip()
-        if(len(xml_line) > 0):
-            if xml_line.endswith("/>"):
-                xml_text += ' '*xml_ident + "<" + xml_line + "\n"
-            else:
-                if(xml_line.startswith('/')):
-                    xml_ident -= 4
-                    xml_text += ' '*xml_ident + "<" + xml_line + "\n"
-                else:
-                    xml_text += ' '*xml_ident + "<" + xml_line + "\n"
-                    xml_ident += 4
-    return xml_text
-
-
 class WrapperXml(object):
     """Simple class manage XML
         attributes:
@@ -101,7 +77,7 @@ class WrapperXml(object):
 
     def __str__(self):
         return ('<?xml version="1.0" encoding="utf-8"?>\n' +
-                xml_beautifier(ET.tostring(self.tree, "utf-8")))
+                ET.tostring(self.tree, "utf-8"))
 
     def getParent(self):
         """ get parent node """
