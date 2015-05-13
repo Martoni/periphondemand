@@ -16,7 +16,6 @@
 # ----------------------------------------------------------------------------
 """ main xml object """
 
-import os
 import xml.etree.cElementTree as ET
 
 from periphondemand.bin.utils.error import Error
@@ -36,6 +35,7 @@ class WrapperXml(object):
             __init__(self,nodestring)
             __init__(self,file)
         """
+
         if "node" in args:
             self.__initnode(args["node"])
         elif "etnode" in args:
@@ -48,6 +48,9 @@ class WrapperXml(object):
             self.__initfile(args["file"])
         else:
             raise Error("Keys unknown in WrapperXml", 0)
+
+        self.parent = None
+        self.tree = None
 
     def __initfile(self, filename):
         """ initialize with filename"""
