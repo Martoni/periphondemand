@@ -9,24 +9,7 @@
 # Created:  2008/01/22
 # Licence:  GPLv3 or newer
 # ----------------------------------------------------------------------------
-# Last commit info:
-# ----------------------------------
-# $LastChangedDate:: xxxx/xx/xx xx:xx:xx $
-# $Rev::                                 $
-# $Author::                              $
-# ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date      |  By                | Changes
-# 18/11/2008|  Fabien Marteau    | adding script property
-#
-# ----------------------------------------------------------------------------
-
-__doc__ = "Session settings and project parameters"
-__version__ = "1.0.0"
-__versionTime__ = "xx/xx/xxxx"
-__author__ = "Fabrice MOUSSET <fabrice.mousset@laposte.net> and "+\
-             "Fabien MARTEAU <fabien.marteau@armadeus.com>"
+"""Session settings and project parameters"""
 
 import cmd, re, os, sys
 from periphondemand.bin.utils.configfile import ConfigFile
@@ -66,20 +49,20 @@ class Settings(object):
             # init personnal libraries path:
             try:
                 self.configfile = ConfigFile(POD_CONFIG)
-            except PodError, e:
+            except PodError:
                 pass
             try:
                 self.personal_lib_path_list = self.configfile.getLibraries()
                 self.personal_lib_name_list = \
                     [pathlib.split("/")[-1] for pathlib in self.personal_lib_path_list]
-            except PodError,e:
+            except PodError:
                 pass
 
             try:
                 self.personal_platformlib_list = self.configfile.getPlatformLibPath()
                 self.personal_platformlib_name_list = \
                     [pathlib.split("/")[-1] for pathlib in self.personal_platformlib_list]
-            except PodError, e:
+            except PodError:
                 pass
 
             self.active_project = None

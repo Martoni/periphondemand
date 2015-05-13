@@ -23,15 +23,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
-
-__doc__ = ""
-__version__ = "1.0.0"
-__versionTime__ = "28/04/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
+""" Platform management """
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
