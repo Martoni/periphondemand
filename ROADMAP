@@ -11,6 +11,7 @@
   * Platform and library out of POD repository
   * Manage FPGA IOs settings with FPGA configuration files for each type of FPGA
   * Library documentation generator
+  * All armadeus wiki documentation transfered
   * Functionals tests
   * Unit tests
   * Improve code quality according to Pylint and PEP8
@@ -24,6 +25,7 @@
     * Manage wait states compatibility master-slave
   
   * Adding Quartus in generatebitstream
+  * Adding APF6_SP platform
   * Busses documentation
   * Improve code quality according to Pylint and PEP8
   * More unit tests
