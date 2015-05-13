@@ -53,9 +53,6 @@ class Component(WrapperXml):
         self.void = void
         # Project that use the component
         self.parent = parent
-        # Port found in top HDL file that is not assignated in interface
-        self.freeportslist = []
-
         self.interfaceslist = []
         self.genericslist = []
         self.hdl_fileslist = []
