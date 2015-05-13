@@ -28,12 +28,7 @@
 # Date       By        Changes
 #
 # ----------------------------------------------------------------------------
-""" Starting point of POD
-"""
-
-
-#__versionTime__ = "02/06/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
+""" Starting point of POD """
 
 from periphondemand.bin.commandline.projectcli import ProjectCli
 from periphondemand.bin.utils.settings import Settings
@@ -43,6 +38,7 @@ import sys, os, getopt
 
 __version__ = ver.getVersion()
 
+SETTINGS = Settings()
 TMPFILENAME = "podtmp"
 
 def usage():
@@ -61,12 +57,12 @@ Report bugs to http://periphondemand.sourceforge.net/
 def main(argv):
     """ Main command line prog for pod """
     try:
-        opts, args = getopt.getopt(argv[1:],
+        opts, _ = getopt.getopt(argv[1:],
                     "hvs:l:",
-                    ["help", "version","source=","load="]
+                    ["help", "version", "source=", "load="]
                     )
-    except getopt.GetoptError,e:
-        print str(e)
+    except getopt.GetoptError, error:
+        print str(error)
         usage()
         sys.exit(2)
     options = [arg[0] for arg in opts]
@@ -79,15 +75,14 @@ def main(argv):
         print "Peripherals On Demand version "+ ver.getVersion()
         sys.exit(0)
 
-    CLI = ProjectCli()
-    SETTINGS = Settings()
+    cli = ProjectCli()
     SETTINGS.projectpath = sy.pwd()
     SETTINGS.version = ver.getVersion()
 
     # load command file if in command params
     if "--source" in options or "-s" in options:
-        for opt,arg in opts:
-            if opt=="--source" or opt=="-s":
+        for opt, arg in opts:
+            if opt == "--source" or opt == "-s":
                 argument = arg
                 break
         if not os.path.exists(argument):
@@ -95,26 +90,26 @@ def main(argv):
                 " doesn't exist"
             usage()
             return
-        CLI.do_source(argument)
+        cli.do_source(argument)
     elif "--load" in options or "-l" in options:
-        for opt,arg in opts:
-            if opt=="--load" or opt=="-l":
+        for opt, arg in opts:
+            if opt == "--load" or opt == "-l":
                 argument = arg.strip('/')
                 break
             if not os.path.exists(argument):
-                print "[ERROR] project "+str(argument)+\
-                    " doesn't exist"
+                print("[ERROR] project " + str(argument) +
+                      " doesn't exist")
                 usage()
                 return
 
-        tmpfile = open(TMPFILENAME,"w")
-        tmpfile.write("load "+argument)
+        tmpfile = open(TMPFILENAME, "w")
+        tmpfile.write("load " + argument)
         tmpfile.close()
-        print "Loading project "+str(argument)+" :\n"
-        CLI.do_source(TMPFILENAME)
+        print "Loading project " + str(argument) + " :\n"
+        cli.do_source(TMPFILENAME)
 
     # infinite command loop
-    CLI.cmdloop()
+    cli.cmdloop()
 
 if __name__ == "__main__":
     main(sys.argv)

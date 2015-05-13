@@ -23,7 +23,7 @@ VHDLEXT = ".vhd"
 UCFEXT = ".ucf"
 BITSTREAMEXT = ".bit"
 PODSCRIPTEXT = ".pod"
-HDLEXT = ["vhdl","vhd","v"]
+HDLEXT = ["vhdl", "vhd", "v"]
 
 #for components
 LIBRARYPATH = "/library"

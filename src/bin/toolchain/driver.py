@@ -43,8 +43,7 @@ DISPLAY = Display()
 
 
 class Driver(WrapperXml):
-    """
-    """
+    """ Generate driver class """
 
     def __init__(self, project):
         self.project = project
@@ -140,7 +139,7 @@ class Driver(WrapperXml):
                 for interface in iterator:
                     writeline = re.sub(
                         r'\/\*\$registers_base_address:' +
-                        interface.group(1) + '\$\*\/',
+                        interface.group(1) + r'\$\*\/',
                         instance.getInterface(interface.group(1)).getBase(),
                         writeline)
                 # register:interfacename:registername:attribute
@@ -158,8 +157,8 @@ class Driver(WrapperXml):
                             ":" + match.group(3) + "\n", 0)
                     writeline = re.sub(
                         r'\/\*\$register:' + match.group(1) +
-                        ':' + match.group(2) + ':' +
-                        match.group(3) + '\$\*\/',
+                        r':' + match.group(2) + r':' +
+                        match.group(3) + r'\$\*\/',
                         attributevalue, writeline)
                 # interrupt_number
                 if re.search(r'\/\*\$interrupt_number\$\*\/',
@@ -205,7 +204,7 @@ class Driver(WrapperXml):
 
         for line in template:
             if state == "STANDARD":
-                begintag = re.match('^\/\*\$foreach\:instance\$\*\/', line)
+                begintag = re.match(r'^\/\*\$foreach\:instance\$\*\/', line)
                 if begintag is not None:
                     state = "FOREACH_INSTANCE"
                     foreach_template = ""
@@ -222,10 +221,10 @@ class Driver(WrapperXml):
                 # main clock speed
                 if re.search(r'\/\*\$main_clock\$\*\/', line) is not None:
                     frequency = project.platform.getMainClock()
-                    line = re.sub('\/\*\$main_clock\$\*\/', frequency, line)
+                    line = re.sub(r'\/\*\$main_clock\$\*\/', frequency, line)
                 destfile.write(line)
             elif state == "FOREACH_INSTANCE":
-                endtag = re.match('^\/\*\$foreach\:instance\:end\$\*\/', line)
+                endtag = re.match(r'^\/\*\$foreach\:instance\:end\$\*\/', line)
                 if endtag is not None:
                     state = "STANDARD"
                     destfile.write(

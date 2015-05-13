@@ -25,10 +25,7 @@
 # ----------------------------------------------------------------------------
 """ Get version of POD """
 
-import re
-
 VERSION = "1.0.4"
-URL = "$HeadURL: https://periphondemand.svn.sourceforge.net/svnroot/periphondemand/trunk/setup.py $"
 
 def getVersion():
     """ get version function """

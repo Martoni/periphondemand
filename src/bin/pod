@@ -23,11 +23,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #-----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-#-----------------------------------------------------------------------------
-import sys,os
+""" pod console """
+
+import sys, os
 import periphondemand.bin.pod
+
 periphondemand.bin.pod.main(sys.argv)
