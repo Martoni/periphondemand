@@ -28,7 +28,7 @@
 
 import os
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 
 
 class ConfigFile(WrapperXml):

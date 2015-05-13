@@ -34,7 +34,7 @@ __doc__ = ""
 __version__ = "1.0.0"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.core.component import Component
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.wrapperxml import WrapperXml

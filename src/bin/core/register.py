@@ -35,7 +35,7 @@ __version__ = "1.0.0"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 
 
 class Register(WrapperXml):

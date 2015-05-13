@@ -42,7 +42,7 @@ from periphondemand.bin.commandline.drivercli import DriverCli
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.basecli import Statekeeper
 from periphondemand.bin.utils.basecli import BaseCli
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 
 from periphondemand.bin.core.project import Project
 from periphondemand.bin.core.library import Library

@@ -25,7 +25,7 @@
 # ----------------------------------------------------------------------------
 """ Manage intercon """
 
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.display import Display
 

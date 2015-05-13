@@ -28,7 +28,7 @@
 from periphondemand.bin.define import SYNTHESISPATH
 from periphondemand.bin.define import VHDLEXT
 
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils.settings import Settings
 
 SETTINGS = Settings()

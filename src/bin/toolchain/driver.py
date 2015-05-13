@@ -33,7 +33,7 @@ from periphondemand.bin.define import COMPONENTSPATH
 from periphondemand.bin.define import DRIVERS_TEMPLATES_PATH
 
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.display import Display

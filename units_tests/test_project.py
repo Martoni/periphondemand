@@ -20,7 +20,7 @@ from mock import MagicMock
 from mock import Mock
 from datetime import datetime
 
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.core import project
 
 class test_project(unittest.TestCase):

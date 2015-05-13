@@ -19,7 +19,7 @@ import readline
 
 from periphondemand.bin.define import PODSCRIPTEXT
 
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils import wrappersystem as sy
 

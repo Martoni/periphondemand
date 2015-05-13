@@ -32,7 +32,7 @@ import sys
 import shutil
 from os.path import join, splitext, split, exists
 import glob
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.define import COLOR_DEBUG
 from periphondemand.bin.define import COLOR_END
 

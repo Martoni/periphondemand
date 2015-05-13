@@ -30,7 +30,7 @@ __author__ = "Fabrice MOUSSET <fabrice.mousset@laposte.net> and "+\
 
 import cmd, re, os, sys
 from periphondemand.bin.utils.configfile import ConfigFile
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.define import POD_PATH
 from periphondemand.bin.define import POD_CONFIG
 

@@ -40,7 +40,7 @@ from periphondemand.bin.define import ALTERA_BITSTREAM_SUFFIX
 from periphondemand.bin.define import BINARYPROJECTPATH
 
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils.display import Display
 from periphondemand.bin.utils import wrappersystem as sy
 

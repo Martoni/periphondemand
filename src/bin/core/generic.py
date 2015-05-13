@@ -34,7 +34,7 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import re
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 
 DESTINATION = ["fpga", "driver", "both"]
 PUBLIC = ["true", "false"]

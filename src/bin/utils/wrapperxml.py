@@ -18,7 +18,7 @@
 
 import xml.etree.cElementTree as ET
 
-from periphondemand.bin.utils.error import PodError
+from periphondemand.bin.utils.poderror import PodError
 
 
 class WrapperXml(object):
