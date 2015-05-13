@@ -96,7 +96,7 @@ def connectClockandReset(masterinterface, intercon):
     """ Connect clock and reset
     """
     bus = masterinterface.getBus()
-    masterinstance = masterinterface.getParent()
+    masterinstance = masterinterface.parent
     masterinstancename = masterinstance.getInstanceName()
     masterinterfacename = masterinterface.getName()
     masterresetname = masterinstancename + "_" +\
@@ -135,8 +135,8 @@ def architectureFoot(intercon):
 def generate_intercon(masterinterface, intercon):
     """Generate intercon VHDL code for wishbone16 bus
     """
-    masterinstance = masterinterface.getParent()
-    project = masterinstance.getParent()
+    masterinstance = masterinterface.parent
+    project = masterinstance.parent
 
     ###########################
     #comment and header

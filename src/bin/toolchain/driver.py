@@ -182,8 +182,8 @@ class Driver(WrapperXml):
                             "Interrupt " + interruptport.getName() +
                             " not connected in " +
                             interruptport.getParent(
-                                ).getParent().getInstanceName() +
-                            "." + interruptport.getParent().getName(), 0)
+                                ).parent.getInstanceName() +
+                            "." + interruptport.parent.getName(), 0)
                     if len(connect) == 0:
                         raise Error("Interrupt " + interruptport.getName() +
                                     " is not connected", 0)

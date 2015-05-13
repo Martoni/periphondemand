@@ -71,11 +71,11 @@ class AllocMem:
                 interface.setBase(hex(base * size))
                 display.msg("setting base address " +
                         hex(base * size) + " for  " +
-                        interface.getParent().getInstanceName() +
+                        interface.parent.getInstanceName() +
                         "." + interface.getName())
             else:
                 display.msg("Base address is " + hex(base) + " for " +
-                        interface.getParent().getInstanceName() +
+                        interface.parent.getInstanceName() +
                         "." + interface.getName())
             self.lastaddress = size * (base + 1)
         else:
@@ -112,7 +112,7 @@ class AllocMem:
                                     "void"])
                 baseaddress = baseaddress + size
             mappinglist.append([interface.getBase(),
-                    interface.getParent().getInstanceName() +
+                    interface.parent.getInstanceName() +
                     "." + interface.getName(),
                     interface.getMemorySize(),
                     interface.getID()])

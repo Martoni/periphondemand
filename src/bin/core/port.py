@@ -75,8 +75,8 @@ class Port(WrapperXml):
         """ Get name in this format:
             instancename_portname
         """
-        instancename = self.getParent().getParent().getInstanceName()
-        interfacename = self.getParent().getName()
+        instancename = self.parent.parent.getInstanceName()
+        interfacename = self.parent.getName()
         return instancename + "_" + self.getName()
 
     def getPinsList(self):
@@ -104,9 +104,9 @@ class Port(WrapperXml):
         pin = self.getPin(pin_num)
         if pin.getConnections() != []:
             raise Error("Pin " +
-                        str(self.getParent().getParent().getInstanceName()) +
+                        str(self.parent.parent.getInstanceName()) +
                         "." +
-                        str(self.getParent().getName()) +
+                        str(self.parent.getName()) +
                         "." +
                         str(self.getName()) +
                         "." +
@@ -367,7 +367,7 @@ class Port(WrapperXml):
         dest_port_list = []
         for pin in self.getPinsList():
             port_connections = \
-                    [pin.getParent() for pin in pin.getConnectedPinList()]
+                    [pin.parent for pin in pin.getConnectedPinList()]
             for port_connect in port_connections:
                 if port_connect not in dest_port_list:
                     dest_port_list.append(port_connect)
@@ -383,7 +383,7 @@ class Port(WrapperXml):
         if (len(pin_dest_list) == 0):
             return []
         first_pin = pin_dest_list[0]
-        return [pin.getParent() for pin in first_pin.getConnectedPinList()]
+        return [pin.parent for pin in first_pin.getConnectedPinList()]
 
     def getMSBConnected(self):
         """Return the MSB that is connected to an another pin

@@ -214,7 +214,7 @@ class Interface(WrapperXml):
 
     def addPort(self, port):
         """ Adding a port """
-        port.setParent(self)
+        port.parent = self
         self.portslist.append(port)
         self.addSubNode(nodename="ports", subnode=port)
 
@@ -265,33 +265,33 @@ class Interface(WrapperXml):
         """ Connect an interface between two components
         """
         if len(interface_dest.ports) != len(self.ports):
-            raise Error(self.getParent().getName() + "." + self.getName() +
-                        " and " + interface_dest.getParent().getName() +
+            raise Error(self.parent.getName() + "." + self.getName() +
+                        " and " + interface_dest.parent.getName() +
                         "." + interface_dest.getName() +
                         "are not the same number of ports")
         for port in self.ports:
             if port.getType() is None:
-                raise Error(self.getParent().getName() + "." +
+                raise Error(self.parent.getName() + "." +
                             self.getName() + "." +
                             port.getName() + " has no type")
             try:
                 port_dst = interface_dest.getPortByType(port.getType())
             except Error, e:
-                raise Error(interface_dest.getParent().getName() + "." +
+                raise Error(interface_dest.parent.getName() + "." +
                             interface_dest.getName() + " have no " +
                             port.getType() + " port")
             if port_dst.getDir() == port.getDir():
-                raise Error("Ports " + self.getParent().getName() + "." +
+                raise Error("Ports " + self.parent.getName() + "." +
                             self.getName() + "." + port.getName() + " and " +
-                            interface_dest.getParent().getName() + "." +
+                            interface_dest.parent.getName() + "." +
                             interface_dest.getName() + "." +
                             port_dst.getName() + " are the same direction")
             if port_dst.getDir() == "in" and port_dst.isVoid() is not True:
-                raise Error("Ports " + interface_dest.getParent().getName() +
+                raise Error("Ports " + interface_dest.parent.getName() +
                             "." + interface_dest.getName() + "." +
                             port_dst.getName() + " is already connected")
             if port.getDir() == "in" and port.isVoid() is not True:
-                raise Error("Ports " + self.getParent().getName() +
+                raise Error("Ports " + self.parent.getName() +
                             "." + self.getName() +
                             "." + port.getName() +
                             " is already connected")
@@ -410,16 +410,16 @@ class Interface(WrapperXml):
     def getSysconInstance(self):
         """ Return syscon instance that drive master interface
         """
-        for instance in self.getParent().getParent().instances:
+        for instance in self.parent.parent.instances:
             for interface in instance.getInterfacesList():
                 if interface.getClass() == "clk_rst":
                     for slave in interface.getSlavesList():
                         if slave.getInstanceName() ==\
-                            self.getParent().getInstanceName() and\
+                            self.parent.getInstanceName() and\
                                     slave.getInterfaceName() == self.getName():
                             return instance
         raise Error("No syscon for interface " + self.getName() +
-                    " of instance " + self.getParent().getInstanceName(), 0)
+                    " of instance " + self.parent.getInstanceName(), 0)
 
     def addRegister(self, register_name):
         if self.getBusName() is None:

@@ -74,8 +74,8 @@ class TopVHDL(TopGen):
                 out = out + ONETAB * 2 + portname + " : out std_logic;\n"
             else:
                 portname = port.getName()
-                interfacename = port.getParent().getName()
-                instancename = port.getParent().getParent().getInstanceName()
+                interfacename = port.parent.getName()
+                instancename = port.parent.parent.getInstanceName()
 
                 out = out + ONETAB + "-- " + instancename +\
                                   "-" + interfacename + "\n"
@@ -252,7 +252,7 @@ class TopVHDL(TopGen):
             if port.forceDefined():
                 continue
             portname = port.getName()
-            instancename = port.getParent().getParent().getInstanceName()
+            instancename = port.parent.parent.getInstanceName()
             out = out + "\n" + ONETAB + "signal " + instancename +\
                         "_" + portname + ": std_logic_vector(" +\
                         str(int(port.getRealSize()) - 1) + " downto 0);\n"
@@ -350,7 +350,7 @@ class TopVHDL(TopGen):
         for port in incomplete_external_ports_list:
             if not port.forceDefined():
                 portname = port.getName()
-                instancename = port.getParent().getParent().getInstanceName()
+                instancename = port.parent.parent.getInstanceName()
                 out = out + "\n" + ONETAB +\
                         "-- connect incomplete external port " +\
                         str(portname) + " pins\n"

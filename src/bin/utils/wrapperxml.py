@@ -79,14 +79,6 @@ class WrapperXml(object):
         return ('<?xml version="1.0" encoding="utf-8"?>\n' +
                 ET.tostring(self.tree, "utf-8"))
 
-    def getParent(self):
-        """ get parent node """
-        return self.parent
-
-    def setParent(self, parent):
-        """ set parent node """
-        self.parent = parent
-
     def getSubNodeList(self, nodename, subnodename):
         """ Return a list of subnodes
         """

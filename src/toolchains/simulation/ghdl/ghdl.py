@@ -112,8 +112,8 @@ def signals(portlist):
     out = ""
     for port in portlist:
         portname = port.getName()
-        interfacename = port.getParent().getName()
-        instancename = port.getParent().getParent().getInstanceName()
+        interfacename = port.parent.getName()
+        instancename = port.parent.parent.getInstanceName()
         out = out + ONETAB + "signal  " +\
             instancename + "_" + portname + " : "
         if port.getMSBConnected() < 1:
@@ -134,8 +134,8 @@ def declareTop(portlist):
 
     for port in portlist:
         portname = port.getName()
-        interfacename = port.getParent().getName()
-        instancename = port.getParent().getParent().getInstanceName()
+        interfacename = port.parent.getName()
+        instancename = port.parent.parent.getInstanceName()
         out = out + ONETAB * 2 +\
             instancename + "_" + portname + \
             " : " + port.getDir()
@@ -163,8 +163,8 @@ def connectTop(portlist):
 
     for port in portlist:
         portname = port.getName()
-        interfacename = port.getParent().getName()
-        instancename = port.getParent().getParent().getInstanceName()
+        interfacename = port.parent.getName()
+        instancename = port.parent.parent.getInstanceName()
 
         # sig declaration
         out = out + ONETAB * 2 + instancename + "_" + portname +\
@@ -216,7 +216,7 @@ def generateTemplate():
     if len(clockportlist) != 1:
         DISPLAY.msg("More than one external clock in design", 1)
     clockport = clockportlist[0]
-    clockname = clockport.getParent().getParent().getInstanceName() +\
+    clockname = clockport.parent.parent.getInstanceName() +\
         "_" + clockport.getName()
 
     ###################

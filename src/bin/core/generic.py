@@ -117,7 +117,7 @@ class Generic(WrapperXml):
     def getValue(self):
         """ return the generic value
         """
-        component = self.getParent()
+        component = self.parent
         if self.getOp() is None:
             return self.getAttributeValue("value")
         else:

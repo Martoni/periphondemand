@@ -44,7 +44,7 @@ class Intercon(Component):
     def __init__(self, masterinterface, project):
         """ Init fonction
         """
-        masterinstancename = masterinterface.getParent().getInstanceName()
+        masterinstancename = masterinterface.parent.getInstanceName()
         masterinterfacename = masterinterface.getName()
 
         Component.__init__(self, project)
@@ -65,7 +65,7 @@ class Intercon(Component):
     def generateXML(self, masterinterface):
         """ Generate intercon code
         """
-        masterinstance = masterinterface.getParent()
+        masterinstance = masterinterface.parent
 
         # set name and description
         self.setName(str(masterinstance.getInstanceName()) +
@@ -90,7 +90,7 @@ class Intercon(Component):
 
         # For each slave and master interface, create interface in intercon
         for interface in interfaceslist:
-            instance = interface.getParent()
+            instance = interface.parent
 
             #######
             # bus (wishbone,...)

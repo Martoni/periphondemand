@@ -590,10 +590,10 @@ class Project(WrapperXml):
     def connect_pin_cmd(self, pin_source, pin_dest):
         """ connect pin between two instances
         """
-        if pin_source.getParent().getParent().isBus():
+        if pin_source.parent.parent.isBus():
             raise Error("One of this pin is under a bus interface." +
                         "Please use connectbus.")
-        if pin_dest.getParent().getParent().isBus():
+        if pin_dest.parent.parent.isBus():
             raise Error("One of this pin is under a bus interface." +
                         "Please use connectbus.")
         pin_source.connectPin(pin_dest)
@@ -731,9 +731,9 @@ class Project(WrapperXml):
             for i in range(len(masters) - 1):
                 for j in range(i + 1, len(masters)):
                     if (masters[i].getBusName() == masters[j].getBusName()):
-                        raise Error(masters[i].getParent().getInstanceName() +
+                        raise Error(masters[i].parent.getInstanceName() +
                                     " and " +
-                                    masters[j].getParent().getInstanceName() +
+                                    masters[j].parent.getInstanceName() +
                                     " has the same bus type : , " +
                                     masters[i].getBusName() +
                                     " bus connection must be made by hand", 0)
@@ -748,7 +748,7 @@ class Project(WrapperXml):
                 if interfaceslave.getBusName() == master.getBusName():
                     try:
                         # connect bus
-                        master.connect_bus(interfaceslave.getParent(),
+                        master.connect_bus(interfaceslave.parent,
                                            interfaceslave.getName())
                     except Error, error:
                         error.setLevel(2)
@@ -767,8 +767,8 @@ class Project(WrapperXml):
             if port.checkVariablePort() is False:
                 raise Error(
                     "Pin connections on port " +
-                    str(port.getParent().getParent().getInstanceName()) +
-                    "." + str(port.getParent().getName()) + "." +
+                    str(port.parent.parent.getInstanceName()) +
+                    "." + str(port.parent.getName()) + "." +
                     str(port.getName()) +
                     "is wrong, pin number must be followed.")
 
@@ -781,13 +781,13 @@ class Project(WrapperXml):
         for master in listmaster:
             for slave in master.getSlavesList():
                 for slave2 in listslave:
-                    if slave2.getParent().getInstanceName() ==\
+                    if slave2.parent.getInstanceName() ==\
                         slave.getInstanceName() and \
                             slave2.getName() == slave.getInterfaceName():
                         listslave.remove(slave2)
 
         for slave in listslave:
-            DISPLAY.msg(slave.getParent().getInstanceName() +
+            DISPLAY.msg(slave.parent.getInstanceName() +
                         " is not connected on a master bus", 1)
         if len(listslave) != 0:
             DISPLAY.msg("Some slave bus are not connected", 1)
@@ -890,12 +890,12 @@ class Project(WrapperXml):
             report_file = open(filename, "w")
         text = "* Master interfaces mapping:\n"
         for master in self.interfaces_master:
-            masterinstance = master.getParent()
+            masterinstance = master.parent
             text += "\n  " + masterinstance.getInstanceName() + "." +\
                     master.getName() + ":\n"
             for slave in master.getSlavesList():
                 interfaceslave = slave.getInterface()
-                instance = interfaceslave.getParent()
+                instance = interfaceslave.parent
                 text += ONETAB + instance.getInstanceName() +\
                     "." + interfaceslave.getName() + ":\n"
                 try:

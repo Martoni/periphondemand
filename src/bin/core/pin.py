@@ -122,18 +122,18 @@ class Pin(WrapperXml):
         try:
             self.delNode("connect",
                 {"instance_dest":
-                pin_dest.getParent().getParent().getParent().getInstanceName(),
-                "interface_dest": pin_dest.getParent().getParent().getName(),
-                "port_dest": pin_dest.getParent().getName(),
+                pin_dest.parent.parent.parent.getInstanceName(),
+                "interface_dest": pin_dest.parent.parent.getName(),
+                "port_dest": pin_dest.parent.getName(),
                 "pin_dest": str(pin_dest.getNum())})
         except Exception:
             pass
         try:
             pin_dest.delNode("connect",
                 {"instance_dest":
-                    self.getParent().getParent().getParent().getInstanceName(),
-                 "interface_dest": self.getParent().getParent().getName(),
-                 "port_dest": self.getParent().getName(),
+                    self.parent.parent.parent.getInstanceName(),
+                 "interface_dest": self.parent.parent.getName(),
+                 "port_dest": self.parent.getName(),
                  "pin_dest": str(self.getNum())})
         except Exception:
             pass
@@ -142,7 +142,7 @@ class Pin(WrapperXml):
     def getConnectedPinList(self):
         """ return list of pins connected to this pin
         """
-        project = self.getParent().getParent().getParent().getParent()
+        project = self.parent.parent.parent.parent
         pinlist = []
         for connect in self.getConnections():
             pinlist.append(project.get_instance(
@@ -159,9 +159,9 @@ class Pin(WrapperXml):
             if connect ==\
             {
           "instance_dest":
-            pin_dest.getParent().getParent().getParent().getInstanceName(),
-          "interface_dest": pin_dest.getParent().getParent().getName(),
-          "port_dest": pin_dest.getParent().getName(),
+            pin_dest.parent.parent.parent.getInstanceName(),
+          "interface_dest": pin_dest.parent.parent.getName(),
+          "port_dest": pin_dest.parent.getName(),
           "pin_dest": str(pin_dest.getNum())}:
                 return True
         return False
@@ -190,14 +190,14 @@ class Pin(WrapperXml):
     def connectPin(self, pin_dest):
         """ Make connection between two pin
         """
-        if self.getParent().forceDefined():
-            raise Error("Port " + str(self.getParent().getName()) +
+        if self.parent.forceDefined():
+            raise Error("Port " + str(self.parent.getName()) +
                         " is forced, can't be connected")
-        if pin_dest.getParent().forceDefined():
-            raise Error("Port " + str(pin_dest.getParent().getName()) +
+        if pin_dest.parent.forceDefined():
+            raise Error("Port " + str(pin_dest.parent.getName()) +
                         " is forced, can't be connected")
 
-        if self.getParent().getDir() == "in":
+        if self.parent.getDir() == "in":
             if len(self.getConnections()) != 0:
                 try:
                     pin_dest.delConnection(self)
@@ -206,21 +206,21 @@ class Pin(WrapperXml):
                     pass
                 raise Error("Can't connect more than one pin on 'in' pin", 0)
 
-        interface_dest = pin_dest.getParent().getParent()
-        instance_dest = interface_dest.getParent()
+        interface_dest = pin_dest.parent.parent
+        instance_dest = interface_dest.parent
 
-        interface_source = self.getParent().getParent()
-        instance_source = interface_source.getParent()
+        interface_source = self.parent.parent
+        instance_source = interface_source.parent
 
         if not self.connectionExists(pin_dest):
             self.__addConnection(instance_dest.getInstanceName(),
                                  interface_dest.getName(),
-                                 pin_dest.getParent().getName(),
+                                 pin_dest.parent.getName(),
                                  pin_dest.getNum())
         if not pin_dest.connectionExists(self):
             pin_dest.__addConnection(instance_source.getInstanceName(),
                                      interface_source.getName(),
-                                     self.getParent().getName(),
+                                     self.parent.getName(),
                                      self.getNum())
 
     def __addConnection(self, instance_destname, interface_destname,
@@ -242,7 +242,7 @@ class Pin(WrapperXml):
         """ connect all platform connection, if connection is not
             for this platform, delete it.
         """
-        project = self.getParent().getParent().getParent().getParent()
+        project = self.parent.parent.parent.parent
         pindest_list = []
         for connection in self.getConnections():
             if connection["instance_dest"] == project.platform_name:

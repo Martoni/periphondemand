@@ -72,7 +72,7 @@ class Component(WrapperXml):
                               componentversion, instancename):
         """ Load a new component from library
         """
-        project = self.getParent()
+        project = self.parent
         # verify component name
         if project.getName() == instancename:
             raise Error("Instance name can't be the same name as projectname",
@@ -263,7 +263,7 @@ class Component(WrapperXml):
         raise Error("No generic with name " + genericname, 0)
 
     def addGeneric(self, generic):
-        generic.setParent(self)
+        generic.parent = self
         self.genericslist.append(generic)
         self.addSubNode(nodename="generics", subnode=generic)
 
@@ -310,7 +310,7 @@ class Component(WrapperXml):
     def addInterface(self, interface):
         """ Add an interface in component
         """
-        interface.setParent(self)
+        interface.parent = self
         self.interfaceslist.append(interface)
         self.addSubNode(nodename="interfaces", subnode=interface)
 

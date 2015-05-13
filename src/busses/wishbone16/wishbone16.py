@@ -101,7 +101,7 @@ def connectClockandReset(masterinterface, intercon):
     """
 
     bus = masterinterface.getBus()
-    masterinstance = masterinterface.getParent()
+    masterinstance = masterinterface.parent
     masterinstancename = masterinstance.getInstanceName()
     masterinterfacename = masterinterface.getName()
     masterresetname = masterinstancename + "_" +\
@@ -133,7 +133,7 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
     """ generate VHDL for address decoding
     """
     bus = masterinterface.getBus()
-    masterinstance = masterinterface.getParent()
+    masterinstance = masterinterface.parent
     masterinstancename = masterinstance.getInstanceName()
     rst_name = masterinstancename + "_" +\
         masterinterface.getPortByType(
@@ -219,7 +219,7 @@ def controlslave(masterinterface, intercon):
     """
 
     bus = masterinterface.getBus()
-    masterinstance = masterinterface.getParent()
+    masterinstance = masterinterface.parent
     masterinstancename = masterinstance.getInstanceName()
     masterinterfacename = masterinterface.getName()
     masterstrobename = masterinstancename + "_" +\
@@ -312,7 +312,7 @@ def controlslave(masterinterface, intercon):
 
 def controlmaster(masterinterface, intercon):
     bus = masterinterface.getBus()
-    masterinstance = masterinterface.getParent()
+    masterinstance = masterinterface.parent
     masterinstancename = masterinstance.getInstanceName()
     masterinterfacename = masterinterface.getName()
 
@@ -380,8 +380,8 @@ def architectureFoot(intercon):
 def generate_intercon(masterinterface, intercon):
     """Generate intercon VHDL code for wishbone16 bus
     """
-    masterinstance = masterinterface.getParent()
-    project = masterinstance.getParent()
+    masterinstance = masterinterface.parent
+    project = masterinstance.parent
 
     # comment and header
     VHDLcode = header(SETTINGS.author, intercon)

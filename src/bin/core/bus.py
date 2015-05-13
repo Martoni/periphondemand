@@ -66,7 +66,7 @@ class Bus(WrapperXml):
     def generate_intercon(self, intercon):
         """ generate intercon
         """
-        masterinterface = self.getParent()
+        masterinterface = self.parent
         import sys
         # load module path
         sys.path.append(SETTINGS.path + BUSPATH + "/" + self.getName())

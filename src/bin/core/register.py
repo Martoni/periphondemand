@@ -77,7 +77,7 @@ class Register(WrapperXml):
     def getAbsoluteAddr(self):
         """ return absolute address
         """
-        baseaddr = int(self.getParent().getBase(), 16)
+        baseaddr = int(self.parent.getBase(), 16)
         offset = int(self.getOffset(), 16)
         if int(self.getSize()) == 8:
             return "%02x" % (baseaddr + offset)
@@ -89,4 +89,4 @@ class Register(WrapperXml):
             raise Error("Register size not supported for reg " +
                         str(self.getName()) +
                         " in component " +
-                        str(self.getParent().getParent().getName()))
+                        str(self.parent.parent.getName()))
