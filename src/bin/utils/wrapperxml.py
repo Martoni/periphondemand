@@ -49,8 +49,9 @@ class WrapperXml(object):
         else:
             raise Error("Keys unknown in WrapperXml", 0)
 
-        self.parent = None
-        self.tree = None
+        #XXX: TODO
+        #self.parent = None
+        #self.tree = None
 
     def __initfile(self, filename):
         """ initialize with filename"""
