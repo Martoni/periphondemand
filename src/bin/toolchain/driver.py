@@ -33,7 +33,7 @@ from periphondemand.bin.define import COMPONENTSPATH
 from periphondemand.bin.define import DRIVERS_TEMPLATES_PATH
 
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.display import Display
@@ -51,7 +51,7 @@ class Driver(WrapperXml):
         filepath = SETTINGS.projectpath + "/" +\
             DRIVERSPATH + "/drivers" + XMLEXT
         if not sy.fileExist(filepath):
-            raise Error("No driver project found", 3)
+            raise PodError("No driver project found", 3)
         WrapperXml.__init__(self, file=filepath)
         self.bspdir = None
 
@@ -60,7 +60,7 @@ class Driver(WrapperXml):
         project = self.project
         op_sys = self.getName()
         if op_sys is None:
-            raise Error("Operating system must be selected", 0)
+            raise PodError("Operating system must be selected", 0)
         for component in project.instances:
             if component.getNum() == "0":
                 driverT = component.getDriver_Template(op_sys)
@@ -86,7 +86,7 @@ class Driver(WrapperXml):
         project = self.project
         op_sys = self.getName()
         if op_sys is None:
-            raise Error("Operating system must be selected", 0)
+            raise PodError("Operating system must be selected", 0)
         for component in project.instances:
             if component.getNum() == "0":
                 driverT = component.getDriver_Template(op_sys)
@@ -106,7 +106,7 @@ class Driver(WrapperXml):
                                 component.getName() + "/" + templatefile,
                                 "w")
                         except IOError, error:
-                            raise Error(str(error), 0)
+                            raise PodError(str(error), 0)
                         self.fillTemplate(template, destfile, component)
                         template.close()
                         destfile.close()
@@ -152,7 +152,7 @@ class Driver(WrapperXml):
                             match.group(2)).getAttributeValue(
                                 match.group(3))
                     if not attributevalue:
-                        raise Error(
+                        raise PodError(
                             "Wrong register value -> " +
                             match.group(1) + ":" + match.group(2) +
                             ":" + match.group(3) + "\n", 0)
@@ -166,7 +166,7 @@ class Driver(WrapperXml):
                              writeline) is not None:
                     interruptlist = instance.getInterruptList()
                     if len(interruptlist) == 0:
-                        raise Error("No interruption port in " +
+                        raise PodError("No interruption port in " +
                                     instance.getInstanceName(), 0)
                     elif len(interruptlist) > 1:
                         DISPLAY.msg(
@@ -177,14 +177,14 @@ class Driver(WrapperXml):
 
                     try:
                         connect = interruptport.getPin(0).getConnections()
-                    except Error, error:
-                        raise Error(
+                    except PodError, error:
+                        raise PodError(
                             "Interrupt " + interruptport.getName() +
                             " not connected in " +
                             interruptport.parent.parent.getInstanceName() +
                             "." + interruptport.parent.getName(), 0)
                     if len(connect) == 0:
-                        raise Error("Interrupt " + interruptport.getName() +
+                        raise PodError("Interrupt " + interruptport.getName() +
                                     " is not connected", 0)
                     elif len(connect) > 1:
                         DISPLAY.msg(
@@ -234,14 +234,14 @@ class Driver(WrapperXml):
                 else:
                     foreach_template = foreach_template + line
             else:
-                raise Error("State error in toolchain driver\n", 0)
+                raise PodError("State error in toolchain driver\n", 0)
 
     def copyBSPDrivers(self):
         """ delete all directories under POD dir, then copy
         drivers in."""
         bspdir = self.getBSPDirectory()
         if bspdir is None:
-            raise Error("Set directory before", 0)
+            raise PodError("Set directory before", 0)
         # deleting all directory in POD dir
         sy.deleteAllDir(bspdir)
         for directory in \
@@ -266,7 +266,7 @@ class Driver(WrapperXml):
         """ set the directory where drivers files must be copied """
         lastdir = directory.split("/")[-1]
         if lastdir != "POD":
-            raise Error("The directory must be named POD and not " +
+            raise PodError("The directory must be named POD and not " +
                         lastdir, 0)
         if sy.dirExist(directory):
             if self.getNode(nodename="bsp") is not None:
@@ -278,7 +278,7 @@ class Driver(WrapperXml):
                              value=directory)
             self.bspdir = directory
         else:
-            raise Error("Directory " + directory + " does not exist", 0)
+            raise PodError("Directory " + directory + " does not exist", 0)
 
     def setBSPOperatingSystem(self, operatingsystem):
         """ set the operating system for driver generation """

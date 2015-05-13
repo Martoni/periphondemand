@@ -29,7 +29,7 @@ from periphondemand.bin.define import BUSPATH
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 SETTINGS = Settings()
 
@@ -49,7 +49,7 @@ class Bus(WrapperXml):
         """ Get size of data"""
         size = self.getAttributeValue("datasize")
         if size is None:
-            raise Error("No datasize attribute in bus " + self.getName(), 0)
+            raise PodError("No datasize attribute in bus " + self.getName(), 0)
         else:
             return size
 

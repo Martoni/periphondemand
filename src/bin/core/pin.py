@@ -34,7 +34,7 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 settings = Settings()
 
@@ -55,7 +55,7 @@ class Pin(WrapperXml):
         elif "num" in keys:
             self.__initnum(keys["num"])
         else:
-            raise Error("Keys unknown in Pin", 0)
+            raise PodError("Keys unknown in Pin", 0)
         self.parent = parent
 
     def __initnode(self, node):
@@ -107,7 +107,7 @@ class Pin(WrapperXml):
                        instance_dest.getInterface(connection["interface_dest"])
                 port_dest = interface_dest.getPort(connection["port_dest"])
                 pin_dest = port_dest.getPin(connection["pin_dest"])
-            except Error:
+            except PodError:
                 pass
             self.delConnectionForce(pin_dest)
 
@@ -191,10 +191,10 @@ class Pin(WrapperXml):
         """ Make connection between two pin
         """
         if self.parent.forceDefined():
-            raise Error("Port " + str(self.parent.getName()) +
+            raise PodError("Port " + str(self.parent.getName()) +
                         " is forced, can't be connected")
         if pin_dest.parent.forceDefined():
-            raise Error("Port " + str(pin_dest.parent.getName()) +
+            raise PodError("Port " + str(pin_dest.parent.getName()) +
                         " is forced, can't be connected")
 
         if self.parent.getDir() == "in":
@@ -204,7 +204,7 @@ class Pin(WrapperXml):
                     self.delConnection(pin_dest)
                 except:
                     pass
-                raise Error("Can't connect more than one pin on 'in' pin", 0)
+                raise PodError("Can't connect more than one pin on 'in' pin", 0)
 
         interface_dest = pin_dest.parent.parent
         instance_dest = interface_dest.parent

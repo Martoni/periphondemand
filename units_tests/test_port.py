@@ -20,7 +20,7 @@ from mock import MagicMock
 from mock import Mock
 from datetime import datetime
 
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.core.port import Port
 
 class test_port(unittest.TestCase):
@@ -38,7 +38,7 @@ class test_port(unittest.TestCase):
         aport.force = "vcc"
         aport.force = "undef"
         self.assertEqual(aport.force, "undef")
-        with self.assertRaises(Error):
+        with self.assertRaises(PodError):
             aport.force = "pouet"
 
 if __name__ == "__main__":

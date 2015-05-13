@@ -32,7 +32,7 @@ from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.display import Display
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 SETTINGS = Settings()
 DISPLAY = Display()
@@ -47,7 +47,7 @@ class Simulation(WrapperXml):
         filepath = SETTINGS.projectpath + "/" +\
                    SIMULATIONPATH + "/simulation" + XMLEXT
         if not sy.fileExist(filepath):
-            raise Error("No simulation project found", 3)
+            raise PodError("No simulation project found", 3)
         WrapperXml.__init__(self, file=filepath)
 
     def generateProject(self):
@@ -69,7 +69,7 @@ class Simulation(WrapperXml):
         except ImportError, error:
             sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                             SIMULATIONPATH + "/" + self.getName())
-            raise Error(str(error), 0)
+            raise PodError(str(error), 0)
         sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                         SIMULATIONPATH + "/" + self.getName())
         return plugin.generateTemplate()
@@ -83,7 +83,7 @@ class Simulation(WrapperXml):
         except ImportError, error:
             sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                             SIMULATIONPATH + "/" + self.getName())
-            raise Error(str(error), 0)
+            raise PodError(str(error), 0)
         sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                         SIMULATIONPATH + "/" + self.getName())
         return plugin.generateMakefile()

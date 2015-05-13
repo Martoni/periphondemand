@@ -28,7 +28,7 @@
 import os
 from periphondemand.bin.define import LIBRARYPATH
 
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils import wrappersystem as sy
@@ -68,7 +68,7 @@ class Library:
         elif libraryname in self.getComponentsLibName():
             return SETTINGS.active_library.getComponentsLibPath(libraryname)
         else:
-            raise Error("Library not found : " + str(libraryname), 0)
+            raise PodError("Library not found : " + str(libraryname), 0)
 
     def listComponents(self, libraryname=None):
         """ Return a list with all library components
@@ -100,7 +100,7 @@ class Library:
         """ delete library path from config file
         """
         if libraryname in self.getOfficialLibraries():
-            raise Error("Can't delete an official library")
+            raise PodError("Can't delete an official library")
         libpath = self.getPersonalLibPath(libraryname)
         SETTINGS.configfile.delLibrary(libpath)
 
@@ -109,13 +109,13 @@ class Library:
         libname = path.split("/")[-1]
         # check if lib name exist
         if libname in self.listLibraries():
-            raise Error("Library " + libname + " already exist", 0)
+            raise PodError("Library " + libname + " already exist", 0)
         # check if components under library are new
         componentlist = sy.listDirectory(path)
         for component in componentlist:
             for libraryname in self.listLibraries():
                 if component in self.listComponents(libraryname):
-                    raise Error("Library " + libname +
+                    raise PodError("Library " + libname +
                             " contain a component that exist in '" +
                             libraryname + "' : " + component, 0)
 
@@ -158,7 +158,7 @@ class Library:
     def load(self, libname):
         """ Load a library with name given in parameter"""
         if not libname in self.listLibraries():
-            raise Error("No " + libname + " in pod libraries")
+            raise PodError("No " + libname + " in pod libraries")
         self.libname = libname
 
     def getLibName(self):

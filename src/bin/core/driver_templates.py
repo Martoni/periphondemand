@@ -33,7 +33,7 @@
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils.display import Display
 from periphondemand.bin.utils.settings import Settings
 
@@ -55,7 +55,7 @@ class Driver_Templates(WrapperXml):
         elif "nodestring" in keys:
             self.__initnodestring(keys["nodestring"])
         else:
-            raise Error("Keys unknown in Driver_Templates init()", 0)
+            raise PodError("Keys unknown in Driver_Templates init()", 0)
 
     def __initnode(self, node):
         WrapperXml.__init__(self, node=node)

@@ -36,7 +36,7 @@ from periphondemand.bin.define import COMPONENTSPATH
 from periphondemand.bin.define import HDLDIR
 
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils import wrappersystem as sy
 
 from periphondemand.bin.core.component import Component
@@ -261,14 +261,14 @@ def controlslave(masterinterface, intercon):
             datainname = slaveinstancename + "_" +\
                 slaveinterface.getPortByType(
                     bus.getSignalName("slave", "datain")).getName()
-        except Error:
+        except PodError:
             datainname = None
 
         try:
             dataoutname = slaveinstancename + "_" +\
                 slaveinterface.getPortByType(
                     bus.getSignalName("slave", "dataout")).getName()
-        except Error:
+        except PodError:
             dataoutname = None
 
         if datainname and dataoutname:
@@ -340,7 +340,7 @@ def controlmaster(masterinterface, intercon):
             out = out + " when " + slaveinstancename + "_" +\
                 slaveinterfacename + "_cs = '1' else\n"
             out = out + ONETAB * 9 + "  "
-        except Error, e:
+        except PodError, e:
             pass
     out = out + " (others = > '0');\n"
 

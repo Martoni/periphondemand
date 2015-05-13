@@ -23,7 +23,7 @@ from periphondemand.bin.define import XMLEXT
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils.display import Display
 
 from periphondemand.bin.core.interface import Interface
@@ -75,20 +75,20 @@ class Component(WrapperXml):
         project = self.parent
         # verify component name
         if project.getName() == instancename:
-            raise Error("Instance name can't be the same name as projectname",
+            raise PodError("Instance name can't be the same name as projectname",
                         0)
         # test if component exist
         if not sy.fileExist(
                 project.library.getLibraryPath(libraryname) +
                                 "/" + componentname):
-            raise Error("No component with name " +
+            raise PodError("No component with name " +
                         libraryname + "." + componentname, 0)
 
         #test if several componentversion
         if componentversion is None:
             if len(project.get_components_versions(
                             libraryname, componentname)) > 1:
-                raise Error("Component version must be chosen :" +
+                raise PodError("Component version must be chosen :" +
                             str(project.get_components_versions(
                                 libraryname, componentname)),
                             0)
@@ -97,7 +97,7 @@ class Component(WrapperXml):
                     componentversion = project.get_components_versions(
                             libraryname, componentname)[0]
                 except IndexError:
-                    raise Error("No xml description of component", 0)
+                    raise PodError("No xml description of component", 0)
         if instancename is None:
                 instancename =\
                         componentname +\
@@ -113,7 +113,7 @@ class Component(WrapperXml):
                                COMPONENTSPATH + "/" + componentname,
                                SETTINGS.projectpath + COMPONENTSPATH +
                                "/" + instancename)
-        except Error:  # if directory exist
+        except PodError:  # if directory exist
             pass
         #Rename xml file
         sy.renameFile(SETTINGS.projectpath +
@@ -189,7 +189,7 @@ class Component(WrapperXml):
         for hdlfile in self.getHdl_filesList():
             if hdlfile.getFileName() == filename:
                 return hdlfile
-        raise Error("no hdl file named " + filename)
+        raise PodError("no hdl file named " + filename)
 
     def addHdl_file(self, hdl_file):
         self.addSubNode(nodename="hdl_files", subnode=hdl_file)
@@ -199,17 +199,17 @@ class Component(WrapperXml):
         """ Add HDL file in library component
         """
         if not sy.fileExist(hdlfilepath):
-            raise Error("File " + hdlfilepath + " doesn't exist")
+            raise PodError("File " + hdlfilepath + " doesn't exist")
 
         hdl_file_name = os.path.basename(hdlfilepath)
         if hdl_file_name in [hdlfile.getFileName()
                     for hdlfile in self.getHdl_filesList()]:
-            raise Error("File " + hdlfilepath + " is already in component")
+            raise PodError("File " + hdlfilepath + " is already in component")
 
         if istop:
             topfile = self.getHDLTop()
             if topfile is not None:
-                raise Error("There is a top HDL file in component named " +
+                raise PodError("There is a top HDL file in component named " +
                             topfile.getFileName())
 
         # copy file in component directory
@@ -222,13 +222,13 @@ class Component(WrapperXml):
                                    scope=scope)
         if istop:
             if hdl_file_object.getEntityName() != self.getName():
-                raise Error("Entity name must be the same of component name")
+                raise PodError("Entity name must be the same of component name")
             # automaticaly add generics
             generic_list = hdl_file_object.getGenericsList()
             for generic in generic_list:
                 self.addGeneric(generic)
                 DISPLAY.msg(
-                        str(Error("Generic " + generic.getName() +
+                        str(PodError("Generic " + generic.getName() +
                                   " added in component", 2)))
 
         # add node in component
@@ -260,7 +260,7 @@ class Component(WrapperXml):
         for generic in self.getGenericsList():
             if generic.getName() == genericname:
                 return generic
-        raise Error("No generic with name " + genericname, 0)
+        raise PodError("No generic with name " + genericname, 0)
 
     def addGeneric(self, generic):
         generic.parent = self
@@ -271,7 +271,7 @@ class Component(WrapperXml):
         for interface in self.interfaceslist:
             if interface.getName() == interfacename:
                 return interface
-        raise Error("Interface " + str(interfacename) + " does not exists", 0)
+        raise PodError("Interface " + str(interfacename) + " does not exists", 0)
 
     def getMasterInterfaceList(self):
         """ return a list of master interface
@@ -302,7 +302,7 @@ class Component(WrapperXml):
         """
         if interfacename in [interface.getName() for
                              interface in self.getInterfacesList()]:
-            raise Error("Interface " + interfacename +
+            raise PodError("Interface " + interfacename +
                         " already exist in component")
         interface = Interface(self, name=interfacename)
         self.addInterface(interface)
@@ -392,7 +392,7 @@ class Component(WrapperXml):
         """
         interface = self.getInterface(interfacemaster)
         if interface.getName() is None:
-            raise Error(interfacemaster + " is not a bus", 1)
+            raise PodError(interfacemaster + " is not a bus", 1)
         interface.connect_bus(instanceslave, interfaceslave)
 
     def del_bus(self, instanceslavename, interfacemaster=None,
@@ -403,7 +403,7 @@ class Component(WrapperXml):
             for interface in self.getInterfacesList():
                 try:
                     interface.del_bus(instanceslavename)
-                except Error:
+                except PodError:
                     pass
         else:
             interface = self.getInterface(interfacemaster)
@@ -421,16 +421,16 @@ class Component(WrapperXml):
         # verify if portname exist in vhdl file
         hdltop = self.getHDLTop()
         if not hdltop:
-            raise Error("No HDL top file in component " + str(self.getName()))
+            raise PodError("No HDL top file in component " + str(self.getName()))
         portlist = hdltop.ports
         if not portname in [port.getName() for port in portlist]:
-            raise Error("Port named " + portname + " can't be found in " +
+            raise PodError("Port named " + portname + " can't be found in " +
                          hdltop.getFileName())
 
         # verify if port is not already placed
         isinfreelist, interface_old = self.portIsInFreeList(portname)
         if not isinfreelist:
-            raise Error("Port named " + portname +
+            raise PodError("Port named " + portname +
                         " is already placed in " + interface_old)
         # take interface
         interface = self.getInterface(interfacename)
@@ -480,7 +480,7 @@ class Component(WrapperXml):
                 try:
                     notassignedports.remove(port_name)
                 except ValueError:
-                    raise Error("HDL top file and XML component " +
+                    raise PodError("HDL top file and XML component " +
                                 "description are not consistant. Port " +
                                 port_name + " in component" +
                                 " description is not present in HDL file ")
@@ -512,7 +512,7 @@ class Component(WrapperXml):
         elif attribute_name == "destination":
             generic.setDestination(attribute_value)
         else:
-            raise Error("Unknown attribute " + str(attribute_name))
+            raise PodError("Unknown attribute " + str(attribute_name))
 
     def setHDL(self, file_name, attribute_name,
             attribute_value):
@@ -528,9 +528,9 @@ class Component(WrapperXml):
             elif attribute_value == "0":
                 HDL.unsetTop()
             else:
-                raise Error("Unknown top value " + str(attribute_value))
+                raise PodError("Unknown top value " + str(attribute_value))
         else:
-            raise Error("Unknown attribute " + str(attribute_name))
+            raise PodError("Unknown attribute " + str(attribute_name))
 
     def setInterface(self, interface_name, attribute_name,
                            attribute_value):
@@ -546,7 +546,7 @@ class Component(WrapperXml):
         elif attribute_name == "clockandreset":
             interface.setClockAndReset(attribute_value)
         else:
-            raise Error("Unknown attribute " + str(attribute_name))
+            raise PodError("Unknown attribute " + str(attribute_name))
 
     def setPort(self, interface_name, port_name,
                       attribute_name, attribute_value):
@@ -562,7 +562,7 @@ class Component(WrapperXml):
         elif attribute_name == "dir":
             port.setDir(attribute_value)
         else:
-            raise Error("Attribute " + str(attribute_name) + " unknown")
+            raise PodError("Attribute " + str(attribute_name) + " unknown")
 
     def setRegister(self, interface_name, register_name,
                           attribute_name, attribute_value):
@@ -578,7 +578,7 @@ class Component(WrapperXml):
         elif attribute_name == "rows":
             register.setRows(attribute_value)
         else:
-            raise Error("Attribute " + str(attribute_name) + " unknown")
+            raise PodError("Attribute " + str(attribute_name) + " unknown")
 
     def addRegister(self, interface_name, register_name):
         """ Add register in interface, interface must be a bus slave"""

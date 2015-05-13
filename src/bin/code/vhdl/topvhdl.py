@@ -32,7 +32,7 @@ from periphondemand.bin.define import HEADERTPL
 from periphondemand.bin.code.topgen import TopGen
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.display import Display
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 import datetime
 
@@ -84,7 +84,7 @@ class TopVHDL(TopGen):
                         same_connections_ports =\
                             port.getPortsWithSameConnection()
                         if same_connections_ports == []:
-                            raise Error(str(port.getExtendedName()) +
+                            raise PodError(str(port.getExtendedName()) +
                                         " is left unconnected")
                         elif len(same_connections_ports) == 1:
                             out = out + ONETAB * 2 +\

@@ -34,7 +34,7 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import re
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 DESTINATION = ["fpga", "driver", "both"]
 PUBLIC = ["true", "false"]
@@ -58,7 +58,7 @@ class Generic(WrapperXml):
         elif "name" in keys:
             self.__initname(keys["name"])
         else:
-            raise Error("Keys unknown in Generic init()", 0)
+            raise PodError("Keys unknown in Generic init()", 0)
 
     def __initnode(self, node):
         WrapperXml.__init__(self, node=node)
@@ -91,13 +91,13 @@ class Generic(WrapperXml):
     def setPublic(self, public):
         public = public.lower()
         if not public in PUBLIC:
-            raise Error("Public value " + str(public) + " wrong")
+            raise PodError("Public value " + str(public) + " wrong")
         self.setAttribute("public", public)
 
     def getType(self):
         the_type = self.getAttributeValue("type")
         if the_type is None:
-            raise Error("Generic " + self.getName() +
+            raise PodError("Generic " + self.getName() +
                         " description malformed, type must be defined", 0)
         else:
             return the_type
@@ -128,7 +128,7 @@ class Generic(WrapperXml):
                     component.getInterface(
                         target[0]).getPort(target[1]).getMaxPinNum()) + 1)
             else:
-                raise Error("Operator unknown " + self.getOp(), 1)
+                raise PodError("Operator unknown " + self.getOp(), 1)
 
     def setValue(self, value):
         if self.getMatch() is None:
@@ -136,7 +136,7 @@ class Generic(WrapperXml):
         elif re.compile(self.getMatch()).match(value):
             self.setAttribute("value", value)
         else:
-            raise Error("Value doesn't match for attribute " + str(value), 0)
+            raise PodError("Value doesn't match for attribute " + str(value), 0)
 
     def getDestination(self):
         """ return the generic destination (fpga,driver or both)
@@ -146,6 +146,6 @@ class Generic(WrapperXml):
     def setDestination(self, destination):
         destination = destination.lower()
         if not destination in DESTINATION:
-            raise Error("Destination value " + str(destination) +
+            raise PodError("Destination value " + str(destination) +
                         " unknown")
         self.setAttribute("destination", destination)

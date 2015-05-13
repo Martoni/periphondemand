@@ -40,7 +40,7 @@ from periphondemand.bin.define import ALTERA_BITSTREAM_SUFFIX
 from periphondemand.bin.define import BINARYPROJECTPATH
 
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils.display import Display
 from periphondemand.bin.utils import wrappersystem as sy
 
@@ -94,7 +94,7 @@ def generatepinout(self, filename=None):
     try:
         file = open(filename, "w")
     except IOError, error:
-        raise Error(str(error), 0)
+        raise PodError(str(error), 0)
     file.write(out)
     file.close()
     display.msg("Constraint file generated with name :" + filename)
@@ -177,5 +177,5 @@ def generateBitStream(self, commandname, scriptname):
                     ALTERA_BITSTREAM_SUFFIX,
                     settings.projectpath + BINARYPROJECTPATH + "/")
     except IOError:
-        raise Error("Can't copy bitstream")
+        raise PodError("Can't copy bitstream")
     sy.chdir(pwd)

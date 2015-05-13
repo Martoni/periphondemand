@@ -35,7 +35,7 @@ __version__ = "1.0.0"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 
 class Register(WrapperXml):
@@ -57,7 +57,7 @@ class Register(WrapperXml):
             WrapperXml.__init__(self, nodename="register")
             self.setName(keys["register_name"])
         else:
-            raise Error("Keys not known in Register", 0)
+            raise PodError("Keys not known in Register", 0)
 
         self.parent = parent
 
@@ -86,7 +86,7 @@ class Register(WrapperXml):
         elif int(self.getSize()) == 32:
             return "%08x" % (baseaddr + offset * 4)
         else:
-            raise Error("Register size not supported for reg " +
+            raise PodError("Register size not supported for reg " +
                         str(self.getName()) +
                         " in component " +
                         str(self.parent.parent.getName()))

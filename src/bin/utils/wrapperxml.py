@@ -18,7 +18,7 @@
 
 import xml.etree.cElementTree as ET
 
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 
 class WrapperXml(object):
@@ -47,7 +47,7 @@ class WrapperXml(object):
         elif "file" in args:
             self.__initfile(args["file"])
         else:
-            raise Error("Keys unknown in WrapperXml", 0)
+            raise PodError("Keys unknown in WrapperXml", 0)
 
         #XXX: TODO
         #self.parent = None
@@ -58,7 +58,7 @@ class WrapperXml(object):
         try:
             self.openXml(filename)
         except IOError, error:
-            raise Error(str(error), 0)
+            raise PodError(str(error), 0)
 
     def __initnode(self, node):
         """ initilize with node """
@@ -77,7 +77,7 @@ class WrapperXml(object):
         try:
             self.tree = ET.fromstring(nodestring)
         except SyntaxError, error:
-            raise Error("XML malformed :\n" + str(error), 0)
+            raise PodError("XML malformed :\n" + str(error), 0)
 
     def __str__(self):
         return ('<?xml version="1.0" encoding="utf-8"?>\n' +
@@ -133,11 +133,11 @@ class WrapperXml(object):
                     return node.addNode(nodename=subnodename,
                                         attributedict=keys["attributedict"])
                 else:
-                    raise Error("Key not known in addSubNode " + str(keys), 0)
+                    raise PodError("Key not known in addSubNode " + str(keys), 0)
             else:
-                raise Error("Key not known in addSubNode" + str(keys), 0)
+                raise PodError("Key not known in addSubNode" + str(keys), 0)
         else:
-            raise Error("Key not known in addSubNode" + str(keys), 0)
+            raise PodError("Key not known in addSubNode" + str(keys), 0)
 
     def addNode(self, **keys):
         """ Add a node in the tree,
@@ -157,7 +157,7 @@ class WrapperXml(object):
                 for key in attributedict:
                     node.setAttribute(key, attributedict[key])
         else:
-            raise Error("Keys not known in addNode", 0)
+            raise PodError("Keys not known in addNode", 0)
 
         try:
             self.tree.append(node.tree)
@@ -201,9 +201,9 @@ class WrapperXml(object):
         else:
             node = self.tree.find(subnodename)
             if node is None:
-                raise Error("No tag named " + str(subnodename))
+                raise PodError("No tag named " + str(subnodename))
             return node.get(key)
-        raise Error("No attribute named " + key +
+        raise PodError("No attribute named " + key +
                     " for tag " + str(subnodename))
 
     def getAttributeNameList(self, subnodename=None):
@@ -212,9 +212,9 @@ class WrapperXml(object):
         else:
             node = self.tree.find(subnodename)
             if node is None:
-                raise Error("No tag named " + str(subnodename))
+                raise PodError("No tag named " + str(subnodename))
             return node.keys()
-        raise Error("getAttributeNameList error")
+        raise PodError("getAttributeNameList error")
 
     def setAttribute(self, key, value, subname=None):
         if subname is None:
@@ -267,20 +267,20 @@ class WrapperXml(object):
             try:
                 self.tree = ET.fromstring(filename)
             except SyntaxError, error:
-                raise Error("Xml malformed in " +
+                raise PodError("Xml malformed in " +
                             filename + " : \n" + str(error), 0)
         else:
             try:
                 xmlfile = open(filename, 'r')
             except IOError, error:
-                raise Error(str(error), 0)
+                raise PodError(str(error), 0)
             content =\
                 xmlfile.read().replace(
                     r'<?xml version="1.0" encoding="utf-8"?>', '')
             try:
                 self.tree = ET.fromstring(content)
             except SyntaxError, error:
-                raise Error("Xml malformed in " +
+                raise PodError("Xml malformed in " +
                             filename + " :\n" + str(error), 0)
 
     def createXml(self, tag):

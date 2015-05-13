@@ -32,7 +32,7 @@ from periphondemand.bin.define import HDLEXT
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 SETTINGS = Settings()
 
@@ -56,7 +56,7 @@ class Hdl_file(WrapperXml):
                                 istop=keys["istop"],
                                 scope=keys["scope"])
         else:
-            raise Error("Keys unknown in Hdl_file", 0)
+            raise PodError("Keys unknown in Hdl_file", 0)
 
     def __initfilename(self, filename, istop, scope):
         WrapperXml.__init__(self, nodename="hdl_file")
@@ -70,7 +70,7 @@ class Hdl_file(WrapperXml):
 
     def setFileName(self, filename):
         if filename.split(".")[-1] not in HDLEXT:
-            raise Error("File " + str(filename) + " is not an HDL file")
+            raise PodError("File " + str(filename) + " is not an HDL file")
         self.setAttribute("filename", filename)
 
     def getFilePath(self):
@@ -101,4 +101,4 @@ class Hdl_file(WrapperXml):
         if scope.lower() in lscope:
             self.setAttribute("scope", scope)
         else:
-            raise Error("Unknown scope " + str(scope))
+            raise PodError("Unknown scope " + str(scope))

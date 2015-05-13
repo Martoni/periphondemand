@@ -28,7 +28,7 @@
 
 import os
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 
 class ConfigFile(WrapperXml):
@@ -68,7 +68,7 @@ class ConfigFile(WrapperXml):
         libpathlist = [node.getAttributeValue("path") for node in
                 self.getSubNodeList(nodename="libraries", subnodename="lib")]
         if not (path in libpathlist):
-            raise Error("Library " + path + " doesn't exist in config", 0)
+            raise PodError("Library " + path + " doesn't exist in config", 0)
         self.delSubNode(nodename="libraries",
                         subnodename="lib",
                         attribute="path",
@@ -83,7 +83,7 @@ class ConfigFile(WrapperXml):
         libpathlist = [node.getAttributeValue("path") for node in
                 self.getSubNodeList(nodename="libraries", subnodename="lib")]
         if path in libpathlist:
-            raise Error("This library is already in POD", 0)
+            raise PodError("This library is already in POD", 0)
         # check if directory exist then add it
         if os.path.exists(path):
             self.addSubNode(nodename="libraries",
@@ -93,7 +93,7 @@ class ConfigFile(WrapperXml):
             self.personal_lib_list.append(path)
             self.savefile()
         else:
-            raise Error("path " + path + " doesn't exist")
+            raise PodError("path " + path + " doesn't exist")
 
     def getLibraries(self):
         """ return a list of library path """
@@ -113,7 +113,7 @@ class ConfigFile(WrapperXml):
                 command_name = command_path + "/" + command_name
                 break
         if not sy.commandExist(command_name):
-            raise Error("Synthesis tool tcl shell command named " +
+            raise PodError("Synthesis tool tcl shell command named " +
                         command_name +
                         " doesn't exist in .podrc")
         return command_name

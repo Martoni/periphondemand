@@ -27,7 +27,7 @@
 
 from periphondemand.bin.utils.basecli import BaseCli
 
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.display import Display
 
@@ -49,7 +49,7 @@ class SimulationCli(BaseCli):
         try:
             alist = self.completeargs(text, line,
                                       "[simulationtoolchain]")
-        except Error, error:
+        except PodError, error:
             print(str(error))
         return alist
 
@@ -60,7 +60,7 @@ select toolchain used for simulation
         """
         try:
             self.checkargs(line, "[simulationtoolchain]")
-        except Error, error:
+        except PodError, error:
             print(str(error))
             return
 
@@ -78,7 +78,7 @@ select toolchain used for simulation
         else:
             try:
                 SETTINGS.active_project.simulation_toolchain = line
-            except Error, error:
+            except PodError, error:
                 print(str(error))
                 return
 
@@ -90,15 +90,15 @@ Make projects files for simulation (makefile and testbench sources)
         if line.strip() != "":
             try:
                 self.do_selecttoolchain(line)
-            except Error, error:
+            except PodError, error:
                 print(str(error))
                 return
         elif SETTINGS.active_project.simulation is None:
-            print Error("Simulation toolchain must be selected before")
+            print PodError("Simulation toolchain must be selected before")
             return
 
         if SETTINGS.active_project.simulation_toolchain is None:
-            print Error("Choose a toolchain before", 0)
+            print PodError("Choose a toolchain before", 0)
             for toolchain in \
                     SETTINGS.active_project.get_simulation_toolchains():
                 print(str(toolchain.getName()))
@@ -106,7 +106,7 @@ Make projects files for simulation (makefile and testbench sources)
         try:
             filename = SETTINGS.active_project.simulation.generateTemplate()
             filename = SETTINGS.active_project.simulation.generateMakefile()
-        except Error, error:
+        except PodError, error:
             print(str(error))
             return
         print(str(DISPLAY))

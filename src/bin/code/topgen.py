@@ -28,7 +28,7 @@
 from periphondemand.bin.define import SYNTHESISPATH
 from periphondemand.bin.define import VHDLEXT
 
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils.settings import Settings
 
 SETTINGS = Settings()
@@ -51,8 +51,8 @@ class TopGen:
                         "_" +
                         masterinterface.getName() +
                         "_intercon")
-            except Error, error:
-                raise Error("Intercon missing, all intercon must be" +
+            except PodError, error:
+                raise PodError("Intercon missing, all intercon must be" +
                             "generated before generate top.\n" + str(error), 0)
 
         ########################

@@ -30,7 +30,7 @@ __author__ = "Fabrice MOUSSET <fabrice.mousset@laposte.net> and "+\
 
 import cmd, re, os, sys
 from periphondemand.bin.utils.configfile import ConfigFile
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.define import POD_PATH
 from periphondemand.bin.define import POD_CONFIG
 
@@ -66,20 +66,20 @@ class Settings(object):
             # init personnal libraries path:
             try:
                 self.configfile = ConfigFile(POD_CONFIG)
-            except Error, e:
+            except PodError, e:
                 pass
             try:
                 self.personal_lib_path_list = self.configfile.getLibraries()
                 self.personal_lib_name_list = \
                     [pathlib.split("/")[-1] for pathlib in self.personal_lib_path_list]
-            except Error,e:
+            except PodError,e:
                 pass
 
             try:
                 self.personal_platformlib_list = self.configfile.getPlatformLibPath()
                 self.personal_platformlib_name_list = \
                     [pathlib.split("/")[-1] for pathlib in self.personal_platformlib_list]
-            except Error, e:
+            except PodError, e:
                 pass
 
             self.active_project = None

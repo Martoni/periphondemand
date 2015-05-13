@@ -27,7 +27,7 @@
 
 from periphondemand.bin.utils.basecli import BaseCli
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils.display import Display
 from periphondemand.bin.utils import wrappersystem as sy
 
@@ -46,7 +46,7 @@ class DriverCli(BaseCli):
 
     def testIfToolChainSelected(self):
         if self.driver is None:
-            raise Error("No toolchain selected (use selecttoolchain command)")
+            raise PodError("No toolchain selected (use selecttoolchain command)")
 
     def complete_generateproject(self, text, line, begidx, endidx):
         toollist = []
@@ -65,7 +65,7 @@ generate a project drivers directory with templates
             self.testIfToolChainSelected()
             self.driver.generateProject()
             self.driver.fillAllTemplates()
-        except Error, error:
+        except PodError, error:
             print DISPLAY
             print error
             return
@@ -79,7 +79,7 @@ fill drivers templates
         try:
             self.testIfToolChainSelected()
             self.driver.fillAllTemplates()
-        except Error, error:
+        except PodError, error:
             print DISPLAY
             print error
             return
@@ -94,7 +94,7 @@ directory must be selected with setprojecttree
         try:
             self.testIfToolChainSelected()
             self.driver.copyBSPDrivers()
-        except Error, error:
+        except PodError, error:
             print DISPLAY
             print error
             return
@@ -120,7 +120,7 @@ select software developpement tree, to copy driver
         try:
             self.testIfToolChainSelected()
             self.driver.setBSPDirectory(line)
-        except Error, error:
+        except PodError, error:
             print DISPLAY
             print error
             return
@@ -141,7 +141,7 @@ select operating system to generate drivers
         """
         try:
             self.checkargs(line, "[drivertoolchain]")
-        except Error, error:
+        except PodError, error:
             print DISPLAY
             print error
             return
@@ -159,7 +159,7 @@ select operating system to generate drivers
         else:
             try:
                 SETTINGS.active_project.driver_toolchain = line
-            except Error, error:
+            except PodError, error:
                 print error
                 return
         self.driver = SETTINGS.active_project.driver

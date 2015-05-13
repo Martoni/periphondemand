@@ -36,7 +36,7 @@ __versionTime__ = "06/06/2008"
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 
 class Slave(WrapperXml):
@@ -56,7 +56,7 @@ class Slave(WrapperXml):
             self.setInstanceName(keys["instancename"])
             self.setInterfaceName(keys["interfacename"])
         else:
-            raise Error("Keys unknowns in Slave init()", 0)
+            raise PodError("Keys unknowns in Slave init()", 0)
 
     def getInstanceName(self):
         return self.getAttributeValue("instancename")

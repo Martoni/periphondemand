@@ -31,7 +31,7 @@ from periphondemand.bin.define import ONETAB
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.display import Display
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 from periphondemand.bin.utils import wrappersystem as sy
 
@@ -80,7 +80,7 @@ class Project(WrapperXml):
                     SETTINGS.projectpath =\
                         os.path.abspath(os.path.dirname(projectpathname))
                 except IOError, error:
-                    raise Error(str(error), 0)
+                    raise PodError(str(error), 0)
             else:
                 SETTINGS.projectpath = projectpathname
             SETTINGS.author = ""
@@ -96,7 +96,7 @@ class Project(WrapperXml):
     def create_project(self, name):
         """ Create a project """
         if sy.dirExist(SETTINGS.projectpath):
-            raise Error("Can't create project, directory " +
+            raise PodError("Can't create project, directory " +
                         SETTINGS.projectpath +
                         " already exists", 0)
         sy.makeDirectory(SETTINGS.projectpath)
@@ -133,7 +133,7 @@ class Project(WrapperXml):
                     self.delSubNode("components",
                                     "component",
                                     "name", node.getAttributeValue("name"))
-                    raise Error("Can't open " +
+                    raise PodError("Can't open " +
                                 node.getAttributeValue("name") + " directory",
                                 0)
                 else:
@@ -150,11 +150,11 @@ class Project(WrapperXml):
         #           self.synthesis = Synthesis(self, node.getName())
         try:
             self.synthesis = Synthesis(self)
-        except Error, error:
+        except PodError, error:
             DISPLAY.msg(str(error))
         try:
             self.simulation = Simulation(self)
-        except Error, error:
+        except PodError, error:
             DISPLAY.msg(str(error))
 
         # Set bus master-slave
@@ -179,7 +179,7 @@ class Project(WrapperXml):
     def synthesis_toolchain(self, toolchainname):
         """ Set the synthesis toolchain """
         if toolchainname not in self.get_synthesis_toolchains():
-            raise Error("No toolchain named " + toolchainname + " in POD")
+            raise PodError("No toolchain named " + toolchainname + " in POD")
         sy.copyFile(SETTINGS.path + TOOLCHAINPATH + SYNTHESISPATH +
                     "/" + toolchainname + "/" + toolchainname + XMLEXT,
                     SETTINGS.projectpath + SYNTHESISPATH + "/")
@@ -221,7 +221,7 @@ class Project(WrapperXml):
     def simulation_toolchain(self, toolchainname):
         """ Set simulation toolchain """
         if toolchainname not in self.get_simulation_toolchains():
-            raise Error("No toolchain named " + toolchainname + " in POD")
+            raise PodError("No toolchain named " + toolchainname + " in POD")
         sy.copyFile(SETTINGS.path + TOOLCHAINPATH + SIMULATIONPATH +
                     "/" + toolchainname + "/" + toolchainname + XMLEXT,
                     SETTINGS.projectpath + SIMULATIONPATH + "/")
@@ -241,7 +241,7 @@ class Project(WrapperXml):
     def driver_toolchain(self, toolchainname):
         """ set driver toolchain """
         if toolchainname not in self.get_driver_toolchains():
-            raise Error("No toolchain named " + toolchainname + " in POD")
+            raise PodError("No toolchain named " + toolchainname + " in POD")
         sy.copyFile(SETTINGS.path + TOOLCHAINPATH + DRIVERSPATH +
                     "/" + toolchainname + "/" + toolchainname + XMLEXT,
                     SETTINGS.projectpath + DRIVERSPATH + "/")
@@ -267,12 +267,12 @@ class Project(WrapperXml):
         platform = self.platform
         interfaces_list = platform.getInterfacesList()
         if len(interfaces_list) != 1:
-            raise Error("I found " + str(len(interfaces_list)) +
+            raise PodError("I found " + str(len(interfaces_list)) +
                         " FPGAs (" + str(interfaces_list) +
                         ") and multiple FPGA project is not implemented yet.")
         port = interfaces_list[0].getPort(portname)
         if port.getDir() == "in":
-            raise Error("The value of this port can't be set " +
+            raise PodError("The value of this port can't be set " +
                         "because of it's direction (in)")
         port.force = state
         self.save()
@@ -292,7 +292,7 @@ class Project(WrapperXml):
     def vhdl_version(self, version):
         """ select vhdl version (VHDL '87 or '93) """
         if (version != "vhdl93") and (version != "vhdl87"):
-            raise Error(str(version) + " is not acceptable version")
+            raise PodError(str(version) + " is not acceptable version")
         self._vhdl_version = version
         self.save()
 
@@ -307,7 +307,7 @@ class Project(WrapperXml):
                             value=path)
             self.save()
         else:
-            raise Error("ComponentsLib directory " +
+            raise PodError("ComponentsLib directory " +
                         str(path) + " doesn't exists")
 
     def add_platforms_lib(self, path):
@@ -321,7 +321,7 @@ class Project(WrapperXml):
                             value=path)
             self.save()
         else:
-            raise Error("ComponentsLib directory " + str(path) +
+            raise PodError("ComponentsLib directory " + str(path) +
                         " doesn't exists")
 
     def add_instance(self, **keys):
@@ -344,13 +344,13 @@ class Project(WrapperXml):
                 instancename = keys["instancename"]
                 # check if instancename is not <componentname><number><number>
                 if re.match(r'^' + componentname + r'\d{2}$', instancename):
-                    raise Error("Instance name forbiden, it's reserved for " +
+                    raise PodError("Instance name forbiden, it's reserved for " +
                                 "automatic instance name generation :" +
                                 instancename, 0)
                 # check instance availability
                 for instance in self.instances:
                     if instance.getName() == instancename:
-                        raise Error("This instance name already exists", 0)
+                        raise PodError("This instance name already exists", 0)
             else:
                 instancename =\
                     componentname +\
@@ -362,7 +362,7 @@ class Project(WrapperXml):
                 componentversion = None
             # Load and create component
             if (componentname == instancename):
-                raise Error("Instance name can't be the" +
+                raise PodError("Instance name can't be the" +
                             "same as component name", 0)
             comp = Component(self)
             comp.loadNewInstance(libraryname,
@@ -372,7 +372,7 @@ class Project(WrapperXml):
             comp.setNum(
                 len(self.get_instances_list_of_component(componentname)))
         else:
-            raise Error("Key not known in add_instance", 0)
+            raise PodError("Key not known in add_instance", 0)
 
         # Add component to project
         self._instanceslist.append(comp)
@@ -418,7 +418,7 @@ class Project(WrapperXml):
         for instance in self.instances:
             if instance.getInstanceName() == instancename:
                 return instance
-        raise Error("Instance " + instancename + " doesn't exists")
+        raise PodError("Instance " + instancename + " doesn't exists")
 
     @property
     def instances(self):
@@ -461,7 +461,7 @@ class Project(WrapperXml):
         for component in self.instances:
             if component.getName() == "platform":
                 return component
-        raise Error("No platform in project", 1)
+        raise PodError("No platform in project", 1)
 
     @property
     def platform_name(self):
@@ -497,7 +497,7 @@ class Project(WrapperXml):
         # suppress platform if already exists
         try:
             self.del_platform()
-        except Error, error:
+        except PodError, error:
             if error.getLevel() < 2:
                 raise error
             print error
@@ -519,7 +519,7 @@ class Project(WrapperXml):
                     if apath.split("/")[-1] == platformlibname:
                         platformdir = apath + "/" + platformname + "/"
                 if platformdir == "":
-                    raise Error("Platform name error")
+                    raise PodError("Platform name error")
         platform = Platform(self, file=platformdir + platformname + XMLEXT)
 
         if sy.fileExist(platformdir + SIMULATIONPATH):
@@ -539,8 +539,8 @@ class Project(WrapperXml):
         # find platform in components list
         try:
             platform = self.platform
-        except Error:
-            raise Error("No platform in project", 2)
+        except PodError:
+            raise PodError("No platform in project", 2)
 
         self.del_instance(platform.getInstanceName())
         self.delNode("platform")
@@ -591,10 +591,10 @@ class Project(WrapperXml):
         """ connect pin between two instances
         """
         if pin_source.parent.parent.isBus():
-            raise Error("One of this pin is under a bus interface." +
+            raise PodError("One of this pin is under a bus interface." +
                         "Please use connectbus.")
         if pin_dest.parent.parent.isBus():
-            raise Error("One of this pin is under a bus interface." +
+            raise PodError("One of this pin is under a bus interface." +
                         "Please use connectbus.")
         pin_source.connectPin(pin_dest)
         self.save()
@@ -614,7 +614,7 @@ class Project(WrapperXml):
             if(port_source.getSize()) == 1:
                 sourcedict["num"] = "0"
             else:
-                raise Error("Source pin number not given, and port size > 1")
+                raise PodError("Source pin number not given, and port size > 1")
         pin_source = port_source.getPin(sourcedict["num"])
 
         # test if destination given
@@ -650,7 +650,7 @@ class Project(WrapperXml):
             intercon = self.get_instance(interfacedict["instance"] + "_" +
                                          interfacedict["interface"] +
                                          "_intercon")
-        except Error:
+        except PodError:
             pass
         else:
             self.del_instance(intercon.getInstanceName())
@@ -726,12 +726,12 @@ class Project(WrapperXml):
         masters = self.interfaces_master
         # autoconnection can be made only if they are 1 master interface
         if len(masters) < 1:
-            raise Error("No bus master in project", 0)
+            raise PodError("No bus master in project", 0)
         elif len(masters) > 1:
             for i in range(len(masters) - 1):
                 for j in range(i + 1, len(masters)):
                     if (masters[i].getBusName() == masters[j].getBusName()):
-                        raise Error(masters[i].parent.getInstanceName() +
+                        raise PodError(masters[i].parent.getInstanceName() +
                                     " and " +
                                     masters[j].parent.getInstanceName() +
                                     " has the same bus type : , " +
@@ -740,7 +740,7 @@ class Project(WrapperXml):
         # find slaves bus
         slaves = self.interfaces_slave
         if len(slaves) == 0:
-            raise Error(" No slave bus in project", 0)
+            raise PodError(" No slave bus in project", 0)
 
         # connect each slave with the same bus name than master
         for master in masters:
@@ -750,7 +750,7 @@ class Project(WrapperXml):
                         # connect bus
                         master.connect_bus(interfaceslave.parent,
                                            interfaceslave.getName())
-                    except Error, error:
+                    except PodError, error:
                         error.setLevel(2)
                         DISPLAY.msg(str(error))
 
@@ -765,7 +765,7 @@ class Project(WrapperXml):
         # Check connections on variable ports
         for port in self.variable_ports:
             if port.checkVariablePort() is False:
-                raise Error(
+                raise PodError(
                     "Pin connections on port " +
                     str(port.parent.parent.getInstanceName()) +
                     "." + str(port.parent.getName()) + "." +
@@ -862,7 +862,7 @@ class Project(WrapperXml):
         for an_io in self.get_ios():
             if an_io.getName() == io_name:
                 return an_io
-        raise Error("No IO with name " + str(io_name))
+        raise PodError("No IO with name " + str(io_name))
 
     def get_components_versions(self, libraryname, componentname):
         """ list component version name in archive
@@ -902,7 +902,7 @@ class Project(WrapperXml):
                     for reg in interfaceslave.getRegisterMap():
                         text += ONETAB + "  " +\
                             "0x%02x : %s\n" % (reg["offset"], reg["name"])
-                except Error:
+                except PodError:
                     text += "\n"
         report_file.write(text)
         report_file.close()

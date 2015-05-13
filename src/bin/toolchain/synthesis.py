@@ -34,7 +34,7 @@ from periphondemand.bin.define import COMPONENTSPATH
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils import wrappersystem as sy
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils.display import Display
 
 SETTINGS = Settings()
@@ -51,7 +51,7 @@ class Synthesis(WrapperXml):
                    "/" + SYNTHESISPATH +\
                    "/synthesis" + XMLEXT
         if not sy.fileExist(filepath):
-            raise Error("No synthesis project found", 3)
+            raise PodError("No synthesis project found", 3)
         WrapperXml.__init__(self, file=filepath)
         # adding path for toolchain plugin
         sys.path.append(SETTINGS.path + TOOLCHAINPATH +
@@ -79,7 +79,7 @@ class Synthesis(WrapperXml):
                                                   subnodename="tool")
             command_name = command_path + "/" + command_name
             if not sy.commandExist(command_name):
-                raise Error("Synthesis tool tcl shell command named " +
+                raise PodError("Synthesis tool tcl shell command named " +
                             command_name + " doesn't exist in PATH")
             return command_name
 
@@ -110,7 +110,7 @@ class Synthesis(WrapperXml):
                                     compdir + "/")
                     except IOError, error:
                         print DISPLAY
-                        raise Error(str(error), 0)
+                        raise PodError(str(error), 0)
 
     def generateTCL(self, filename=None):
         """ generate tcl script to drive synthesis tool """
@@ -119,7 +119,7 @@ class Synthesis(WrapperXml):
         except ImportError, error:
             sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                             SYNTHESISPATH + "/" + self.getName())
-            raise Error(str(error), 0)
+            raise PodError(str(error), 0)
         sys.path.append(SETTINGS.path + TOOLCHAINPATH +
                         SYNTHESISPATH + "/" + self.getName())
         filename = plugin.generateTCL(self)
@@ -140,8 +140,8 @@ class Synthesis(WrapperXml):
         try:
             return self.getAttributeValue(key="filename",
                                           subnodename="script")
-        except Error, error:
-            raise Error("TCL script must be generated before")
+        except PodError, error:
+            raise PodError("TCL script must be generated before")
 
     def generatePinout(self, filename):
         """ Generate pinout constraints file """
@@ -150,7 +150,7 @@ class Synthesis(WrapperXml):
         except ImportError, error:
             sy.delFile(SETTINGS.path + TOOLCHAINPATH +
                        SYNTHESISPATH + "/" + self.getName())
-            raise Error(str(e), 0)
+            raise PodError(str(e), 0)
         sy.delFile(SETTINGS.path + TOOLCHAINPATH +
                    SYNTHESISPATH + "/" + self.getName())
 
@@ -162,7 +162,7 @@ class Synthesis(WrapperXml):
         try:
             plugin = __import__(self.getName())
         except ImportError, e:
-            raise Error(str(e), 0)
+            raise PodError(str(e), 0)
         tclscript_name = self.getTCLScriptName()
         scriptpath = SETTINGS.projectpath +\
                      SYNTHESISPATH +\
@@ -172,5 +172,5 @@ class Synthesis(WrapperXml):
                                      self.getSynthesisToolCommand(),
                                      scriptpath)
         except AttributeError:
-            raise Error("Can't generate bitstream for this synthesis" +
+            raise PodError("Can't generate bitstream for this synthesis" +
                         " toolchain, not implemented")

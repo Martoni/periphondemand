@@ -31,7 +31,7 @@ from periphondemand.bin.define import SYNTHESISPATH
 
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.basecli import BaseCli
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils.display import Display
 
 SETTINGS = Settings()
@@ -63,7 +63,7 @@ select toolchain used for simulation
         """
         try:
             self.checkargs(line, "[synthesistoolchain]")
-        except Error, error:
+        except PodError, error:
             print(str(error))
             return
 
@@ -81,7 +81,7 @@ select toolchain used for simulation
         else:
             try:
                 SETTINGS.active_project.synthesis_toolchain = line
-            except Error, error:
+            except PodError, error:
                 print(str(error))
                 return
 
@@ -104,18 +104,18 @@ generate the project for synthesis tool
         """
         try:
             self.checkargs(line, "[synthesistoolchain]")
-        except Error, error:
+        except PodError, error:
             print(str(error))
             return
         # select toolchain
         if line.strip() != "":
             try:
                 self.do_selecttoolchain(line)
-            except Error, error:
+            except PodError, error:
                 print(str(error))
                 return
         elif SETTINGS.active_project.synthesis is None:
-            print(str(Error("Toolchain must be selected before")))
+            print(str(PodError("Toolchain must be selected before")))
             return
 
         # generate project
@@ -125,7 +125,7 @@ generate the project for synthesis tool
             SETTINGS.active_project.synthesis.generatePinout(None)
             print(str(DISPLAY))
             SETTINGS.active_project.synthesis.generateTCL(None)
-        except Error, error:
+        except PodError, error:
             print(str(error))
             return
         print(str(DISPLAY))
@@ -139,7 +139,7 @@ ise
         """
 
         if SETTINGS.active_project.synthesis is None:
-            print Error("Select toolchain before")
+            print PodError("Select toolchain before")
             return
         if line.strip() != "":
             filename = SETTINGS.path + TOOLCHAINPATH +\
@@ -148,7 +148,7 @@ ise
             filename = None
         try:
             SETTINGS.active_project.synthesis.generateTCL(filename)
-        except Error, error:
+        except PodError, error:
             print(str(error))
             return
         print DISPLAY
@@ -160,7 +160,7 @@ generate ucf file, tool supported are :
 ise
         """
         if SETTINGS.active_project.synthesis is None:
-            print(str(Error("Select toolchain before")))
+            print(str(PodError("Select toolchain before")))
             return
         if line.strip() != "":
             filename = SETTINGS.path + TOOLCHAINPATH +\
@@ -169,7 +169,7 @@ ise
             filename = None
         try:
             SETTINGS.active_project.synthesis.generatePinout(filename)
-        except Error, error:
+        except PodError, error:
             print(str(error))
             return
         print(str(DISPLAY))
@@ -180,11 +180,11 @@ Usage : generatebitstream
 generate the bitstream for fpga configuration
         """
         if SETTINGS.active_project.synthesis is None:
-            print Error("Select toolchain before")
+            print PodError("Select toolchain before")
             return
         try:
             SETTINGS.active_project.synthesis.generateBitStream()
-        except Error, error:
+        except PodError, error:
             print(str(error))
             return
         print DISPLAY
@@ -216,7 +216,7 @@ set IO standard value
         standard_value = arg[1]
         try:
             SETTINGS.active_project.get_io(io_name).setStandard(standard_value)
-        except Error, error:
+        except PodError, error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -247,7 +247,7 @@ get IO standard value
         io_name = arg[0]
         try:
             print SETTINGS.active_project.get_io(io_name).getStandard()
-        except Error, e:
+        except PodError, e:
             print DISPLAY
             print e
             return
@@ -281,7 +281,7 @@ set IO standard value
         try:
             SETTINGS.active_project.get_io(
                 io_name).setPortOption(port_option_value)
-        except Error, error:
+        except PodError, error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -312,7 +312,7 @@ get IO Port option value
         io_name = arg[0]
         try:
             print SETTINGS.active_project.get_io(io_name).getPortOption()
-        except Error, e:
+        except PodError, e:
             print DISPLAY
             print e
             return
@@ -345,7 +345,7 @@ set IO drive value
         drive_value = arg[1]
         try:
             SETTINGS.active_project.get_io(io_name).setDrive(drive_value)
-        except Error, error:
+        except PodError, error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -376,7 +376,7 @@ get IO drive value
         io_name = arg[0]
         try:
             print SETTINGS.active_project.get_io(io_name).getDrive()
-        except Error, error:
+        except PodError, error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -410,7 +410,7 @@ Set fpga attributes
         try:
             platform = SETTINGS.active_project.platform
             platform.setAttribute(att_name, att_value, "fpga")
-        except Error, error:
+        except PodError, error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -443,7 +443,7 @@ get fpga attributes values
         try:
             platform = SETTINGS.active_project.platform
             print(str(platform.getAttributeValue(att_name, "fpga")))
-        except Error, error:
+        except PodError, error:
             print(str(DISPLAY))
             print(str(error))
             return

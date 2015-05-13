@@ -35,7 +35,7 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils import wrappersystem as sy
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 from periphondemand.bin.core.pin import Pin
 
@@ -56,7 +56,7 @@ class Port(WrapperXml):
         elif "node" in keys:
             self.__initnode(keys["node"])
         else:
-            raise Error("Keys not known in Port ", 0)
+            raise PodError("Keys not known in Port ", 0)
 
         self.parent = parent
         self.pinlist = []
@@ -103,7 +103,7 @@ class Port(WrapperXml):
         """
         pin = self.getPin(pin_num)
         if pin.getConnections() != []:
-            raise Error("Pin " +
+            raise PodError("Pin " +
                         str(self.parent.parent.getInstanceName()) +
                         "." +
                         str(self.parent.getName()) +
@@ -128,7 +128,7 @@ class Port(WrapperXml):
         """ return pin node
         """
         if int(num) >= self.getSize():
-            raise Error("Pin number " + str(num) + " not in port size")
+            raise PodError("Pin number " + str(num) + " not in port size")
         for pin in self.getPinsList():
             if pin.getNum() == str(num):
                 return pin
@@ -154,23 +154,23 @@ class Port(WrapperXml):
                 return "0"
             else:
                 return ucvalue
-        except Error:
+        except PodError:
             return "0"
 
     def set_unconnected_value(self, value):
         if self.getDir() != "in":
-            raise Error("Unconnected Value can be set only on 'in' port", 0)
+            raise PodError("Unconnected Value can be set only on 'in' port", 0)
         if str(value).isdigit():
             if int(value) in [0, 1]:
                 self.setAttribute("unconnected_value", str(value))
             else:
-                raise Error("Wrong value : " + str(value), 0)
+                raise PodError("Wrong value : " + str(value), 0)
         else:
-            raise Error("Wrong value : " + str(value), 0)
+            raise PodError("Wrong value : " + str(value), 0)
 
     def setDir(self, direction):
         if not direction.lower() in ["out", "in", "inout"]:
-            raise Error("Direction wrong : " + str(direction))
+            raise PodError("Direction wrong : " + str(direction))
         self.setAttribute("dir", direction)
 
     def getPortOption(self):
@@ -200,20 +200,20 @@ class Port(WrapperXml):
         """ Setting force for this port """
         listofpins = self.getPinsList()
         if len(listofpins) > 1:
-            raise Error("Force multiple pin port is not implemented")
+            raise PodError("Force multiple pin port is not implemented")
         if len(listofpins) == 1:
-            raise Error("This pin is already connected")
+            raise PodError("This pin is already connected")
 
         forcevalues = ["gnd", "vcc", "undef"]
         if force in forcevalues:
             self.setAttribute("force", force)
         else:
-            raise Error("force value must be in " + str(forcevalues))
+            raise PodError("force value must be in " + str(forcevalues))
 
     def forceDefined(self):
         try:
             force = self.force
-        except Error:
+        except PodError:
             return False
         forcevalues = ["gnd", "vcc"]
         if force in forcevalues:
@@ -229,7 +229,7 @@ class Port(WrapperXml):
     def getFreq(self):
         freq = self.getAttributeValue("freq")
         if freq is None:
-            raise Error("No frequency attribute for " + self.getName())
+            raise PodError("No frequency attribute for " + self.getName())
         return freq
 
     def isvariable(self):
@@ -317,7 +317,7 @@ class Port(WrapperXml):
         if checktab[
                 listdir.index(self.getDir())][
                         listdir.index(portdest.getDir())] == 0:
-            raise Error("incompatible pin : " +
+            raise PodError("incompatible pin : " +
                         self.getDir() + " => " + portdest.getDir(), 0)
 
     def connect_port(self, port_dest):
@@ -325,12 +325,12 @@ class Port(WrapperXml):
         """
         size = self.getSize()
         if size != port_dest.getSize():
-            raise Error("The two ports have differents size")
+            raise PodError("The two ports have differents size")
         if self.getPinsList() != []:
-            raise Error("Port connection " +
+            raise PodError("Port connection " +
                         self.getName() + " is not void")
         if port_dest.getPinsList() != []:
-            raise Error("Port connection " +
+            raise PodError("Port connection " +
                         port_dest.getName() + " is not void")
 
         self.connectAllPin(port_dest)

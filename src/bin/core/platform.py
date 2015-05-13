@@ -35,7 +35,7 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils import wrappersystem as sy
 
 from periphondemand.bin.core.component import Component
@@ -63,7 +63,7 @@ class Platform(Component):
         elif "file" in keys:
             self.__initfile(keys["file"])
         else:
-            raise Error("Keys unknown in Platform constructor", 0)
+            raise PodError("Keys unknown in Platform constructor", 0)
 
         if self.getNode("interfaces") is not None:
             for element in self.getNode("interfaces").getNodeList("interface"):
@@ -83,7 +83,7 @@ class Platform(Component):
         forcelist = []
         interfaces_list = self.getInterfacesList()
         if len(interfaces_list) != 1:
-            raise Error("I found " + str(len(interfaces_list)) +
+            raise PodError("I found " + str(len(interfaces_list)) +
                         " FPGAs (" + str(interfaces_list) +
                         ") and multiple FPGA project is not implemented yet.")
         for port in interfaces_list[0].ports:

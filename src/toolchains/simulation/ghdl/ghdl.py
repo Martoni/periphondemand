@@ -37,7 +37,7 @@ from periphondemand.bin.code.topgen import TopGen
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.display import Display
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 import time
 import datetime
@@ -212,7 +212,7 @@ def generateTemplate():
         "_tb" + VHDLEXT
     clockportlist = SETTINGS.active_project.clock_ports
     if len(clockportlist) == 0:
-        raise Error("No external clock signal found", 0)
+        raise PodError("No external clock signal found", 0)
     if len(clockportlist) != 1:
         DISPLAY.msg("More than one external clock in design", 1)
     clockport = clockportlist[0]

@@ -32,7 +32,7 @@ import sys
 import shutil
 from os.path import join, splitext, split, exists
 import glob
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.define import COLOR_DEBUG
 from periphondemand.bin.define import COLOR_END
 
@@ -41,7 +41,7 @@ def inttobin(n, size):
     """ convert a number n, in binary string with length size
     """
     if n < 0:
-        raise Error("Must be positive number", 1)
+        raise PodError("Must be positive number", 1)
     s = ''
     while n != 0:
         if n % 2 == 0:
@@ -63,7 +63,7 @@ def check_name(name):
     authorized characters : [a-z],[0-9],'_'
     """
     if re.match('[0-9]', name[0]):
-        raise Error("Digit forbiden in beginning of name")
+        raise PodError("Digit forbiden in beginning of name")
     for car in name:
         if re.match('[a-z]', car):
             continue
@@ -71,15 +71,15 @@ def check_name(name):
             continue
         if car == '_':
             continue
-        raise Error("Character " + car +
+        raise PodError("Character " + car +
                     " forbiden, must be included in [a-z],[0-9],_", 0)
 
     if re.search(r'__', name):
-        raise Error(" Double '_' forbiden", 0)
+        raise PodError(" Double '_' forbiden", 0)
     if re.match('^_', name):
-        raise Error(" '_' at the begining forbiden", 0)
+        raise PodError(" '_' at the begining forbiden", 0)
     if re.search(r'_$', name):
-        raise Error(" '_' at the end forbiden", 0)
+        raise PodError(" '_' at the end forbiden", 0)
 
 
 def launchAShell(shell_name, commands_file_name):
@@ -116,7 +116,7 @@ def renameFile(oldfilepath, newfilepath):
     try:
         return os.rename(oldfilepath, newfilepath)
     except OSError, error:
-        raise Error(str(error) + "\nrenaming " +
+        raise PodError(str(error) + "\nrenaming " +
                     str(oldfilepath) + " in " + str(newfilepath))
 
 
@@ -124,7 +124,7 @@ def renameDirectory(olddir, newdir):
     olddir = os.path.expanduser(olddir)
     newdir = os.path.expanduser(newdir)
     if(os.path.exists(newdir)):
-        raise Error("Directory " + newdir + " exists", 0)
+        raise PodError("Directory " + newdir + " exists", 0)
     else:
         return renameFile(olddir, newdir)
 
@@ -135,7 +135,7 @@ def makeDirectory(name):
     try:
         return os.makedirs(name)
     except OSError, error:
-        raise Error("can't make directory " + name + " :\n"+str(error))
+        raise PodError("can't make directory " + name + " :\n"+str(error))
 
 
 def copyDirectory(source, target):
@@ -185,7 +185,7 @@ def delDirectory(dirpath):
     if os.path.exists(dirpath):
         return shutil.rmtree(dirpath)
     else:
-        raise Error("Directory " + dirpath +
+        raise PodError("Directory " + dirpath +
                     " doesn't exists can't be deleted", 1)
 
 
@@ -250,7 +250,7 @@ def deleteAllDir(dirpath):
         for thedir in listDirectory(dirpath):
             delDirectory(dirpath + "/" + thedir)
     except IOError, error:
-        raise Error(str(error), 0)
+        raise PodError(str(error), 0)
 
 
 def deleteAllFiles(dirpath):
@@ -259,7 +259,7 @@ def deleteAllFiles(dirpath):
         for thefile in listFiles(dirpath):
             os.remove(dirpath + "/" + thefile)
     except IOError, error:
-        raise Error(str(error), 0)
+        raise PodError(str(error), 0)
 
 
 def ls(dirpath):
@@ -301,22 +301,22 @@ if __name__ == "__main__":
         check_name("plop0")
         check_name("plop_plop8")
         check_name("plop*plop0")
-    except Error, error:
+    except PodError, error:
         print error
     try:
         check_name("plop-plop")
-    except Error, error:
+    except PodError, error:
         print error
 
     try:
         check_name("_plop")
-    except Error, error:
+    except PodError, error:
         print error
     try:
         check_name("plop_")
-    except Error, error:
+    except PodError, error:
         print error
     try:
         check_name("plop__plop")
-    except Error, error:
+    except PodError, error:
         print error

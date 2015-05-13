@@ -42,7 +42,7 @@ from periphondemand.bin.define import XILINX_BINARY_SUFFIX
 from periphondemand.bin.define import ONETAB
 
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils.display import Display
 from periphondemand.bin.utils import wrappersystem as sy
 
@@ -82,7 +82,7 @@ def generatelibraryconstraints(self):
                         attrValName + "\" LOC=" +\
                         constraint.getAttributeValue("loc") + ";\n"
                 else:
-                    raise Error("component " + instance.getName() +
+                    raise PodError("component " + instance.getName() +
                                 " has an unknown type " +
                                 constraint.getAttributeValue("type"), 0)
     return out
@@ -110,7 +110,7 @@ def generatepinout(self, filename=None):
                 pin = port.getPinsList()
                 # Platform ports are all 1-sized, raise error if not
                 if len(pin) != 1:
-                    raise Error("Platform port " + port.getName() +
+                    raise PodError("Platform port " + port.getName() +
                                 " has size different of 1", 0)
                 pin = pin[0]
                 # Only one connection per platform pin can be branched.
@@ -206,7 +206,7 @@ def generatepinout(self, filename=None):
     try:
         afile = open(filename, "w")
     except IOError, error:
-        raise Error(str(error), 0)
+        raise PodError(str(error), 0)
     afile.write(out)
     afile.close()
     DISPLAY.msg("Constraint file generated with name : " + filename)
@@ -306,5 +306,5 @@ def generateBitStream(self, commandname, scriptname):
                     XILINX_BINARY_SUFFIX,
                     SETTINGS.projectpath + BINARYPROJECTPATH + "/")
     except IOError:
-        raise Error("Can't copy bitstream")
+        raise PodError("Can't copy bitstream")
     sy.chdir(pwd)

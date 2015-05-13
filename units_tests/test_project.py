@@ -20,7 +20,7 @@ from mock import MagicMock
 from mock import Mock
 from datetime import datetime
 
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.core import project
 
 class test_project(unittest.TestCase):
@@ -42,7 +42,7 @@ class test_project(unittest.TestCase):
         self.assertEqual(aproject.vhdl_version, "vhdl87")
         aproject.vhdl_version = "vhdl93"
         self.assertEqual(aproject.vhdl_version, "vhdl93")
-        with self.assertRaises(Error):
+        with self.assertRaises(PodError):
             aproject.vhdl_version = "puet"
         os.system("rm -rf " + projectname)
 

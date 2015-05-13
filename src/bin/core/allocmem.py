@@ -33,7 +33,7 @@
 __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.display import Display
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 
 display = Display()
 
@@ -55,7 +55,7 @@ class AllocMem:
 
     def addInterfaceSlave(self, interface):
         if interface.getClass() != "slave":
-            raise Error(interface.getName() + " is not a slave", 0)
+            raise PodError(interface.getName() + " is not a slave", 0)
 
         # add slave interface to list
         self.listinterfaceslave.append(interface)
@@ -64,7 +64,7 @@ class AllocMem:
         if size > 0:
             try:
                 base = int(interface.getBase(), 16)
-            except Error:
+            except PodError:
                 base = self.lastaddress / size
                 if (self.lastaddress % size) != 0:
                     base = base + 1

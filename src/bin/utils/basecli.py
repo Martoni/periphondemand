@@ -19,7 +19,7 @@ import readline
 
 from periphondemand.bin.define import PODSCRIPTEXT
 
-from periphondemand.bin.utils.error import Error
+from periphondemand.bin.utils.error import PodError
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils import wrappersystem as sy
 
@@ -129,7 +129,7 @@ class BaseCli(cmd.Cmd):
                     stop = self.onecmd(line)
                     stop = self.postcmd(stop, line)
                 except KeyboardInterrupt:
-                    print Error("User keyboard interrupt")
+                    print PodError("User keyboard interrupt")
             self.postloop()
         finally:
             if self.use_rawinput and self.completekey:
@@ -483,7 +483,7 @@ fpga_attributes    : give list of fpga attributes in platform
             pass
         if len(argline) < self.minArgNumber(template, ' ') or \
            len(argline) > self.maxArgNumber(template, ' '):
-            raise Error(
+            raise PodError(
                 "Wrong argument number:\n%s\n instead of\n %s" % (line,
                                                                   template), 0)
 
@@ -499,7 +499,7 @@ fpga_attributes    : give list of fpga attributes in platform
             subargtemplate = argt.split(".")
             if (len(subargline) < self.minArgNumber(argt, '.')) or\
                     (len(subargline) > self.maxArgNumber(argt, '.')):
-                raise Error(
+                raise PodError(
                     "Wrong subargument:\n%s\ninstead of\n%s" % (argl,
                                                                 argt), 0)
 
@@ -537,7 +537,7 @@ fpga_attributes    : give list of fpga attributes in platform
         """
         try:
             self.checkargs(line, "<filename>")
-        except Error, error:
+        except PodError, error:
             print(str(error))
             return
         # Create the file

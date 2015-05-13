@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
-# Name:     Error.py
+# Name:     PodError.py
 # Purpose:
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
 # Created:  30/04/2008
@@ -22,7 +22,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 # ----------------------------------------------------------------------------
-""" Error class """
+""" PodError class """
 
 from periphondemand.bin.define import COLOR_INFO
 from periphondemand.bin.define import COLOR_INFO_MESSAGE
@@ -36,7 +36,7 @@ INFO    = 2
 WARNING = 1
 ERROR   = 0
 
-class Error(Exception):
+class PodError(Exception):
     """ Manage specific error
 
     attributes:
