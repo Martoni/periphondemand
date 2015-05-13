@@ -76,11 +76,11 @@ class Interface(WrapperXml):
 
         if self.getNode("slaves") is not None:
             for element in self.getSubNodeList("slaves", "slave"):
-                    self.slaveslist.append(Slave(self, node=element))
+                self.slaveslist.append(Slave(self, node=element))
 
         if self.getNode("registers") is not None:
             for element in self.getSubNodeList("registers", "register"):
-                    self.registerslist.append(Register(self, node=element))
+                self.registerslist.append(Register(self, node=element))
 
         if self.getNode("ports") is not None:
             for node in self.getSubNodeList("ports", "port"):
@@ -306,11 +306,11 @@ class Interface(WrapperXml):
         interfaceslave = instanceslave.getInterface(interfaceslavename)
         for slave in self.getSlavesList():
             if slave.getInstanceName() == instanceslave.getInstanceName()\
-                    and slave.getInterfaceName() == interfaceslavename:
-                        raise PodError("Bus connection for " +
-                                    slave.getInstanceName() + "." +
-                                    slave.getInterfaceName() +
-                                    " already exists", 1)
+                and slave.getInterfaceName() == interfaceslavename:
+                raise PodError("Bus connection for " +
+                               slave.getInstanceName() + "." +
+                               slave.getInterfaceName() +
+                               " already exists", 1)
         if self.getBusName() is None:
             raise PodError("Interface " + self.getName() + " must be a bus ", 0)
         if interfaceslave.getBusName() is None:
@@ -364,8 +364,8 @@ class Interface(WrapperXml):
         for slave in self.getSlavesList():
             if slave.getInstanceName() == instancedestname\
                     and slave.getInterfaceName() == interfacedestname:
-                        raise PodError("Clock connection " + instancedestname +
-                                    "." + interfacedestname + " exists", 1)
+                raise PodError("Clock connection " + instancedestname +
+                               "." + interfacedestname + " exists", 1)
 
         self.addSubNode(nodename="slaves", subnodename="slave",
                         attributedict={"instancename": instancedestname,

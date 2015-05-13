@@ -99,10 +99,9 @@ class Component(WrapperXml):
                 except IndexError:
                     raise PodError("No xml description of component", 0)
         if instancename is None:
-                instancename =\
-                        componentname +\
-                        "%02d" %\
-                        len(project.get_instances_list_of_component(componentname))
+            instancename =\
+                    componentname + "%02d" %\
+                    len(project.get_instances_list_of_component(componentname))
 
         #copy and rename directory
         sy.copyDirectory(project.library.getLibraryPath(libraryname) +
@@ -271,7 +270,8 @@ class Component(WrapperXml):
         for interface in self.interfaceslist:
             if interface.getName() == interfacename:
                 return interface
-        raise PodError("Interface " + str(interfacename) + " does not exists", 0)
+        raise PodError("Interface " + str(interfacename) +
+                       " does not exists", 0)
 
     def getMasterInterfaceList(self):
         """ return a list of master interface
@@ -421,7 +421,8 @@ class Component(WrapperXml):
         # verify if portname exist in vhdl file
         hdltop = self.getHDLTop()
         if not hdltop:
-            raise PodError("No HDL top file in component " + str(self.getName()))
+            raise PodError("No HDL top file in component " +
+                           str(self.getName()))
         portlist = hdltop.ports
         if not portname in [port.getName() for port in portlist]:
             raise PodError("Port named " + portname + " can't be found in " +
