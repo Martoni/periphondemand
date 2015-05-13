@@ -873,7 +873,7 @@ Suppress a pin connection
         """
         try:
             self.is_project_open()
-            self.checkargs
+            self.checkargs(
                 line,
                 "<instancename>.<interfacename>.<portname>.[pinnum] " +
                 "[instancename].[interfacename].[portname].[pinnum]")
