@@ -24,13 +24,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
+""" Manage Clock and Reset bus """
 
-__doc__ = ""
-__version__ = "1.0.0"
-__versionTime__ = "29/04/2011"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com> and Gwenhael Goavec-Merou <gwenhael.goavec-merou@armadeus.com>"
-
-import time
 import datetime
 
 from periphondemand.bin.define import ONETAB
@@ -41,21 +36,17 @@ from periphondemand.bin.define import HDLDIR
 from periphondemand.bin.define import VHDLEXT
 
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.poderror    import PodError
-from periphondemand.bin.utils          import wrappersystem as sy
+from periphondemand.bin.utils.poderror import PodError
+from periphondemand.bin.utils import wrappersystem as sy
 
-from periphondemand.bin.core.component  import Component
-from periphondemand.bin.core.port       import Port
-from periphondemand.bin.core.interface  import Interface
-from periphondemand.bin.core.hdl_file   import Hdl_file
+from periphondemand.bin.core.hdl_file import Hdl_file
 
 SETTINGS = Settings()
 
-def header(author,intercon):
+def header(author, intercon):
     """ return vhdl header
     """
     header = open(SETTINGS.path + TEMPLATESPATH + "/" + HEADERTPL, "r").read()
-    header = header.replace("$tpl:author$", __author__)
     header = header.replace("$tpl:date$", str(datetime.date.today()))
     header = header.replace("$tpl:filename$", intercon.getName() + VHDLEXT)
     header = header.replace("$tpl:abstract$", intercon.getDescription())
@@ -98,25 +89,23 @@ def connectClockandReset(masterinterface, intercon):
     bus = masterinterface.getBus()
     masterinstance = masterinterface.parent
     masterinstancename = masterinstance.getInstanceName()
-    masterinterfacename = masterinterface.getName()
     masterresetname = masterinstancename + "_" +\
             masterinterface.getPortByType(bus.getSignalName("master",
                                                             "reset")).getName()
-    masterclockname  = masterinstancename + "_" +\
+    masterclockname = masterinstancename + "_" +\
             masterinterface.getPortByType(bus.getSignalName("master",
                                                             "clock")).getName()
 
     out = "\n" + ONETAB + "-- Clock and Reset connection\n"
     for slave in masterinterface.getSlavesList():
-        slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
         slaveinstancename = slave.getInstanceName()
         slaveresetname = slaveinstancename + "_" +\
             slaveinterface.getPortByType(
                 bus.getSignalName("slave", "reset")).getName()
-        slaveclockname  = slaveinstancename + "_" +\
+        slaveclockname = slaveinstancename + "_" +\
             slaveinterface.getPortByType(
-                bus.getSignalName("slave","clock")).getName()
+                bus.getSignalName("slave", "clock")).getName()
 
         out = out + "\n" + ONETAB + "-- for " + slaveinstancename + "\n"
         #reset
@@ -127,10 +116,9 @@ def connectClockandReset(masterinterface, intercon):
     return out
 
 def architectureFoot(intercon):
-        """ Write foot architecture code
-        """
-        out = "\nend architecture " + intercon.getName() + "_1;\n"
-        return out
+    """ Write foot architecture code """
+    out = "\nend architecture " + intercon.getName() + "_1;\n"
+    return out
 
 def generate_intercon(masterinterface, intercon):
     """Generate intercon VHDL code for wishbone16 bus
@@ -158,16 +146,17 @@ def generate_intercon(masterinterface, intercon):
                        COMPONENTSPATH + "/" +
                        intercon.getInstanceName() + "/" + HDLDIR):
         sy.makeDirectory(SETTINGS.projectpath +
-                        COMPONENTSPATH + "/" +
-                        intercon.getInstanceName() + "/" + HDLDIR)
-    file = open(SETTINGS.projectpath + COMPONENTSPATH + "/" +
-            intercon.getInstanceName() +
-            "/" + HDLDIR + "/" + intercon.getInstanceName() + VHDLEXT, "w")
-    file.write(VHDLcode)
-    file.close()
+                         COMPONENTSPATH + "/" +
+                         intercon.getInstanceName() + "/" + HDLDIR)
+    afile = open(SETTINGS.projectpath + COMPONENTSPATH + "/" +
+                 intercon.getInstanceName() +
+                 "/" + HDLDIR + "/" + intercon.getInstanceName() + VHDLEXT,
+                 "w")
+    afile.write(VHDLcode)
+    afile.close()
     #hdl file path
     hdl = Hdl_file(intercon,
-            filename=intercon.getInstanceName() + VHDLEXT,
-            istop=1, scope="both")
+                   filename=intercon.getInstanceName() + VHDLEXT,
+                   istop=1, scope="both")
     intercon.addHdl_file(hdl)
     return VHDLcode
