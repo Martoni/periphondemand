@@ -67,23 +67,22 @@ class Component(WrapperXml):
         project = self.parent
         # verify component name
         if project.getName() == instancename:
-            raise PodError("Instance name can't be the same name as projectname",
-                        0)
+            raise PodError("Instance name can't be " +
+                           "the same name as projectname", 0)
         # test if component exist
         if not sy.fileExist(
                 project.library.getLibraryPath(libraryname) +
                                 "/" + componentname):
             raise PodError("No component with name " +
-                        libraryname + "." + componentname, 0)
+                           libraryname + "." + componentname, 0)
 
         #test if several componentversion
         if componentversion is None:
             if len(project.get_components_versions(
                             libraryname, componentname)) > 1:
                 raise PodError("Component version must be chosen :" +
-                            str(project.get_components_versions(
-                                libraryname, componentname)),
-                            0)
+                               str(project.get_components_versions(
+                                   libraryname, componentname)), 0)
             else:
                 try:
                     componentversion = project.get_components_versions(
@@ -201,7 +200,7 @@ class Component(WrapperXml):
             topfile = self.getHDLTop()
             if topfile is not None:
                 raise PodError("There is a top HDL file in component named " +
-                            topfile.getFileName())
+                               topfile.getFileName())
 
         # copy file in component directory
         hdlpath = os.path.join(self.getComponentPath(), "hdl")
@@ -220,7 +219,7 @@ class Component(WrapperXml):
                 self.addGeneric(generic)
                 DISPLAY.msg(
                         str(PodError("Generic " + generic.getName() +
-                                  " added in component", 2)))
+                                     " added in component", 2)))
 
         # add node in component
         self.addSubNode(nodename="hdl_files", subnode=hdl_file_object)
@@ -295,7 +294,7 @@ class Component(WrapperXml):
         if interfacename in [interface.getName() for
                              interface in self.getInterfacesList()]:
             raise PodError("Interface " + interfacename +
-                        " already exist in component")
+                           " already exist in component")
         interface = Interface(self, name=interfacename)
         self.addInterface(interface)
 
@@ -418,7 +417,7 @@ class Component(WrapperXml):
         portlist = hdltop.ports
         if not portname in [port.getName() for port in portlist]:
             raise PodError("Port named " + portname + " can't be found in " +
-                         hdltop.getFileName())
+                           hdltop.getFileName())
 
         # verify if port is not already placed
         isinfreelist, interface_old = self.portIsInFreeList(portname)
@@ -474,9 +473,9 @@ class Component(WrapperXml):
                     notassignedports.remove(port_name)
                 except ValueError:
                     raise PodError("HDL top file and XML component " +
-                                "description are not consistant. Port " +
-                                port_name + " in component" +
-                                " description is not present in HDL file ")
+                                   "description are not consistant. Port " +
+                                   port_name + " in component" +
+                                   " description is not present in HDL file ")
                 display_port[key].append(port_name)
         if len(notassignedports) != 0:
             display_port["Not_assigned_Ports"] = notassignedports
