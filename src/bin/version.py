@@ -26,7 +26,3 @@
 """ Get version of POD """
 
 VERSION = "1.0.4"
-
-def getVersion():
-    """ get version function """
-    return VERSION

@@ -111,7 +111,7 @@ class Project(WrapperXml):
 
         self.createXml("project")
         self.setName(name)
-        self.setVersion("1.0")
+        self.version = "1.0"
         self.void = 0
         self.save()
 

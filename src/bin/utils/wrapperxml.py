@@ -253,11 +253,13 @@ class WrapperXml(object):
     def setName(self, value):
         return self.setAttribute("name", value)
 
-    def getVersion(self):
+    @property
+    def version(self):
         """ get the version """
         return self.getAttributeValue("version")
 
-    def setVersion(self, version):
+    @version.setter
+    def version(self, version):
         """ set the version """
         return self.setAttribute("version", version)
 

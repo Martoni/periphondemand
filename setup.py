@@ -34,7 +34,7 @@ import os
 import re
 import sys
 sys.path.append("src/bin/")
-from version import *
+from version import VERSION
 
 
 def visit(libfile, dirname, names):
@@ -72,7 +72,7 @@ package_files_list.extend(getTree("toolchains"))
 package_files_list.extend(getTree("tests"))
 
 setup(name='PeriphOnDemand',
-      version=getVersion(),
+      version=VERSION,
       url='https://sourceforge.net/projects/periphondemand',
       author='Fabien Marteau and Nicolas Colombain',
       author_email='<fabien.marteau@armadeus.com>,"' +

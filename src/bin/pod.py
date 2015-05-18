@@ -33,10 +33,8 @@
 from periphondemand.bin.commandline.projectcli import ProjectCli
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils import wrappersystem as sy
-from periphondemand.bin import version as ver
+from periphondemand.bin.version import VERSION
 import sys, os, getopt
-
-__version__ = ver.getVersion()
 
 SETTINGS = Settings()
 TMPFILENAME = "podtmp"
@@ -72,12 +70,12 @@ def main(argv):
         sys.exit(0)
 
     if "version" in options or "-v" in options:
-        print "Peripherals On Demand version "+ ver.getVersion()
+        print "Peripherals On Demand version " + VERSION
         sys.exit(0)
 
     cli = ProjectCli()
     SETTINGS.projectpath = sy.pwd()
-    SETTINGS.version = ver.getVersion()
+    SETTINGS.version = VERSION
 
     # load command file if in command params
     if "--source" in options or "-s" in options:
