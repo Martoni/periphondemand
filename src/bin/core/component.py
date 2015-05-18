@@ -60,16 +60,8 @@ class Component(WrapperXml):
         self.interruptslist = []
         self.constraintslist = []
 
-    def setVersionName(self, versionname):
-        """ Set the version name """
-        self.versionname = versionname
-
-    def getVersionName(self):
-        """ Get version name """
-        return self.versionname
-
     def loadNewInstance(self, libraryname, componentname,
-                              componentversion, instancename):
+                        componentversion, instancename):
         """ Load a new component from library
         """
         project = self.parent
