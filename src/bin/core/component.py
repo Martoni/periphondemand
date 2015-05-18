@@ -185,47 +185,6 @@ class Component(WrapperXml):
         self.addSubNode(nodename="hdl_files", subnode=hdl_file)
         return self.hdl_fileslist.append(hdl_file)
 
-    def setHDLfile(self, hdlfilepath, istop=0, scope="both"):
-        """ Add HDL file in library component
-        """
-        if not sy.fileExist(hdlfilepath):
-            raise PodError("File " + hdlfilepath + " doesn't exist")
-
-        hdl_file_name = os.path.basename(hdlfilepath)
-        if hdl_file_name in [hdlfile.getFileName()
-                    for hdlfile in self.getHdl_filesList()]:
-            raise PodError("File " + hdlfilepath + " is already in component")
-
-        if istop:
-            topfile = self.getHDLTop()
-            if topfile is not None:
-                raise PodError("There is a top HDL file in component named " +
-                               topfile.getFileName())
-
-        # copy file in component directory
-        hdlpath = os.path.join(self.getComponentPath(), "hdl")
-        sy.copyFile(hdlfilepath, hdlpath)
-        # create hdl_file node
-        hdl_file_object = Hdl_file(self,
-                                   filename=hdl_file_name,
-                                   istop=istop,
-                                   scope=scope)
-        if istop:
-            if hdl_file_object.getEntityName() != self.getName():
-                raise PodError("Entity name must be the same of component name")
-            # automaticaly add generics
-            generic_list = hdl_file_object.getGenericsList()
-            for generic in generic_list:
-                self.addGeneric(generic)
-                DISPLAY.msg(
-                        str(PodError("Generic " + generic.getName() +
-                                     " added in component", 2)))
-
-        # add node in component
-        self.addSubNode(nodename="hdl_files", subnode=hdl_file_object)
-        filelist = self.hdl_fileslist.append(hdl_file_object)
-        return filelist
-
     def getComponentPath(self):
         """ return path of component in system
         """
