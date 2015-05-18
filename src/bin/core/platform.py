@@ -26,15 +26,12 @@
 """ Platform management """
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils import wrappersystem as sy
 
 from periphondemand.bin.core.component import Component
 from periphondemand.bin.core.interface import Interface
 from periphondemand.bin.core.simulationlib import SimulationLib
-
-settings = Settings()
 
 
 class Platform(Component):
@@ -46,10 +43,10 @@ class Platform(Component):
 
     def __init__(self, parent, **keys):
         """ Init Component,
-            __init__(self,parent,node)
-            __init__(self,parent,file)
+            __init__(self, parent, node)
+            __init__(self, parent, file)
         """
-        Component.__init__(self, parent)
+        Component.__init__(self)
         if "node" in keys:
             self.__initnode(keys["node"])
         elif "file" in keys:

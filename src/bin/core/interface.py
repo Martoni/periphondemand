@@ -55,6 +55,8 @@ class Interface(WrapperXml):
             __init__(self,parent,nodestring)
         """
 
+        self.parent = parent
+
         if "name" in keys:
             self.__initname(keys["name"])
         elif "node" in keys:
@@ -64,7 +66,6 @@ class Interface(WrapperXml):
         else:
             raise PodError("Keys unknown in Interface", 0)
 
-        self.parent = parent
         self.registerslist = []
         self.portslist = []
         self.slaveslist = []

@@ -364,7 +364,7 @@ class Project(WrapperXml):
             if (componentname == instancename):
                 raise PodError("Instance name can't be the" +
                             "same as component name", 0)
-            comp = Component(self)
+            comp = Component()
             comp.loadNewInstance(libraryname,
                                  componentname,
                                  componentversion,
@@ -657,7 +657,7 @@ class Project(WrapperXml):
 
         instance = self.get_instance(interfacedict["instance"])
         interface = instance.getInterface(interfacedict["interface"])
-        intercon = Intercon(interface, self)
+        intercon = Intercon(interface)
         self.add_instance(component=intercon)
         self.save()
 

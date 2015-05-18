@@ -40,9 +40,12 @@ class Port(WrapperXml):
 
     def __init__(self, parent, **keys):
         """ Init port,
-            __init__(self,parent,name)
-            __init__(self,parent,wxml)
+            __init__(self, parent, name)
+            __init__(self, parent, wxml)
         """
+
+        self.parent = parent
+
         if "name" in keys:
             self.__initname(keys["name"])
         elif "node" in keys:
@@ -50,7 +53,6 @@ class Port(WrapperXml):
         else:
             raise PodError("Keys not known in Port ", 0)
 
-        self.parent = parent
         self.pinlist = []
         for element in self.getNodeList("pin"):
             pin = Pin(self, node=element)

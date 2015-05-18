@@ -23,20 +23,13 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
 """ Class that manage pins """
-
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.poderror import PodError
 
-settings = Settings()
+SETTINGS = Settings()
 
 
 class Pin(WrapperXml):
@@ -50,13 +43,15 @@ class Pin(WrapperXml):
             __init__(self,parent,node)
             __init__(self,parent,num)
         """
+
+        self.parent = parent
+
         if "node" in keys:
             self.__initnode(keys["node"])
         elif "num" in keys:
             self.__initnum(keys["num"])
         else:
             raise PodError("Keys unknown in Pin", 0)
-        self.parent = parent
 
     def __initnode(self, node):
         WrapperXml.__init__(self, node=node)
@@ -101,7 +96,7 @@ class Pin(WrapperXml):
         """
         for connection in self.getConnections():
             try:
-                instance_dest = settings.active_project.get_instance(
+                instance_dest = SETTINGS.active_project.get_instance(
                                                   connection["instance_dest"])
                 interface_dest =\
                        instance_dest.getInterface(connection["interface_dest"])
@@ -113,31 +108,26 @@ class Pin(WrapperXml):
 
     def delConnection(self, pin_dest):
         if not self.connectionExists(pin_dest):
-            return 1
+            return False
         return self.delConnectionForce(pin_dest)
 
     def delConnectionForce(self, pin_dest):
         """ Delete connection from this pin to pin_dest
         """
-        try:
-            self.delNode("connect",
-                {"instance_dest":
-                pin_dest.parent.parent.parent.getInstanceName(),
-                "interface_dest": pin_dest.parent.parent.getName(),
-                "port_dest": pin_dest.parent.getName(),
-                "pin_dest": str(pin_dest.getNum())})
-        except Exception:
-            pass
-        try:
-            pin_dest.delNode("connect",
+        self.delNode("connect",
+            {"instance_dest":
+            pin_dest.parent.parent.parent.getInstanceName(),
+            "interface_dest": pin_dest.parent.parent.getName(),
+            "port_dest": pin_dest.parent.getName(),
+            "pin_dest": str(pin_dest.getNum())})
+
+        pin_dest.delNode("connect",
                 {"instance_dest":
                     self.parent.parent.parent.getInstanceName(),
                  "interface_dest": self.parent.parent.getName(),
                  "port_dest": self.parent.getName(),
                  "pin_dest": str(self.getNum())})
-        except Exception:
-            pass
-        return 1
+        return True
 
     def getConnectedPinList(self):
         """ return list of pins connected to this pin
@@ -190,12 +180,22 @@ class Pin(WrapperXml):
     def connectPin(self, pin_dest):
         """ Make connection between two pin
         """
+        message = "trying to connect " +\
+                  self.parent.parent.parent.getName() + "." +\
+                  self.parent.parent.getName() + "." +\
+                  self.parent.getName() + "." +\
+                  self.getNum() + " -> " +\
+                  pin_dest.parent.parent.parent.getName() + "." +\
+                  pin_dest.parent.parent.getName() + "." +\
+                  pin_dest.parent.getName() + "." +\
+                  pin_dest.getNum()
+
         if self.parent.forceDefined():
-            raise PodError("Port " + str(self.parent.getName()) +
-                        " is forced, can't be connected")
+            raise PodError(message + " : Port " + str(self.parent.getName()) +
+                           " is forced, can't be connected")
         if pin_dest.parent.forceDefined():
-            raise PodError("Port " + str(pin_dest.parent.getName()) +
-                        " is forced, can't be connected")
+            raise PodError(message + " : Port " + str(pin_dest.parent.getName()) +
+                           " is forced, can't be connected")
 
         if self.parent.getDir() == "in":
             if len(self.getConnections()) != 0:
@@ -204,7 +204,9 @@ class Pin(WrapperXml):
                     self.delConnection(pin_dest)
                 except:
                     pass
-                raise PodError("Can't connect more than one pin on 'in' pin", 0)
+            if len(self.getConnections()) != 0:
+                raise PodError(message + " : Can't connect more than " +
+                               "one pin on 'in' pin")
 
         interface_dest = pin_dest.parent.parent
         instance_dest = interface_dest.parent
@@ -242,18 +244,18 @@ class Pin(WrapperXml):
         """ connect all platform connection, if connection is not
             for this platform, delete it.
         """
-        project = self.parent.parent.parent.parent
+        project = SETTINGS.active_project
         pindest_list = []
-        for connection in self.getConnections():
-            if connection["instance_dest"] == project.platform_name:
-                pin_dest = project.get_instance(
+        if project.platform_name is not None:
+            for connection in self.getConnections():
+                if connection["instance_dest"] == project.platform_name:
+                    pin_dest = project.get_instance(
                         connection["instance_dest"]).getInterface(
-                                connection["interface_dest"]).getPort(
-                                        connection["port_dest"]).getPin(
-                                                connection["pin_dest"])
-                pindest_list.append(pin_dest)
+                            connection["interface_dest"]).getPort(
+                                connection["port_dest"]).getPin(
+                                    connection["pin_dest"])
+                    pindest_list.append(pin_dest)
         self.delAllConnectionsForce()
-
         for pin_dest in pindest_list:
             self.connectPin(pin_dest)
 

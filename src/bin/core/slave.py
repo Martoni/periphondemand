@@ -37,7 +37,9 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.poderror import PodError
+from periphondemand.bin.utils.settings import Settings
 
+SETTINGS = Settings()
 
 class Slave(WrapperXml):
     """ Manage Slaves connection
@@ -71,8 +73,7 @@ class Slave(WrapperXml):
         self.setAttribute("interfacename", interfacename)
 
     def get_instance(self):
-        return self.parent.parent.parent.get_instance(
-                self.getInstanceName())
+        return SETTINGS.active_project.get_instance(self.getInstanceName())
 
     def getInterface(self):
         return self.get_instance().getInterface(self.getInterfaceName())

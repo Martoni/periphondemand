@@ -46,12 +46,12 @@ class Component(WrapperXml):
 
     """
 
-    def __init__(self, parent=None, void=0):
+    def __init__(self):
         """ Init Component,
-            __init__(self,parent)
+            __init__(self)
         """
-        self.void = void
 
+        WrapperXml.__init__(self, nodename="void")
         self.interfaceslist = []
         self.genericslist = []
         self.hdl_fileslist = []
@@ -60,7 +60,8 @@ class Component(WrapperXml):
         self.constraintslist = []
 
         # Project that use the component
-        self.parent = parent
+        self.parent = SETTINGS.active_project
+        self.void = 0
 
     def loadNewInstance(self, libraryname, componentname,
                         componentversion, instancename):

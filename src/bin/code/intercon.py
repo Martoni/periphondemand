@@ -41,13 +41,13 @@ class Intercon(Component):
     """ Generate Intercon component
     """
 
-    def __init__(self, masterinterface, project):
+    def __init__(self, masterinterface):
         """ Init fonction
         """
         masterinstancename = masterinterface.parent.getInstanceName()
         masterinterfacename = masterinterface.getName()
 
-        Component.__init__(self, project)
+        Component.__init__(self)
         self.interfaceslist = []
         self.addNode(nodename="component")
 

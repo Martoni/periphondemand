@@ -36,6 +36,11 @@ class WrapperXml(object):
             __init__(self,file)
         """
 
+        if not hasattr(self, 'parent'):
+            self.parent = None
+        if not hasattr(self, 'tree'):
+            self.tree = None
+
         if "node" in args:
             self.__initnode(args["node"])
         elif "etnode" in args:
@@ -48,10 +53,6 @@ class WrapperXml(object):
             self.__initfile(args["file"])
         else:
             raise PodError("Keys unknown in WrapperXml", 0)
-
-        #XXX: TODO
-        #self.parent = None
-        #self.tree = None
 
     def __initfile(self, filename):
         """ initialize with filename"""
@@ -204,7 +205,7 @@ class WrapperXml(object):
                 raise PodError("No tag named " + str(subnodename))
             return node.get(key)
         raise PodError("No attribute named " + key +
-                    " for tag " + str(subnodename))
+                       " for tag " + str(subnodename))
 
     def getAttributeNameList(self, subnodename=None):
         if subnodename is None:
