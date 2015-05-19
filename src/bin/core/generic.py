@@ -90,7 +90,7 @@ class Generic(WrapperXml):
 
     def setPublic(self, public):
         public = public.lower()
-        if not public in PUBLIC:
+        if public not in PUBLIC:
             raise PodError("Public value " + str(public) + " wrong")
         self.setAttribute("public", public)
 
@@ -98,7 +98,7 @@ class Generic(WrapperXml):
         the_type = self.getAttributeValue("type")
         if the_type is None:
             raise PodError("Generic " + self.getName() +
-                        " description malformed, type must be defined", 0)
+                           " description malformed, type must be defined", 0)
         else:
             return the_type
 
@@ -136,7 +136,7 @@ class Generic(WrapperXml):
         elif re.compile(self.getMatch()).match(value):
             self.setAttribute("value", value)
         else:
-            raise PodError("Value doesn't match for attribute " + str(value), 0)
+            raise PodError("Value doesn't match for attribute " + str(value))
 
     def getDestination(self):
         """ return the generic destination (fpga,driver or both)
@@ -145,7 +145,7 @@ class Generic(WrapperXml):
 
     def setDestination(self, destination):
         destination = destination.lower()
-        if not destination in DESTINATION:
+        if destination not in DESTINATION:
             raise PodError("Destination value " + str(destination) +
-                        " unknown")
+                           " unknown")
         self.setAttribute("destination", destination)

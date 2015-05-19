@@ -35,7 +35,7 @@ __author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 from periphondemand.bin.utils.display import Display
 from periphondemand.bin.utils.poderror import PodError
 
-display = Display()
+DISPLAY = Display()
 
 
 class AllocMem:
@@ -69,25 +69,24 @@ class AllocMem:
                 if (self.lastaddress % size) != 0:
                     base = base + 1
                 interface.setBase(hex(base * size))
-                display.msg("setting base address " +
-                        hex(base * size) + " for  " +
-                        interface.parent.getInstanceName() +
-                        "." + interface.getName())
+                DISPLAY.msg("setting base address " +
+                            hex(base * size) + " for  " +
+                            interface.parent.getInstanceName() +
+                            "." + interface.getName())
             else:
-                display.msg("Base address is " + hex(base) + " for " +
-                        interface.parent.getInstanceName() +
-                        "." + interface.getName())
+                DISPLAY.msg("Base address is " + hex(base) + " for " +
+                            interface.parent.getInstanceName() +
+                            "." + interface.getName())
             self.lastaddress = size * (base + 1)
         else:
-            display.msg("No addressing value in this type of bus")
+            DISPLAY.msg("No addressing value in this type of bus")
 
     def delInterfaceSlave(self, interface):
         self.listinterfaceslave.remove(interface)
 
     def setAddressSlave(self, interfaceslave, address):
         """ set base address for interfaceslave,
-            address in hexa
-        """
+            address in hexa """
         interfaceslave.setBase(address)
 
     def getMapping(self):
@@ -100,7 +99,7 @@ class AllocMem:
         mappinglist = []
         # sorting slave interface
         self.listinterfaceslave.sort(
-                lambda x,  y: x.getBaseInt() - y.getBaseInt())
+            lambda x,  y: x.getBaseInt() - y.getBaseInt())
 
         baseaddress = 0
         for interface in self.listinterfaceslave:
@@ -112,10 +111,10 @@ class AllocMem:
                                     "void"])
                 baseaddress = baseaddress + size
             mappinglist.append([interface.getBase(),
-                    interface.parent.getInstanceName() +
-                    "." + interface.getName(),
-                    interface.getMemorySize(),
-                    interface.getID()])
+                                interface.parent.getInstanceName() +
+                                "." + interface.getName(),
+                                interface.getMemorySize(),
+                                interface.getID()])
             baseaddress = baseaddress + interface.getMemorySize()
         return mappinglist
 

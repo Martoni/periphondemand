@@ -43,6 +43,7 @@ from periphondemand.bin.core.hdl_file import Hdl_file
 
 SETTINGS = Settings()
 
+
 def header(author, intercon):
     """ return vhdl header
     """
@@ -52,22 +53,23 @@ def header(author, intercon):
     header = header.replace("$tpl:abstract$", intercon.getDescription())
     return header
 
+
 def entity(intercon):
     """ generate entity
     """
     entity = "Entity " + intercon.getName() + " is\n"
-    entity = entity + ONETAB + "port\n" + ONETAB +"(\n"
+    entity = entity + ONETAB + "port\n" + ONETAB + "(\n"
     for interface in intercon.getInterfacesList():
         entity = entity + "\n" + ONETAB * 2 + "-- " +\
-                interface.getName() + " connection\n"
+            interface.getName() + " connection\n"
         for port in interface.ports:
             entity = entity + ONETAB * 2 + "%-40s" % port.getName() + " : " +\
-                    "%-5s" % port.getDir()
+                "%-5s" % port.getDir()
             if port.getSize() == "1":
                 entity = entity + "std_logic;\n"
             else:
                 entity = entity + "std_logic_vector(" + port.getMaxPinNum() +\
-                        " downto " + port.getMinPinNum() + ");\n"
+                    " downto " + port.getMinPinNum() + ");\n"
     # Suppress the #!@ last semicolon
     entity = entity[:-2]
     entity = entity + "\n"
@@ -75,13 +77,15 @@ def entity(intercon):
     entity = entity + ONETAB + ");\n" + "end entity;\n\n"
     return entity
 
+
 def architectureHead(masterinterface, intercon):
     """ Generate the head architecture
     """
-    archead = "architecture " + intercon.getName() + "_1 of "\
-               + intercon.getName() + " is\n"
+    archead = "architecture " + intercon.getName() + "_1 of " +\
+        intercon.getName() + " is\n"
     archead = archead + "begin\n"
     return archead
+
 
 def connectClockandReset(masterinterface, intercon):
     """ Connect clock and reset
@@ -90,11 +94,11 @@ def connectClockandReset(masterinterface, intercon):
     masterinstance = masterinterface.parent
     masterinstancename = masterinstance.getInstanceName()
     masterresetname = masterinstancename + "_" +\
-            masterinterface.getPortByType(bus.getSignalName("master",
-                                                            "reset")).getName()
+        masterinterface.getPortByType(bus.getSignalName("master",
+                                                        "reset")).getName()
     masterclockname = masterinstancename + "_" +\
-            masterinterface.getPortByType(bus.getSignalName("master",
-                                                            "clock")).getName()
+        masterinterface.getPortByType(bus.getSignalName("master",
+                                                        "clock")).getName()
 
     out = "\n" + ONETAB + "-- Clock and Reset connection\n"
     for slave in masterinterface.getSlavesList():
@@ -106,19 +110,19 @@ def connectClockandReset(masterinterface, intercon):
         slaveclockname = slaveinstancename + "_" +\
             slaveinterface.getPortByType(
                 bus.getSignalName("slave", "clock")).getName()
-
         out = out + "\n" + ONETAB + "-- for " + slaveinstancename + "\n"
-        #reset
+        # reset
         out = out + ONETAB + slaveresetname + " <= " + masterresetname + ";\n"
-        #clock
+        # clock
         out = out + ONETAB + slaveclockname + " <= " + masterclockname + ";\n"
-
     return out
+
 
 def architectureFoot(intercon):
     """ Write foot architecture code """
     out = "\nend architecture " + intercon.getName() + "_1;\n"
     return out
+
 
 def generate_intercon(masterinterface, intercon):
     """Generate intercon VHDL code for wishbone16 bus
@@ -126,21 +130,17 @@ def generate_intercon(masterinterface, intercon):
     masterinstance = masterinterface.parent
     project = masterinstance.parent
 
-    ###########################
-    #comment and header
+    # comment and header
     VHDLcode = header(SETTINGS.author, intercon)
-    ###########################
-    #entity
+    # entity
     VHDLcode = VHDLcode + entity(intercon)
     VHDLcode = VHDLcode + architectureHead(masterinterface, intercon)
-    ###########################
-    #Clock and Reset connection
+    # Clock and Reset connection
     VHDLcode = VHDLcode + connectClockandReset(masterinterface, intercon)
 
-    #Foot
+    # Foot
     VHDLcode = VHDLcode + architectureFoot(intercon)
 
-    ###########################
     # saving
     if not sy.dirExist(SETTINGS.projectpath +
                        COMPONENTSPATH + "/" +
@@ -154,7 +154,7 @@ def generate_intercon(masterinterface, intercon):
                  "w")
     afile.write(VHDLcode)
     afile.close()
-    #hdl file path
+    # hdl file path
     hdl = Hdl_file(intercon,
                    filename=intercon.getInstanceName() + VHDLEXT,
                    istop=1, scope="both")

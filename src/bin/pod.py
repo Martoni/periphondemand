@@ -34,10 +34,14 @@ from periphondemand.bin.commandline.projectcli import ProjectCli
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.version import VERSION
-import sys, os, getopt
+
+import sys
+import os
+import getopt
 
 SETTINGS = Settings()
 TMPFILENAME = "podtmp"
+
 
 def usage():
     """ print POD arg usage """
@@ -52,13 +56,14 @@ Usage: pod [OPTION...]
 Report bugs to http://periphondemand.sourceforge.net/
 """
 
+
 def main(argv):
     """ Main command line prog for pod """
     try:
-        opts, _ = getopt.getopt(argv[1:],
-                    "hvs:l:",
-                    ["help", "version", "source=", "load="]
-                    )
+        opts, _ = getopt.getopt(argv[1:], "hvs:l:", ["help",
+                                                     "version",
+                                                     "source=",
+                                                     "load="])
     except getopt.GetoptError, error:
         print str(error)
         usage()
@@ -84,8 +89,7 @@ def main(argv):
                 argument = arg
                 break
         if not os.path.exists(argument):
-            print "[ERROR] script "+str(argument)+\
-                " doesn't exist"
+            print("[ERROR] script " + str(argument) + " doesn't exist")
             usage()
             return
         cli.do_source(argument)

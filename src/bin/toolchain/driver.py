@@ -115,7 +115,7 @@ class Driver(WrapperXml):
         out = ""
         for instance in\
             self.project.get_instances_list_of_component(
-                    component.getName()):
+                component.getName()):
             for writeline in template.split("\n"):
                 # instance_name
                 writeline = re.sub(r'\/\*\$instance_name\$\*\/',
@@ -166,7 +166,7 @@ class Driver(WrapperXml):
                     interruptlist = instance.getInterruptList()
                     if len(interruptlist) == 0:
                         raise PodError("No interruption port in " +
-                                    instance.getInstanceName(), 0)
+                                       instance.getInstanceName(), 0)
                     elif len(interruptlist) > 1:
                         DISPLAY.msg(
                             "More than one interrupt port in " +
@@ -184,7 +184,7 @@ class Driver(WrapperXml):
                             "." + interruptport.parent.getName(), 0)
                     if len(connect) == 0:
                         raise PodError("Interrupt " + interruptport.getName() +
-                                    " is not connected", 0)
+                                       " is not connected", 0)
                     elif len(connect) > 1:
                         DISPLAY.msg(
                             "More than one connection for interruption port " +
@@ -258,7 +258,7 @@ class Driver(WrapperXml):
         lastdir = directory.split("/")[-1]
         if lastdir != "POD":
             raise PodError("The directory must be named POD and not " +
-                        lastdir, 0)
+                           lastdir, 0)
         if sy.dirExist(directory):
             if self.getNode(nodename="bsp") is not None:
                 self.getNode(nodename="bsp").setAttribute("directory",

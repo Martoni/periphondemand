@@ -97,8 +97,8 @@ class Project(WrapperXml):
         """ Create a project """
         if sy.dirExist(SETTINGS.projectpath):
             raise PodError("Can't create project, directory " +
-                        SETTINGS.projectpath +
-                        " already exists", 0)
+                           SETTINGS.projectpath +
+                           " already exists", 0)
         sy.makeDirectory(SETTINGS.projectpath)
 
         sy.makeDirectory(SETTINGS.projectpath + BINARYPROJECTPATH)
@@ -134,8 +134,8 @@ class Project(WrapperXml):
                                     "component",
                                     "name", node.getAttributeValue("name"))
                     raise PodError("Can't open " +
-                                node.getAttributeValue("name") + " directory",
-                                0)
+                                   node.getAttributeValue("name") +
+                                   " directory", 0)
                 else:
                     self._instanceslist.append(comp)
 
@@ -268,12 +268,13 @@ class Project(WrapperXml):
         interfaces_list = platform.getInterfacesList()
         if len(interfaces_list) != 1:
             raise PodError("I found " + str(len(interfaces_list)) +
-                        " FPGAs (" + str(interfaces_list) +
-                        ") and multiple FPGA project is not implemented yet.")
+                           " FPGAs (" + str(interfaces_list) +
+                           ") and multiple FPGA project " +
+                           "is not implemented yet.")
         port = interfaces_list[0].getPort(portname)
         if port.getDir() == "in":
             raise PodError("The value of this port can't be set " +
-                        "because of it's direction (in)")
+                           "because of it's direction (in)")
         port.force = state
         self.save()
 
@@ -308,7 +309,7 @@ class Project(WrapperXml):
             self.save()
         else:
             raise PodError("ComponentsLib directory " +
-                        str(path) + " doesn't exists")
+                           str(path) + " doesn't exists")
 
     def add_platforms_lib(self, path):
         """ Adding a platforms library under the project """
@@ -322,7 +323,7 @@ class Project(WrapperXml):
             self.save()
         else:
             raise PodError("ComponentsLib directory " + str(path) +
-                        " doesn't exists")
+                           " doesn't exists")
 
     def add_instance(self, **keys):
         """ Add a component in project
@@ -344,9 +345,10 @@ class Project(WrapperXml):
                 instancename = keys["instancename"]
                 # check if instancename is not <componentname><number><number>
                 if re.match(r'^' + componentname + r'\d{2}$', instancename):
-                    raise PodError("Instance name forbiden, it's reserved for " +
-                                "automatic instance name generation :" +
-                                instancename, 0)
+                    raise PodError("Instance name forbiden, " +
+                                   "it's reserved for " +
+                                   "automatic instance name generation :" +
+                                   instancename, 0)
                 # check instance availability
                 for instance in self.instances:
                     if instance.getName() == instancename:
@@ -363,7 +365,7 @@ class Project(WrapperXml):
             # Load and create component
             if (componentname == instancename):
                 raise PodError("Instance name can't be the" +
-                            "same as component name", 0)
+                               "same as component name", 0)
             comp = Component()
             comp.loadNewInstance(libraryname,
                                  componentname,
@@ -592,10 +594,10 @@ class Project(WrapperXml):
         """
         if pin_source.parent.parent.isBus():
             raise PodError("One of this pin is under a bus interface." +
-                        "Please use connectbus.")
+                           "Please use connectbus.")
         if pin_dest.parent.parent.isBus():
             raise PodError("One of this pin is under a bus interface." +
-                        "Please use connectbus.")
+                           "Please use connectbus.")
         pin_source.connectPin(pin_dest)
         self.save()
 
@@ -614,7 +616,8 @@ class Project(WrapperXml):
             if(port_source.getSize()) == 1:
                 sourcedict["num"] = "0"
             else:
-                raise PodError("Source pin number not given, and port size > 1")
+                raise PodError("Source pin number not given, " +
+                               "and port size > 1")
         pin_source = port_source.getPin(sourcedict["num"])
 
         # test if destination given
@@ -732,11 +735,12 @@ class Project(WrapperXml):
                 for j in range(i + 1, len(masters)):
                     if (masters[i].getBusName() == masters[j].getBusName()):
                         raise PodError(masters[i].parent.getInstanceName() +
-                                    " and " +
-                                    masters[j].parent.getInstanceName() +
-                                    " has the same bus type : , " +
-                                    masters[i].getBusName() +
-                                    " bus connection must be made by hand", 0)
+                                       " and " +
+                                       masters[j].parent.getInstanceName() +
+                                       " has the same bus type : , " +
+                                       masters[i].getBusName() +
+                                       " bus connection " +
+                                       "must be made by hand", 0)
         # find slaves bus
         slaves = self.interfaces_slave
         if len(slaves) == 0:

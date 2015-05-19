@@ -41,6 +41,7 @@ from periphondemand.bin.utils.settings import Settings
 
 SETTINGS = Settings()
 
+
 class Slave(WrapperXml):
     """ Manage Slaves connection
     """

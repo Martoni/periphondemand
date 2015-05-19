@@ -69,12 +69,14 @@ class Platform(Component):
         WrapperXml.__init__(self, file=file)
 
     def getForcesList(self):
+        """ get the list of forces """
         forcelist = []
         interfaces_list = self.getInterfacesList()
         if len(interfaces_list) != 1:
             raise PodError("I found " + str(len(interfaces_list)) +
-                        " FPGAs (" + str(interfaces_list) +
-                        ") and multiple FPGA project is not implemented yet.")
+                           " FPGAs (" + str(interfaces_list) +
+                           ") and multiple FPGA project " +
+                           " is not implemented yet.")
         for port in interfaces_list[0].ports:
             if port.forceDefined():
                 forcelist.append(port)

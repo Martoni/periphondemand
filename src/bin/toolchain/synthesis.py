@@ -49,8 +49,8 @@ class Synthesis(WrapperXml):
     def __init__(self, parent):
         self.parent = parent
         filepath = SETTINGS.projectpath +\
-                   "/" + SYNTHESISPATH +\
-                   "/synthesis" + XMLEXT
+            "/" + SYNTHESISPATH +\
+            "/synthesis" + XMLEXT
         if not sy.fileExist(filepath):
             raise PodError("No synthesis project found", 3)
         WrapperXml.__init__(self, file=filepath)
@@ -71,7 +71,8 @@ class Synthesis(WrapperXml):
         """ Test if command exist and return it """
         try:
             # try if .podrc exists
-            return SETTINGS.getSynthesisToolCommand(self.getSynthesisToolName())
+            return SETTINGS.getSynthesisToolCommand(
+                self.getSynthesisToolName())
         except:
             # else use toolchain default
             command_name = self.getAttributeValue(key="command",
@@ -81,7 +82,7 @@ class Synthesis(WrapperXml):
             command_name = command_path + "/" + command_name
             if not sy.commandExist(command_name):
                 raise PodError("Synthesis tool tcl shell command named " +
-                            command_name + " doesn't exist in PATH")
+                               command_name + " doesn't exist in PATH")
             return command_name
 
     def generateProject(self):
@@ -91,8 +92,8 @@ class Synthesis(WrapperXml):
             if component.getNum() == "0":
                 # Make directory
                 compdir = SETTINGS.projectpath +\
-                          SYNTHESISPATH + "/" +\
-                          component.getName()
+                    SYNTHESISPATH + "/" +\
+                    component.getName()
                 if sy.dirExist(compdir):
                     DISPLAY.msg("Directory " + compdir +
                                 " exist, will be deleted")
@@ -102,13 +103,12 @@ class Synthesis(WrapperXml):
                 # copy hdl files
                 for hdlfile in component.getHdl_filesList():
                     try:
-                        sy.copyFile(SETTINGS.projectpath +
-                                    COMPONENTSPATH +
-                                    "/" +
-                                    component.getInstanceName() +
-                                    "/hdl/" +
-                                    hdlfile.getFileName(),
-                                    compdir + "/")
+                        sy.copyFile(
+                            SETTINGS.projectpath +
+                            COMPONENTSPATH + "/" +
+                            component.getInstanceName() +
+                            "/hdl/" + hdlfile.getFileName(),
+                            compdir + "/")
                     except IOError, error:
                         print DISPLAY
                         raise PodError(str(error), 0)
@@ -166,12 +166,12 @@ class Synthesis(WrapperXml):
             raise PodError(str(e), 0)
         tclscript_name = self.getTCLScriptName()
         scriptpath = SETTINGS.projectpath +\
-                     SYNTHESISPATH +\
-                     "/" + tclscript_name
+            SYNTHESISPATH +\
+            "/" + tclscript_name
         try:
             plugin.generateBitStream(self,
                                      self.getSynthesisToolCommand(),
                                      scriptpath)
         except AttributeError:
             raise PodError("Can't generate bitstream for this synthesis" +
-                        " toolchain, not implemented")
+                           " toolchain, not implemented")

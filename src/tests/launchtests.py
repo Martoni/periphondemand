@@ -23,21 +23,13 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
+""" Launch functionnals tests """
 
-__doc__ = ""
-__version__ = "2.0.0"
-__versionTime__ = "19/12/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
+import os  # to list directory
+import re  # for regexp
+import getopt  # for commands arguments
+import sys  # for argv
 
-import os # to list directory
-import re # for regexp
-import getopt # for commands arguments
-import sys # for argv
 
 def usage():
     """ print POD arg usage """
@@ -50,24 +42,26 @@ Usage: launchtests [OPTION...]
 Report bugs to http://periphondemand.sourceforge.net/
 """
 
+
 def diff(output, testname):
-    tmpfile = open("tmp_chk","w")
+    tmpfile = open("tmp_chk", "w")
     tmpfile.write(output)
     tmpfile.close()
-    out = os.popen("diff tmp_chk "+testname).read()
+    out = os.popen("diff tmp_chk " + testname).read()
     out = out.strip()
     if out != "":
         return out
     else:
         return None
 
+
 def main():
     reset = None
     try:
         opts, args = getopt.getopt(sys.argv[1:],
-                    "hr", ["help", "reset"])
-    except getopt.GetoptError,e:
-        print str(e)
+                                   "hr", ["help", "reset"])
+    except getopt.GetoptError, error:
+        print(str(error))
         usage()
         sys.exit(2)
     options = [arg[0] for arg in opts]
@@ -83,26 +77,26 @@ def main():
     dirlist = os.listdir(".")
 
     # keep testscript only
-    testlist = [test for test in dirlist if re.match("\d\d*",test)]
+    testlist = [test for test in dirlist if re.match("\d\d*", test)]
     testlist.sort()
     number_of_tests = int(testlist[-1][0:2])
 
     for i in range(number_of_tests):
-        print " Test number "+str(i+1)+" : "+testlist[i][3:],
+        print " Test number " + str(i + 1) + " : " + testlist[i][3:],
         out = os.popen("pod -s "+testlist[i]).read()
         # if -r, create output files
-        if reset :
-            file_chk = open("chk_"+testlist[i],"w")
+        if reset:
+            file_chk = open("chk_" + testlist[i], "w")
             file_chk.write(out)
             file_chk.close()
-            print "chk_"+testlist[i]+" written"
+            print "chk_" + testlist[i] + " written"
         else:
-            if not os.path.exists("chk_"+testlist[i]):
-                print "[ERROR] chk_"+testlist[i]+" doesn't exist. "+\
-                      "Maybe you should use -r option to generate chk file ?"
+            if not os.path.exists("chk_" + testlist[i]):
+                print("[ERROR] chk_" + testlist[i] + " doesn't exist. " +
+                      "Maybe you should use -r option to generate chk file ?")
                 sys.exit(-1)
-            testout = diff(out,"chk_"+testlist[i])
-            if testout == None:
+            testout = diff(out, "chk_" + testlist[i])
+            if testout is None:
                 print " Check"
             else:
                 print " Not Check"
@@ -110,4 +104,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -71,21 +71,22 @@ class Pin(WrapperXml):
         if(self.getNode("connect") is not None):
             for element in self.getNodeList("connect"):
                 connectionslist.append(
-                        {"instance_dest":
-                            str(element.getAttributeValue("instance_dest")),
-                         "interface_dest":
-                            str(element.getAttributeValue("interface_dest")),
-                         "port_dest":
-                            str(element.getAttributeValue("port_dest")),
-                         "pin_dest":
-                            str(element.getAttributeValue("pin_dest"))})
+                    {"instance_dest":
+                        str(element.getAttributeValue("instance_dest")),
+                     "interface_dest":
+                        str(element.getAttributeValue("interface_dest")),
+                     "port_dest":
+                        str(element.getAttributeValue("port_dest")),
+                     "pin_dest":
+                        str(element.getAttributeValue("pin_dest"))})
         return connectionslist
 
     def delAllConnectionsForce(self):
         """ Delete all connections in this pin without any check
         """
         for connection in self.getConnections():
-            self.delNode("connect",
+            self.delNode(
+                "connect",
                 {"instance_dest": connection["instance_dest"],
                  "interface_dest": connection["interface_dest"],
                  "port_dest": connection["port_dest"],
@@ -97,9 +98,9 @@ class Pin(WrapperXml):
         for connection in self.getConnections():
             try:
                 instance_dest = SETTINGS.active_project.get_instance(
-                                                  connection["instance_dest"])
+                    connection["instance_dest"])
                 interface_dest =\
-                       instance_dest.getInterface(connection["interface_dest"])
+                    instance_dest.getInterface(connection["interface_dest"])
                 port_dest = interface_dest.getPort(connection["port_dest"])
                 pin_dest = port_dest.getPin(connection["pin_dest"])
             except PodError:
@@ -114,19 +115,21 @@ class Pin(WrapperXml):
     def delConnectionForce(self, pin_dest):
         """ Delete connection from this pin to pin_dest
         """
-        self.delNode("connect",
+        self.delNode(
+            "connect",
             {"instance_dest":
-            pin_dest.parent.parent.parent.getInstanceName(),
-            "interface_dest": pin_dest.parent.parent.getName(),
-            "port_dest": pin_dest.parent.getName(),
-            "pin_dest": str(pin_dest.getNum())})
+             pin_dest.parent.parent.parent.getInstanceName(),
+             "interface_dest": pin_dest.parent.parent.getName(),
+             "port_dest": pin_dest.parent.getName(),
+             "pin_dest": str(pin_dest.getNum())})
 
-        pin_dest.delNode("connect",
-                {"instance_dest":
-                    self.parent.parent.parent.getInstanceName(),
-                 "interface_dest": self.parent.parent.getName(),
-                 "port_dest": self.parent.getName(),
-                 "pin_dest": str(self.getNum())})
+        pin_dest.delNode(
+            "connect",
+            {"instance_dest":
+                self.parent.parent.parent.getInstanceName(),
+             "interface_dest": self.parent.parent.getName(),
+             "port_dest": self.parent.getName(),
+             "pin_dest": str(self.getNum())})
         return True
 
     def getConnectedPinList(self):
@@ -146,13 +149,11 @@ class Pin(WrapperXml):
         """ check if this connection exists
         """
         for connect in self.getConnections():
-            if connect ==\
-            {
-          "instance_dest":
-            pin_dest.parent.parent.parent.getInstanceName(),
-          "interface_dest": pin_dest.parent.parent.getName(),
-          "port_dest": pin_dest.parent.getName(),
-          "pin_dest": str(pin_dest.getNum())}:
+            if connect == {"instance_dest":
+                           pin_dest.parent.parent.parent.getInstanceName(),
+                           "interface_dest": pin_dest.parent.parent.getName(),
+                           "port_dest": pin_dest.parent.getName(),
+                           "pin_dest": str(pin_dest.getNum())}:
                 return True
         return False
 

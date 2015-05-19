@@ -46,7 +46,7 @@ class Simulation(WrapperXml):
     def __init__(self, parent):
         self.parent = parent
         filepath = SETTINGS.projectpath + "/" +\
-                   SIMULATIONPATH + "/simulation" + XMLEXT
+            SIMULATIONPATH + "/simulation" + XMLEXT
         if not sy.fileExist(filepath):
             raise PodError("No simulation project found", 3)
         WrapperXml.__init__(self, file=filepath)

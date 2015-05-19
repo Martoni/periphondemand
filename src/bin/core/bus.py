@@ -43,7 +43,7 @@ class Bus(WrapperXml):
     def __init__(self, parent, name):
         self.parent = parent
         WrapperXml.__init__(self, file=(SETTINGS.path + BUSPATH + "/" +
-                                  name + "/" + name + ".xml"))
+                            name + "/" + name + ".xml"))
 
     def getDataSize(self):
         """ Get size of data"""

@@ -79,15 +79,15 @@ class Library:
         componentlist = []
         if libraryname in official_component_type:
             componentlist =\
-                    sy.listDirectory(SETTINGS.path +
-                                     LIBRARYPATH + "/" +
-                                     libraryname)
+                sy.listDirectory(SETTINGS.path +
+                                 LIBRARYPATH + "/" +
+                                 libraryname)
         elif libraryname in self.getPersonalLibName():
             componentlist =\
-                    sy.listDirectory(self.getPersonalLibPath(libraryname))
+                sy.listDirectory(self.getPersonalLibPath(libraryname))
         elif libraryname in self.getComponentsLibName():
             componentlist =\
-                    sy.listDirectory(self.getComponentsLibPath(libraryname))
+                sy.listDirectory(self.getComponentsLibPath(libraryname))
         return componentlist
 
     def addLibrary(self, path):
@@ -116,8 +116,8 @@ class Library:
             for libraryname in self.listLibraries():
                 if component in self.listComponents(libraryname):
                     raise PodError("Library " + libname +
-                            " contain a component that exist in '" +
-                            libraryname + "' : " + component, 0)
+                                   " contain a component that exist in '" +
+                                   libraryname + "' : " + component, 0)
 
     def getComponentsLibPath(self, name=None):
         """ Get the path of library"""
@@ -157,7 +157,7 @@ class Library:
 
     def load(self, libname):
         """ Load a library with name given in parameter"""
-        if not libname in self.listLibraries():
+        if libname not in self.listLibraries():
             raise PodError("No " + libname + " in pod libraries")
         self.libname = libname
 
