@@ -54,7 +54,7 @@ class Driver(WrapperXml):
         WrapperXml.__init__(self, file=filepath)
         self.bspdir = None
 
-    def generateProject(self):
+    def generate_project(self):
         """ copy template drivers files """
         project = self.project
         op_sys = self.getName()
@@ -62,8 +62,8 @@ class Driver(WrapperXml):
             raise PodError("Operating system must be selected", 0)
         for component in project.instances:
             if component.getNum() == "0":
-                driverT = component.getDriver_Template(op_sys)
-                if driverT is not None:
+                driver_template = component.getDriver_Template(op_sys)
+                if driver_template is not None:
                     if sy.dirExist(SETTINGS.projectpath + DRIVERSPATH +
                                    "/" + component.getName()):
                         DISPLAY.msg("Driver directory for " +
@@ -80,7 +80,7 @@ class Driver(WrapperXml):
                 else:
                     DISPLAY.msg("No driver for " + component.getName())
 
-    def fillAllTemplates(self):
+    def fill_all_templates(self):
         """ fill template """
         project = self.project
         op_sys = self.getName()
@@ -88,11 +88,11 @@ class Driver(WrapperXml):
             raise PodError("Operating system must be selected", 0)
         for component in project.instances:
             if component.getNum() == "0":
-                driverT = component.getDriver_Template(op_sys)
-                if driverT is not None:
+                driver_template = component.getDriver_Template(op_sys)
+                if driver_template is not None:
                     DISPLAY.msg("Copy and fill template for " +
                                 component.getName())
-                    for templatefile in driverT.getTemplatesList():
+                    for templatefile in driver_template.getTemplatesList():
                         try:
                             template = open(
                                 SETTINGS.projectpath + COMPONENTSPATH +
@@ -106,16 +106,16 @@ class Driver(WrapperXml):
                                 "w")
                         except IOError, error:
                             raise PodError(str(error), 0)
-                        self.fillTemplate(template, destfile, component)
+                        self.fill_template(template, destfile, component)
                         template.close()
                         destfile.close()
 
-    def fillTemplateForEachInstance(self, template, component):
+    def fill_template_for_each_instance(self, template, component):
         """ fill template for each instance of component """
-        project = self.project
         out = ""
-        for instance in \
-                project.get_instances_list_of_component(component.getName()):
+        for instance in\
+            self.project.get_instances_list_of_component(
+                    component.getName()):
             for writeline in template.split("\n"):
                 # instance_name
                 writeline = re.sub(r'\/\*\$instance_name\$\*\/',
@@ -176,7 +176,7 @@ class Driver(WrapperXml):
 
                     try:
                         connect = interruptport.getPin(0).getConnections()
-                    except PodError, error:
+                    except PodError:
                         raise PodError(
                             "Interrupt " + interruptport.getName() +
                             " not connected in " +
@@ -196,7 +196,7 @@ class Driver(WrapperXml):
                 out = out + writeline + "\n"
         return out
 
-    def fillTemplate(self, template, destfile, component):
+    def fill_template(self, template, destfile, component):
         """ fill template file """
         project = self.project
         state = "STANDARD"
@@ -212,11 +212,11 @@ class Driver(WrapperXml):
                 # number_of_instances
                 if re.search(r'\/\*\$number_of_instances\$\*\/',
                              line) is not None:
-                    listOfInstances =\
+                    instances_list =\
                         project.get_instances_list_of_component(
                             component.getName())
                     line = re.sub(r'\/\*\$number_of_instances\$\*\/',
-                                  str(len(listOfInstances)),
+                                  str(len(instances_list)),
                                   line)
                 # main clock speed
                 if re.search(r'\/\*\$main_clock\$\*\/', line) is not None:
@@ -228,17 +228,17 @@ class Driver(WrapperXml):
                 if endtag is not None:
                     state = "STANDARD"
                     destfile.write(
-                        self.fillTemplateForEachInstance(foreach_template,
-                                                         component))
+                        self.fill_template_for_each_instance(foreach_template,
+                                                             component))
                 else:
                     foreach_template = foreach_template + line
             else:
                 raise PodError("State error in toolchain driver\n", 0)
 
-    def copyBSPDrivers(self):
+    def copy_bsp_drivers(self):
         """ delete all directories under POD dir, then copy
         drivers in."""
-        bspdir = self.getBSPDirectory()
+        bspdir = self.get_bsp_dir()
         if bspdir is None:
             raise PodError("Set directory before", 0)
         # deleting all directory in POD dir
@@ -247,21 +247,13 @@ class Driver(WrapperXml):
                 sy.listDirectory(SETTINGS.projectpath + DRIVERSPATH + "/"):
             sy.copyDirectory(SETTINGS.projectpath + DRIVERSPATH +
                              "/" + directory,
-                             self.getBSPDirectory())
+                             self.get_bsp_dir())
 
-    def setProjectTree(self, tree):
-        """ set the directory where driver will be copied"""
-        self.setBSPDirectory(tree)
-
-    def setOperatingSystem(self, op_sys):
-        """ select operating system  """
-        self.setBSPOperatingSystem(op_sys)
-
-    def getBSPDirectory(self):
+    def get_bsp_dir(self):
         """ return the directory where drivers files are copied """
         return self.bspdir
 
-    def setBSPDirectory(self, directory):
+    def set_bsp_directory(self, directory):
         """ set the directory where drivers files must be copied """
         lastdir = directory.split("/")[-1]
         if lastdir != "POD":
@@ -278,14 +270,3 @@ class Driver(WrapperXml):
             self.bspdir = directory
         else:
             raise PodError("Directory " + directory + " does not exist", 0)
-
-    def setBSPOperatingSystem(self, operatingsystem):
-        """ set the operating system for driver generation """
-        if self.getNode(nodename="bsp") is not None:
-            self.getNode(nodename="bsp").setAttribute("os",
-                                                      operatingsystem)
-        else:
-            self.addNode(nodename="bsp",
-                         attributename="os",
-                         value=operatingsystem)
-        self.bspos = operatingsystem

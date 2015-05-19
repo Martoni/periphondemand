@@ -63,8 +63,8 @@ generate a project drivers directory with templates
         """
         try:
             self.testIfToolChainSelected()
-            self.driver.generateProject()
-            self.driver.fillAllTemplates()
+            self.driver.generate_project()
+            self.driver.fill_all_templates()
         except PodError, error:
             print DISPLAY
             print error
@@ -78,7 +78,7 @@ fill drivers templates
         """
         try:
             self.testIfToolChainSelected()
-            self.driver.fillAllTemplates()
+            self.driver.fill_all_templates()
         except PodError, error:
             print DISPLAY
             print error
@@ -93,7 +93,7 @@ directory must be selected with setprojecttree
         """
         try:
             self.testIfToolChainSelected()
-            self.driver.copyBSPDrivers()
+            self.driver.copy_bsp_drivers()
         except PodError, error:
             print DISPLAY
             print error
@@ -119,7 +119,7 @@ select software developpement tree, to copy driver
         """
         try:
             self.testIfToolChainSelected()
-            self.driver.setBSPDirectory(line)
+            self.driver.set_bsp_directory(line)
         except PodError, error:
             print DISPLAY
             print error
