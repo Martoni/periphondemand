@@ -340,6 +340,68 @@ class TopVHDL(TopGen):
                         port.getName() + " <= '1';\n"
         return out + "\n"
 
+    def connect_in_port(self, component, port):
+        """ Connect all pins port"""
+        platform = self.project.platform
+        platformname = platform.getInstanceName()
+        out = ""
+        if len(port.getPinsList()) != 0:
+            portdest = port.getDestinationPort()
+            if portdest is not None and\
+                    (portdest.getSize() == port.getSize()):
+                # If port is completely connected to one
+                # and only one other port
+                pin = port.getPinsList()[0]
+                connect = pin.getConnections()[0]
+                if connect["instance_dest"] != platformname:
+                    out = out + ONETAB * 2 +\
+                        component.getInstanceName() +\
+                        "_" + port.getName() +\
+                        " <= " +\
+                        connect["instance_dest"] +\
+                        "_" + connect["port_dest"] + ";\n"
+            else:
+                # If pins port are connected individualy
+                # to several other ports
+                for pin in port.getPinsList():
+                    # Connect pin individualy
+                    if pin.getNum() is not None and\
+                            len(pin.getConnections()) != 0:
+                        connect = pin.getConnections()[0]
+                        if connect["instance_dest"] != platformname:
+                            out = out + ONETAB * 2 +\
+                                component.getInstanceName() +\
+                                "_" + port.getName()
+                            if int(port.getSize()) > 1:
+                                out = out + "(" + pin.getNum() + ")"
+                            out = out + " <= " + connect["instance_dest"] +\
+                                "_" + connect["port_dest"]
+                            # is destination vector or simple net ?
+                            for comp in self.project.instances:
+                                if comp.getInstanceName() !=\
+                                        connect["instance_dest"]:
+                                    continue
+                                for inter in comp.getInterfacesList():
+                                    if inter.getName() !=\
+                                            connect["interface_dest"]:
+                                        continue
+                                    for port2 in inter.ports:
+                                        if port2.getName() ==\
+                                                connect["port_dest"]:
+                                            if int(port2.getSize()) > 1:
+                                                out = out + "(" + \
+                                                    connect["pin_dest"] + ")"
+                            out = out + ";\n"
+        # if port is void, connect '0' or open
+        else:
+            message = "port " + component.getInstanceName() +\
+                "." + interface.getName() + "." +\
+                port.getName() + " is void." +\
+                " It will be set to '" +\
+                str(port.getUnconnectedValue()) + "'"
+            DISPLAY.msg(message, 2)
+        return out
+
     def connectInstance(self, incomplete_external_ports_list):
         """ Connect instances
         """
@@ -384,60 +446,7 @@ class TopVHDL(TopGen):
                 out = out + ONETAB * 2 + "-- " + interface.getName() + "\n"
                 for port in interface.ports:
                     if port.getDir() == "in":
-                        # Connect all pins port
-                        if len(port.getPinsList()) != 0:
-                            portdest = port.getDestinationPort()
-                            if portdest is not None and\
-                                    (portdest.getSize() == port.getSize()):
-                                # If port is completely connected to one
-                                # and only one other port
-                                pin = port.getPinsList()[0]
-                                connect = pin.getConnections()[0]
-                                if connect["instance_dest"] != platformname:
-                                    out = out + ONETAB * 2 +\
-                                        component.getInstanceName() +\
-                                        "_" + port.getName() +\
-                                        " <= " +\
-                                        connect["instance_dest"] +\
-                                        "_" + connect["port_dest"] + ";\n"
-                            else:
-                                # If pins port are connected individualy
-                                # to several other ports
-                                for pin in port.getPinsList():
-                                    # Connect pin individualy
-                                    if pin.getNum() is not None and\
-                                            len(pin.getConnections()) != 0:
-                                        connect = pin.getConnections()[0]
-                                        if connect["instance_dest"] != platformname:
-                                            out = out + ONETAB * 2 +\
-                                                  component.getInstanceName() +\
-                                                  "_" + port.getName()
-                                            if int(port.getSize()) > 1:
-                                                out = out + "(" + pin.getNum() + ")"
-                                            out = out + " <= " + connect["instance_dest"] +\
-                                                    "_" + connect["port_dest"]
-                                            # is destination vector or simple net ?
-                                            for comp in self.project.instances:
-                                                if comp.getInstanceName() != connect["instance_dest"]:
-                                                    continue
-                                                for inter in comp.getInterfacesList():
-                                                    if inter.getName() != connect["interface_dest"]:
-                                                        continue
-                                                    for port2 in inter.ports:
-                                                        if port2.getName() == connect["port_dest"]:
-                                                            if int(port2.getSize()) > 1:
-                                                                out = out + "(" + \
-                                                                    connect["pin_dest"] + ")"
-                                            out = out + ";\n"
-                        # if port is void, connect '0' or open
-                        else:
-                            message = "port " + component.getInstanceName() +\
-                                "." + interface.getName() + "." +\
-                                port.getName() + " is void." +\
-                                " It will be set to '" +\
-                                str(port.getUnconnectedValue()) + "'"
-                            DISPLAY.msg(message, 2)
-
+                        out += self.connect_in_port(component, port)
         return out
 
     @classmethod
