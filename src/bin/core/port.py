@@ -98,14 +98,14 @@ class Port(WrapperXml):
         pin = self.getPin(pin_num)
         if pin.getConnections() != []:
             raise PodError("Pin " +
-                        str(self.parent.parent.getInstanceName()) +
-                        "." +
-                        str(self.parent.getName()) +
-                        "." +
-                        str(self.getName()) +
-                        "." +
-                        str(pin_num) +
-                        " can't be deleted, connections exists")
+                           str(self.parent.parent.getInstanceName()) +
+                           "." +
+                           str(self.parent.getName()) +
+                           "." +
+                           str(self.getName()) +
+                           "." +
+                           str(pin_num) +
+                           " can't be deleted, connections exists")
         self.pinlist.remove(pin)
         self.delNode(pin)
 
@@ -135,7 +135,7 @@ class Port(WrapperXml):
         return self.getAttributeValue("type")
 
     def setType(self, the_type):
-        #TODO: check if type is known
+        # TODO: check if type is known
         self.setAttribute("type", the_type)
 
     def getDir(self):
@@ -308,11 +308,10 @@ class Port(WrapperXml):
                     (1, 1, 1, 0, 0),
                     (0, 1, 0, 0, 0))
 
-        if checktab[
-                listdir.index(self.getDir())][
-                        listdir.index(portdest.getDir())] == 0:
+        if checktab[listdir.index(self.getDir())][
+                listdir.index(portdest.getDir())] == 0:
             raise PodError("incompatible pin : " +
-                        self.getDir() + " => " + portdest.getDir(), 0)
+                           self.getDir() + " => " + portdest.getDir(), 0)
 
     def connect_port(self, port_dest):
         """ Connect all pins of a port on all pin on same size port dest
@@ -322,10 +321,10 @@ class Port(WrapperXml):
             raise PodError("The two ports have differents size")
         if self.getPinsList() != []:
             raise PodError("Port connection " +
-                        self.getName() + " is not void")
+                           self.getName() + " is not void")
         if port_dest.getPinsList() != []:
             raise PodError("Port connection " +
-                        port_dest.getName() + " is not void")
+                           port_dest.getName() + " is not void")
 
         self.connectAllPin(port_dest)
 
@@ -360,8 +359,8 @@ class Port(WrapperXml):
         port_dest = None
         dest_port_list = []
         for pin in self.getPinsList():
-            port_connections = \
-                    [pin.parent for pin in pin.getConnectedPinList()]
+            port_connections =\
+                [pin.parent for pin in pin.getConnectedPinList()]
             for port_connect in port_connections:
                 if port_connect not in dest_port_list:
                     dest_port_list.append(port_connect)

@@ -30,12 +30,7 @@
 # ----------------------------------------------------------------------------
 """ Manage registers """
 
-__doc__ = ""
-__version__ = "1.0.0"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
-
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils.poderror import PodError
 
 
 class Register(WrapperXml):
@@ -65,7 +60,7 @@ class Register(WrapperXml):
         return self.getAttributeValue("offset")
 
     def setOffset(self, offset):
-        #TODO: check if offset is valid
+        # TODO: check if offset is valid
         self.setAttribute("offset", offset)
 
     def getRows(self):
@@ -87,6 +82,6 @@ class Register(WrapperXml):
             return "%08x" % (baseaddr + offset * 4)
         else:
             raise PodError("Register size not supported for reg " +
-                        str(self.getName()) +
-                        " in component " +
-                        str(self.parent.parent.getName()))
+                           str(self.getName()) +
+                           " in component " +
+                           str(self.parent.parent.getName()))

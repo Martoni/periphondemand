@@ -169,9 +169,9 @@ def generateBitStream(self, commandname, scriptname):
         else:
             print "SHELL>" + line,
     try:
-        print settings.projectpath + OBJSPATH + "/" + \
-                    BINARY_PREFIX + settings.active_project.getName() + \
-                    ALTERA_BITSTREAM_SUFFIX
+        print(settings.projectpath + OBJSPATH + "/" +
+              BINARY_PREFIX + settings.active_project.getName() +
+              ALTERA_BITSTREAM_SUFFIX)
         sy.copyFile(settings.projectpath + OBJSPATH + "/" +
                     BINARY_PREFIX + settings.active_project.getName() +
                     ALTERA_BITSTREAM_SUFFIX,

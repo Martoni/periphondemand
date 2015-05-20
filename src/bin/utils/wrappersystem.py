@@ -72,7 +72,7 @@ def check_name(name):
         if car == '_':
             continue
         raise PodError("Character " + car +
-                    " forbiden, must be included in [a-z],[0-9],_", 0)
+                       " forbiden, must be included in [a-z],[0-9],_", 0)
 
     if re.search(r'__', name):
         raise PodError(" Double '_' forbiden", 0)
@@ -117,7 +117,7 @@ def renameFile(oldfilepath, newfilepath):
         return os.rename(oldfilepath, newfilepath)
     except OSError, error:
         raise PodError(str(error) + "\nrenaming " +
-                    str(oldfilepath) + " in " + str(newfilepath))
+                       str(oldfilepath) + " in " + str(newfilepath))
 
 
 def renameDirectory(olddir, newdir):
@@ -135,7 +135,7 @@ def makeDirectory(name):
     try:
         return os.makedirs(name)
     except OSError, error:
-        raise PodError("can't make directory " + name + " :\n"+str(error))
+        raise PodError("can't make directory " + name + " :\n" + str(error))
 
 
 def copyDirectory(source, target):
@@ -186,7 +186,7 @@ def delDirectory(dirpath):
         return shutil.rmtree(dirpath)
     else:
         raise PodError("Directory " + dirpath +
-                    " doesn't exists can't be deleted", 1)
+                       " doesn't exists can't be deleted", 1)
 
 
 def delFile(dirpath):

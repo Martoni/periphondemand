@@ -83,8 +83,8 @@ def generatelibraryconstraints(self):
                         constraint.getAttributeValue("loc") + ";\n"
                 else:
                     raise PodError("component " + instance.getName() +
-                                " has an unknown type " +
-                                constraint.getAttributeValue("type"), 0)
+                                   " has an unknown type " +
+                                   constraint.getAttributeValue("type"), 0)
     return out
 
 
@@ -111,7 +111,7 @@ def generatepinout(self, filename=None):
                 # Platform ports are all 1-sized, raise error if not
                 if len(pin) != 1:
                     raise PodError("Platform port " + port.getName() +
-                                " has size different of 1", 0)
+                                   " has size different of 1", 0)
                 pin = pin[0]
                 # Only one connection per platform pin can be branched.
                 # If several connections found, only first is used

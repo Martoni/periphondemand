@@ -23,11 +23,6 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
 """ Managing printing messages """
 
 from periphondemand.bin.define import COLOR_ERROR
@@ -65,9 +60,9 @@ class Display(object):
                     try:
                         if SETTINGS.color() == 1:
                             out = out + COLOR_ERROR + "[ERROR]" +\
-                                    COLOR_END + "  : " +\
-                                    COLOR_ERROR_MESSAGE + msg[0].strip() +\
-                                    COLOR_END + "\n"
+                                COLOR_END + "  : " +\
+                                COLOR_ERROR_MESSAGE + msg[0].strip() +\
+                                COLOR_END + "\n"
                         else:
                             out = out + "[ERROR]  : " + msg[0].strip() + "\n"
                     except NameError:
@@ -76,9 +71,9 @@ class Display(object):
                     try:
                         if SETTINGS.color() == 1:
                             out = out + COLOR_WARNING + "[WARNING]" +\
-                                    COLOR_END + ": " +\
-                                    COLOR_WARNING_MESSAGE + msg[0].strip() +\
-                                    COLOR_END + "\n"
+                                COLOR_END + ": " +\
+                                COLOR_WARNING_MESSAGE + msg[0].strip() +\
+                                COLOR_END + "\n"
                         else:
                             out = out + "[WARNING]: " + msg[0].strip() + "\n"
                     except NameError:
@@ -87,9 +82,9 @@ class Display(object):
                     try:
                         if SETTINGS.color() == 1:
                             out = out + COLOR_INFO + "[INFO]" +\
-                                    COLOR_END + " : " +\
-                                    COLOR_INFO_MESSAGE + msg[0].strip() +\
-                                    COLOR_END + "\n"
+                                COLOR_END + " : " +\
+                                COLOR_INFO_MESSAGE + msg[0].strip() +\
+                                COLOR_END + "\n"
                         else:
                             out = out + "[INFO] : " + msg[0].strip() + "\n"
                     except NameError:

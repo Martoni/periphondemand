@@ -134,11 +134,11 @@ class WrapperXml(object):
                     return node.addNode(nodename=subnodename,
                                         attributedict=keys["attributedict"])
                 else:
-                    raise PodError("Key not known in addSubNode " + str(keys), 0)
+                    raise PodError("Key not known in addSubNode " + str(keys))
             else:
-                raise PodError("Key not known in addSubNode" + str(keys), 0)
+                raise PodError("Key not known in addSubNode" + str(keys))
         else:
-            raise PodError("Key not known in addSubNode" + str(keys), 0)
+            raise PodError("Key not known in addSubNode" + str(keys))
 
     def addNode(self, **keys):
         """ Add a node in the tree,
@@ -271,7 +271,7 @@ class WrapperXml(object):
                 self.tree = ET.fromstring(filename)
             except SyntaxError, error:
                 raise PodError("Xml malformed in " +
-                            filename + " : \n" + str(error), 0)
+                               filename + " : \n" + str(error))
         else:
             try:
                 xmlfile = open(filename, 'r')
@@ -284,7 +284,7 @@ class WrapperXml(object):
                 self.tree = ET.fromstring(content)
             except SyntaxError, error:
                 raise PodError("Xml malformed in " +
-                            filename + " :\n" + str(error), 0)
+                               filename + " :\n" + str(error))
 
     def createXml(self, tag):
         self.tree = ET.Element(tag)

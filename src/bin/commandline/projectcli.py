@@ -718,9 +718,9 @@ Connect interface between two components
         """
         try:
             self.is_project_open()
-            self.checkargs(
-                line,
-                "<instancename>.<interfacename> <instancename>.<interfacename>")
+            self.checkargs(line,
+                           "<instancename>.<interfacename> " +
+                           "<instancename>.<interfacename>")
         except Exception, error:
             print DISPLAY
             print(str(error))
@@ -748,7 +748,8 @@ Connect interface between two components
         connectlist = []
         try:
             connectlist =\
-                self.completeargs(text, line,
+                self.completeargs(
+                    text, line,
                     "<masterinstancename>.<masterinterfacename> " +
                     "<slaveinstancename>.<slaveinterfacename>")
         except Exception, error:
@@ -899,10 +900,10 @@ Suppress a pin connection
             dest.append(None)
         try:
             SETTINGS.active_project.delete_pin_connection_cmd(
-                {"instance":source[0], "interface":source[1],
-                 "port":source[2], "num":source[3]},
-                {"instance":dest[0], "interface":dest[1],
-                 "port":dest[2], "num":dest[3]})
+                {"instance": source[0], "interface": source[1],
+                 "port": source[2], "num": source[3]},
+                {"instance": dest[0], "interface": dest[1],
+                 "port": dest[2], "num": dest[3]})
         except PodError, error:
             print DISPLAY
             print error

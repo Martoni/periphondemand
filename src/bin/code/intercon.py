@@ -38,8 +38,7 @@ DISPLAY = Display()
 
 
 class Intercon(Component):
-    """ Generate Intercon component
-    """
+    """ Generate Intercon component """
 
     def __init__(self, masterinterface):
         """ Init fonction
@@ -81,7 +80,6 @@ class Intercon(Component):
         # Save to make directories
         self.saveInstance()
 
-        #####
         # Create interface for each component connected on intercon
         # for slaves and master:
         slaveslist = masterinterface.getSlavesList()
@@ -92,25 +90,24 @@ class Intercon(Component):
         for interface in interfaceslist:
             instance = interface.parent
 
-            #######
             # bus (wishbone,...)
             bus = Interface(self,
                             name=instance.getInstanceName() +
-                                 "_" + interface.getName())
+                            "_" + interface.getName())
             bus.setClass("intercon")
             # Adding bus interface on intercon
             self.addInterface(bus)
 
-            #Creating port with invert direction value
+            # Creating port with invert direction value
             for port in interface.ports:
                 newport = Port(bus,
                                name=instance.getInstanceName() +
-                                    "_" + port.getName())
+                               "_" + port.getName())
                 newport.setDir(self.invertDir(port.getDir()))
                 newport.setSize(port.getSize())
                 # adding port on bus interface
                 bus.addPort(newport)
-                #connect port new port on instance interface
+                # connect port new port on instance interface
                 port.connectAllPin(newport)
 
         bus.setClass("intercon")

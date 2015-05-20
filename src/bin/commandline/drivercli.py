@@ -23,7 +23,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-""" Commandline for driver environnement """
+""" Commandline for driver environment """
 
 from periphondemand.bin.utils.basecli import BaseCli
 from periphondemand.bin.utils.settings import Settings
@@ -36,7 +36,7 @@ SETTINGS = Settings()
 
 
 class DriverCli(BaseCli):
-    """
+    """ Manage driver command line environment
     """
 
     def __init__(self, parent):
@@ -46,7 +46,8 @@ class DriverCli(BaseCli):
 
     def testIfToolChainSelected(self):
         if self.driver is None:
-            raise PodError("No toolchain selected (use selecttoolchain command)")
+            raise PodError("No toolchain selected " +
+                           "(use selecttoolchain command)")
 
     def complete_generateproject(self, text, line, begidx, endidx):
         toollist = []

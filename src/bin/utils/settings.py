@@ -11,11 +11,16 @@
 # ----------------------------------------------------------------------------
 """Session settings and project parameters"""
 
-import cmd, re, os, sys
+import cmd
+import re
+import os
+import sys
+
 from periphondemand.bin.utils.configfile import ConfigFile
 from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.define import POD_PATH
 from periphondemand.bin.define import POD_CONFIG
+
 
 class Settings(object):
     """Settings class implements a Singleton design pattern to share the same
@@ -53,15 +58,18 @@ class Settings(object):
                 pass
             try:
                 self.personal_lib_path_list = self.configfile.getLibraries()
-                self.personal_lib_name_list = \
-                    [pathlib.split("/")[-1] for pathlib in self.personal_lib_path_list]
+                self.personal_lib_name_list =\
+                    [pathlib.split("/")[-1]
+                        for pathlib in self.personal_lib_path_list]
             except PodError:
                 pass
 
             try:
-                self.personal_platformlib_list = self.configfile.getPlatformLibPath()
-                self.personal_platformlib_name_list = \
-                    [pathlib.split("/")[-1] for pathlib in self.personal_platformlib_list]
+                self.personal_platformlib_list =\
+                    self.configfile.getPlatformLibPath()
+                self.personal_platformlib_name_list =\
+                    [pathlib.split("/")[-1]
+                        for pathlib in self.personal_platformlib_list]
             except PodError:
                 pass
 
@@ -85,9 +93,11 @@ class Settings(object):
             return os.path.join(self.__script_dir, sub_dir)
         else:
             return ""
+
     def isScript(self):
         return self.script
-    def setScript(self,value):
+
+    def setScript(self, value):
         if value:
             self.script = 1
         else:
@@ -96,7 +106,5 @@ class Settings(object):
     def getSynthesisToolCommand(self, synthesisName):
         return self.configfile.getSynthesisToolCommand(synthesisName)
 
-    components_dir  = property(lambda self: self.getDir("components"))
-    board_dir       = property(lambda self: self.getDir("boards"))
-
-
+    components_dir = property(lambda self: self.getDir("components"))
+    board_dir = property(lambda self: self.getDir("boards"))

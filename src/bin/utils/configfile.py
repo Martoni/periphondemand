@@ -47,16 +47,16 @@ class ConfigFile(WrapperXml):
             self.savefile()
         # fill library path list:
         try:
-            self.personal_lib_list = \
-                [node.getAttributeValue("path")
-                        for node in self.getSubNodeList("libraries", "lib")]
+            self.personal_lib_list =\
+                [node.getAttributeValue("path") for
+                    node in self.getSubNodeList("libraries", "lib")]
         except:
             self.personal_lib_list = []
         try:
             self.personal_platformlib_list = \
                 [node.getAttributeValue("path")
-                        for node in self.getSubNodeList("platforms",
-                                                        "platform")]
+                    for node in self.getSubNodeList("platforms",
+                                                    "platform")]
         except:
             self.personal_platformlib_list = []
 
@@ -64,9 +64,10 @@ class ConfigFile(WrapperXml):
         """ Delete library path in config file"""
         path = os.path.expanduser(path)
         path = os.path.abspath(path)
-         # check if lib doesn't exists in config file
+        # check if lib doesn't exists in config file
         libpathlist = [node.getAttributeValue("path") for node in
-                self.getSubNodeList(nodename="libraries", subnodename="lib")]
+                       self.getSubNodeList(nodename="libraries",
+                                           subnodename="lib")]
         if not (path in libpathlist):
             raise PodError("Library " + path + " doesn't exist in config", 0)
         self.delSubNode(nodename="libraries",
@@ -81,7 +82,8 @@ class ConfigFile(WrapperXml):
         path = os.path.abspath(path)
         # check if lib doesn't exists in config file
         libpathlist = [node.getAttributeValue("path") for node in
-                self.getSubNodeList(nodename="libraries", subnodename="lib")]
+                       self.getSubNodeList(nodename="libraries",
+                                           subnodename="lib")]
         if path in libpathlist:
             raise PodError("This library is already in POD", 0)
         # check if directory exist then add it
@@ -114,8 +116,8 @@ class ConfigFile(WrapperXml):
                 break
         if not sy.commandExist(command_name):
             raise PodError("Synthesis tool tcl shell command named " +
-                        command_name +
-                        " doesn't exist in .podrc")
+                           command_name +
+                           " doesn't exist in .podrc")
         return command_name
 
     def savefile(self):
@@ -123,4 +125,3 @@ class ConfigFile(WrapperXml):
         self.configfile = open(self.filename, "w")
         self.configfile.write(str(self))
         self.configfile.close()
-

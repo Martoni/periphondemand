@@ -32,9 +32,10 @@ from periphondemand.bin.define import COLOR_WARNING_MESSAGE
 from periphondemand.bin.define import COLOR_ERROR
 from periphondemand.bin.define import COLOR_ERROR_MESSAGE
 
-INFO    = 2
+INFO = 2
 WARNING = 1
-ERROR   = 0
+ERROR = 0
+
 
 class PodError(Exception):
     """ Manage specific error
@@ -44,16 +45,17 @@ class PodError(Exception):
         level   -- the exception level
     """
 
-    def __init__(self,message,level=0):
+    def __init__(self, message, level=0):
         self._message = message
-        self.level   = level
-        Exception.__init__(self,message)
+        self.level = level
+        Exception.__init__(self, message)
 
     def __repr__(self):
         return self.message
 
     def _get_message(self):
         return self._message
+
     def _set_message(self, message):
         self._message = message
     message = property(_get_message, _set_message)
@@ -62,10 +64,10 @@ class PodError(Exception):
         if self.level == 0:
             standardmsg = "[ERROR] : " + self.message
             try:
-                if SETTINGS.color()==1:
-                    return COLOR_ERROR+"[ERROR]"+COLOR_END+"  : "+\
-                            COLOR_ERROR_MESSAGE+self.message+\
-                            COLOR_END
+                if SETTINGS.color() == 1:
+                    return COLOR_ERROR + "[ERROR]" + COLOR_END + "  : " +\
+                        COLOR_ERROR_MESSAGE + self.message +\
+                        COLOR_END
                 else:
                     return standardmsg
             except NameError:
@@ -73,10 +75,10 @@ class PodError(Exception):
         elif self.level == 1:
             standardmsg = "[WARNING] : " + self.message
             try:
-                if SETTINGS.color()==1:
-                    return COLOR_WARNING+"[WARNING]"+COLOR_END\
-                            +": "+COLOR_WARNING_MESSAGE + self.message+\
-                            COLOR_END
+                if SETTINGS.color() == 1:
+                    return COLOR_WARNING + "[WARNING]" + COLOR_END +\
+                        ": " + COLOR_WARNING_MESSAGE + self.message +\
+                        COLOR_END
                 else:
                     return standardmsg
             except NameError:
@@ -84,16 +86,17 @@ class PodError(Exception):
         else:
             standardmsg = "[INFO] : " + self.message
             try:
-                if SETTINGS.color()==1:
-                    return COLOR_INFO+"[INFO]"+COLOR_END+"   : "+\
-                            COLOR_INFO_MESSAGE+self.message+COLOR_END
+                if SETTINGS.color() == 1:
+                    return COLOR_INFO + "[INFO]" + COLOR_END + "   : " +\
+                        COLOR_INFO_MESSAGE + self.message + COLOR_END
                 else:
                     return standardmsg
             except NameError:
                 return standardmsg
 
-    def setLevel(self,level):
+    def setLevel(self, level):
         self.level = int(str(level))
+
     def getLevel(self):
         return self.level
 

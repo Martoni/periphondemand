@@ -71,8 +71,9 @@ select toolchain used for simulation
             else:
                 if SETTINGS.active_project.simulation_toolchain is None:
                     print "Choose a toolchain\n"
+                    project = SETTINGS.active_project
                     for toolchain in \
-                          SETTINGS.active_project.get_simulation_toolchains():
+                            project.get_simulation_toolchains():
                         print(str(toolchain))
                     return
         else:

@@ -195,7 +195,8 @@ class Pin(WrapperXml):
             raise PodError(message + " : Port " + str(self.parent.getName()) +
                            " is forced, can't be connected")
         if pin_dest.parent.forceDefined():
-            raise PodError(message + " : Port " + str(pin_dest.parent.getName()) +
+            raise PodError(message +
+                           " : Port " + str(pin_dest.parent.getName()) +
                            " is forced, can't be connected")
 
         if self.parent.getDir() == "in":
@@ -227,7 +228,7 @@ class Pin(WrapperXml):
                                      self.getNum())
 
     def __addConnection(self, instance_destname, interface_destname,
-                              port_destname, pin_destnum=None):
+                        port_destname, pin_destnum=None):
         """ add pin connection and check direction compatibility
         """
         if pin_destnum is not None:

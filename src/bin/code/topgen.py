@@ -33,7 +33,8 @@ from periphondemand.bin.utils.settings import Settings
 
 SETTINGS = Settings()
 
-class TopGen:
+
+class TopGen(object):
     """ Generate Top component from a project
     """
 
@@ -43,55 +44,45 @@ class TopGen:
     def generate(self):
         """ generate code for top component
         """
-        ## checking if all intercons are done
+        # checking if all intercons are done
         for masterinterface in self.project.interfaces_master:
             try:
                 self.project.get_instance(
-                        masterinterface.parent.getInstanceName() +
-                        "_" +
-                        masterinterface.getName() +
-                        "_intercon")
+                    masterinterface.parent.getInstanceName() +
+                    "_" +
+                    masterinterface.getName() +
+                    "_intercon")
             except PodError, error:
                 raise PodError("Intercon missing, all intercon must be" +
-                            "generated before generate top.\n" + str(error), 0)
+                               "generated before generate top.\n" + str(error))
 
-        ########################
         # header
         out = self.header()
-        ########################
         # entity
         entityname = "top_" + self.project.getName()
         portlist = self.project.platform.getConnectPortsList()
         out = out + self.entity(entityname, portlist)
-        ########################
         # architecture head
         out = out + self.architectureHead(entityname)
-        ########################
         # declare components
         out = out + self.declareComponents()
-        ########################
         # declare signals
-        incompleteportslist = \
-                self.project.platform.getIncompleteExternalPortsList()
+        platform = self.project.platform
+        incompleteportslist =\
+            platform.getIncompleteExternalPortsList()
         out = out + self.declareSignals(self.project.instances,
                                         incompleteportslist)
-        ########################
         # begin
         out = out + self.architectureBegin()
-        ########################
         # Connect forces
         out = out + self.connectForces(portlist)
-        ########################
         # declare Instance
         out = out + self.declareInstance()
-        #######################
         # instance connection
         out = out + self.connectInstance(incompleteportslist)
-        ########################
         # architecture foot
         out = out + self.architectureFoot(entityname)
 
-        #######################
         # save file
         try:
             file = open(SETTINGS.projectpath + SYNTHESISPATH +
@@ -101,5 +92,3 @@ class TopGen:
         file.write(out)
         file.close()
         return out
-
-
