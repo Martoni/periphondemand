@@ -63,17 +63,19 @@ class Synthesis(WrapperXml):
         self.saveXml(SETTINGS.projectpath +
                      "/synthesis/synthesis" + XMLEXT)
 
-    def getSynthesisToolName(self):
+    @property
+    def synthesis_toolname(self):
         """ return synthesis tool name """
         return self.getAttributeValue(key="name", subnodename="tool")
 
-    def getSynthesisToolCommand(self):
+    @property
+    def synthesis_toolcommandname(self):
         """ Test if command exist and return it """
         try:
             # try if .podrc exists
-            return SETTINGS.getSynthesisToolCommand(
-                self.getSynthesisToolName())
-        except:
+            return SETTINGS.get_synthesis_tool_command(
+                self.synthesis_toolname)
+        except PodError:
             # else use toolchain default
             command_name = self.getAttributeValue(key="command",
                                                   subnodename="tool")
@@ -85,7 +87,7 @@ class Synthesis(WrapperXml):
                                command_name + " doesn't exist in PATH")
             return command_name
 
-    def generateProject(self):
+    def generate_project(self):
         """ copy all hdl file in synthesis project directory
         """
         for component in self.parent.instances:
@@ -113,7 +115,7 @@ class Synthesis(WrapperXml):
                         print DISPLAY
                         raise PodError(str(error), 0)
 
-    def generateTCL(self, filename=None):
+    def generate_tcl(self, filename=None):
         """ generate tcl script to drive synthesis tool """
         try:
             plugin = __import__(self.getName())
@@ -123,11 +125,22 @@ class Synthesis(WrapperXml):
             raise PodError(str(error), 0)
         sys.path.append(SETTINGS.path + TOOLCHAINPATH +
                         SYNTHESISPATH + "/" + self.getName())
-        filename = plugin.generateTCL(self)
-        self.setTCLScriptName(str(filename))
+        filename = plugin.generate_tcl(self)
+        self.tcl_scriptname = str(filename)
         return None
 
-    def setTCLScriptName(self, filename):
+    @property
+    def tcl_scriptname(self):
+        """ get the tcl script filename """
+        try:
+            return self.getAttributeValue(key="filename",
+                                          subnodename="script")
+        except PodError:
+            raise PodError("TCL script must be generated before")
+
+    @tcl_scriptname.setter
+    def tcl_scriptname(self, filename):
+        """ set the tcl script filename """
         if self.getNode("script") is None:
             self.addNode(nodename="script",
                          attributename="filename",
@@ -137,41 +150,34 @@ class Synthesis(WrapperXml):
                               value=filename,
                               subname="script")
 
-    def getTCLScriptName(self):
-        try:
-            return self.getAttributeValue(key="filename",
-                                          subnodename="script")
-        except PodError, error:
-            raise PodError("TCL script must be generated before")
-
-    def generatePinout(self, filename):
+    def generate_pinout(self, filename):
         """ Generate pinout constraints file """
         try:
             plugin = __import__(self.getName())
         except ImportError, error:
             sy.delFile(SETTINGS.path + TOOLCHAINPATH +
                        SYNTHESISPATH + "/" + self.getName())
-            raise PodError(str(e), 0)
+            raise PodError(str(error))
         sy.delFile(SETTINGS.path + TOOLCHAINPATH +
                    SYNTHESISPATH + "/" + self.getName())
 
-        plugin.generatepinout(self, filename)
+        plugin.generate_pinout(self, filename)
         return None
 
-    def generateBitStream(self):
+    def generate_bitstream(self):
         """ Generate the bitstream for fpga configuration """
         try:
             plugin = __import__(self.getName())
-        except ImportError, e:
-            raise PodError(str(e), 0)
-        tclscript_name = self.getTCLScriptName()
+        except ImportError, error:
+            raise PodError(str(error), 0)
         scriptpath = SETTINGS.projectpath +\
             SYNTHESISPATH +\
-            "/" + tclscript_name
+            "/" + self.tcl_scriptname
         try:
-            plugin.generateBitStream(self,
-                                     self.getSynthesisToolCommand(),
-                                     scriptpath)
-        except AttributeError:
+            plugin.generate_bitstream(self,
+                                      self.synthesis_toolcommandname,
+                                      scriptpath)
+        except PodError, error:
             raise PodError("Can't generate bitstream for this synthesis" +
-                           " toolchain, not implemented")
+                           " toolchain:" + self.synthesis_toolname +
+                           ", not implemented. (" + str(error) + ")")

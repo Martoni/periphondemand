@@ -103,8 +103,8 @@ class Settings(object):
         else:
             self.script = 0
 
-    def getSynthesisToolCommand(self, synthesisName):
-        return self.configfile.getSynthesisToolCommand(synthesisName)
+    def get_synthesis_tool_command(self, synthesisName):
+        return self.configfile.get_synthesis_tool_command(synthesisName)
 
     components_dir = property(lambda self: self.getDir("components"))
     board_dir = property(lambda self: self.getDir("boards"))

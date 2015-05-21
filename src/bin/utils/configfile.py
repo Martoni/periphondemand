@@ -105,13 +105,13 @@ class ConfigFile(WrapperXml):
         """ Return a list of platformlib path """
         return self.personal_platformlib_list
 
-    def getSynthesisToolCommand(self, synthesisName):
+    def get_synthesis_tool_command(self, synthesisName):
         """ Return the path to synthesis command """
         from periphondemand.bin.utils import wrappersystem as sy
-        for i in self.getNode("tools").getNodeList("tool"):
-            if (i.getAttributeValue(key="name") == synthesisName):
-                command_name = i.getAttributeValue(key="command")
-                command_path = i.getAttributeValue(key="default_path")
+        for anode in self.getNode("tools").getNodeList("tool"):
+            if (anode.getAttributeValue(key="name") == synthesisName):
+                command_name = anode.getAttributeValue(key="command")
+                command_path = anode.getAttributeValue(key="default_path")
                 command_name = command_path + "/" + command_name
                 break
         if not sy.commandExist(command_name):

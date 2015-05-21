@@ -51,7 +51,7 @@ class Simulation(WrapperXml):
             raise PodError("No simulation project found", 3)
         WrapperXml.__init__(self, file=filepath)
 
-    def generateProject(self):
+    def generate_project(self):
         DISPLAY.msg("TODO")
         pass
 

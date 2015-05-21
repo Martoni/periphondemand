@@ -88,7 +88,7 @@ def generatelibraryconstraints(self):
     return out
 
 
-def generatepinout(self, filename=None):
+def generate_pinout(self, filename=None):
     """ Generate the constraint file .ucf for xilinx fpga
     """
     if filename is None:
@@ -213,7 +213,7 @@ def generatepinout(self, filename=None):
     return filename
 
 
-def generateTCL(self, filename=None):
+def generate_tcl(self, filename=None):
     """ generate tcl script for ise
     """
     if filename is None:
@@ -284,7 +284,7 @@ def generateTCL(self, filename=None):
     return SETTINGS.active_project.getName() + TCLEXT
 
 
-def generateBitStream(self, commandname, scriptname):
+def generate_bitstream(self, commandname, scriptname):
     """ generate the bitstream """
     pwd = sy.pwd()
     sy.deleteAll(SETTINGS.projectpath + OBJSPATH)

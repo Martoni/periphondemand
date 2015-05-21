@@ -340,7 +340,7 @@ class TopVHDL(TopGen):
                         port.getName() + " <= '1';\n"
         return out + "\n"
 
-    def connect_in_port(self, component, port):
+    def connect_in_port(self, component, interface, port):
         """ Connect all pins port"""
         platform = self.project.platform
         platformname = platform.getInstanceName()
@@ -446,7 +446,7 @@ class TopVHDL(TopGen):
                 out = out + ONETAB * 2 + "-- " + interface.getName() + "\n"
                 for port in interface.ports:
                     if port.getDir() == "in":
-                        out += self.connect_in_port(component, port)
+                        out += self.connect_in_port(component, interface, port)
         return out
 
     @classmethod

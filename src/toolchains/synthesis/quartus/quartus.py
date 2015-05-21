@@ -79,7 +79,7 @@ def generatepinoutContent(self):
     return out
 
 
-def generatepinout(self, filename=None):
+def generate_pinout(self, filename=None):
     """ Generate the constraint file in tcl for quartus fpga
     """
     if filename is None:
@@ -101,7 +101,7 @@ def generatepinout(self, filename=None):
     return filename
 
 
-def generateTCL(self, filename=None):
+def generate_tcl(self, filename=None):
     """ generate tcl script for quartus
     """
     if filename is None:
@@ -156,7 +156,7 @@ def generateTCL(self, filename=None):
     return settings.active_project.getName() + TCLEXT
 
 
-def generateBitStream(self, commandname, scriptname):
+def generate_bitstream(self, commandname, scriptname):
     """ generate the bitstream """
     pwd = sy.pwd()
     sy.deleteAll(settings.projectpath + OBJSPATH)

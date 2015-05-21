@@ -120,11 +120,11 @@ generate the project for synthesis tool
 
         # generate project
         try:
-            SETTINGS.active_project.synthesis.generateProject()
+            SETTINGS.active_project.synthesis.generate_project()
             print(str(DISPLAY))
-            SETTINGS.active_project.synthesis.generatePinout(None)
+            SETTINGS.active_project.synthesis.generate_pinout(None)
             print(str(DISPLAY))
-            SETTINGS.active_project.synthesis.generateTCL(None)
+            SETTINGS.active_project.synthesis.generate_tcl(None)
         except PodError, error:
             print(str(error))
             return
@@ -147,7 +147,7 @@ ise
         else:
             filename = None
         try:
-            SETTINGS.active_project.synthesis.generateTCL(filename)
+            SETTINGS.active_project.synthesis.generate_tcl(filename)
         except PodError, error:
             print(str(error))
             return
@@ -168,7 +168,7 @@ ise
         else:
             filename = None
         try:
-            SETTINGS.active_project.synthesis.generatePinout(filename)
+            SETTINGS.active_project.synthesis.generate_pinout(filename)
         except PodError, error:
             print(str(error))
             return
@@ -183,7 +183,7 @@ generate the bitstream for fpga configuration
             print PodError("Select toolchain before")
             return
         try:
-            SETTINGS.active_project.synthesis.generateBitStream()
+            SETTINGS.active_project.synthesis.generate_bitstream()
         except PodError, error:
             print(str(error))
             return
