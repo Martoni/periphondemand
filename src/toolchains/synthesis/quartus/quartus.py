@@ -58,22 +58,22 @@ def generatepinoutContent(self):
     out = ""
     for interface in self.project.platform.getInterfacesList():
         for port in interface.ports:
-            if port.forceDefined():
+            if port.force_defined():
                 out = out + ONETAB + 'set_location_assignment ' + \
-                    str(port.getPosition()) + \
+                    str(port.position) + \
                     ' -to force_' + str(port.getName()) + ";\n"
             else:
-                for pin in port.getPinsList():
+                for pin in port.pins:
                     if pin.getConnections() != []:
                         connect = pin.getConnections()
                         out = out + ONETAB + 'set_location_assignment ' + \
-                            port.getPosition() + " -to " + \
+                            port.position + " -to " + \
                             connect[0]["instance_dest"] + "_" + \
                             connect[0]["port_dest"]
                         if self.project.get_instance(
                             connect[0]["instance_dest"]).getInterface(
                                 connect[0]["interface_dest"]).getPort(
-                                    connect[0]["port_dest"]).getSize() != "1":
+                                    connect[0]["port_dest"]).size != "1":
                             out = out + "[" + connect[0]["pin_dest"] + "]"
                         out = out + ';\n'
     return out

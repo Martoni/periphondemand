@@ -26,9 +26,7 @@
 """ Manage port """
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.poderror import PodError
-
 from periphondemand.bin.core.pin import Pin
 
 
@@ -47,9 +45,10 @@ class Port(WrapperXml):
         self.parent = parent
 
         if "name" in keys:
-            self.__initname(keys["name"])
+            WrapperXml.__init__(self, nodename="port")
+            self.setAttribute("name", keys["name"])
         elif "node" in keys:
-            self.__initnode(keys["node"])
+            WrapperXml.__init__(self, node=keys["node"])
         else:
             raise PodError("Keys not known in Port ", 0)
 
@@ -58,72 +57,24 @@ class Port(WrapperXml):
             pin = Pin(self, node=element)
             self.pinlist.append(pin)
 
-    def __initname(self, name):
-        WrapperXml.__init__(self, nodename="port")
-        self.setAttribute("name", name)
-
-    def __initnode(self, node):
-        WrapperXml.__init__(self, node=node)
-
-    def getExtendedName(self):
+    @property
+    def extended_name(self):
         """ Get name in this format:
             instancename_portname
         """
         instancename = self.parent.parent.getInstanceName()
-        interfacename = self.parent.getName()
         return instancename + "_" + self.getName()
 
-    def getPinsList(self):
+    @property
+    def pins(self):
+        """ return the pins port list """
         return self.pinlist
 
-    def addPin(self, pin):
-        """ Connect an object Pin in Port
-            attributes:
-                pin -- object Pin()
-        """
-        if pin.isAll() and len(self.pinlist) == 1:
-            if self.pinlist[0].isAll():
-                return self.pinlist[0]
-        else:
-            for pintmp in self.pinlist:
-                if pintmp.getNum() == pin.getNum():
-                    return pintmp
-        self.pinlist.append(pin)
-        self.addNode(node=pin)
-        return pin
-
-    def delPin(self, pin_num):
-        """ delete a pin
-        """
-        pin = self.getPin(pin_num)
-        if pin.getConnections() != []:
-            raise PodError("Pin " +
-                           str(self.parent.parent.getInstanceName()) +
-                           "." +
-                           str(self.parent.getName()) +
-                           "." +
-                           str(self.getName()) +
-                           "." +
-                           str(pin_num) +
-                           " can't be deleted, connections exists")
-        self.pinlist.remove(pin)
-        self.delNode(pin)
-
-    def getSize(self):
-        """ return port size
-        """
-        size = WrapperXml.getSize(self)
-        if size.isdigit():
-            return size
-        else:
-            return self.parent.parent.getGeneric(str(size)).getValue()
-
-    def getPin(self, num):
-        """ return pin node
-        """
-        if int(num) >= self.getSize():
+    def get_pin(self, num):
+        """ return pin node """
+        if int(num) >= self.size:
             raise PodError("Pin number " + str(num) + " not in port size")
-        for pin in self.getPinsList():
+        for pin in self.pins:
             if pin.getNum() == str(num):
                 return pin
         pin = Pin(self, num=str(num))
@@ -131,17 +82,31 @@ class Port(WrapperXml):
         self.addNode(node=pin)
         return pin
 
-    def getType(self):
+    @property
+    def porttype(self):
+        """ get type of port """
         return self.getAttributeValue("type")
 
-    def setType(self, the_type):
-        # TODO: check if type is known
+    @porttype.setter
+    def porttype(self, the_type):
+        """ set type of port """
         self.setAttribute("type", the_type)
 
-    def getDir(self):
+    @property
+    def direction(self):
+        """ get port direction """
         return self.getAttributeValue("dir")
 
-    def getUnconnectedValue(self):
+    @direction.setter
+    def direction(self, direction):
+        """ set port direction """
+        if not direction.lower() in ["out", "in", "inout"]:
+            raise PodError("Direction wrong : " + str(direction))
+        self.setAttribute("dir", direction)
+
+    @property
+    def unconnected_value(self):
+        """ Get unconnected value """
         try:
             ucvalue = self.getAttributeValue("unconnected_value")
             if ucvalue is None:
@@ -151,48 +116,58 @@ class Port(WrapperXml):
         except PodError:
             return "0"
 
-    def set_unconnected_value(self, value):
-        if self.getDir() != "in":
-            raise PodError("Unconnected Value can be set only on 'in' port", 0)
+    @unconnected_value.setter
+    def unconnected_value(self, value):
+        """ Set unconnected value """
+        if self.direction != "in":
+            raise PodError("Unconnected Value can be set only on 'in' port")
         if str(value).isdigit():
             if int(value) in [0, 1]:
                 self.setAttribute("unconnected_value", str(value))
             else:
-                raise PodError("Wrong value : " + str(value), 0)
+                raise PodError("Wrong value : " + str(value))
         else:
             raise PodError("Wrong value : " + str(value), 0)
 
-    def setDir(self, direction):
-        if not direction.lower() in ["out", "in", "inout"]:
-            raise PodError("Direction wrong : " + str(direction))
-        self.setAttribute("dir", direction)
-
-    def getPortOption(self):
+    @property
+    def port_option(self):
+        """ get port option """
         return self.getAttributeValue("port_option")
 
-    def setPortOption(self, port_option):
+    @port_option.setter
+    def port_option(self, port_option):
+        """ set port option """
         self.setAttribute("port_option", port_option)
 
-    def getStandard(self):
+    @property
+    def standard(self):
+        """ Set standard value """
         return self.getAttributeValue("standard")
 
-    def setStandard(self, standard):
+    @standard.setter
+    def standard(self, standard):
+        """ Get standard value """
         self.setAttribute("standard", standard)
 
-    def setDrive(self, drive):
-        self.setAttribute("drive", drive)
-
-    def getDrive(self):
+    @property
+    def drive(self):
+        """ get drive """
         return self.getAttributeValue("drive")
+
+    @drive.setter
+    def drive(self, drive):
+        """ Set drive """
+        self.setAttribute("drive", drive)
 
     @property
     def force(self):
+        """ Get a force platform io value """
         return self.getAttributeValue("force")
 
     @force.setter
     def force(self, force):
-        """ Setting force for this port """
-        listofpins = self.getPinsList()
+        """ Setting force platform io for this port """
+        listofpins = self.pins
         if len(listofpins) > 1:
             raise PodError("Force multiple pin port is not implemented")
         if len(listofpins) == 1:
@@ -204,7 +179,26 @@ class Port(WrapperXml):
         else:
             raise PodError("force value must be in " + str(forcevalues))
 
-    def forceDefined(self):
+    @property
+    def position(self):
+        """ Get position """
+        return self.getAttributeValue("position")
+
+    @position.setter
+    def position(self, position):
+        """ Set position """
+        self.setAttribute("position", position)
+
+    @property
+    def frequency(self):
+        """ Get a frequency for this port (if it's clock port) """
+        freq = self.getAttributeValue("freq")
+        if freq is None:
+            raise PodError("No frequency attribute for " + self.getName())
+        return freq
+
+    def force_defined(self):
+        """ Return True if a force platform io is defined """
         try:
             force = self.force
         except PodError:
@@ -214,19 +208,8 @@ class Port(WrapperXml):
             return True
         return False
 
-    def getPosition(self):
-        return self.getAttributeValue("position")
-
-    def setPosition(self, position):
-        self.setAttribute("position", position)
-
-    def getFreq(self):
-        freq = self.getAttributeValue("freq")
-        if freq is None:
-            raise PodError("No frequency attribute for " + self.getName())
-        return freq
-
     def isvariable(self):
+        """ Is size of this port is variable ? """
         try:
             if self.getAttributeValue("variable_size") == "1":
                 return 1
@@ -235,14 +218,14 @@ class Port(WrapperXml):
         except AttributeError:
             return 0
 
-    def checkVariablePort(self):
+    def check_variable_port(self):
         """ check if variable port is correctly connected.
             Connections on variable port must begin at pin 0
             and must be followed.
             ex: 0, 1, 2, 3, …
         """
         if self.isvariable():
-            listofpin = self.getPinsList()
+            listofpin = self.pins
             if listofpin == []:
                 return True
             tab = []
@@ -256,44 +239,45 @@ class Port(WrapperXml):
         else:
             return True
 
-    def getRealSize(self):
+    @property
+    def real_size(self):
         """ if port is variable, return the size set by generic"""
         if self.isvariable():
-            return str(int(self.getMaxPinNum()) + 1)
+            return str(int(self.max_pin_num) + 1)
         else:
-            return str(self.getSize())
+            return str(self.size)
 
-    def getMaxPinNum(self):
-        """ return the max num pin value
-        """
+    @property
+    def max_pin_num(self):
+        """ return the max num pin value """
         num = "0"
-        listofpin = self.getPinsList()
+        listofpin = self.pins
         if listofpin == []:
-            return str(int(self.getSize()) - 1)
+            return str(int(self.size) - 1)
         for pin in listofpin:
             if pin.getNum() is None:
-                return str(int(self.getSize()) - 1)
+                return str(int(self.size) - 1)
             if int(pin.getNum()) > int(num):
                 num = pin.getNum()
         return num
 
-    def getMinPinNum(self):
-        """ return the min pin value
-        """
-        num = self.getSize()
-        listofpin = self.getPinsList()
+    @property
+    def min_pin_num(self):
+        """ return the min pin value """
+        num = self.size
+        listofpin = self.pins
         if listofpin == []:
             return "0"
-        for pin in self.getPinsList():
+        for pin in self.pins:
             if pin.getNum() is None:
                 return "0"
             if int(pin.getNum()) < int(num):
                 num = pin.getNum()
         return num
 
-    def checkConnection(self, portdest):
+    def check_connection(self, portdest):
         """ Check the compatibility between the two pin with following rules:
-        src\dest|  out in  inout lock clock
+        src dest|  out in  inout lock clock
         ------------------------------------
         out     |   x   v    v     x    x
         in      |   v   v    v     x    v
@@ -308,57 +292,58 @@ class Port(WrapperXml):
                     (1, 1, 1, 0, 0),
                     (0, 1, 0, 0, 0))
 
-        if checktab[listdir.index(self.getDir())][
-                listdir.index(portdest.getDir())] == 0:
+        if checktab[listdir.index(self.direction)][
+                listdir.index(portdest.direction)] == 0:
             raise PodError("incompatible pin : " +
-                           self.getDir() + " => " + portdest.getDir(), 0)
+                           self.direction + " => " + portdest.direction, 0)
 
     def connect_port(self, port_dest):
         """ Connect all pins of a port on all pin on same size port dest
         """
-        size = self.getSize()
-        if size != port_dest.getSize():
+        size = self.size
+        if size != port_dest.size:
             raise PodError("The two ports have differents size")
-        if self.getPinsList() != []:
+        if self.pins != []:
             raise PodError("Port connection " +
                            self.getName() + " is not void")
-        if port_dest.getPinsList() != []:
+        if port_dest.pins != []:
             raise PodError("Port connection " +
                            port_dest.getName() + " is not void")
 
-        self.connectAllPin(port_dest)
+        self.connect_all_pins(port_dest)
 
-    def connectAllPin(self, port_dest):
+    def connect_all_pins(self, port_dest):
         """ Connect all port pin to a destination instance
         """
-        for pin_num in range(int(self.getSize())):
-            pin_source = self.getPin(pin_num)
-            pin_dest = port_dest.getPin(pin_num)
+        for pin_num in range(int(self.size)):
+            pin_source = self.get_pin(pin_num)
+            pin_dest = port_dest.get_pin(pin_num)
             pin_source.connectPin(pin_dest)
 
-    def autoconnectPin(self):
+    def autoconnect_pins(self):
         """ If there are platform defaut connection
             in this port, autoconnect it
         """
-        for pin in self.getPinsList():
-            pin.autoconnectPin()
+        for pin in self.pins:
+            pin.autoconnect_pin()
 
-    def getDestinationPort(self):
+    @property
+    def dest_port(self):
         """ get destination port connected to this port
             if only one port connected
         """
-        port_list = self.getDestinationPortList()
+        port_list = self.dest_ports
         if len(port_list) == 1:
             return port_list[0]
         else:
             return None
 
-    def getDestinationPortList(self):
+    @property
+    def dest_ports(self):
         """ Get a list of destination ports
         """
-        port_dest = None
         dest_port_list = []
-        for pin in self.getPinsList():
+        for pin in self.pins:
             port_connections =\
                 [pin.parent for pin in pin.getConnectedPinList()]
             for port_connect in port_connections:
@@ -367,22 +352,24 @@ class Port(WrapperXml):
 
         return dest_port_list
 
-    def getPortsWithSameConnection(self):
+    @property
+    def ports_with_same_connection(self):
         """ Return a list of ports that are connected on sames pin.
             only works with port on externals I/O (platform). If only this
             one port is connected to one pin, self port is returned.
         """
-        pin_dest_list = self.getPin(0).getConnectedPinList()
+        pin_dest_list = self.get_pin(0).getConnectedPinList()
         if (len(pin_dest_list) == 0):
             return []
         first_pin = pin_dest_list[0]
         return [pin.parent for pin in first_pin.getConnectedPinList()]
 
-    def getMSBConnected(self):
-        """Return the MSB that is connected to an another pin
+    @property
+    def connected_msb(self):
+        """Return the MSB num that is connected to an another pin
         """
         num = -1
-        for pin in self.getPinsList():
+        for pin in self.pins:
             if pin.isConnected():
                 if int(pin.getNum()) > num:
                     num = int(pin.getNum())
@@ -392,16 +379,16 @@ class Port(WrapperXml):
         """ Return False if at less one pin is connected
             on another pin
         """
-        for pin in self.getPinsList():
+        for pin in self.pins:
             if pin.isConnected():
                 return False
         return True
 
-    def isCompletelyConnected(self):
+    def is_fully_connected(self):
         """ return True if all pin has connection"""
-        if len(self.getPinsList()) != int(self.getSize()):
+        if len(self.pins) != int(self.size):
             return False
-        for pin in self.getPinsList():
+        for pin in self.pins:
             if not pin.isConnected():
                 return False
         return True

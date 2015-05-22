@@ -94,7 +94,8 @@ class Generic(WrapperXml):
             raise PodError("Public value " + str(public) + " wrong")
         self.setAttribute("public", public)
 
-    def getType(self):
+    @property
+    def generictype(self):
         the_type = self.getAttributeValue("type")
         if the_type is None:
             raise PodError("Generic " + self.getName() +
@@ -102,8 +103,9 @@ class Generic(WrapperXml):
         else:
             return the_type
 
-    def setType(self, type):
-        self.setAttribute("type", type)
+    @generictype.setter
+    def generictype(self, atype):
+        self.setAttribute("type", atype)
 
     def getMatch(self):
         try:
@@ -126,7 +128,7 @@ class Generic(WrapperXml):
                 # return the number of connected pin
                 return str(int(
                     component.getInterface(
-                        target[0]).getPort(target[1]).getMaxPinNum()) + 1)
+                        target[0]).getPort(target[1]).max_pin_num) + 1)
             else:
                 raise PodError("Operator unknown " + self.getOp(), 1)
 

@@ -78,7 +78,7 @@ class Platform(Component):
                            ") and multiple FPGA project " +
                            " is not implemented yet.")
         for port in interfaces_list[0].ports:
-            if port.forceDefined():
+            if port.force_defined():
                 forcelist.append(port)
         return forcelist
 
@@ -126,10 +126,10 @@ class Platform(Component):
         for interface in self.getInterfacesList():
             for port in interface.ports:
                 # add forced port in list
-                if port.forceDefined():
+                if port.force_defined():
                     portlist.append(port)
                 else:
-                    for port in port.getDestinationPortList():
+                    for port in port.dest_ports:
                         if port not in portlist:
                             portlist.append(port)
         return portlist
@@ -140,8 +140,8 @@ class Platform(Component):
         """
         incomplete_port_list = []
         for port in self.getConnectPortsList():
-            if port.getDir() != "out":
-                if not port.isCompletelyConnected():
+            if port.direction != "out":
+                if not port.is_fully_connected():
                     incomplete_port_list.append(port)
         return incomplete_port_list
 

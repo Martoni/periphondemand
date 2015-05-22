@@ -399,7 +399,7 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "pinnum":
             return ["" + instancename + "." + interfacename +
                     "." + portname + "." + str(i)
-                    for i in range(int(port.getSize()))]
+                    for i in range(int(port.size))]
         elif subargt == "libraryname":
             arglist = SETTINGS.active_project.library.listLibraries()
             return arglist

@@ -215,7 +215,7 @@ set IO standard value
         io_name = arg[0]
         standard_value = arg[1]
         try:
-            SETTINGS.active_project.get_io(io_name).setStandard(standard_value)
+            SETTINGS.active_project.get_io(io_name).standard = standard_value
         except PodError, error:
             print(str(DISPLAY))
             print(str(error))
@@ -246,7 +246,7 @@ get IO standard value
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print SETTINGS.active_project.get_io(io_name).getStandard()
+            print SETTINGS.active_project.get_io(io_name).standard
         except PodError, e:
             print DISPLAY
             print e
@@ -280,7 +280,7 @@ set IO standard value
         port_option_value = arg[1]
         try:
             SETTINGS.active_project.get_io(
-                io_name).setPortOption(port_option_value)
+                io_name).port_option = port_option_value
         except PodError, error:
             print(str(DISPLAY))
             print(str(error))
@@ -311,7 +311,7 @@ get IO Port option value
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print SETTINGS.active_project.get_io(io_name).getPortOption()
+            print SETTINGS.active_project.get_io(io_name).port_option
         except PodError, e:
             print DISPLAY
             print e
@@ -344,7 +344,7 @@ set IO drive value
         io_name = arg[0]
         drive_value = arg[1]
         try:
-            SETTINGS.active_project.get_io(io_name).setDrive(drive_value)
+            SETTINGS.active_project.get_io(io_name).drive = drive_value
         except PodError, error:
             print(str(DISPLAY))
             print(str(error))
@@ -375,7 +375,7 @@ get IO drive value
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print SETTINGS.active_project.get_io(io_name).getDrive()
+            print SETTINGS.active_project.get_io(io_name).drive
         except PodError, error:
             print(str(DISPLAY))
             print(str(error))

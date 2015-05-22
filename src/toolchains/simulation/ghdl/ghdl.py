@@ -116,10 +116,10 @@ def signals(portlist):
         instancename = port.parent.parent.getInstanceName()
         out = out + ONETAB + "signal  " +\
             instancename + "_" + portname + " : "
-        if port.getMSBConnected() < 1:
+        if port.connected_msb < 1:
             out = out + " std_logic;"
         else:
-            out = out + " std_logic_vector(" + str(port.getMSBConnected()) +\
+            out = out + " std_logic_vector(" + str(port.connected_msb) +\
                 " downto 0);"
         out = out + "\n"
     return out
@@ -138,12 +138,12 @@ def declareTop(portlist):
         instancename = port.parent.parent.getInstanceName()
         out = out + ONETAB * 2 +\
             instancename + "_" + portname + \
-            " : " + port.getDir()
-        if port.getMSBConnected() < 1:
+            " : " + port.direction
+        if port.connected_msb < 1:
             out = out + " std_logic;"
         else:
             out = out + " std_logic_vector(" +\
-                str(port.getMSBConnected()) + " downto 0);"
+                str(port.connected_msb) + " downto 0);"
         out = out + "\n"
     # Suppress the #!@ last semicolon
     out = out[:-2]
@@ -225,7 +225,7 @@ def generateTemplate():
     out = out + include()
     out = out + entity()
     out = out + architecturehead()
-    freq = clockport.getDestinationPort().getFreq()
+    freq = clockport.dest_port.frequency
     clockhalfperiod = (1000 / float(freq)) / 2
     out = out + constant(clockhalfperiod)
     portlist = SETTINGS.active_project.platform.getConnectPortsList()

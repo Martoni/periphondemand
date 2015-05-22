@@ -146,7 +146,7 @@ class Interface(WrapperXml):
         try:
             return int(
                 self.getPortByType(
-                    self.bus.getSignalName("slave", "address")).getSize())
+                    self.bus.getSignalName("slave", "address")).size)
         except PodError:
             return 0
 
@@ -204,7 +204,7 @@ class Interface(WrapperXml):
     def getPortByType(self, porttypename):
         """ Get port using port type name as argument"""
         for port in self.portslist:
-            if port.getType() == porttypename:
+            if port.porttype == porttypename:
                 return port
         raise PodError("No port with type " + str(porttypename), 1)
 
@@ -266,35 +266,35 @@ class Interface(WrapperXml):
                            "." + interface_dest.getName() +
                            "are not the same number of ports")
         for port in self.ports:
-            if port.getType() is None:
+            if port.porttype is None:
                 raise PodError(self.parent.getName() + "." +
                                self.getName() + "." +
                                port.getName() + " has no type")
             try:
-                port_dst = interface_dest.getPortByType(port.getType())
+                port_dst = interface_dest.getPortByType(port.porttype)
             except PodError, e:
                 raise PodError(interface_dest.parent.getName() + "." +
                                interface_dest.getName() + " have no " +
-                               port.getType() + " port")
-            if port_dst.getDir() == port.getDir():
+                               port.porttype + " port")
+            if port_dst.direction == port.direction:
                 raise PodError("Ports " + self.parent.getName() + "." +
                                self.getName() + "." + port.getName() +
                                " and " +
                                interface_dest.parent.getName() + "." +
                                interface_dest.getName() + "." +
                                port_dst.getName() + " are the same direction")
-            if port_dst.getDir() == "in" and port_dst.isVoid() is not True:
+            if port_dst.direction == "in" and port_dst.isVoid() is not True:
                 raise PodError("Ports " + interface_dest.parent.getName() +
                                "." + interface_dest.getName() + "." +
                                port_dst.getName() + " is already connected")
-            if port.getDir() == "in" and port.isVoid() is not True:
+            if port.direction == "in" and port.isVoid() is not True:
                 raise PodError("Ports " + self.parent.getName() +
                                "." + self.getName() +
                                "." + port.getName() +
                                " is already connected")
 
         for port in self.ports:
-            port_dst = interface_dest.getPortByType(port.getType())
+            port_dst = interface_dest.getPortByType(port.porttype)
             port.connect_port(port_dst)
 
     def connect_bus(self, instanceslave, interfaceslavename):
@@ -351,10 +351,10 @@ class Interface(WrapperXml):
         except PodError:
             return None
 
-    def autoconnectPin(self):
+    def autoconnect_pins(self):
         """ autoconnect pin """
         for port in self.ports:
-            port.autoconnectPin()
+            port.autoconnect_pins()
 
     def connectClkDomain(self, instancedestname, interfacedestname):
         """ Connect clock domain

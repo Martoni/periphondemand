@@ -590,10 +590,10 @@ Connect pin between instances
                 SETTINGS.active_project.get_instance(
                     source[0]).getInterface(
                         source[1]).getPort(
-                            source[2]).getPin(source[3]),
+                            source[2]).get_pin(source[3]),
                 SETTINGS.active_project.get_instance(
                     dest[0]).getInterface(
-                        dest[1]).getPort(dest[2]).getPin(dest[3]))
+                        dest[1]).getPort(dest[2]).get_pin(dest[3]))
         except PodError, error:
             print(str(DISPLAY))
             print(str(error))
@@ -1123,8 +1123,8 @@ Print instance information
 
             for port in interface.ports:
                 print(" " * 5 + "%-15s" % port.getName() +
-                      " s" + port.getSize())
-                for pin in port.getPinsList():
+                      " s" + port.size)
+                for pin in port.pins:
                     print(" " * 8 + "pin"),
                     if pin.getNum() is not None:
                         print(pin.getNum() + ":"),

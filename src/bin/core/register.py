@@ -74,11 +74,11 @@ class Register(WrapperXml):
         """
         baseaddr = int(self.parent.getBase(), 16)
         offset = int(self.getOffset(), 16)
-        if int(self.getSize()) == 8:
+        if int(self.size) == 8:
             return "%02x" % (baseaddr + offset)
-        elif int(self.getSize()) == 16:
+        elif int(self.size) == 16:
             return "%04x" % (baseaddr + offset * 2)
-        elif int(self.getSize()) == 32:
+        elif int(self.size) == 32:
             return "%08x" % (baseaddr + offset * 4)
         else:
             raise PodError("Register size not supported for reg " +

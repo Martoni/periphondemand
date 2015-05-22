@@ -272,7 +272,7 @@ class Project(WrapperXml):
                            ") and multiple FPGA project " +
                            "is not implemented yet.")
         port = interfaces_list[0].getPort(portname)
-        if port.getDir() == "in":
+        if port.direction == "in":
             raise PodError("The value of this port can't be set " +
                            "because of it's direction (in)")
         port.force = state
@@ -482,9 +482,9 @@ class Project(WrapperXml):
             if not instance.isPlatform():
                 for interface in instance.getInterfacesList():
                     for port in interface.ports:
-                        if (port.getDir() == "in") and \
-                            (port.getSize() == "1") and \
-                                (port.getType() == "CLK"):
+                        if (port.direction == "in") and \
+                            (port.size == "1") and \
+                                (port.porttype == "CLK"):
                             for pin in port.getPinsList():
                                 if len(pin.getConnections()) == 1:
                                     connection = pin.getConnections()[0]
@@ -613,12 +613,12 @@ class Project(WrapperXml):
             instance_source.getInterface(sourcedict["interface"])
         port_source = interface_source.getPort(sourcedict["port"])
         if sourcedict["num"] is None:
-            if(port_source.getSize()) == 1:
+            if(port_source.size) == 1:
                 sourcedict["num"] = "0"
             else:
                 raise PodError("Source pin number not given, " +
                                "and port size > 1")
-        pin_source = port_source.getPin(sourcedict["num"])
+        pin_source = port_source.get_pin(sourcedict["num"])
 
         # test if destination given
         if (destdict["instance"] is not None) and\
@@ -628,7 +628,7 @@ class Project(WrapperXml):
             instance_dest = self.get_instance(destdict["instance"])
             interface_dest = instance_dest.getInterface(destdict["interface"])
             port_dest = interface_dest.getPort(destdict["port"])
-            pin_dest = port_dest.getPin(destdict["num"])
+            pin_dest = port_dest.get_pin(destdict["num"])
 
             pin_source.delConnection(pin_dest)
             pin_dest.delConnection(pin_source)
@@ -639,7 +639,7 @@ class Project(WrapperXml):
                 interface_dest =\
                     instance_dest.getInterface(connection["interface_dest"])
                 port_dest = interface_dest.getPort(connection["port_dest"])
-                pin_dest = port_dest.getPin(connection["pin_dest"])
+                pin_dest = port_dest.get_pin(connection["pin_dest"])
 
                 pin_source.delConnection(pin_dest)
                 pin_dest.delConnection(pin_source)
@@ -768,7 +768,7 @@ class Project(WrapperXml):
         ##########################################
         # Check connections on variable ports
         for port in self.variable_ports:
-            if port.checkVariablePort() is False:
+            if port.check_variable_port() is False:
                 raise PodError(
                     "Pin connections on port " +
                     str(port.parent.parent.getInstanceName()) +

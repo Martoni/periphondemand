@@ -103,12 +103,12 @@ class Intercon(Component):
                 newport = Port(bus,
                                name=instance.getInstanceName() +
                                "_" + port.getName())
-                newport.setDir(self.invertDir(port.getDir()))
-                newport.setSize(port.getSize())
+                newport.direction = self.invertDir(port.direction)
+                newport.size = port.size
                 # adding port on bus interface
                 bus.addPort(newport)
                 # connect port new port on instance interface
-                port.connectAllPin(newport)
+                port.connect_all_pins(newport)
 
         bus.setClass("intercon")
         self.setNum("0")

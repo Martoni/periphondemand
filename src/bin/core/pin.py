@@ -102,7 +102,7 @@ class Pin(WrapperXml):
                 interface_dest =\
                     instance_dest.getInterface(connection["interface_dest"])
                 port_dest = interface_dest.getPort(connection["port_dest"])
-                pin_dest = port_dest.getPin(connection["pin_dest"])
+                pin_dest = port_dest.get_pin(connection["pin_dest"])
             except PodError:
                 pass
             self.delConnectionForce(pin_dest)
@@ -141,7 +141,7 @@ class Pin(WrapperXml):
             pinlist.append(project.get_instance(
                 connect["instance_dest"]).getInterface(
                     connect["interface_dest"]).getPort(
-                        connect["port_dest"]).getPin(
+                        connect["port_dest"]).get_pin(
                             connect["pin_dest"]))
         return pinlist
 
@@ -191,15 +191,15 @@ class Pin(WrapperXml):
                   pin_dest.parent.getName() + "." +\
                   pin_dest.getNum()
 
-        if self.parent.forceDefined():
+        if self.parent.force_defined():
             raise PodError(message + " : Port " + str(self.parent.getName()) +
                            " is forced, can't be connected")
-        if pin_dest.parent.forceDefined():
+        if pin_dest.parent.force_defined():
             raise PodError(message +
                            " : Port " + str(pin_dest.parent.getName()) +
                            " is forced, can't be connected")
 
-        if self.parent.getDir() == "in":
+        if self.parent.direction == "in":
             if len(self.getConnections()) != 0:
                 try:
                     pin_dest.delConnection(self)
@@ -242,7 +242,7 @@ class Pin(WrapperXml):
                           "port_dest": str(port_destname)}
         self.addNode(nodename="connect", attributedict=attributes)
 
-    def autoconnectPin(self):
+    def autoconnect_pin(self):
         """ connect all platform connection, if connection is not
             for this platform, delete it.
         """
@@ -254,7 +254,7 @@ class Pin(WrapperXml):
                     pin_dest = project.get_instance(
                         connection["instance_dest"]).getInterface(
                             connection["interface_dest"]).getPort(
-                                connection["port_dest"]).getPin(
+                                connection["port_dest"]).get_pin(
                                     connection["pin_dest"])
                     pindest_list.append(pin_dest)
         self.delAllConnectionsForce()

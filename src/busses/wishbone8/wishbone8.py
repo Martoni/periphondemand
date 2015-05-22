@@ -68,12 +68,12 @@ def entity(intercon):
             interface.getName() + " connection\n"
         for port in interface.ports:
             entity = entity + ONETAB * 2 + "%-40s" % port.getName() +\
-                " : " + "%-5s" % port.getDir()
-            if port.getSize() == "1":
+                " : " + "%-5s" % port.direction
+            if port.size == "1":
                 entity = entity + "std_logic;\n"
             else:
-                entity = entity + "std_logic_vector(" + port.getMaxPinNum() +\
-                    " downto " + port.getMinPinNum() + ");\n"
+                entity = entity + "std_logic_vector(" + port.max_pin_num +\
+                    " downto " + port.min_pin_num + ");\n"
     # Suppress the #!@ last semicolon
     entity = entity[:-2]
     entity = entity + "\n"

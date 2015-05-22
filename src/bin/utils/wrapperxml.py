@@ -241,10 +241,12 @@ class WrapperXml(object):
             desc.text = description
         return description
 
-    def getSize(self):
+    @property
+    def size(self):
         return self.getAttributeValue("size")
 
-    def setSize(self, size):
+    @size.setter
+    def size(self, size):
         self.setAttribute("size", str(size))
 
     def getName(self):

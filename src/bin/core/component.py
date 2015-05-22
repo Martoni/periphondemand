@@ -117,7 +117,7 @@ class Component(WrapperXml):
         # load component
         self.loadInstance(instancename)
         # Connect platform connection
-        self.autoconnectPin()
+        self.autoconnect_pins()
 
     def loadInstance(self, instancename):
         """ Load an instance from project directory
@@ -163,11 +163,11 @@ class Component(WrapperXml):
         """ Get list of constraints """
         return self.constraintslist
 
-    def autoconnectPin(self):
+    def autoconnect_pins(self):
         """ Auto connect platform default pins
         """
         for interface in self.getInterfacesList():
-            interface.autoconnectPin()
+            interface.autoconnect_pins()
 
     def getHdl_filesList(self):
         """ Get list of HDL files """
@@ -516,9 +516,9 @@ class Component(WrapperXml):
         elif attribute_name == "type":
             port.setType(attribute_value)
         elif attribute_name == "size":
-            port.setSize(attribute_value)
+            port.size = attribute_value
         elif attribute_name == "dir":
-            port.setDir(attribute_value)
+            port.direction = attribute_value
         else:
             raise PodError("Attribute " + str(attribute_name) + " unknown")
 
@@ -532,7 +532,7 @@ class Component(WrapperXml):
         elif attribute_name == "offset":
             register.setOffset(attribute_value)
         elif attribute_name == "size":
-            register.setSize(attribute_value)
+            register.size = attribute_value
         elif attribute_name == "rows":
             register.setRows(attribute_value)
         else:
