@@ -28,7 +28,7 @@ from periphondemand.bin.utils.display import Display
 
 from periphondemand.bin.core.interface import Interface
 from periphondemand.bin.core.hdl_file import Hdl_file
-from periphondemand.bin.core.driver_templates import Driver_Templates
+from periphondemand.bin.core.driver_templates import DriverTemplates
 from periphondemand.bin.core.generic import Generic
 
 SETTINGS = Settings()
@@ -144,7 +144,7 @@ class Component(WrapperXml):
             for element in\
                     self.getSubNodeList("driver_files", "driver_templates"):
                 self.driver_templateslist.append(
-                    Driver_Templates(self, node=element))
+                    DriverTemplates(self, node=element))
 
         if self.getNode("interrupts") is not None:
             for element in self.getSubNodeList("interrupts", "interrupt"):
@@ -285,7 +285,7 @@ class Component(WrapperXml):
     def getDriver_Template(self, architecture):
         """ Get a driver template """
         for driverT in self.getDriver_TemplateList():
-            if driverT.getArchitecture() == architecture:
+            if driverT.architecture_name == architecture:
                 return driverT
         return None
 

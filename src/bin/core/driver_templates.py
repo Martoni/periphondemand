@@ -23,26 +23,14 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
 """ Class that manage driver templates """
-
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.poderror import PodError
-from periphondemand.bin.utils.display import Display
-from periphondemand.bin.utils.settings import Settings
-
-settings = Settings()
-display = Display()
 
 
-class Driver_Templates(WrapperXml):
-    """
+class DriverTemplates(WrapperXml):
+    """ Manage drivers templates
     """
     def __init__(self, parent, **keys):
         """ init driver_templates,
@@ -51,28 +39,25 @@ class Driver_Templates(WrapperXml):
         """
         self.parent = parent
         if "node" in keys:
-            self.__initnode(keys["node"])
+            WrapperXml.__init__(self, node=keys["node"])
         elif "nodestring" in keys:
-            self.__initnodestring(keys["nodestring"])
+            WrapperXml.__init__(self, nodestring=keys["nodestring"])
         else:
-            raise PodError("Keys unknown in Driver_Templates init()", 0)
+            raise PodError("Keys unknown in DriverTemplates init()", 0)
 
-    def __initnode(self, node):
-        WrapperXml.__init__(self, node=node)
-
-    def __initnodestring(self, nodestring):
-        WrapperXml.__init__(self, nodestring=nodestring)
-
-    def getTemplatesList(self):
+    @property
+    def template_names(self):
         """ return a list of templates file name """
         return [template.getAttributeValue("name") for
                 template in self.getNodeList("file")]
 
-    def getVersionsList(self):
+    @property
+    def versions(self):
         """ return a list of version supported """
         return [version.getAttributeValue("version") for
                 version in self.getNodeList("support")]
 
-    def getArchitecture(self):
+    @property
+    def architecture_name(self):
         """ return arcitecture name """
         return self.getAttributeValue("architecture")

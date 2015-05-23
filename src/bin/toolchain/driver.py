@@ -92,7 +92,7 @@ class Driver(WrapperXml):
                 if driver_template is not None:
                     DISPLAY.msg("Copy and fill template for " +
                                 component.getName())
-                    for templatefile in driver_template.getTemplatesList():
+                    for templatefile in driver_template.template_names:
                         try:
                             template = open(
                                 SETTINGS.projectpath + COMPONENTSPATH +
