@@ -108,7 +108,7 @@ class Synthesis(WrapperXml):
                         sy.copyFile(
                             SETTINGS.projectpath +
                             COMPONENTSPATH + "/" +
-                            component.getInstanceName() +
+                            component.instancename +
                             "/hdl/" + hdlfile.getFileName(),
                             compdir + "/")
                     except IOError, error:

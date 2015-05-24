@@ -62,7 +62,7 @@ class Port(WrapperXml):
         """ Get name in this format:
             instancename_portname
         """
-        instancename = self.parent.parent.getInstanceName()
+        instancename = self.parent.parent.instancename
         return instancename + "_" + self.getName()
 
     @property

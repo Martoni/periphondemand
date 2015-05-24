@@ -337,7 +337,7 @@ class Project(WrapperXml):
         """
         if "component" in keys:
             comp = keys["component"]
-            instancename = comp.getInstanceName()
+            instancename = comp.instancename
         elif ("componentname" in keys) and ("libraryname" in keys):
             componentname = keys["componentname"]
             libraryname = keys["libraryname"]
@@ -418,7 +418,7 @@ class Project(WrapperXml):
         """ Return the instance by name
         """
         for instance in self.instances:
-            if instance.getInstanceName() == instancename:
+            if instance.instancename == instancename:
                 return instance
         raise PodError("Instance " + instancename + " doesn't exists")
 
@@ -477,7 +477,7 @@ class Project(WrapperXml):
         # looking for port connected to platform
         # with type="CLK" and "in" direction
         portlist = []
-        platformname = self.platform.getInstanceName()
+        platformname = self.platform.instancename
         for instance in self.instances:
             if not instance.isPlatform():
                 for interface in instance.getInterfacesList():
@@ -544,7 +544,7 @@ class Project(WrapperXml):
         except PodError:
             raise PodError("No platform in project", 2)
 
-        self.del_instance(platform.getInstanceName())
+        self.del_instance(platform.instancename)
         self.delNode("platform")
         self.save()
 
@@ -574,7 +574,7 @@ class Project(WrapperXml):
         self.delSubNode("components",
                         "component",
                         "name",
-                        instance.getInstanceName())
+                        instance.instancename)
         instance.delInstance()
         DISPLAY.msg("Component " + instancename + " deleted")
         self.save()
@@ -656,7 +656,7 @@ class Project(WrapperXml):
         except PodError:
             pass
         else:
-            self.del_instance(intercon.getInstanceName())
+            self.del_instance(intercon.instancename)
 
         instance = self.get_instance(interfacedict["instance"])
         interface = instance.getInterface(interfacedict["interface"])
@@ -734,9 +734,9 @@ class Project(WrapperXml):
             for i in range(len(masters) - 1):
                 for j in range(i + 1, len(masters)):
                     if (masters[i].getBusName() == masters[j].getBusName()):
-                        raise PodError(masters[i].parent.getInstanceName() +
+                        raise PodError(masters[i].parent.instancename +
                                        " and " +
-                                       masters[j].parent.getInstanceName() +
+                                       masters[j].parent.instancename +
                                        " has the same bus type : , " +
                                        masters[i].getBusName() +
                                        " bus connection " +
@@ -771,7 +771,7 @@ class Project(WrapperXml):
             if port.check_variable_port() is False:
                 raise PodError(
                     "Pin connections on port " +
-                    str(port.parent.parent.getInstanceName()) +
+                    str(port.parent.parent.instancename) +
                     "." + str(port.parent.getName()) + "." +
                     str(port.getName()) +
                     "is wrong, pin number must be followed.")
@@ -785,13 +785,13 @@ class Project(WrapperXml):
         for master in listmaster:
             for slave in master.getSlavesList():
                 for slave2 in listslave:
-                    if slave2.parent.getInstanceName() ==\
-                        slave.getInstanceName() and \
-                            slave2.getName() == slave.getInterfaceName():
+                    if slave2.parent.instancename ==\
+                        slave.instancename and \
+                            slave2.getName() == slave.interfacename:
                         listslave.remove(slave2)
 
         for slave in listslave:
-            DISPLAY.msg(slave.parent.getInstanceName() +
+            DISPLAY.msg(slave.parent.instancename +
                         " is not connected on a master bus", 1)
         if len(listslave) != 0:
             DISPLAY.msg("Some slave bus are not connected", 1)
@@ -810,18 +810,18 @@ class Project(WrapperXml):
                         DISPLAY.msg(
                             "Register conflict at " +
                             hex(register["offset"]) + " between " +
-                            str(slave.getInstanceName()) + "." +
+                            str(slave.instancename) + "." +
                             str(register["name"]) + " and " +
                             str(dict_reg[register["offset"]][0]) + "." +
                             str(dict_reg[register["offset"]][1]), 0)
                         dict_reg[register["offset"]] =\
                             (str(dict_reg[register["offset"]][0]) + "," +
-                             slave.getInstanceName() + "/!\\",
+                             slave.instancename + "/!\\",
                              str(dict_reg[register["offset"]][1]) + "," +
                              register["name"] + "/!\\")
                     else:
                         dict_reg[register["offset"]] =\
-                            (slave.getInstanceName(), register["name"])
+                            (slave.instancename, register["name"])
             DISPLAY.msg("")
             DISPLAY.msg("Mapping for interface " + master.getName() + ":")
             DISPLAY.msg("Address  | instance.interface             |" +
@@ -895,12 +895,12 @@ class Project(WrapperXml):
         text = "* Master interfaces mapping:\n"
         for master in self.interfaces_master:
             masterinstance = master.parent
-            text += "\n  " + masterinstance.getInstanceName() + "." +\
+            text += "\n  " + masterinstance.instancename + "." +\
                     master.getName() + ":\n"
             for slave in master.getSlavesList():
                 interfaceslave = slave.getInterface()
                 instance = interfaceslave.parent
-                text += ONETAB + instance.getInstanceName() +\
+                text += ONETAB + instance.instancename +\
                     "." + interfaceslave.getName() + ":\n"
                 try:
                     for reg in interfaceslave.getRegisterMap():

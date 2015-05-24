@@ -99,7 +99,7 @@ def constant(clockhalfperiod):
         for interface in instance.getInterfacesList():
             for register in interface.getRegisterList():
                 constant = constant + ONETAB + "CONSTANT " +\
-                    instance.getInstanceName().upper() + "_" +\
+                    instance.instancename.upper() + "_" +\
                     register.getName().upper() +\
                     " : std_logic_vector := x\"" + register.getAbsoluteAddr() +\
                     "\";\n"
@@ -113,7 +113,7 @@ def signals(portlist):
     for port in portlist:
         portname = port.getName()
         interfacename = port.parent.getName()
-        instancename = port.parent.parent.getInstanceName()
+        instancename = port.parent.parent.instancename
         out = out + ONETAB + "signal  " +\
             instancename + "_" + portname + " : "
         if port.connected_msb < 1:
@@ -135,7 +135,7 @@ def declareTop(portlist):
     for port in portlist:
         portname = port.getName()
         interfacename = port.parent.getName()
-        instancename = port.parent.parent.getInstanceName()
+        instancename = port.parent.parent.instancename
         out = out + ONETAB * 2 +\
             instancename + "_" + portname + \
             " : " + port.direction
@@ -164,7 +164,7 @@ def connectTop(portlist):
     for port in portlist:
         portname = port.getName()
         interfacename = port.parent.getName()
-        instancename = port.parent.parent.getInstanceName()
+        instancename = port.parent.parent.instancename
 
         # sig declaration
         out = out + ONETAB * 2 + instancename + "_" + portname +\
@@ -216,7 +216,7 @@ def generateTemplate():
     if len(clockportlist) != 1:
         DISPLAY.msg("More than one external clock in design", 1)
     clockport = clockportlist[0]
-    clockname = clockport.parent.parent.getInstanceName() +\
+    clockname = clockport.parent.parent.instancename +\
         "_" + clockport.getName()
 
     ###################

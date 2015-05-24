@@ -63,7 +63,7 @@ def generatelibraryconstraints(self):
     for instance in self.project.instances:
         if instance.getConstraintsList() != []:
             for constraint in instance.getConstraintsList():
-                instanceName = instance.getInstanceName()
+                instanceName = instance.instancename
                 attrValName = str(constraint.getAttributeValue("name"))
                 if constraint.getAttributeValue("type") == "clk":
                     attrValNameUnder = attrValName.replace('/', '_')

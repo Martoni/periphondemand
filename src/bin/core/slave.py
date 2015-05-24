@@ -30,11 +30,6 @@
 # ----------------------------------------------------------------------------
 """ Managing slave interfaces """
 
-__doc__ = ""
-__version__ = "1.0.0"
-__versionTime__ = "06/06/2008"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
-
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils.settings import Settings
@@ -56,25 +51,35 @@ class Slave(WrapperXml):
             WrapperXml.__init__(self, node=keys["node"])
         elif "instancename" in keys:
             WrapperXml.__init__(self, nodename="slave")
-            self.setInstanceName(keys["instancename"])
-            self.setInterfaceName(keys["interfacename"])
+            self.instancename = keys["instancename"]
+            self.interfacename = keys["interfacename"]
         else:
             raise PodError("Keys unknowns in Slave init()", 0)
 
-    def getInstanceName(self):
+    @property
+    def instancename(self):
+        """ Get instance name """
         return self.getAttributeValue("instancename")
 
-    def setInstanceName(self, instancename):
+    @instancename.setter
+    def instancename(self, instancename):
+        """ Set instance name """
         self.setAttribute("instancename", instancename)
 
-    def getInterfaceName(self):
+    @property
+    def interfacename(self):
+        """ get interface name """
         return self.getAttributeValue("interfacename")
 
-    def setInterfaceName(self, interfacename):
+    @interfacename.setter
+    def interfacename(self, interfacename):
+        """ set interface name """
         self.setAttribute("interfacename", interfacename)
 
     def get_instance(self):
-        return SETTINGS.active_project.get_instance(self.getInstanceName())
+        """ get the parent instance of this slave interface """
+        return SETTINGS.active_project.get_instance(self.instancename)
 
     def getInterface(self):
-        return self.get_instance().getInterface(self.getInterfaceName())
+        """ get the parent interface of this slave interface """
+        return self.get_instance().getInterface(self.interfacename)

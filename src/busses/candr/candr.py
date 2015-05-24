@@ -92,7 +92,7 @@ def connectClockandReset(masterinterface, intercon):
     """
     bus = masterinterface.getBus()
     masterinstance = masterinterface.parent
-    masterinstancename = masterinstance.getInstanceName()
+    masterinstancename = masterinstance.instancename
     masterresetname = masterinstancename + "_" +\
         masterinterface.getPortByType(bus.getSignalName("master",
                                                         "reset")).getName()
@@ -103,7 +103,7 @@ def connectClockandReset(masterinterface, intercon):
     out = "\n" + ONETAB + "-- Clock and Reset connection\n"
     for slave in masterinterface.getSlavesList():
         slaveinterface = slave.getInterface()
-        slaveinstancename = slave.getInstanceName()
+        slaveinstancename = slave.instancename
         slaveresetname = slaveinstancename + "_" +\
             slaveinterface.getPortByType(
                 bus.getSignalName("slave", "reset")).getName()
@@ -144,19 +144,19 @@ def generate_intercon(masterinterface, intercon):
     # saving
     if not sy.dirExist(SETTINGS.projectpath +
                        COMPONENTSPATH + "/" +
-                       intercon.getInstanceName() + "/" + HDLDIR):
+                       intercon.instancename + "/" + HDLDIR):
         sy.makeDirectory(SETTINGS.projectpath +
                          COMPONENTSPATH + "/" +
-                         intercon.getInstanceName() + "/" + HDLDIR)
+                         intercon.instancename + "/" + HDLDIR)
     afile = open(SETTINGS.projectpath + COMPONENTSPATH + "/" +
-                 intercon.getInstanceName() +
-                 "/" + HDLDIR + "/" + intercon.getInstanceName() + VHDLEXT,
+                 intercon.instancename +
+                 "/" + HDLDIR + "/" + intercon.instancename + VHDLEXT,
                  "w")
     afile.write(VHDLcode)
     afile.close()
     # hdl file path
     hdl = Hdl_file(intercon,
-                   filename=intercon.getInstanceName() + VHDLEXT,
+                   filename=intercon.instancename + VHDLEXT,
                    istop=1, scope="both")
     intercon.addHdl_file(hdl)
     return VHDLcode

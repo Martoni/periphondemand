@@ -96,7 +96,7 @@ class Driver(WrapperXml):
                         try:
                             template = open(
                                 SETTINGS.projectpath + COMPONENTSPATH +
-                                "/" + component.getInstanceName() + "/" +
+                                "/" + component.instancename + "/" +
                                 DRIVERS_TEMPLATES_PATH + "/" +
                                 op_sys + "/" +
                                 templatefile, "r")
@@ -119,7 +119,7 @@ class Driver(WrapperXml):
             for writeline in template.split("\n"):
                 # instance_name
                 writeline = re.sub(r'\/\*\$instance_name\$\*\/',
-                                   instance.getInstanceName().upper(),
+                                   instance.instancename.upper(),
                                    writeline)
                 # instance_num
                 writeline = re.sub(r'\/\*\$instance_num\$\*\/',
@@ -166,11 +166,11 @@ class Driver(WrapperXml):
                     interruptlist = instance.getInterruptList()
                     if len(interruptlist) == 0:
                         raise PodError("No interruption port in " +
-                                       instance.getInstanceName(), 0)
+                                       instance.instancename, 0)
                     elif len(interruptlist) > 1:
                         DISPLAY.msg(
                             "More than one interrupt port in " +
-                            instance.getInstanceName() +
+                            instance.instancename +
                             "." + interruptlist[0].getName() + " is used")
                     interruptport = interruptlist[0]
 
@@ -180,7 +180,7 @@ class Driver(WrapperXml):
                         raise PodError(
                             "Interrupt " + interruptport.getName() +
                             " not connected in " +
-                            interruptport.parent.parent.getInstanceName() +
+                            interruptport.parent.parent.instancename +
                             "." + interruptport.parent.getName(), 0)
                     if len(connect) == 0:
                         raise PodError("Interrupt " + interruptport.getName() +

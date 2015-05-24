@@ -118,7 +118,7 @@ class Pin(WrapperXml):
         self.delNode(
             "connect",
             {"instance_dest":
-             pin_dest.parent.parent.parent.getInstanceName(),
+             pin_dest.parent.parent.parent.instancename,
              "interface_dest": pin_dest.parent.parent.getName(),
              "port_dest": pin_dest.parent.getName(),
              "pin_dest": str(pin_dest.getNum())})
@@ -126,7 +126,7 @@ class Pin(WrapperXml):
         pin_dest.delNode(
             "connect",
             {"instance_dest":
-                self.parent.parent.parent.getInstanceName(),
+                self.parent.parent.parent.instancename,
              "interface_dest": self.parent.parent.getName(),
              "port_dest": self.parent.getName(),
              "pin_dest": str(self.getNum())})
@@ -150,7 +150,7 @@ class Pin(WrapperXml):
         """
         for connect in self.getConnections():
             if connect == {"instance_dest":
-                           pin_dest.parent.parent.parent.getInstanceName(),
+                           pin_dest.parent.parent.parent.instancename,
                            "interface_dest": pin_dest.parent.parent.getName(),
                            "port_dest": pin_dest.parent.getName(),
                            "pin_dest": str(pin_dest.getNum())}:
@@ -217,12 +217,12 @@ class Pin(WrapperXml):
         instance_source = interface_source.parent
 
         if not self.connectionExists(pin_dest):
-            self.__addConnection(instance_dest.getInstanceName(),
+            self.__addConnection(instance_dest.instancename,
                                  interface_dest.getName(),
                                  pin_dest.parent.getName(),
                                  pin_dest.getNum())
         if not pin_dest.connectionExists(self):
-            pin_dest.__addConnection(instance_source.getInstanceName(),
+            pin_dest.__addConnection(instance_source.instancename,
                                      interface_source.getName(),
                                      self.parent.getName(),
                                      self.getNum())
@@ -272,7 +272,7 @@ class Pin(WrapperXml):
         """ Return True if pin is connected to instance given,
         else return False
         """
-        instance_name = instance.getInstanceName()
+        instance_name = instance.instancename
         for connexion in self.getConnections():
             if connexion["instance_dest"] == instance_name:
                 return True

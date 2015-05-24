@@ -347,7 +347,7 @@ fpga_attributes    : give list of fpga attributes in platform
                listargs[0][0] == "slaveinstancename" or\
                listargs[0][0] == "instancename":
                 instance = SETTINGS.active_project.get_instance(listargs[0][1])
-                instancename = instance.getInstanceName()
+                instancename = instance.instancename
             elif listargs[0][0] == "platformlib":
                 platformlib = listargs[0][1]
             elif listargs[0][0] == "libraryname":
@@ -374,15 +374,15 @@ fpga_attributes    : give list of fpga attributes in platform
                 return []
         # fill list
         if subargt == "masterinstancename":
-            return [interface.parent.getInstanceName()
+            return [interface.parent.instancename
                     for interface in
                     SETTINGS.active_project.interfaces_master]
         elif subargt == "slaveinstancename":
-            return [interface.parent.getInstanceName()
+            return [interface.parent.instancename
                     for interface in
                     SETTINGS.active_project.interfaces_slave]
         elif subargt == "instancename":
-            return [instance.getInstanceName()
+            return [instance.instancename
                     for instance in SETTINGS.active_project.instances]
         elif subargt == "interfacename":
             return ["" + instancename + "." + interface.getName()

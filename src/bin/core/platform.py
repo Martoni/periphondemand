@@ -111,7 +111,8 @@ class Platform(Component):
         """
         pass
 
-    def getInstanceName(self):
+    @property
+    def instancename(self):
         return Component.getName(self)
 
     def getName(self):

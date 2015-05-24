@@ -455,7 +455,7 @@ List components available in the library
         """ List instances in project completion"""
         try:
             self.is_project_open()
-            return [comp.getInstanceName()
+            return [comp.instancename
                     for comp in SETTINGS.active_project.instances]
         except PodError, error:
             print(str(error))
@@ -1016,7 +1016,7 @@ List master interface
             print(str(error))
             return
         for master in SETTINGS.active_project.interfaces_master:
-            print(master.parent.getInstanceName() + "." + master.getName())
+            print(master.parent.instancename + "." + master.getName())
         print DISPLAY
 
     def complete_getmapping(self, text, line, begidx, endidx):
@@ -1100,7 +1100,7 @@ Print instance information
             print DISPLAY
             print error
             return
-        print("Instance name :" + instance.getInstanceName())
+        print("Instance name :" + instance.instancename)
         print("Component  name :" + instance.getName())
         print("description : " + instance.getDescription().strip())
         print("->Generics")
@@ -1116,8 +1116,8 @@ Print instance information
                     print("%-15s :" % interface.getName())
                     for slave in interface.getSlavesList():
                         print(" " * 10 + "slave -> " +
-                              slave.getInstanceName() + "." +
-                              slave.getInterfaceName())
+                              slave.instancename + "." +
+                              slave.interfacename)
             else:
                 print("%-15s :" % interface.getName())
 

@@ -89,8 +89,8 @@ def architectureHead(masterinterface, intercon):
         intercon.getName() + " is\n"
     for slave in masterinterface.getSlavesList():
         archead = archead + ONETAB + "signal " +\
-            "%-40s" % (slave.getInstanceName() + "_" +
-                       slave.getInterfaceName() + "_cs") +\
+            "%-40s" % (slave.instancename + "_" +
+                       slave.interfacename + "_cs") +\
             " : std_logic := '0' ;\n"
     archead = archead + "begin\n"
     return archead
@@ -102,7 +102,7 @@ def connectClockandReset(masterinterface, intercon):
 
     bus = masterinterface.getBus()
     masterinstance = masterinterface.parent
-    masterinstancename = masterinstance.getInstanceName()
+    masterinstancename = masterinstance.instancename
     masterinterfacename = masterinterface.getName()
     masterresetname = masterinstancename + "_" +\
         masterinterface.getPortByType(
@@ -115,7 +115,7 @@ def connectClockandReset(masterinterface, intercon):
     for slave in masterinterface.getSlavesList():
         slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
-        slaveinstancename = slave.getInstanceName()
+        slaveinstancename = slave.instancename
         slaveresetname = slaveinstancename + "_" +\
             slaveinterface.getPortByType(
                 bus.getSignalName("slave", "reset")).getName()
@@ -134,14 +134,14 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
     """
     bus = masterinterface.getBus()
     masterinstance = masterinterface.parent
-    masterinstancename = masterinstance.getInstanceName()
+    masterinstancename = masterinstance.instancename
     rst_name = masterinstancename + "_" +\
         masterinterface.getPortByType(
             bus.getSignalName("master", "reset")).getName()
     clk_name = masterinstancename + "_" +\
         masterinterface.getPortByType(
             bus.getSignalName("master", "clock")).getName()
-    masteraddressname = masterinstance.getInstanceName() + "_" +\
+    masteraddressname = masterinstance.instancename + "_" +\
         masterinterface.getPortByType(
             bus.getSignalName("master", "address")).getName()
     masterstrobename = masterinstancename + "_" +\
@@ -160,7 +160,7 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
         if slavesizeaddr > 0:
             slaveaddressport = slave.getInterface().getPortByType(
                 bus.getSignalName("slave", "address"))
-            slavename_addr = slaveinstance.getInstanceName() + "_" +\
+            slavename_addr = slaveinstance.instancename + "_" +\
                 slaveaddressport.getName()
         if slavesizeaddr == 1:
             out = out + ONETAB + slavename_addr +\
@@ -178,7 +178,7 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
     for slave in masterinterface.getSlavesList():
         slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
-        chipselectname = slaveinstance.getInstanceName() + "_" +\
+        chipselectname = slaveinstance.instancename + "_" +\
             slaveinterface.getName() + "_cs"
         out = out + ONETAB*3 + chipselectname + " <= '0';\n"
     out = out + ONETAB*2 + "elsif rising_edge(" + clk_name + ") then\n"
@@ -186,14 +186,14 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
     for slave in masterinterface.getSlavesList():
         slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
-        chipselectname = slaveinstance.getInstanceName() + "_" +\
+        chipselectname = slaveinstance.instancename + "_" +\
             slaveinterface.getName() + "_cs"
         slavesizeaddr = slave.getInterface().getAddressSize()
         slavebase_address = slaveinterface.getBaseInt()
         if slavesizeaddr > 0:
             slaveaddressport = slave.getInterface().getPortByType(
                 bus.getSignalName("slave", "address"))
-            slavename_addr = slaveinstance.getInstanceName() + "_" +\
+            slavename_addr = slaveinstance.instancename + "_" +\
                 slaveaddressport.getName()
 
         out = out + "\n"
@@ -220,7 +220,7 @@ def controlslave(masterinterface, intercon):
 
     bus = masterinterface.getBus()
     masterinstance = masterinterface.parent
-    masterinstancename = masterinstance.getInstanceName()
+    masterinstancename = masterinstance.instancename
     masterinterfacename = masterinterface.getName()
     masterstrobename = masterinstancename + "_" +\
         masterinterface.getPortByType(
@@ -236,7 +236,7 @@ def controlslave(masterinterface, intercon):
     for slave in masterinterface.getSlavesList():
         slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
-        slaveinstancename = slave.getInstanceName()
+        slaveinstancename = slave.instancename
         slavestrobename = slaveinstancename + "_" +\
             slaveinterface.getPortByType(
                 bus.getSignalName("slave", "strobe")).getName()
@@ -313,14 +313,14 @@ def controlslave(masterinterface, intercon):
 def controlmaster(masterinterface, intercon):
     bus = masterinterface.getBus()
     masterinstance = masterinterface.parent
-    masterinstancename = masterinstance.getInstanceName()
+    masterinstancename = masterinstance.instancename
     masterinterfacename = masterinterface.getName()
 
     out = "\n\n" + ONETAB + "-------------------------------\n"
     out = out + ONETAB + "-- Control signal for master --\n"
     out = out + ONETAB + "-------------------------------\n"
 
-    out = out + ONETAB + masterinstance.getInstanceName() + "_"
+    out = out + ONETAB + masterinstance.instancename + "_"
     out = out + masterinterface.getPortByType(
         bus.getSignalName("master", "datain")).getName()
     out = out + " <= "
@@ -329,7 +329,7 @@ def controlmaster(masterinterface, intercon):
         slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
         slaveinterfacename = slaveinterface.getName()
-        slaveinstancename = slave.getInstanceName()
+        slaveinstancename = slave.instancename
         try:
             dataoutname = slaveinstancename + "_" +\
                 slaveinterface.getPortByType(bus.getSignalName(
@@ -343,7 +343,7 @@ def controlmaster(masterinterface, intercon):
     out = out + " (others => '0');\n"
 
     # ACK
-    out = out + ONETAB + masterinstance.getInstanceName() + "_"
+    out = out + ONETAB + masterinstance.instancename + "_"
     out = out + masterinterface.getPortByType(
         bus.getSignalName("master", "ack")).getName()
     out = out + " <= "
@@ -353,7 +353,7 @@ def controlmaster(masterinterface, intercon):
             slaveinstance = slave.get_instance()
             slaveinterface = slave.getInterface()
             slaveinterfacename = slaveinterface.getName()
-            slaveinstancename = slave.getInstanceName()
+            slaveinstancename = slave.instancename
             if count == 0:
                 out = out + " "
                 count = 1
@@ -413,19 +413,19 @@ def generate_intercon(masterinterface, intercon):
     # saving
     if not sy.dirExist(SETTINGS.projectpath +
                        COMPONENTSPATH + "/" +
-                       intercon.getInstanceName() + "/" + HDLDIR):
+                       intercon.instancename + "/" + HDLDIR):
         sy.makeDirectory(SETTINGS.projectpath +
                          COMPONENTSPATH + "/" +
-                         intercon.getInstanceName() + "/" + HDLDIR)
+                         intercon.instancename + "/" + HDLDIR)
     afile = open(SETTINGS.projectpath + COMPONENTSPATH + "/" +
-                 intercon.getInstanceName() +
-                 "/" + HDLDIR + "/" + intercon.getInstanceName() + VHDLEXT,
+                 intercon.instancename +
+                 "/" + HDLDIR + "/" + intercon.instancename + VHDLEXT,
                  "w")
     afile.write(VHDLcode)
     afile.close()
     # hdl file path
     hdl = Hdl_file(intercon,
-                   filename=intercon.getInstanceName() + VHDLEXT,
+                   filename=intercon.instancename + VHDLEXT,
                    istop=1, scope="both")
     intercon.addHdl_file(hdl)
     return VHDLcode

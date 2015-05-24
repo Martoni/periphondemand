@@ -48,7 +48,7 @@ class TopGen(object):
         for masterinterface in self.project.interfaces_master:
             try:
                 self.project.get_instance(
-                    masterinterface.parent.getInstanceName() +
+                    masterinterface.parent.instancename +
                     "_" +
                     masterinterface.getName() +
                     "_intercon")

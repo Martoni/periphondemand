@@ -157,7 +157,7 @@ class Component(WrapperXml):
             for element in self.getSubNodeList("constraints", "constraint"):
                 self.constraintslist.append(element)
 
-        self.setInstanceName(instancename)
+        self.instancename = instancename
 
     def getConstraintsList(self):
         """ Get list of constraints """
@@ -292,24 +292,26 @@ class Component(WrapperXml):
     def saveInstance(self):
         """ Save component in project directory files """
         if not sy.dirExist(SETTINGS.projectpath + COMPONENTSPATH +
-                           "/" + self.getInstanceName()):
+                           "/" + self.instancename):
             sy.makeDirectory(SETTINGS.projectpath + COMPONENTSPATH +
-                             "/" + self.getInstanceName())
+                             "/" + self.instancename)
         self.saveXml(SETTINGS.projectpath + COMPONENTSPATH + "/" +
-                     self.getInstanceName() + "/" +
-                     self.getInstanceName() + ".xml")
+                     self.instancename + "/" +
+                     self.instancename + ".xml")
 
     def delInstance(self):
         """ suppress component instance """
         if not self.isPlatform():
             sy.delDirectory(SETTINGS.projectpath + COMPONENTSPATH + "/" +
-                            self.getInstanceName())
+                            self.instancename)
 
-    def getInstanceName(self):
+    @property
+    def instancename(self):
         """ get the name of this component instance"""
         return self.getAttributeValue("instance_name")
 
-    def setInstanceName(self, instancename):
+    @instancename.setter
+    def instancename(self, instancename):
         """ set the name of this instance """
         return self.setAttribute("instance_name", instancename)
 

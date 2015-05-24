@@ -239,18 +239,18 @@ class Interface(WrapperXml):
         self.slaveslist.remove(slave)
         self.delSubNode("slaves",
                         "slave",
-                        {"instancename": slave.getInstanceName(),
-                         "interfacename": slave.getInterfaceName()})
+                        {"instancename": slave.instancename,
+                         "interfacename": slave.interfacename})
 
     def del_bus(self, instanceslavename, interfaceslavename=None):
         """ delete slave bus connection
         """
         for slave in self.getSlavesList():
-            if slave.getInstanceName() == instanceslavename:
+            if slave.instancename == instanceslavename:
                 if interfaceslavename is None:
                     self.delSlave(slave)
                     return
-                elif slave.getInterfaceName() == interfaceslavename:
+                elif slave.interfacename == interfaceslavename:
                     self.delSlave(slave)
                     return
         raise PodError("Bus connection " + str(self.getName()) +
@@ -302,11 +302,11 @@ class Interface(WrapperXml):
         """
         interfaceslave = instanceslave.getInterface(interfaceslavename)
         for slave in self.getSlavesList():
-            if slave.getInstanceName() == instanceslave.getInstanceName() and\
-                    slave.getInterfaceName() == interfaceslavename:
+            if slave.instancename == instanceslave.instancename and\
+                    slave.interfacename == interfaceslavename:
                 raise PodError("Bus connection for " +
-                               slave.getInstanceName() + "." +
-                               slave.getInterfaceName() +
+                               slave.instancename + "." +
+                               slave.interfacename +
                                " already exists", 1)
         if self.getBusName() is None:
             raise PodError("Interface " + self.getName() + " must be a bus ")
@@ -319,19 +319,19 @@ class Interface(WrapperXml):
         if self.getClass() != "master":
             raise PodError(self.getName() + " is not a master", 0)
         if interfaceslave.getBusName() is None:
-            raise PodError(instanceslave.getInstanceName() +
+            raise PodError(instanceslave.instancename +
                            "." + interfaceslave.getName() + " is not a bus", 1)
         if interfaceslave.getClass() != "slave":
-            raise PodError(instanceslave.getInstanceName() +
+            raise PodError(instanceslave.instancename +
                            "." + interfaceslave.getName() +
                            " is not a slave", 1)
         self.addSubNode(nodename="slaves",
                         subnodename="slave",
                         attributedict={
-                            "instancename": instanceslave.getInstanceName(),
+                            "instancename": instanceslave.instancename,
                             "interfacename": interfaceslavename})
         self.slaveslist.append(Slave(self,
-                               instancename=instanceslave.getInstanceName(),
+                               instancename=instanceslave.instancename,
                                interfacename=interfaceslavename))
         self.allocMem.addInterfaceSlave(interfaceslave)
         interfaceslave.setMaster(self)
@@ -360,8 +360,8 @@ class Interface(WrapperXml):
         """ Connect clock domain
         """
         for slave in self.getSlavesList():
-            if slave.getInstanceName() == instancedestname\
-                    and slave.getInterfaceName() == interfacedestname:
+            if slave.instancename == instancedestname\
+                    and slave.interfacename == interfacedestname:
                 raise PodError("Clock connection " + instancedestname +
                                "." + interfacedestname + " exists", 1)
 
@@ -410,12 +410,12 @@ class Interface(WrapperXml):
             for interface in instance.getInterfacesList():
                 if interface.getClass() == "clk_rst":
                     for slave in interface.getSlavesList():
-                        if slave.getInstanceName() ==\
-                            self.parent.getInstanceName() and\
-                                slave.getInterfaceName() == self.getName():
+                        if slave.instancename ==\
+                            self.parent.instancename and\
+                                slave.interfacename == self.getName():
                             return instance
         raise PodError("No syscon for interface " + self.getName() +
-                       " of instance " + self.parent.getInstanceName(), 0)
+                       " of instance " + self.parent.instancename, 0)
 
     def addRegister(self, register_name):
         if self.getBusName() is None:

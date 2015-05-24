@@ -75,7 +75,7 @@ class TopVHDL(TopGen):
             else:
                 portname = port.getName()
                 interfacename = port.parent.getName()
-                instancename = port.parent.parent.getInstanceName()
+                instancename = port.parent.parent.instancename
 
                 out = out + ONETAB + "-- " + instancename +\
                     "-" + interfacename + "\n"
@@ -214,7 +214,7 @@ class TopVHDL(TopGen):
     def declareSignals(self, componentslist, incomplete_external_ports_list):
         """ Declare signals ports
         """
-        platformname = self.project.platform.getInstanceName()
+        platformname = self.project.platform.instancename
         out = ""
         out = out + ONETAB + "-------------------------\n"
         out = out + ONETAB + "-- Signals declaration\n"
@@ -223,7 +223,7 @@ class TopVHDL(TopGen):
             if component.getName() == "platform":
                 continue
             out = out + "\n" + ONETAB + "-- " +\
-                component.getInstanceName() + "\n"
+                component.instancename + "\n"
             for interface in component.getInterfacesList():
                 out = out + ONETAB + "-- " + interface.getName() + "\n"
 
@@ -238,7 +238,7 @@ class TopVHDL(TopGen):
                     if connection_list[0]["instance_dest"] == platformname:
                         continue
                     out = out + ONETAB + "signal " +\
-                        component.getInstanceName() +\
+                        component.instancename +\
                         "_" + port.getName() + ": "
                     if int(port.size) == 1:
                         out = out + " std_logic;\n"
@@ -254,7 +254,7 @@ class TopVHDL(TopGen):
             if port.force_defined():
                 continue
             portname = port.getName()
-            instancename = port.parent.parent.getInstanceName()
+            instancename = port.parent.parent.instancename
             out = out + "\n" + ONETAB + "signal " + instancename +\
                 "_" + portname + ": std_logic_vector(" +\
                 str(int(port.real_size) - 1) + " downto 0);\n"
@@ -269,7 +269,7 @@ class TopVHDL(TopGen):
         for component in self.project.instances:
             if component.getName() != "platform":
                 out = out + "\n" + ONETAB +\
-                    component.getInstanceName() + " : "
+                    component.instancename + " : "
                 if self.project.vhdl_version == "vhdl93":
                     out = out + "entity work."
                 out = out + component.getName() + "\n"
@@ -343,7 +343,7 @@ class TopVHDL(TopGen):
     def connect_in_port(self, component, interface, port):
         """ Connect all pins port"""
         platform = self.project.platform
-        platformname = platform.getInstanceName()
+        platformname = platform.instancename
         out = ""
         if len(port.pins) != 0:
             portdest = port.dest_port
@@ -355,7 +355,7 @@ class TopVHDL(TopGen):
                 connect = pin.getConnections()[0]
                 if connect["instance_dest"] != platformname:
                     out = out + ONETAB * 2 +\
-                        component.getInstanceName() +\
+                        component.instancename +\
                         "_" + port.getName() +\
                         " <= " +\
                         connect["instance_dest"] +\
@@ -370,7 +370,7 @@ class TopVHDL(TopGen):
                         connect = pin.getConnections()[0]
                         if connect["instance_dest"] != platformname:
                             out = out + ONETAB * 2 +\
-                                component.getInstanceName() +\
+                                component.instancename +\
                                 "_" + port.getName()
                             if int(port.size) > 1:
                                 out = out + "(" + pin.getNum() + ")"
@@ -378,7 +378,7 @@ class TopVHDL(TopGen):
                                 "_" + connect["port_dest"]
                             # is destination vector or simple net ?
                             for comp in self.project.instances:
-                                if comp.getInstanceName() !=\
+                                if comp.instancename !=\
                                         connect["instance_dest"]:
                                     continue
                                 for inter in comp.getInterfacesList():
@@ -394,7 +394,7 @@ class TopVHDL(TopGen):
                             out = out + ";\n"
         # if port is void, connect '0' or open
         else:
-            message = "port " + component.getInstanceName() +\
+            message = "port " + component.instancename +\
                 "." + interface.getName() + "." +\
                 port.getName() + " is void." +\
                 " It will be set to '" +\
@@ -411,12 +411,12 @@ class TopVHDL(TopGen):
         out = out + ONETAB + "---------------------------\n"
 
         platform = self.project.platform
-        platformname = platform.getInstanceName()
+        platformname = platform.instancename
         # connect incomplete_external_ports_list
         for port in incomplete_external_ports_list:
             if not port.force_defined():
                 portname = port.getName()
-                instancename = port.parent.parent.getInstanceName()
+                instancename = port.parent.parent.instancename
                 out = out + "\n" + ONETAB +\
                     "-- connect incomplete external port " +\
                     str(portname) + " pins\n"
@@ -438,10 +438,10 @@ class TopVHDL(TopGen):
 
         # connect all "in" ports pin
         for component in self.project.instances:
-            if component.getInstanceName() == platformname:
+            if component.instancename == platformname:
                 continue
             out = out + "\n" + ONETAB + "-- connect " +\
-                component.getInstanceName() + "\n"
+                component.instancename + "\n"
             for interface in component.getInterfacesList():
                 out = out + ONETAB * 2 + "-- " + interface.getName() + "\n"
                 for port in interface.ports:
