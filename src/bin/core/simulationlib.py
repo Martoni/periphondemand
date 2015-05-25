@@ -30,16 +30,8 @@
 # ----------------------------------------------------------------------------
 """ Simulation library """
 
-__doc__ = ""
-__version__ = "1.0.0"
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
-
 from periphondemand.bin.utils.poderror import PodError
-from periphondemand.bin.core.component import Component
-from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.wrapperxml import WrapperXml
-
-settings = Settings()
 
 
 class SimulationLib(WrapperXml):
@@ -54,16 +46,15 @@ class SimulationLib(WrapperXml):
         self.parent = parent
         if "node" in keys:
             self.__initnode(keys["node"])
+            WrapperXml.__init__(self, node=keys["node"])
         elif "nodestring" in keys:
             self.__initnodestring(keys["nodestring"])
+            WrapperXml.__init__(self,
+                                nodestring=keys["nodestring"])
         else:
             raise PodError("Keys unknown in SimulationLib init()", 0)
 
-    def __initnode(self, node):
-        WrapperXml.__init__(self, node=node)
-
-    def __initnodestring(self, nodestring):
-        WrapperXml.__init__(self, nodestring=nodestring)
-
-    def getFileName(self):
+    @property
+    def filename(self):
+        """ get the simulation filename """
         return self.getAttributeValue("filename")

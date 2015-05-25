@@ -63,7 +63,7 @@ class Port(WrapperXml):
             instancename_portname
         """
         instancename = self.parent.parent.instancename
-        return instancename + "_" + self.getName()
+        return instancename + "_" + self.name
 
     @property
     def pins(self):
@@ -194,7 +194,7 @@ class Port(WrapperXml):
         """ Get a frequency for this port (if it's clock port) """
         freq = self.getAttributeValue("freq")
         if freq is None:
-            raise PodError("No frequency attribute for " + self.getName())
+            raise PodError("No frequency attribute for " + self.name)
         return freq
 
     def force_defined(self):
@@ -305,10 +305,10 @@ class Port(WrapperXml):
             raise PodError("The two ports have differents size")
         if self.pins != []:
             raise PodError("Port connection " +
-                           self.getName() + " is not void")
+                           self.name + " is not void")
         if port_dest.pins != []:
             raise PodError("Port connection " +
-                           port_dest.getName() + " is not void")
+                           port_dest.name + " is not void")
 
         self.connect_all_pins(port_dest)
 

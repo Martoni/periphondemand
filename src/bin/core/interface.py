@@ -98,7 +98,7 @@ class Interface(WrapperXml):
 
     def setMaster(self, masterinterface):
         if self.getClass() != "slave":
-            raise PodError("interface " + self.getName() + " must be slave", 0)
+            raise PodError("interface " + self.name + " must be slave", 0)
         elif masterinterface.getClass() != "master":
             raise PodError("interface " + masterinterface.getClass() +
                            " must be master", 0)
@@ -109,7 +109,7 @@ class Interface(WrapperXml):
         if self.getClass() != "slave":
             raise PodError("Only slave interface could have a master", 0)
         if self.interfacemaster is None:
-            raise PodError("Interface " + self.getName() +
+            raise PodError("Interface " + self.name +
                            " is not connected on a master", 0)
         return self.interfacemaster
 
@@ -197,7 +197,7 @@ class Interface(WrapperXml):
     def getPort(self, portname):
         """ Get port by its name """
         for port in self.portslist:
-            if port.getName() == portname:
+            if port.name == portname:
                 return port
         raise PodError("Port " + portname + " does not exists", 1)
 
@@ -253,7 +253,7 @@ class Interface(WrapperXml):
                 elif slave.interfacename == interfaceslavename:
                     self.delSlave(slave)
                     return
-        raise PodError("Bus connection " + str(self.getName()) +
+        raise PodError("Bus connection " + str(self.name) +
                        " -> " + str(instanceslavename) + "." +
                        str(interfaceslavename) + " doesn't exist", 0)
 
@@ -261,36 +261,36 @@ class Interface(WrapperXml):
         """ Connect an interface between two components
         """
         if len(interface_dest.ports) != len(self.ports):
-            raise PodError(self.parent.getName() + "." + self.getName() +
-                           " and " + interface_dest.parent.getName() +
-                           "." + interface_dest.getName() +
+            raise PodError(self.parent.name + "." + self.name +
+                           " and " + interface_dest.parent.name +
+                           "." + interface_dest.name +
                            "are not the same number of ports")
         for port in self.ports:
             if port.porttype is None:
-                raise PodError(self.parent.getName() + "." +
-                               self.getName() + "." +
-                               port.getName() + " has no type")
+                raise PodError(self.parent.name + "." +
+                               self.name + "." +
+                               port.name + " has no type")
             try:
                 port_dst = interface_dest.getPortByType(port.porttype)
             except PodError, e:
-                raise PodError(interface_dest.parent.getName() + "." +
-                               interface_dest.getName() + " have no " +
+                raise PodError(interface_dest.parent.name + "." +
+                               interface_dest.name + " have no " +
                                port.porttype + " port")
             if port_dst.direction == port.direction:
-                raise PodError("Ports " + self.parent.getName() + "." +
-                               self.getName() + "." + port.getName() +
+                raise PodError("Ports " + self.parent.name + "." +
+                               self.name + "." + port.name +
                                " and " +
-                               interface_dest.parent.getName() + "." +
-                               interface_dest.getName() + "." +
-                               port_dst.getName() + " are the same direction")
+                               interface_dest.parent.name + "." +
+                               interface_dest.name + "." +
+                               port_dst.name + " are the same direction")
             if port_dst.direction == "in" and port_dst.isVoid() is not True:
-                raise PodError("Ports " + interface_dest.parent.getName() +
-                               "." + interface_dest.getName() + "." +
-                               port_dst.getName() + " is already connected")
+                raise PodError("Ports " + interface_dest.parent.name +
+                               "." + interface_dest.name + "." +
+                               port_dst.name + " is already connected")
             if port.direction == "in" and port.isVoid() is not True:
-                raise PodError("Ports " + self.parent.getName() +
-                               "." + self.getName() +
-                               "." + port.getName() +
+                raise PodError("Ports " + self.parent.name +
+                               "." + self.name +
+                               "." + port.name +
                                " is already connected")
 
         for port in self.ports:
@@ -309,21 +309,21 @@ class Interface(WrapperXml):
                                slave.interfacename +
                                " already exists", 1)
         if self.getBusName() is None:
-            raise PodError("Interface " + self.getName() + " must be a bus ")
+            raise PodError("Interface " + self.name + " must be a bus ")
         if interfaceslave.getBusName() is None:
-            raise PodError("Interface " + interfaceslave.getName() +
+            raise PodError("Interface " + interfaceslave.name +
                            " must be a bus ")
         if self.getBusName() != interfaceslave.getBusName():
             raise PodError("Can't connect " + self.getBusName() +
                            " on " + interfaceslave.getBusName(), 1)
         if self.getClass() != "master":
-            raise PodError(self.getName() + " is not a master", 0)
+            raise PodError(self.name + " is not a master", 0)
         if interfaceslave.getBusName() is None:
             raise PodError(instanceslave.instancename +
-                           "." + interfaceslave.getName() + " is not a bus", 1)
+                           "." + interfaceslave.name + " is not a bus", 1)
         if interfaceslave.getClass() != "slave":
             raise PodError(instanceslave.instancename +
-                           "." + interfaceslave.getName() +
+                           "." + interfaceslave.name +
                            " is not a slave", 1)
         self.addSubNode(nodename="slaves",
                         subnodename="slave",
@@ -374,7 +374,7 @@ class Interface(WrapperXml):
 
     def getRegister(self, registername):
         for register in self.getRegisterList():
-            if register.getName() == registername:
+            if register.name == registername:
                 return register
         raise PodError("No register with name " + registername, 0)
 
@@ -394,11 +394,11 @@ class Interface(WrapperXml):
                 listreg.append(
                     {"offset": int(register.getOffset(), 16) * self.regStep() +
                         int(self.getBase(), 16),
-                        "name": register.getName()})
+                        "name": register.name})
             return listreg
         else:
             return [{"offset": int(self.getBase(), 16),
-                     "name": self.getName()}]
+                     "name": self.name}]
 
     def regStep(self):
         """ Step between two register """
@@ -412,9 +412,9 @@ class Interface(WrapperXml):
                     for slave in interface.getSlavesList():
                         if slave.instancename ==\
                             self.parent.instancename and\
-                                slave.interfacename == self.getName():
+                                slave.interfacename == self.name:
                             return instance
-        raise PodError("No syscon for interface " + self.getName() +
+        raise PodError("No syscon for interface " + self.name +
                        " of instance " + self.parent.instancename, 0)
 
     def addRegister(self, register_name):

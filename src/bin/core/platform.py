@@ -41,6 +41,8 @@ class Platform(Component):
             interfacelist   -- list objects containing platforms constraints
     """
 
+    name = "platform"
+
     def __init__(self, parent, **keys):
         """ Init Component,
             __init__(self, parent, node)
@@ -48,9 +50,9 @@ class Platform(Component):
         """
         Component.__init__(self)
         if "node" in keys:
-            self.__initnode(keys["node"])
+            WrapperXml.__init__(self, node=keys["node"])
         elif "file" in keys:
-            self.__initfile(keys["file"])
+            WrapperXml.__init__(self, file=keys["file"])
         else:
             raise PodError("Keys unknown in Platform constructor", 0)
 
@@ -62,13 +64,8 @@ class Platform(Component):
             for library in self.getNode("simulation").getNodeList("simlib"):
                 self.librarieslist.append(SimulationLib(self, node=library))
 
-    def __initnode(self, node):
-        WrapperXml.__init__(self, node=node)
-
-    def __initfile(self, file):
-        WrapperXml.__init__(self, file=file)
-
-    def getForcesList(self):
+    @property
+    def forces(self):
         """ get the list of forces """
         forcelist = []
         interfaces_list = self.getInterfacesList()
@@ -82,9 +79,9 @@ class Platform(Component):
                 forcelist.append(port)
         return forcelist
 
-    def getComponentsList(self):
-        """ Return platform dependent components list
-        """
+    @property
+    def components(self):
+        """ Return platform dependent components list """
         componentslist = []
         try:
             for element in self.getSubNodeList("components", "component"):
@@ -95,30 +92,24 @@ class Platform(Component):
             pass
         return componentslist
 
-    def delComponent(self):
-        """ suppress platform instance
-        """
-        self.tree = None
-
-    def saveInstance(self):
+    def save(self):
         """ platform component is in project file
         then, no save
         """
         pass
 
-    def loadInstance(self, name):
+    def load(self, name):
         """ Load platform
         """
         pass
 
     @property
     def instancename(self):
+        """ Get the instance name """
         return Component.getName(self)
 
-    def getName(self):
-        return "platform"
-
-    def getConnectPortsList(self):
+    @property
+    def connect_ports(self):
         """ Return the list of port to be connected out of Platform
             [portlist]
         """
@@ -135,48 +126,68 @@ class Platform(Component):
                             portlist.append(port)
         return portlist
 
-    def getIncompleteExternalPortsList(self):
+    @property
+    def incomplete_ext_ports(self):
         """ Return the list of incomplete in or
             inout port connected on platform
         """
         incomplete_port_list = []
-        for port in self.getConnectPortsList():
+        for port in self.connect_ports:
             if port.direction != "out":
                 if not port.is_fully_connected():
                     incomplete_port_list.append(port)
         return incomplete_port_list
 
-    def getLibrariesList(self):
+    @property
+    def libraries(self):
+        """ Get the library list """
         try:
             return self.librarieslist
-        except AttributeError, error:
+        except AttributeError:
             return []
 
-    def getFamily(self):
+    @property
+    def family(self):
+        """ get the family name """
         return self.getNode("fpga").getAttributeValue("family")
 
-    def getDevice(self):
+    @property
+    def device(self):
+        """ get device name """
         return self.getNode("fpga").getAttributeValue("device")
 
-    def setDevice(self, device):
+    @device.setter
+    def device(self, device):
+        """ set device name """
         self.getNode("fpga").setAttribute("device", device)
 
-    def getPackage(self):
+    @property
+    def package(self):
+        """ get package name """
         return self.getNode("fpga").getAttributeValue("package")
 
-    def getSpeed(self):
+    @property
+    def speed(self):
+        """ get speed """
         return self.getNode("fpga").getAttributeValue("speed")
 
-    def setSpeed(self, speed):
+    @speed.setter
+    def speed(self, speed):
+        """ set speed """
         return self.getNode("fpga").setAttribute("speed", speed)
 
-    def getMainClock(self):
+    @property
+    def main_clock(self):
+        """ get main clock """
         return self.getNode("fpga").getAttributeValue("main_clock")
 
-    def isPlatform(self):
+    @classmethod
+    def is_platform(cls):
+        """ is it a platform instance ? """
         return True
 
-    def getPlatformPortsList(self):
+    @property
+    def platform_ports(self):
         """ Get all port in platform """
         portslist = []
         for interface in self.getInterfacesList():

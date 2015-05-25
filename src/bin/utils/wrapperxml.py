@@ -249,10 +249,14 @@ class WrapperXml(object):
     def size(self, size):
         self.setAttribute("size", str(size))
 
-    def getName(self):
+    @property
+    def name(self):
+        """ return the name of the tree """
         return self.getAttributeValue("name")
 
-    def setName(self, value):
+    @name.setter
+    def name(self, value):
+        """ set the name of the tree """
         return self.setAttribute("name", value)
 
     @property

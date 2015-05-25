@@ -54,7 +54,7 @@ def header():
     header = header.replace("$tpl:author$", SETTINGS.author)
     header = header.replace("$tpl:date$", str(datetime.date.today()))
     header = header.replace("$tpl:filename$", "Top_" +
-                            SETTINGS.active_project.getName() + "_tb.vhd")
+                            SETTINGS.active_project.name + "_tb.vhd")
     header = header.replace("$tpl:abstract$",
                             SETTINGS.active_project.getDescription())
     return header
@@ -63,7 +63,7 @@ def header():
 def include():
     include = ""
     platform = SETTINGS.active_project.platform
-    for library in platform.getLibrariesList():
+    for library in platform.libraries:
         for line in library.getDescription().split("\n"):
             include = include + "-- " + line + "\n"
         include = include + "use " +\
@@ -76,9 +76,9 @@ def entity():
     """ return entity code
     """
     entity = "\nentity " + "top_" +\
-        SETTINGS.active_project.getName() + "_tb is\n"
+        SETTINGS.active_project.name + "_tb is\n"
     entity = entity + "end entity top_" +\
-        SETTINGS.active_project.getName() + "_tb;\n\n"
+        SETTINGS.active_project.name + "_tb;\n\n"
     return entity
 
 
@@ -86,7 +86,7 @@ def architecturehead():
     """ return architecture head VHDL code
     """
     arch = "architecture RTL of " + "top_" +\
-        SETTINGS.active_project.getName() + "_tb is\n\n"
+        SETTINGS.active_project.name + "_tb is\n\n"
     return arch
 
 
@@ -100,7 +100,7 @@ def constant(clockhalfperiod):
             for register in interface.getRegisterList():
                 constant = constant + ONETAB + "CONSTANT " +\
                     instance.instancename.upper() + "_" +\
-                    register.getName().upper() +\
+                    register.name.upper() +\
                     " : std_logic_vector := x\"" + register.getAbsoluteAddr() +\
                     "\";\n"
     return constant
@@ -111,8 +111,8 @@ def signals(portlist):
     """
     out = ""
     for port in portlist:
-        portname = port.getName()
-        interfacename = port.parent.getName()
+        portname = port.name
+        interfacename = port.parent.name
         instancename = port.parent.parent.instancename
         out = out + ONETAB + "signal  " +\
             instancename + "_" + portname + " : "
@@ -129,12 +129,12 @@ def declareTop(portlist):
     """ declare top component
     """
 
-    out = "\n" + ONETAB + "component top_" + SETTINGS.active_project.getName()
+    out = "\n" + ONETAB + "component top_" + SETTINGS.active_project.name
     out = out + "\n" + ONETAB + "port ("
 
     for port in portlist:
-        portname = port.getName()
-        interfacename = port.parent.getName()
+        portname = port.name
+        interfacename = port.parent.name
         instancename = port.parent.parent.instancename
         out = out + ONETAB * 2 +\
             instancename + "_" + portname + \
@@ -149,7 +149,7 @@ def declareTop(portlist):
     out = out[:-2]
     out = out + "\n" + ONETAB + ");\n"
     out = out + ONETAB + "end component top_" +\
-        SETTINGS.active_project.getName() + ";\n"
+        SETTINGS.active_project.name + ";\n"
     return out
 
 
@@ -158,12 +158,12 @@ def beginarch():
 
 
 def connectTop(portlist):
-    out = ONETAB + "top : top_" + SETTINGS.active_project.getName() + "\n"
+    out = ONETAB + "top : top_" + SETTINGS.active_project.name + "\n"
     out = out + ONETAB + "port map(\n"
 
     for port in portlist:
-        portname = port.getName()
-        interfacename = port.parent.getName()
+        portname = port.name
+        interfacename = port.parent.name
         instancename = port.parent.parent.instancename
 
         # sig declaration
@@ -208,7 +208,7 @@ def generateTemplate():
     """ generate Template Testbench
     """
     filename = SETTINGS.projectpath + SIMULATIONPATH +\
-        "/top_" + SETTINGS.active_project.getName() +\
+        "/top_" + SETTINGS.active_project.name +\
         "_tb" + VHDLEXT
     clockportlist = SETTINGS.active_project.clock_ports
     if len(clockportlist) == 0:
@@ -217,7 +217,7 @@ def generateTemplate():
         DISPLAY.msg("More than one external clock in design", 1)
     clockport = clockportlist[0]
     clockname = clockport.parent.parent.instancename +\
-        "_" + clockport.getName()
+        "_" + clockport.name
 
     ###################
     # header
@@ -228,7 +228,7 @@ def generateTemplate():
     freq = clockport.dest_port.frequency
     clockhalfperiod = (1000 / float(freq)) / 2
     out = out + constant(clockhalfperiod)
-    portlist = SETTINGS.active_project.platform.getConnectPortsList()
+    portlist = SETTINGS.active_project.platform.connect_ports
     out = out + signals(portlist)
     out = out + declareTop(portlist)
     out = out + beginarch()
@@ -261,17 +261,17 @@ def generateMakefile():
     # include file list:
     srclist = []
     platform = SETTINGS.active_project.platform
-    projectname = "top_" + SETTINGS.active_project.getName()
+    projectname = "top_" + SETTINGS.active_project.name
     srclist.append(".." + SYNTHESISPATH + "/top_" +
-                   SETTINGS.active_project.getName() + VHDLEXT)
+                   SETTINGS.active_project.name + VHDLEXT)
     for component in SETTINGS.active_project.instances:
         if component.getNum() == "0":
-            compdir = ".." + SYNTHESISPATH + "/" + component.getName() + "/"
+            compdir = ".." + SYNTHESISPATH + "/" + component.name + "/"
             for hdlfile in component.getHdl_filesList():
                 srclist.append(compdir + hdlfile.getFileName().split("/")[-1])
 
     librarylist = []
-    for library in platform.getLibrariesList():
+    for library in platform.libraries:
         srclist.append(library.getFileName())
         librarylist.append(library.getFileName())
 

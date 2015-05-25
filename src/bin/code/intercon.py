@@ -44,7 +44,7 @@ class Intercon(Component):
         """ Init fonction
         """
         masterinstancename = masterinterface.parent.instancename
-        masterinterfacename = masterinterface.getName()
+        masterinterfacename = masterinterface.name
 
         Component.__init__(self)
         self.interfaceslist = []
@@ -68,17 +68,17 @@ class Intercon(Component):
 
         # set name and description
         self.setName(str(masterinstance.instancename) +
-                     "_" + str(masterinterface.getName()))
+                     "_" + str(masterinterface.name))
         self.instancename = masterinstance.instancename +\
-                             "_" + masterinterface.getName() +\
-                             "_intercon"
+            "_" + masterinterface.name +\
+            "_intercon"
         self.setDescription("Connect slaves to " +
-                            masterinterface.getName() +
+                            masterinterface.name +
                             " from " +
                             masterinstance.instancename)
 
         # Save to make directories
-        self.saveInstance()
+        self.save()
 
         # Create interface for each component connected on intercon
         # for slaves and master:
@@ -93,7 +93,7 @@ class Intercon(Component):
             # bus (wishbone,...)
             bus = Interface(self,
                             name=instance.instancename +
-                            "_" + interface.getName())
+                            "_" + interface.name)
             bus.setClass("intercon")
             # Adding bus interface on intercon
             self.addInterface(bus)
@@ -102,7 +102,7 @@ class Intercon(Component):
             for port in interface.ports:
                 newport = Port(bus,
                                name=instance.instancename +
-                               "_" + port.getName())
+                               "_" + port.name)
                 newport.direction = self.invertDir(port.direction)
                 newport.size = port.size
                 # adding port on bus interface

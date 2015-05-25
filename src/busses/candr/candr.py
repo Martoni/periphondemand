@@ -49,7 +49,7 @@ def header(author, intercon):
     """
     header = open(SETTINGS.path + TEMPLATESPATH + "/" + HEADERTPL, "r").read()
     header = header.replace("$tpl:date$", str(datetime.date.today()))
-    header = header.replace("$tpl:filename$", intercon.getName() + VHDLEXT)
+    header = header.replace("$tpl:filename$", intercon.name + VHDLEXT)
     header = header.replace("$tpl:abstract$", intercon.getDescription())
     return header
 
@@ -57,13 +57,13 @@ def header(author, intercon):
 def entity(intercon):
     """ generate entity
     """
-    entity = "Entity " + intercon.getName() + " is\n"
+    entity = "Entity " + intercon.name + " is\n"
     entity = entity + ONETAB + "port\n" + ONETAB + "(\n"
     for interface in intercon.getInterfacesList():
         entity = entity + "\n" + ONETAB * 2 + "-- " +\
-            interface.getName() + " connection\n"
+            interface.name + " connection\n"
         for port in interface.ports:
-            entity = entity + ONETAB * 2 + "%-40s" % port.getName() + " : " +\
+            entity = entity + ONETAB * 2 + "%-40s" % port.name + " : " +\
                 "%-5s" % port.direction
             if port.size == "1":
                 entity = entity + "std_logic;\n"
@@ -81,8 +81,8 @@ def entity(intercon):
 def architectureHead(masterinterface, intercon):
     """ Generate the head architecture
     """
-    archead = "architecture " + intercon.getName() + "_1 of " +\
-        intercon.getName() + " is\n"
+    archead = "architecture " + intercon.name + "_1 of " +\
+        intercon.name + " is\n"
     archead = archead + "begin\n"
     return archead
 
@@ -95,10 +95,10 @@ def connectClockandReset(masterinterface, intercon):
     masterinstancename = masterinstance.instancename
     masterresetname = masterinstancename + "_" +\
         masterinterface.getPortByType(bus.getSignalName("master",
-                                                        "reset")).getName()
+                                                        "reset")).name
     masterclockname = masterinstancename + "_" +\
         masterinterface.getPortByType(bus.getSignalName("master",
-                                                        "clock")).getName()
+                                                        "clock")).name
 
     out = "\n" + ONETAB + "-- Clock and Reset connection\n"
     for slave in masterinterface.getSlavesList():
@@ -106,10 +106,10 @@ def connectClockandReset(masterinterface, intercon):
         slaveinstancename = slave.instancename
         slaveresetname = slaveinstancename + "_" +\
             slaveinterface.getPortByType(
-                bus.getSignalName("slave", "reset")).getName()
+                bus.getSignalName("slave", "reset")).name
         slaveclockname = slaveinstancename + "_" +\
             slaveinterface.getPortByType(
-                bus.getSignalName("slave", "clock")).getName()
+                bus.getSignalName("slave", "clock")).name
         out = out + "\n" + ONETAB + "-- for " + slaveinstancename + "\n"
         # reset
         out = out + ONETAB + slaveresetname + " <= " + masterresetname + ";\n"
@@ -120,7 +120,7 @@ def connectClockandReset(masterinterface, intercon):
 
 def architectureFoot(intercon):
     """ Write foot architecture code """
-    out = "\nend architecture " + intercon.getName() + "_1;\n"
+    out = "\nend architecture " + intercon.name + "_1;\n"
     return out
 
 

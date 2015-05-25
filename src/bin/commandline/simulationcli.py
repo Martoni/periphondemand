@@ -102,7 +102,7 @@ Make projects files for simulation (makefile and testbench sources)
             print PodError("Choose a toolchain before", 0)
             for toolchain in \
                     SETTINGS.active_project.get_simulation_toolchains():
-                print(str(toolchain.getName()))
+                print(str(toolchain.name))
             return
         try:
             filename = SETTINGS.active_project.simulation.generateTemplate()

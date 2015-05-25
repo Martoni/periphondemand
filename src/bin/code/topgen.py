@@ -50,7 +50,7 @@ class TopGen(object):
                 self.project.get_instance(
                     masterinterface.parent.instancename +
                     "_" +
-                    masterinterface.getName() +
+                    masterinterface.name +
                     "_intercon")
             except PodError, error:
                 raise PodError("Intercon missing, all intercon must be" +
@@ -59,8 +59,8 @@ class TopGen(object):
         # header
         out = self.header()
         # entity
-        entityname = "top_" + self.project.getName()
-        portlist = self.project.platform.getConnectPortsList()
+        entityname = "top_" + self.project.name
+        portlist = self.project.platform.connect_ports
         out = out + self.entity(entityname, portlist)
         # architecture head
         out = out + self.architectureHead(entityname)
@@ -68,8 +68,7 @@ class TopGen(object):
         out = out + self.declareComponents()
         # declare signals
         platform = self.project.platform
-        incompleteportslist =\
-            platform.getIncompleteExternalPortsList()
+        incompleteportslist = platform.incomplete_port_list
         out = out + self.declareSignals(self.project.instances,
                                         incompleteportslist)
         # begin
@@ -86,7 +85,7 @@ class TopGen(object):
         # save file
         try:
             file = open(SETTINGS.projectpath + SYNTHESISPATH +
-                        "/top_" + self.project.getName() + VHDLEXT, "w")
+                        "/top_" + self.project.name + VHDLEXT, "w")
         except IOError, error:
             raise error
         file.write(out)

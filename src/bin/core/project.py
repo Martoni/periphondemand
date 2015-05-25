@@ -128,7 +128,7 @@ class Project(WrapperXml):
                 else:
                     comp = Platform(self, node=self.getNode("platform"))
                 try:
-                    comp.loadInstance(node.getAttributeValue("name"))
+                    comp.load(node.getAttributeValue("name"))
                 except IOError:
                     self.delSubNode("components",
                                     "component",
@@ -144,10 +144,10 @@ class Project(WrapperXml):
         # if(toolchains):
         #       node = toolchains.getNode("simulation")
         #       if node!=None:
-        #           self.simulation = Simulation(self, node.getName())
+        #           self.simulation = Simulation(self, node.name)
         #       node = toolchains.getNode("synthesis")
         #       if node!=None:
-        #           self.synthesis = Synthesis(self, node.getName())
+        #           self.synthesis = Synthesis(self, node.name)
         try:
             self.synthesis = Synthesis(self)
         except PodError, error:
@@ -193,23 +193,23 @@ class Project(WrapperXml):
     @property
     def fpga_speed_grade(self):
         """ Get FPGA speedgrade """
-        return self.platform.getSpeed()
+        return self.platform.speed
 
     @fpga_speed_grade.setter
     def fpga_speed_grade(self, speed):
         """ Set FPGA speedgrade """
-        self.platform.setSpeed(speed)
+        self.platform.speed = speed
         self.save()
 
     @property
     def fpga_device(self):
         """ get fpgadevice """
-        return self.platform.getDevice()
+        return self.platform.device
 
     @fpga_device.setter
     def fpga_device(self, device):
         """ set fpga device """
-        self.platform.setDevice(device)
+        self.platform.device = device
         self.save()
 
     @property
@@ -282,7 +282,7 @@ class Project(WrapperXml):
     def forced_ports(self):
         """ List FPGA forced FPGA pin """
         platform = self.platform
-        return platform.getForcesList()
+        return platform.forces
 
     @property
     def vhdl_version(self):
@@ -351,7 +351,7 @@ class Project(WrapperXml):
                                    instancename, 0)
                 # check instance availability
                 for instance in self.instances:
-                    if instance.getName() == instancename:
+                    if instance.name == instancename:
                         raise PodError("This instance name already exists", 0)
             else:
                 instancename =\
@@ -378,7 +378,7 @@ class Project(WrapperXml):
 
         # Add component to project
         self._instanceslist.append(comp)
-        if comp.getName() != "platform":
+        if comp.name != "platform":
             self.addSubNode(nodename="components",
                             subnodename="component",
                             attributename="name",
@@ -388,7 +388,7 @@ class Project(WrapperXml):
             self.addSubNode(nodename="components",
                             subnodename="component",
                             attributedict=attrib)
-        DISPLAY.msg("Component " + comp.getName() +
+        DISPLAY.msg("Component " + comp.name +
                     " added as " + instancename)
         self.save()
 
@@ -452,7 +452,7 @@ class Project(WrapperXml):
         """ return a list of instances for a componentname """
         listinstance = []
         for instance in self.instances:
-            if instance.getName() == componentname:
+            if instance.name == componentname:
                 listinstance.append(instance)
         return listinstance
 
@@ -461,7 +461,7 @@ class Project(WrapperXml):
         """ return component instance platform
         """
         for component in self.instances:
-            if component.getName() == "platform":
+            if component.name == "platform":
                 return component
         raise PodError("No platform in project", 1)
 
@@ -479,7 +479,7 @@ class Project(WrapperXml):
         portlist = []
         platformname = self.platform.instancename
         for instance in self.instances:
-            if not instance.isPlatform():
+            if not instance.is_platform():
                 for interface in instance.getInterfacesList():
                     for port in interface.ports:
                         if (port.direction == "in") and \
@@ -530,7 +530,7 @@ class Project(WrapperXml):
         self.add_instance(component=platform)
         self.addNode(node=platform)
         # Adding platform default components
-        for component in platform.getComponentsList():
+        for component in platform.components:
             self.add_instance(libraryname=component["type"],
                               componentname=component["name"])
         self.save()
@@ -566,11 +566,11 @@ class Project(WrapperXml):
                     pin.delAllConnections()
         # remove busses connections from project instances to this instancename
         for comp in self.instances:
-            if comp.getName() != "platform":
+            if comp.name != "platform":
                 comp.del_bus(instanceslavename=instancename)
         # Remove components from project
         self._instanceslist.remove(instance)
-        self.reorder_instances(instance.getName())
+        self.reorder_instances(instance.name)
         self.delSubNode("components",
                         "component",
                         "name",
@@ -582,12 +582,12 @@ class Project(WrapperXml):
     def save(self):
         """ Save the project """
         for comp in self._instanceslist:
-            comp.saveInstance()
+            comp.save()
         if self.synthesis is not None:
             self.synthesis.save()
         if self.simulation is not None:
             self.simulation.save()
-        self.saveXml(SETTINGS.projectpath + "/" + self.getName() + XMLEXT)
+        self.saveXml(SETTINGS.projectpath + "/" + self.name + XMLEXT)
 
     def connect_pin_cmd(self, pin_source, pin_dest):
         """ connect pin between two instances
@@ -716,7 +716,7 @@ class Project(WrapperXml):
         """ Renum all instances in the correct order """
         complist = []
         for comp in self._instanceslist:
-            if comp.getName() == componentname:
+            if comp.name == componentname:
                 complist.append(comp)
         num = 0
         for comp in complist:
@@ -753,7 +753,7 @@ class Project(WrapperXml):
                     try:
                         # connect bus
                         master.connect_bus(interfaceslave.parent,
-                                           interfaceslave.getName())
+                                           interfaceslave.name)
                     except PodError, error:
                         error.setLevel(2)
                         DISPLAY.msg(str(error))
@@ -772,8 +772,8 @@ class Project(WrapperXml):
                 raise PodError(
                     "Pin connections on port " +
                     str(port.parent.parent.instancename) +
-                    "." + str(port.parent.getName()) + "." +
-                    str(port.getName()) +
+                    "." + str(port.parent.name) + "." +
+                    str(port.name) +
                     "is wrong, pin number must be followed.")
 
         ###########################################
@@ -787,7 +787,7 @@ class Project(WrapperXml):
                 for slave2 in listslave:
                     if slave2.parent.instancename ==\
                         slave.instancename and \
-                            slave2.getName() == slave.interfacename:
+                            slave2.name == slave.interfacename:
                         listslave.remove(slave2)
 
         for slave in listslave:
@@ -801,7 +801,7 @@ class Project(WrapperXml):
         dict_reg = {}
         newmaster = []
         for master in listmaster:
-            if (master.getName() != "candroutput"):
+            if (master.name != "candroutput"):
                 newmaster.append(master)
         for master in newmaster:
             for slave in master.getSlavesList():
@@ -823,7 +823,7 @@ class Project(WrapperXml):
                         dict_reg[register["offset"]] =\
                             (slave.instancename, register["name"])
             DISPLAY.msg("")
-            DISPLAY.msg("Mapping for interface " + master.getName() + ":")
+            DISPLAY.msg("Mapping for interface " + master.name + ":")
             DISPLAY.msg("Address  | instance.interface             |" +
                         " size        ")
             DISPLAY.msg("-----------------------------" +
@@ -864,7 +864,7 @@ class Project(WrapperXml):
     def get_io(self, io_name):
         """ return IO with io_name given """
         for an_io in self.get_ios():
-            if an_io.getName() == io_name:
+            if an_io.name == io_name:
                 return an_io
         raise PodError("No IO with name " + str(io_name))
 
@@ -888,7 +888,7 @@ class Project(WrapperXml):
         """ generate a project report """
         if filename is None:
             report_file = open(SETTINGS.projectpath +
-                               "/" + self.getName() +
+                               "/" + self.name +
                                "_report.txt", "w")
         else:
             report_file = open(filename, "w")
@@ -896,12 +896,12 @@ class Project(WrapperXml):
         for master in self.interfaces_master:
             masterinstance = master.parent
             text += "\n  " + masterinstance.instancename + "." +\
-                    master.getName() + ":\n"
+                    master.name + ":\n"
             for slave in master.getSlavesList():
                 interfaceslave = slave.getInterface()
                 instance = interfaceslave.parent
                 text += ONETAB + instance.instancename +\
-                    "." + interfaceslave.getName() + ":\n"
+                    "." + interfaceslave.name + ":\n"
                 try:
                     for reg in interfaceslave.getRegisterMap():
                         text += ONETAB + "  " +\

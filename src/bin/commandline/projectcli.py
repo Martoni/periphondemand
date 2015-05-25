@@ -161,8 +161,8 @@ create new project
                 print(str(error))
                 return
 
-        self.setPrompt("POD", SETTINGS.active_project.getName())
-        print("Project " + SETTINGS.active_project.getName() + " created")
+        self.setPrompt("POD", SETTINGS.active_project.name)
+        print("Project " + SETTINGS.active_project.name + " created")
 
     def complete_load(self, text, line, begidx, endidx):
         """ complete load command with files under directory """
@@ -202,7 +202,7 @@ Load a project
         except IOError, error:
             print(str(error))
             return
-        self.setPrompt("POD:" + SETTINGS.active_project.getName())
+        self.setPrompt("POD:" + SETTINGS.active_project.name)
         print(str(DISPLAY))
 
     def complete_setspeedgrade(self, text, line, begidx, endidx):
@@ -538,7 +538,7 @@ List instance interface
             self.checkargs(line, "<instancename>")
             self.is_project_open()
             interfacelist =\
-                [interface.getName() for interface in
+                [interface.name for interface in
                     SETTINGS.active_project.get_instance(
                         line).getInterfacesList()]
         except PodError, error:
@@ -989,7 +989,7 @@ Set the base address of slave interface
                 print DISPLAY
                 print("PodError, need a slave interface name")
                 return
-            names.append(masterinterface[0].getName())
+            names.append(masterinterface[0].name)
 
         try:
             interfaceslave =\
@@ -1016,7 +1016,7 @@ List master interface
             print(str(error))
             return
         for master in SETTINGS.active_project.interfaces_master:
-            print(master.parent.instancename + "." + master.getName())
+            print(master.parent.instancename + "." + master.name)
         print DISPLAY
 
     def complete_getmapping(self, text, line, begidx, endidx):
@@ -1101,28 +1101,28 @@ Print instance information
             print error
             return
         print("Instance name :" + instance.instancename)
-        print("Component  name :" + instance.getName())
+        print("Component  name :" + instance.name)
         print("description : " + instance.getDescription().strip())
         print("->Generics")
         for generic in instance.getGenericsList():
-            print("%15s : " % generic.getName() + generic.getValue())
+            print("%15s : " % generic.name + generic.getValue())
         print("->Interfaces")
         for interface in instance.getInterfacesList():
             if interface.getBusName() is not None:
                 if interface.getClass() == "slave":
-                    print("%-15s " % interface.getName() +
+                    print("%-15s " % interface.name +
                           " Base address:" + hex(interface.getBaseInt()))
                 elif interface.getClass() == "master":
-                    print("%-15s :" % interface.getName())
+                    print("%-15s :" % interface.name)
                     for slave in interface.getSlavesList():
                         print(" " * 10 + "slave -> " +
                               slave.instancename + "." +
                               slave.interfacename)
             else:
-                print("%-15s :" % interface.getName())
+                print("%-15s :" % interface.name)
 
             for port in interface.ports:
-                print(" " * 5 + "%-15s" % port.getName() +
+                print(" " * 5 + "%-15s" % port.name +
                       " s" + port.size)
                 for pin in port.pins:
                     print(" " * 8 + "pin"),
@@ -1260,7 +1260,7 @@ Generate top component
             return
         print DISPLAY
         print("Top generated with name : top_" +
-              SETTINGS.active_project.getName() + ".vhd")
+              SETTINGS.active_project.name + ".vhd")
 
     def do_report(self, line):
         """\
@@ -1293,7 +1293,7 @@ List all force configured for this project
         """
         try:
             for port in SETTINGS.active_project.forced_ports:
-                print("port " + str(port.getName()) +
+                print("port " + str(port.name) +
                       " is forced to " + port.force)
         except PodError, error:
             print DISPLAY

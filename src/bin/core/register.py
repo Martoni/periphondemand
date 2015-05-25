@@ -82,6 +82,6 @@ class Register(WrapperXml):
             return "%08x" % (baseaddr + offset * 4)
         else:
             raise PodError("Register size not supported for reg " +
-                           str(self.getName()) +
+                           str(self.name) +
                            " in component " +
-                           str(self.parent.parent.getName()))
+                           str(self.parent.parent.name))

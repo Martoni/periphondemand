@@ -49,7 +49,7 @@ class Bus(WrapperXml):
         """ Get size of data"""
         size = self.getAttributeValue("datasize")
         if size is None:
-            raise PodError("No datasize attribute in bus " + self.getName(), 0)
+            raise PodError("No datasize attribute in bus " + self.name, 0)
         else:
             return size
 
@@ -69,8 +69,8 @@ class Bus(WrapperXml):
         masterinterface = self.parent
         import sys
         # load module path
-        sys.path.append(SETTINGS.path + BUSPATH + "/" + self.getName())
-        plugin = __import__(self.getName())
-        sys.path.remove(SETTINGS.path + BUSPATH + "/" + self.getName())
+        sys.path.append(SETTINGS.path + BUSPATH + "/" + self.name)
+        plugin = __import__(self.name)
+        sys.path.remove(SETTINGS.path + BUSPATH + "/" + self.name)
 
         plugin.generate_intercon(masterinterface, intercon)

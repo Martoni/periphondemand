@@ -56,7 +56,7 @@ class Synthesis(WrapperXml):
         WrapperXml.__init__(self, file=filepath)
         # adding path for toolchain plugin
         sys.path.append(SETTINGS.path + TOOLCHAINPATH +
-                        SYNTHESISPATH + "/" + self.getName())
+                        SYNTHESISPATH + "/" + self.name)
 
     def save(self):
         """ Save xml """
@@ -95,13 +95,13 @@ class Synthesis(WrapperXml):
                 # Make directory
                 compdir = SETTINGS.projectpath +\
                     SYNTHESISPATH + "/" +\
-                    component.getName()
+                    component.name
                 if sy.dirExist(compdir):
                     DISPLAY.msg("Directory " + compdir +
                                 " exist, will be deleted")
                     sy.delDirectory(compdir)
                 sy.makeDirectory(compdir)
-                DISPLAY.msg("Make directory for " + component.getName())
+                DISPLAY.msg("Make directory for " + component.name)
                 # copy hdl files
                 for hdlfile in component.getHdl_filesList():
                     try:
@@ -118,13 +118,13 @@ class Synthesis(WrapperXml):
     def generate_tcl(self, filename=None):
         """ generate tcl script to drive synthesis tool """
         try:
-            plugin = __import__(self.getName())
+            plugin = __import__(self.name)
         except ImportError, error:
             sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
-                            SYNTHESISPATH + "/" + self.getName())
+                            SYNTHESISPATH + "/" + self.name)
             raise PodError(str(error), 0)
         sys.path.append(SETTINGS.path + TOOLCHAINPATH +
-                        SYNTHESISPATH + "/" + self.getName())
+                        SYNTHESISPATH + "/" + self.name)
         filename = plugin.generate_tcl(self)
         self.tcl_scriptname = str(filename)
         return None
@@ -153,13 +153,13 @@ class Synthesis(WrapperXml):
     def generate_pinout(self, filename):
         """ Generate pinout constraints file """
         try:
-            plugin = __import__(self.getName())
+            plugin = __import__(self.name)
         except ImportError, error:
             sy.delFile(SETTINGS.path + TOOLCHAINPATH +
-                       SYNTHESISPATH + "/" + self.getName())
+                       SYNTHESISPATH + "/" + self.name)
             raise PodError(str(error))
         sy.delFile(SETTINGS.path + TOOLCHAINPATH +
-                   SYNTHESISPATH + "/" + self.getName())
+                   SYNTHESISPATH + "/" + self.name)
 
         plugin.generate_pinout(self, filename)
         return None
@@ -167,7 +167,7 @@ class Synthesis(WrapperXml):
     def generate_bitstream(self):
         """ Generate the bitstream for fpga configuration """
         try:
-            plugin = __import__(self.getName())
+            plugin = __import__(self.name)
         except ImportError, error:
             raise PodError(str(error), 0)
         scriptpath = SETTINGS.projectpath +\

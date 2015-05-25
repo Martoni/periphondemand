@@ -57,7 +57,7 @@ class Driver(WrapperXml):
     def generate_project(self):
         """ copy template drivers files """
         project = self.project
-        op_sys = self.getName()
+        op_sys = self.name
         if op_sys is None:
             raise PodError("Operating system must be selected", 0)
         for component in project.instances:
@@ -65,25 +65,25 @@ class Driver(WrapperXml):
                 driver_template = component.getDriver_Template(op_sys)
                 if driver_template is not None:
                     if sy.dirExist(SETTINGS.projectpath + DRIVERSPATH +
-                                   "/" + component.getName()):
+                                   "/" + component.name):
                         DISPLAY.msg("Driver directory for " +
-                                    component.getName() +
+                                    component.name +
                                     " allready exist. suppressing it")
                         sy.delDirectory(SETTINGS.projectpath + DRIVERSPATH +
-                                        "/" + component.getName())
+                                        "/" + component.name)
                     DISPLAY.msg("Create directory for " +
-                                component.getName() + " driver")
+                                component.name + " driver")
                     # create component directory
                     sy.makeDirectory(SETTINGS.projectpath +
                                      DRIVERSPATH + "/" +
-                                     component.getName())
+                                     component.name)
                 else:
-                    DISPLAY.msg("No driver for " + component.getName())
+                    DISPLAY.msg("No driver for " + component.name)
 
     def fill_all_templates(self):
         """ fill template """
         project = self.project
-        op_sys = self.getName()
+        op_sys = self.name
         if op_sys is None:
             raise PodError("Operating system must be selected", 0)
         for component in project.instances:
@@ -91,7 +91,7 @@ class Driver(WrapperXml):
                 driver_template = component.getDriver_Template(op_sys)
                 if driver_template is not None:
                     DISPLAY.msg("Copy and fill template for " +
-                                component.getName())
+                                component.name)
                     for templatefile in driver_template.template_names:
                         try:
                             template = open(
@@ -102,7 +102,7 @@ class Driver(WrapperXml):
                                 templatefile, "r")
                             destfile = open(
                                 SETTINGS.projectpath + DRIVERSPATH + "/" +
-                                component.getName() + "/" + templatefile,
+                                component.name + "/" + templatefile,
                                 "w")
                         except IOError, error:
                             raise PodError(str(error), 0)
@@ -114,8 +114,7 @@ class Driver(WrapperXml):
         """ fill template for each instance of component """
         out = ""
         for instance in\
-            self.project.get_instances_list_of_component(
-                component.getName()):
+                self.project.get_instances_list_of_component(component.name):
             for writeline in template.split("\n"):
                 # instance_name
                 writeline = re.sub(r'\/\*\$instance_name\$\*\/',
@@ -171,24 +170,24 @@ class Driver(WrapperXml):
                         DISPLAY.msg(
                             "More than one interrupt port in " +
                             instance.instancename +
-                            "." + interruptlist[0].getName() + " is used")
+                            "." + interruptlist[0].name + " is used")
                     interruptport = interruptlist[0]
 
                     try:
                         connect = interruptport.get_pin(0).getConnections()
                     except PodError:
                         raise PodError(
-                            "Interrupt " + interruptport.getName() +
+                            "Interrupt " + interruptport.name +
                             " not connected in " +
                             interruptport.parent.parent.instancename +
-                            "." + interruptport.parent.getName(), 0)
+                            "." + interruptport.parent.name, 0)
                     if len(connect) == 0:
-                        raise PodError("Interrupt " + interruptport.getName() +
+                        raise PodError("Interrupt " + interruptport.name +
                                        " is not connected", 0)
                     elif len(connect) > 1:
                         DISPLAY.msg(
                             "More than one connection for interruption port " +
-                            interruptport.getName() + ". " +
+                            interruptport.name + ". " +
                             connect[0]["port_dest"] + " is used")
                     writeline = re.sub(r'\/\*\$interrupt_number\$\*\/',
                                        connect[0]["pin_dest"],
@@ -214,13 +213,13 @@ class Driver(WrapperXml):
                              line) is not None:
                     instances_list =\
                         project.get_instances_list_of_component(
-                            component.getName())
+                            component.name)
                     line = re.sub(r'\/\*\$number_of_instances\$\*\/',
                                   str(len(instances_list)),
                                   line)
                 # main clock speed
                 if re.search(r'\/\*\$main_clock\$\*\/', line) is not None:
-                    frequency = project.platform.getMainClock()
+                    frequency = project.platform.main_clock
                     line = re.sub(r'\/\*\$main_clock\$\*\/', frequency, line)
                 destfile.write(line)
             elif state == "FOREACH_INSTANCE":

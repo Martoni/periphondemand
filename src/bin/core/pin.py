@@ -119,16 +119,16 @@ class Pin(WrapperXml):
             "connect",
             {"instance_dest":
              pin_dest.parent.parent.parent.instancename,
-             "interface_dest": pin_dest.parent.parent.getName(),
-             "port_dest": pin_dest.parent.getName(),
+             "interface_dest": pin_dest.parent.parent.name,
+             "port_dest": pin_dest.parent.name,
              "pin_dest": str(pin_dest.getNum())})
 
         pin_dest.delNode(
             "connect",
             {"instance_dest":
                 self.parent.parent.parent.instancename,
-             "interface_dest": self.parent.parent.getName(),
-             "port_dest": self.parent.getName(),
+             "interface_dest": self.parent.parent.name,
+             "port_dest": self.parent.name,
              "pin_dest": str(self.getNum())})
         return True
 
@@ -151,8 +151,8 @@ class Pin(WrapperXml):
         for connect in self.getConnections():
             if connect == {"instance_dest":
                            pin_dest.parent.parent.parent.instancename,
-                           "interface_dest": pin_dest.parent.parent.getName(),
-                           "port_dest": pin_dest.parent.getName(),
+                           "interface_dest": pin_dest.parent.parent.name,
+                           "port_dest": pin_dest.parent.name,
                            "pin_dest": str(pin_dest.getNum())}:
                 return True
         return False
@@ -182,21 +182,21 @@ class Pin(WrapperXml):
         """ Make connection between two pin
         """
         message = "trying to connect " +\
-                  self.parent.parent.parent.getName() + "." +\
-                  self.parent.parent.getName() + "." +\
-                  self.parent.getName() + "." +\
+                  self.parent.parent.parent.name + "." +\
+                  self.parent.parent.name + "." +\
+                  self.parent.name + "." +\
                   self.getNum() + " -> " +\
-                  pin_dest.parent.parent.parent.getName() + "." +\
-                  pin_dest.parent.parent.getName() + "." +\
-                  pin_dest.parent.getName() + "." +\
+                  pin_dest.parent.parent.parent.name + "." +\
+                  pin_dest.parent.parent.name + "." +\
+                  pin_dest.parent.name + "." +\
                   pin_dest.getNum()
 
         if self.parent.force_defined():
-            raise PodError(message + " : Port " + str(self.parent.getName()) +
+            raise PodError(message + " : Port " + str(self.parent.name) +
                            " is forced, can't be connected")
         if pin_dest.parent.force_defined():
             raise PodError(message +
-                           " : Port " + str(pin_dest.parent.getName()) +
+                           " : Port " + str(pin_dest.parent.name) +
                            " is forced, can't be connected")
 
         if self.parent.direction == "in":
@@ -218,13 +218,13 @@ class Pin(WrapperXml):
 
         if not self.connectionExists(pin_dest):
             self.__addConnection(instance_dest.instancename,
-                                 interface_dest.getName(),
-                                 pin_dest.parent.getName(),
+                                 interface_dest.name,
+                                 pin_dest.parent.name,
                                  pin_dest.getNum())
         if not pin_dest.connectionExists(self):
             pin_dest.__addConnection(instance_source.instancename,
-                                     interface_source.getName(),
-                                     self.parent.getName(),
+                                     interface_source.name,
+                                     self.parent.name,
                                      self.getNum())
 
     def __addConnection(self, instance_destname, interface_destname,

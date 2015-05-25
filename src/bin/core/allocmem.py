@@ -55,7 +55,7 @@ class AllocMem:
 
     def addInterfaceSlave(self, interface):
         if interface.getClass() != "slave":
-            raise PodError(interface.getName() + " is not a slave", 0)
+            raise PodError(interface.name + " is not a slave", 0)
 
         # add slave interface to list
         self.listinterfaceslave.append(interface)
@@ -72,11 +72,11 @@ class AllocMem:
                 DISPLAY.msg("setting base address " +
                             hex(base * size) + " for  " +
                             interface.parent.instancename +
-                            "." + interface.getName())
+                            "." + interface.name)
             else:
                 DISPLAY.msg("Base address is " + hex(base) + " for " +
                             interface.parent.instancename +
-                            "." + interface.getName())
+                            "." + interface.name)
             self.lastaddress = size * (base + 1)
         else:
             DISPLAY.msg("No addressing value in this type of bus")
@@ -112,7 +112,7 @@ class AllocMem:
                 baseaddress = baseaddress + size
             mappinglist.append([interface.getBase(),
                                 interface.parent.instancename +
-                                "." + interface.getName(),
+                                "." + interface.name,
                                 interface.getMemorySize(),
                                 interface.getID()])
             baseaddress = baseaddress + interface.getMemorySize()

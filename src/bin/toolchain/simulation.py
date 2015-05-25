@@ -64,29 +64,29 @@ class Simulation(WrapperXml):
     def generateTemplate(self):
         import sys
         sys.path.append(SETTINGS.path + TOOLCHAINPATH +
-                        SIMULATIONPATH + "/" + self.getName())
+                        SIMULATIONPATH + "/" + self.name)
         try:
-            plugin = __import__(self.getName())
+            plugin = __import__(self.name)
         except ImportError, error:
             sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
-                            SIMULATIONPATH + "/" + self.getName())
+                            SIMULATIONPATH + "/" + self.name)
             raise PodError(str(error), 0)
         sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
-                        SIMULATIONPATH + "/" + self.getName())
+                        SIMULATIONPATH + "/" + self.name)
         return plugin.generateTemplate()
 
     def generateMakefile(self):
         import sys
         sys.path.append(SETTINGS.path + TOOLCHAINPATH +
-                        SIMULATIONPATH + "/" + self.getName())
+                        SIMULATIONPATH + "/" + self.name)
         try:
-            plugin = __import__(self.getName())
+            plugin = __import__(self.name)
         except ImportError, error:
             sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
-                            SIMULATIONPATH + "/" + self.getName())
+                            SIMULATIONPATH + "/" + self.name)
             raise PodError(str(error), 0)
         sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
-                        SIMULATIONPATH + "/" + self.getName())
+                        SIMULATIONPATH + "/" + self.name)
         return plugin.generateMakefile()
 
     def save(self):

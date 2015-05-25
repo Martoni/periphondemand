@@ -359,7 +359,7 @@ fpga_attributes    : give list of fpga attributes in platform
         if len(listargs) > 1:
             if listargs[1][0] == "interfacename":
                 interface = instance.getInterface(listargs[1][1])
-                interfacename = interface.getName()
+                interfacename = interface.name
             elif listargs[1][0] == "componentname":
                 componentname = listargs[1][1]
             elif listargs[1][0] == "componentversion":
@@ -369,7 +369,7 @@ fpga_attributes    : give list of fpga attributes in platform
         if len(listargs) > 2:
             if listargs[2][0] == "portname":
                 port = interface = interface.getPort(listargs[2][1])
-                portname = port.getName()
+                portname = port.name
             else:
                 return []
         # fill list
@@ -385,17 +385,17 @@ fpga_attributes    : give list of fpga attributes in platform
             return [instance.instancename
                     for instance in SETTINGS.active_project.instances]
         elif subargt == "interfacename":
-            return ["" + instancename + "." + interface.getName()
+            return ["" + instancename + "." + interface.name
                     for interface in instance.getInterfacesList()]
         elif subargt == "masterinterfacename":
-            return ["" + instancename + "." + interface.getName()
+            return ["" + instancename + "." + interface.name
                     for interface in instance.getMasterInterfaceList()]
         elif subargt == "slaveinterfacename":
-            return ["" + instancename + "." + interface.getName()
+            return ["" + instancename + "." + interface.name
                     for interface in instance.getSlaveInterfaceList()]
         elif subargt == "portname":
             return ["" + instancename + "." + interfacename + "." +
-                    port.getName() for port in interface.ports]
+                    port.name for port in interface.ports]
         elif subargt == "pinnum":
             return ["" + instancename + "." + interfacename +
                     "." + portname + "." + str(i)
@@ -409,9 +409,9 @@ fpga_attributes    : give list of fpga attributes in platform
             arglist.append("standard")
             return arglist
         elif subargt == "forcename":
-            arglist = ["" + port.getName()
+            arglist = ["" + port.name
                        for port in
-                       SETTINGS.active_project.platform.getPlatformPortsList()]
+                       SETTINGS.active_project.platform.platform_ports]
             return arglist
         elif subargt == "forcestate":
             return ["gnd", "vcc", "undef"]
@@ -453,7 +453,7 @@ fpga_attributes    : give list of fpga attributes in platform
                             SETTINGS.getPlatformLibPath(platformlib))]
 
         elif subargt == "genericname":
-            return ["" + instancename + "." + generic.getName()
+            return ["" + instancename + "." + generic.name
                     for generic in instance.getGenericsList()]
 
         elif subargt == "simulationtoolchain":
@@ -464,7 +464,7 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "drivertoolchain":
             return SETTINGS.active_project.get_driver_toolchains()
         elif subargt == "IO_name":
-            return [port.getName() for port in
+            return [port.name for port in
                     SETTINGS.active_project.get_ios()]
         elif subargt == "fpga_attributes":
             platform = SETTINGS.active_project.platform

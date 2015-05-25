@@ -69,7 +69,7 @@ class Component(WrapperXml):
         """
         project = self.parent
         # verify component name
-        if project.getName() == instancename:
+        if project.name == instancename:
             raise PodError("Instance name can't be " +
                            "the same name as projectname", 0)
         # test if component exist
@@ -115,11 +115,11 @@ class Component(WrapperXml):
                       "/" + instancename + "/" + instancename + XMLEXT)
 
         # load component
-        self.loadInstance(instancename)
+        self.load(instancename)
         # Connect platform connection
         self.autoconnect_pins()
 
-    def loadInstance(self, instancename):
+    def load(self, instancename):
         """ Load an instance from project directory
         """
         # load xml file
@@ -196,7 +196,7 @@ class Component(WrapperXml):
         """ return path of component in system
         """
         librarypath = SETTINGS.active_library.getLibraryPath()
-        return os.path.join(librarypath, self.getName())
+        return os.path.join(librarypath, self.name)
 
     def getInterruptList(self):
         """ Get interrupt list """
@@ -218,7 +218,7 @@ class Component(WrapperXml):
     def getGeneric(self, genericname):
         """ get a generic """
         for generic in self.getGenericsList():
-            if generic.getName() == genericname:
+            if generic.name == genericname:
                 return generic
         raise PodError("No generic with name " + genericname, 0)
 
@@ -231,7 +231,7 @@ class Component(WrapperXml):
     def getInterface(self, interfacename):
         """ Get an interface by name """
         for interface in self.interfaceslist:
-            if interface.getName() == interfacename:
+            if interface.name == interfacename:
                 return interface
         raise PodError("Interface " + str(interfacename) +
                        " does not exists", 0)
@@ -261,7 +261,7 @@ class Component(WrapperXml):
 
     def createInterface(self, interfacename):
         """ Create an interface and add it in component """
-        if interfacename in [interface.getName() for
+        if interfacename in [interface.name for
                              interface in self.getInterfacesList()]:
             raise PodError("Interface " + interfacename +
                            " already exist in component")
@@ -289,7 +289,7 @@ class Component(WrapperXml):
                 return driverT
         return None
 
-    def saveInstance(self):
+    def save(self):
         """ Save component in project directory files """
         if not sy.dirExist(SETTINGS.projectpath + COMPONENTSPATH +
                            "/" + self.instancename):
@@ -301,7 +301,7 @@ class Component(WrapperXml):
 
     def delInstance(self):
         """ suppress component instance """
-        if not self.isPlatform():
+        if not self.is_platform():
             sy.delDirectory(SETTINGS.projectpath + COMPONENTSPATH + "/" +
                             self.instancename)
 
@@ -354,7 +354,7 @@ class Component(WrapperXml):
     def connect_bus(self, interfacemaster, instanceslave, interfaceslave):
         """ Connect an interface bus master to slave """
         interface = self.getInterface(interfacemaster)
-        if interface.getName() is None:
+        if interface.name is None:
             raise PodError(interfacemaster + " is not a bus", 1)
         interface.connect_bus(instanceslave, interfaceslave)
 
@@ -383,9 +383,9 @@ class Component(WrapperXml):
         hdltop = self.getHDLTop()
         if not hdltop:
             raise PodError("No HDL top file in component " +
-                           str(self.getName()))
+                           str(self.name))
         portlist = hdltop.ports
-        if portname not in [port.getName() for port in portlist]:
+        if portname not in [port.name for port in portlist]:
             raise PodError("Port named " + portname + " can't be found in " +
                            hdltop.getFileName())
 
@@ -409,8 +409,8 @@ class Component(WrapperXml):
         for interface in interfaceslist:
             portlist = interface.ports
             for port in portlist:
-                if port.getName() == portname:
-                    return (0, interface.getName())
+                if port.name == portname:
+                    return (0, interface.name)
         return (1, "")
 
     def getFreePortsList(self):
@@ -418,7 +418,7 @@ class Component(WrapperXml):
         ports_list = self.getHDLTop().ports
         freeportlist = []
         for port in ports_list:
-            if self.portIsInFreeList(port.getName()):
+            if self.portIsInFreeList(port.name):
                 freeportlist.append(port)
         return freeportlist
 
@@ -430,13 +430,13 @@ class Component(WrapperXml):
         """
         display_port = {}
         tophdlfile = self.getHDLTop()
-        notassignedports = [port.getName() for
+        notassignedports = [port.name for
                             port in tophdlfile.ports]
         interfacelist = self.getInterfacesList()
         for interface in interfacelist:
-            key = interface.getName()
+            key = interface.name
             display_port[key] = []
-            port_name_list = [port.getName() for
+            port_name_list = [port.name for
                               port in interface.ports]
             for port_name in port_name_list:
                 try:
@@ -451,7 +451,8 @@ class Component(WrapperXml):
             display_port["Not_assigned_Ports"] = notassignedports
         return display_port
 
-    def isPlatform(self):
+    @classmethod
+    def is_platform(cls):
         """ is this component instance is a Platform ?"""
         return False
 

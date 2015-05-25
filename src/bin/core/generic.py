@@ -98,7 +98,7 @@ class Generic(WrapperXml):
     def generictype(self):
         the_type = self.getAttributeValue("type")
         if the_type is None:
-            raise PodError("Generic " + self.getName() +
+            raise PodError("Generic " + self.name +
                            " description malformed, type must be defined", 0)
         else:
             return the_type
