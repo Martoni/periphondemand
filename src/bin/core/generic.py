@@ -68,7 +68,7 @@ class Generic(WrapperXml):
 
     def __initname(self, name):
         WrapperXml.__init__(self, nodename="generic")
-        self.setName(name)
+        self.name = name
 
     def getOp(self):
         return self.getAttributeValue("op")

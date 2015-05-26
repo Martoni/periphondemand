@@ -295,8 +295,7 @@ class TopVHDL(TopGen):
                                     (port.direction == "in"):
                                 out = out +\
                                     sorted(
-                                        [aport.extended_name
-                                         for aport in
+                                        [aport.extended_name for aport in
                                          port.ports_with_same_connection]
                                         )[0]
                                 out = out + ",\n"

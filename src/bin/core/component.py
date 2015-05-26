@@ -462,7 +462,7 @@ class Component(WrapperXml):
         """Add or modify attribute value for a node """
         generic = self.getGeneric(generic_name)
         if attribute_name == "name":
-            generic.setName(attribute_value)
+            generic.name = attribute_value
         elif attribute_name == "public":
             generic.setPublic(attribute_value)
         elif attribute_name == "value":
@@ -499,7 +499,7 @@ class Component(WrapperXml):
         """Add or modify attribute value for a node """
         interface = self.getInterface(interface_name)
         if attribute_name == "name":
-            interface.setName(attribute_value)
+            interface.name = attribute_value
         elif attribute_name == "bus":
             interface.setBus(attribute_value)
         elif attribute_name == "class":
@@ -515,7 +515,7 @@ class Component(WrapperXml):
         interface = self.getInterface(interface_name)
         port = interface.getPort(port_name)
         if attribute_name == "name":
-            port.setName(attribute_value)
+            port.name = attribute_value
         elif attribute_name == "type":
             port.setType(attribute_value)
         elif attribute_name == "size":
@@ -531,7 +531,7 @@ class Component(WrapperXml):
         interface = self.getInterface(interface_name)
         register = interface.getRegister(register_name)
         if attribute_name == "name":
-            register.setName(attribute_value)
+            register.name = attribute_value
         elif attribute_name == "offset":
             register.setOffset(attribute_value)
         elif attribute_name == "size":

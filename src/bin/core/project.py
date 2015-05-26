@@ -110,7 +110,7 @@ class Project(WrapperXml):
         sy.makeDirectory(SETTINGS.projectpath + DRIVERSPATH)
 
         self.createXml("project")
-        self.setName(name)
+        self.name = name
         self.version = "1.0"
         self.void = 0
         self.save()
@@ -425,6 +425,7 @@ class Project(WrapperXml):
     @property
     def instances(self):
         """ Get instances list of project """
+        print("DEBUG: " + str(self._instanceslist))
         return self._instanceslist
 
     @property

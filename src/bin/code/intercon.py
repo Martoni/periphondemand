@@ -67,8 +67,8 @@ class Intercon(Component):
         masterinstance = masterinterface.parent
 
         # set name and description
-        self.setName(str(masterinstance.instancename) +
-                     "_" + str(masterinterface.name))
+        self.name = str(masterinstance.instancename) +\
+            "_" + str(masterinterface.name)
         self.instancename = masterinstance.instancename +\
             "_" + masterinterface.name +\
             "_intercon"

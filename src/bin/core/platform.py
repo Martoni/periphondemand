@@ -106,7 +106,7 @@ class Platform(Component):
     @property
     def instancename(self):
         """ Get the instance name """
-        return Component.getName(self)
+        return self.name
 
     @property
     def connect_ports(self):

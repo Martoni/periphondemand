@@ -68,7 +68,7 @@ class TopGen(object):
         out = out + self.declareComponents()
         # declare signals
         platform = self.project.platform
-        incompleteportslist = platform.incomplete_port_list
+        incompleteportslist = platform.incomplete_ext_ports
         out = out + self.declareSignals(self.project.instances,
                                         incompleteportslist)
         # begin

@@ -45,10 +45,8 @@ class SimulationLib(WrapperXml):
         """
         self.parent = parent
         if "node" in keys:
-            self.__initnode(keys["node"])
             WrapperXml.__init__(self, node=keys["node"])
         elif "nodestring" in keys:
-            self.__initnodestring(keys["nodestring"])
             WrapperXml.__init__(self,
                                 nodestring=keys["nodestring"])
         else:

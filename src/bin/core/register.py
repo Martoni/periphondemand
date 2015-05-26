@@ -50,7 +50,7 @@ class Register(WrapperXml):
             WrapperXml.__init__(self, nodestring=keys["nodestring"])
         elif "register_name" in keys:
             WrapperXml.__init__(self, nodename="register")
-            self.setName(keys["register_name"])
+            self.name = keys["register_name"]
         else:
             raise PodError("Keys not known in Register", 0)
 
