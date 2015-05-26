@@ -388,8 +388,7 @@ class Project(WrapperXml):
             self.addSubNode(nodename="components",
                             subnodename="component",
                             attributedict=attrib)
-        DISPLAY.msg("Component " + comp.name +
-                    " added as " + instancename)
+        DISPLAY.msg("Component " + comp.name + " added as " + instancename)
         self.save()
 
     @property
@@ -425,7 +424,6 @@ class Project(WrapperXml):
     @property
     def instances(self):
         """ Get instances list of project """
-        print("DEBUG: " + str(self._instanceslist))
         return self._instanceslist
 
     @property
@@ -461,9 +459,9 @@ class Project(WrapperXml):
     def platform(self):
         """ return component instance platform
         """
-        for component in self.instances:
-            if component.name == "platform":
-                return component
+        for instance in self.instances:
+            if instance.is_platform() is True:
+                return instance
         raise PodError("No platform in project", 1)
 
     @property

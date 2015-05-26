@@ -167,7 +167,7 @@ class TopVHDL(TopGen):
         out = out + "\n"
         component = []
         for comp in self.project.instances:
-            if comp.name != "platform":
+            if comp.is_platform() is False:
                 component.append(comp.name)
 
         # if multiple instance of the same component
@@ -220,7 +220,7 @@ class TopVHDL(TopGen):
         out = out + ONETAB + "-- Signals declaration\n"
         out = out + ONETAB + "-------------------------\n"
         for component in componentslist:
-            if component.name == "platform":
+            if component.is_platform() is True:
                 continue
             out = out + "\n" + ONETAB + "-- " +\
                 component.instancename + "\n"
@@ -267,7 +267,7 @@ class TopVHDL(TopGen):
         out = out + ONETAB + "-- declare instances\n"
         out = out + ONETAB + "-------------------------\n"
         for component in self.project.instances:
-            if component.name != "platform":
+            if component.is_platform() is False:
                 out = out + "\n" + ONETAB +\
                     component.instancename + " : "
                 if self.project.vhdl_version == "vhdl93":
@@ -411,6 +411,7 @@ class TopVHDL(TopGen):
 
         platform = self.project.platform
         platformname = platform.instancename
+        print("DEBUG platformname : " + str(platformname))
         # connect incomplete_external_ports_list
         for port in incomplete_external_ports_list:
             if not port.force_defined():
@@ -437,7 +438,7 @@ class TopVHDL(TopGen):
 
         # connect all "in" ports pin
         for component in self.project.instances:
-            if component.instancename == platformname:
+            if component.is_platform():
                 continue
             out = out + "\n" + ONETAB + "-- connect " +\
                 component.instancename + "\n"

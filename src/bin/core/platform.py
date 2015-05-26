@@ -41,8 +41,6 @@ class Platform(Component):
             interfacelist   -- list objects containing platforms constraints
     """
 
-    name = "platform"
-
     def __init__(self, parent, **keys):
         """ Init Component,
             __init__(self, parent, node)
@@ -63,6 +61,8 @@ class Platform(Component):
         if self.getNode("simulation") is not None:
             for library in self.getNode("simulation").getNodeList("simlib"):
                 self.librarieslist.append(SimulationLib(self, node=library))
+
+        self.instancename = self.name
 
     @property
     def forces(self):
@@ -102,11 +102,6 @@ class Platform(Component):
         """ Load platform
         """
         pass
-
-    @property
-    def instancename(self):
-        """ Get the instance name """
-        return self.name
 
     @property
     def connect_ports(self):
