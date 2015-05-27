@@ -240,7 +240,7 @@ class Component(WrapperXml):
         """ return a list of master interface """
         interfacelist = []
         for interface in self.getInterfacesList():
-            if interface.getClass() == "master":
+            if interface.interface_class == "master":
                 interfacelist.append(interface)
         return interfacelist
 
@@ -248,14 +248,14 @@ class Component(WrapperXml):
         """ return a list of slave interface """
         interfacelist = []
         for interface in self.getInterfacesList():
-            if interface.getClass() == "slave":
+            if interface.interface_class == "slave":
                 interfacelist.append(interface)
         return interfacelist
 
     def getSysconInterface(self):
         """ Get the syscon interface"""
         for interface in self.getInterfacesList():
-            if interface.getClass() == "clk_rst":
+            if interface.interface_class == "clk_rst":
                 break
         return interface
 
@@ -503,7 +503,7 @@ class Component(WrapperXml):
         elif attribute_name == "bus":
             interface.setBus(attribute_value)
         elif attribute_name == "class":
-            interface.setClass(attribute_value)
+            interface.interface_class = attribute_value
         elif attribute_name == "clockandreset":
             interface.setClockAndReset(attribute_value)
         else:

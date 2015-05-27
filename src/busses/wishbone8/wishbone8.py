@@ -148,7 +148,7 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
     masterstrobename = masterinstancename + "_" +\
         masterinterface.getPortByType(
             bus.getSignalName("master", "strobe")).name
-    mastersizeaddr = masterinterface.getAddressSize()
+    mastersizeaddr = masterinterface.addr_port_size
 
     out = ONETAB + "-----------------------\n"
     out = out + ONETAB + "-- Address decoding  --\n"
@@ -156,8 +156,8 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
     for slave in masterinterface.getSlavesList():
         slaveinstance = slave.get_instance()
         slaveinterface = slave.getInterface()
-        slavesizeaddr = slave.getInterface().getAddressSize()
-        slavebase_address = slaveinterface.getBaseInt()
+        slavesizeaddr = slave.getInterface().addr_port_size
+        slavebase_address = slaveinterface.base_addr
         if slavesizeaddr > 0:
             slaveaddressport = slave.getInterface().getPortByType(
                 bus.getSignalName("slave", "address"))
@@ -190,8 +190,8 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
         slaveinterface = slave.getInterface()
         chipselectname = slaveinstance.instancename +\
             "_" + slaveinterface.name + "_cs"
-        slavesizeaddr = slave.getInterface().getAddressSize()
-        slavebase_address = slaveinterface.getBaseInt()
+        slavesizeaddr = slave.getInterface().addr_port_size
+        slavebase_address = slaveinterface.base_addr
         if slavesizeaddr > 0:
             slaveaddressport = slave.getInterface().getPortByType(
                 bus.getSignalName("slave", "address"))

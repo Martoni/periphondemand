@@ -72,7 +72,7 @@ class Register(WrapperXml):
     def getAbsoluteAddr(self):
         """ return absolute address
         """
-        baseaddr = int(self.parent.getBase(), 16)
+        baseaddr = self.parent.base_addr
         offset = int(self.getOffset(), 16)
         if int(self.size) == 8:
             return "%02x" % (baseaddr + offset)

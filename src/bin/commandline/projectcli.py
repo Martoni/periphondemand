@@ -995,8 +995,8 @@ Set the base address of slave interface
             interfaceslave =\
                 SETTINGS.active_project.get_instance(
                     names[0]).getInterface(names[1])
-            interfacemaster = interfaceslave.getMaster()
-            interfacemaster.allocMem.setAddressSlave(interfaceslave, arg[1])
+            interfacemaster = interfaceslave.master
+            interfacemaster.alloc_mem.setAddressSlave(interfaceslave, arg[1])
         except PodError, error:
             print DISPLAY
             print(str(error))
@@ -1039,7 +1039,7 @@ Return mapping for a master interface
             self.is_project_open()
             self.checkargs(line, "<masterinstancename>.<masterinterfacename>")
         except PodError, error:
-            print DISPLAY
+            print(str(DISPLAY))
             print(str(error))
             return
         arg = line.split(' ')
@@ -1048,9 +1048,9 @@ Return mapping for a master interface
             masterinterface =\
                 SETTINGS.active_project.get_instance(
                     names[0]).getInterface(names[1])
-            print masterinterface.allocMem
+            print(str(masterinterface.alloc_mem))
         except PodError, error:
-            print DISPLAY
+            print(str(DISPLAY))
             print(str(error))
         print DISPLAY
 
@@ -1109,10 +1109,10 @@ Print instance information
         print("->Interfaces")
         for interface in instance.getInterfacesList():
             if interface.getBusName() is not None:
-                if interface.getClass() == "slave":
+                if interface.interface_class == "slave":
                     print("%-15s " % interface.name +
-                          " Base address:" + hex(interface.getBaseInt()))
-                elif interface.getClass() == "master":
+                          " Base address:" + hex(interface.base_addr))
+                elif interface.interface_class == "master":
                     print("%-15s :" % interface.name)
                     for slave in interface.getSlavesList():
                         print(" " * 10 + "slave -> " +

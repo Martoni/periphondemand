@@ -139,7 +139,8 @@ class Driver(WrapperXml):
                     writeline = re.sub(
                         r'\/\*\$registers_base_address:' +
                         interface.group(1) + r'\$\*\/',
-                        instance.getInterface(interface.group(1)).getBase(),
+                        hex(instance.getInterface(
+                            interface.group(1)).base_addr),
                         writeline)
                 # register:interfacename:registername:attribute
                 exp = re.compile(r'\/\*\$register:(.*?):(.*?):(.*?)\$\*\/')

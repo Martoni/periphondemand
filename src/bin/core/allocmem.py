@@ -54,7 +54,7 @@ class AllocMem:
         return self.instancescount - 1
 
     def addInterfaceSlave(self, interface):
-        if interface.getClass() != "slave":
+        if interface.interface_class != "slave":
             raise PodError(interface.name + " is not a slave", 0)
 
         # add slave interface to list
@@ -63,12 +63,12 @@ class AllocMem:
         size = interface.getMemorySize()
         if size > 0:
             try:
-                base = int(interface.getBase(), 16)
+                base = interface.base_addr
             except PodError:
                 base = self.lastaddress / size
                 if (self.lastaddress % size) != 0:
                     base = base + 1
-                interface.setBase(hex(base * size))
+                interface.base_addr = base * size
                 DISPLAY.msg("setting base address " +
                             hex(base * size) + " for  " +
                             interface.parent.instancename +
@@ -87,7 +87,7 @@ class AllocMem:
     def setAddressSlave(self, interfaceslave, address):
         """ set base address for interfaceslave,
             address in hexa """
-        interfaceslave.setBase(address)
+        interfaceslave.base_addr = address
 
     def getMapping(self):
         """ return a list mapping
@@ -99,18 +99,18 @@ class AllocMem:
         mappinglist = []
         # sorting slave interface
         self.listinterfaceslave.sort(
-            lambda x,  y: x.getBaseInt() - y.getBaseInt())
+            lambda x,  y: x.base_addr - y.base_addr)
 
         baseaddress = 0
         for interface in self.listinterfaceslave:
-            if baseaddress < interface.getBaseInt():
-                size = interface.getBaseInt() - baseaddress
+            if baseaddress < interface.base_addr:
+                size = interface.base_addr - baseaddress
                 mappinglist.append(["0x%02x" % baseaddress,
                                     "--void--",
                                     str(size),
                                     "void"])
                 baseaddress = baseaddress + size
-            mappinglist.append([interface.getBase(),
+            mappinglist.append([hex(interface.base_addr),
                                 interface.parent.instancename +
                                 "." + interface.name,
                                 interface.getMemorySize(),

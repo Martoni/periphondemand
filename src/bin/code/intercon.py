@@ -94,7 +94,7 @@ class Intercon(Component):
             bus = Interface(self,
                             name=instance.instancename +
                             "_" + interface.name)
-            bus.setClass("intercon")
+            bus.interface_class = "intercon"
             # Adding bus interface on intercon
             self.addInterface(bus)
 
@@ -110,5 +110,5 @@ class Intercon(Component):
                 # connect port new port on instance interface
                 port.connect_all_pins(newport)
 
-        bus.setClass("intercon")
+        bus.interface_class = "intercon"
         self.setNum("0")

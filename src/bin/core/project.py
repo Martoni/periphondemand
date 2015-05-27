@@ -161,8 +161,8 @@ class Project(WrapperXml):
         for masterinterface in self.interfaces_master:
             for slave in masterinterface.getSlavesList():
                 slaveinterface = slave.getInterface()
-                masterinterface.allocMem.addInterfaceSlave(slaveinterface)
-                slaveinterface.setMaster(masterinterface)
+                masterinterface.alloc_mem.addInterfaceSlave(slaveinterface)
+                slaveinterface.master = masterinterface
 
         # set bsp directory
         if self.getNode(nodename="bsp") is not None:
@@ -398,7 +398,7 @@ class Project(WrapperXml):
         interfacelist = []
         for instance in self.instances:
             for interface in instance.getInterfacesList():
-                if interface.getClass() == "master":
+                if interface.interface_class == "master":
                     interfacelist.append(interface)
         return interfacelist
 
@@ -409,7 +409,7 @@ class Project(WrapperXml):
         interfacelist = []
         for instance in self.instances:
             for interface in instance.getInterfacesList():
-                if interface.getClass() == "slave":
+                if interface.interface_class == "slave":
                     interfacelist.append(interface)
         return interfacelist
 
@@ -827,7 +827,7 @@ class Project(WrapperXml):
                         " size        ")
             DISPLAY.msg("-----------------------------" +
                         "----------------------------")
-            for register in master.allocMem.getMapping():
+            for register in master.alloc_mem.getMapping():
                 DISPLAY.msg("%8s" % register[0] + " | " +
                             "%30s" % register[1] +
                             " | " + "%10s" % register[2])
