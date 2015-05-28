@@ -367,7 +367,7 @@ fpga_attributes    : give list of fpga attributes in platform
                 return []
         if len(listargs) > 2:
             if listargs[2][0] == "portname":
-                port = interface = interface.getPort(listargs[2][1])
+                port = interface = interface.get_port(listargs[2][1])
                 portname = port.name
             else:
                 return []

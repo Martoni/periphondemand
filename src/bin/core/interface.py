@@ -58,9 +58,10 @@ class Interface(WrapperXml):
         else:
             raise PodError("Keys unknown in Interface", 0)
 
-        self.registerslist = []
+        self._registerslist = []
         self.portslist = []
-        self.slaveslist = []
+        self._slaveslist = []
+        self._bus = None
 
         if self.interface_class == "master":
             self.alloc_mem = AllocMem(self)
@@ -69,19 +70,19 @@ class Interface(WrapperXml):
 
         if self.getNode("slaves") is not None:
             for element in self.getSubNodeList("slaves", "slave"):
-                self.slaveslist.append(Slave(self, node=element))
+                self._slaveslist.append(Slave(self, node=element))
 
         if self.getNode("registers") is not None:
             for element in self.getSubNodeList("registers", "register"):
-                self.registerslist.append(Register(self, node=element))
+                self._registerslist.append(Register(self, node=element))
 
         if self.getNode("ports") is not None:
             for node in self.getSubNodeList("ports", "port"):
                 self.portslist.append(Port(self, node=node))
 
         # set bus
-        if self.getBusName() is not None:
-            self.setBus(self.getBusName())
+        if self.bus_name is not None:
+            self.bus = self.bus_name
 
     @property
     def master(self):
@@ -95,6 +96,7 @@ class Interface(WrapperXml):
 
     @master.setter
     def master(self, masterinterface):
+        """ set master interface """
         if self.interface_class != "slave":
             raise PodError("interface " + self.name + " must be slave", 0)
         elif masterinterface.interface_class != "master":
@@ -116,6 +118,7 @@ class Interface(WrapperXml):
 
     @property
     def base_addr(self):
+        """ get base address register value """
         try:
             base = self.getAttributeValue("base", "registers")
             if base is None:
@@ -133,11 +136,11 @@ class Interface(WrapperXml):
         if type(baseoffset) is str:
             baseoffset = int(baseoffset, 16)
 
-        if self.getBusName() is None:
+        if self.bus_name is None:
             raise PodError("Interface is not a bus", 1)
         if self.interface_class != "slave":
             raise PodError("Bus must be slave", 1)
-        size = self.getMemorySize()
+        size = self.mem_size
         if (baseoffset % size) != 0:
             raise PodError("Offset must be a multiple of " + hex(size), 1)
         self.setAttribute("base", hex(baseoffset), "registers")
@@ -147,33 +150,35 @@ class Interface(WrapperXml):
         """ How many pin in address port ?  """
         try:
             return int(
-                self.getPortByType(
+                self.get_port_by_type(
                     self.bus.getSignalName("slave", "address")).size)
         except PodError:
             return 0
 
-    def getMemorySize(self):
+    @property
+    def mem_size(self):
         """ Get the memory size """
-        return ((2 ** self.addr_port_size) * self.regStep())
+        return ((2 ** self.addr_port_size) * self.regstep)
 
-    def getBusName(self):
+    @property
+    def bus_name(self):
         """ Get the bus name """
         return self.getAttributeValue("bus")
 
-    def getBus(self):
+    @property
+    def bus(self):
         """ Get the interface bus"""
-        return self.bus
+        return self._bus
 
-    def setBus(self, attribute):
+    @bus.setter
+    def bus(self, attribute):
         """ Set bus attribute"""
-        self.bus = Bus(self, name=attribute)
+        self._bus = Bus(self, name=attribute)
         self.setAttribute("bus", attribute)
 
-    def isBus(self):
+    def is_bus(self):
         """ Test if this interface is a bus """
-        try:
-            self.getBus()
-        except AttributeError:
+        if self._bus is None:
             return False
         return True
 
@@ -182,49 +187,47 @@ class Interface(WrapperXml):
         """ get the ports list of interface"""
         return self.portslist
 
-    def getPort(self, portname):
+    def get_port(self, portname):
         """ Get port by its name """
         for port in self.portslist:
             if port.name == portname:
                 return port
         raise PodError("Port " + portname + " does not exists", 1)
 
-    def addPort(self, port):
+    def add_port(self, port):
         """ Adding a port """
         port.parent = self
         self.portslist.append(port)
         self.addSubNode(nodename="ports", subnode=port)
 
-    def getPortByType(self, porttypename):
+    def get_port_by_type(self, porttypename):
         """ Get port using port type name as argument"""
         for port in self.portslist:
             if port.porttype == porttypename:
                 return port
         raise PodError("No port with type " + str(porttypename), 1)
 
-    def deletePin(self, instancedest, interfacedest=None, portdest=None,
-                  pindest=None, portsource=None, pinsource=None):
+    def del_pin(self, instancedest, interfacedest=None, portdest=None,
+                pindest=None, portsource=None, pinsource=None):
         """ Delete all interface pins
         """
         if portsource is None:
             for port in self.ports:
-                port.deletePin(instancedest=instancedest)
+                port.del_pin(instancedest=instancedest)
         else:
-            port = self.getPort(portsource)
-            port.deletePin(instancedest,
-                           interfacedest,
-                           portdest,
-                           pindest,
-                           pinsource)
+            port = self.get_port(portsource)
+            port.del_pin(instancedest, interfacedest,
+                         portdest, pindest, pinsource)
 
-    def getSlavesList(self):
+    @property
+    def slaves(self):
         """ Get the slaves list of interface"""
-        return self.slaveslist
+        return self._slaveslist
 
-    def delSlave(self, slave):
+    def del_slave(self, slave):
         """ Delet slave """
         self.alloc_mem.delInterfaceSlave(slave.getInterface())
-        self.slaveslist.remove(slave)
+        self._slaveslist.remove(slave)
         self.delSubNode("slaves", "slave",
                         {"instancename": slave.instancename,
                          "interfacename": slave.interfacename})
@@ -232,13 +235,13 @@ class Interface(WrapperXml):
     def del_bus(self, instanceslavename, interfaceslavename=None):
         """ delete slave bus connection
         """
-        for slave in self.getSlavesList():
+        for slave in self.slaves:
             if slave.instancename == instanceslavename:
                 if interfaceslavename is None:
-                    self.delSlave(slave)
+                    self.del_slave(slave)
                     return
                 elif slave.interfacename == interfaceslavename:
-                    self.delSlave(slave)
+                    self.del_slave(slave)
                     return
         raise PodError("Bus connection " + str(self.name) +
                        " -> " + str(instanceslavename) + "." +
@@ -258,8 +261,8 @@ class Interface(WrapperXml):
                                self.name + "." +
                                port.name + " has no type")
             try:
-                port_dst = interface_dest.getPortByType(port.porttype)
-            except PodError, e:
+                port_dst = interface_dest.get_port_by_type(port.porttype)
+            except PodError:
                 raise PodError(interface_dest.parent.name + "." +
                                interface_dest.name + " have no " +
                                port.porttype + " port")
@@ -281,31 +284,31 @@ class Interface(WrapperXml):
                                " is already connected")
 
         for port in self.ports:
-            port_dst = interface_dest.getPortByType(port.porttype)
+            port_dst = interface_dest.get_port_by_type(port.porttype)
             port.connect_port(port_dst)
 
     def connect_bus(self, instanceslave, interfaceslavename):
         """ Connect an interfaceslave to an interface bus master
         """
         interfaceslave = instanceslave.getInterface(interfaceslavename)
-        for slave in self.getSlavesList():
+        for slave in self.slaves:
             if slave.instancename == instanceslave.instancename and\
                     slave.interfacename == interfaceslavename:
                 raise PodError("Bus connection for " +
                                slave.instancename + "." +
                                slave.interfacename +
                                " already exists", 1)
-        if self.getBusName() is None:
+        if self.bus_name is None:
             raise PodError("Interface " + self.name + " must be a bus ")
-        if interfaceslave.getBusName() is None:
+        if interfaceslave.bus_name is None:
             raise PodError("Interface " + interfaceslave.name +
                            " must be a bus ")
-        if self.getBusName() != interfaceslave.getBusName():
-            raise PodError("Can't connect " + self.getBusName() +
-                           " on " + interfaceslave.getBusName(), 1)
+        if self.bus_name != interfaceslave.bus_name:
+            raise PodError("Can't connect " + self.bus_name +
+                           " on " + interfaceslave.bus_name, 1)
         if self.interface_class != "master":
             raise PodError(self.name + " is not a master", 0)
-        if interfaceslave.getBusName() is None:
+        if interfaceslave.bus_name is None:
             raise PodError(instanceslave.instancename +
                            "." + interfaceslave.name + " is not a bus", 1)
         if interfaceslave.interface_class != "slave":
@@ -317,36 +320,39 @@ class Interface(WrapperXml):
                         attributedict={
                             "instancename": instanceslave.instancename,
                             "interfacename": interfaceslavename})
-        self.slaveslist.append(Slave(self,
-                               instancename=instanceslave.instancename,
-                               interfacename=interfaceslavename))
+        self._slaveslist.append(
+            Slave(self,
+                  instancename=instanceslave.instancename,
+                  interfacename=interfaceslavename))
         self.alloc_mem.addInterfaceSlave(interfaceslave)
         interfaceslave.master = self
-        interfaceslave.setID(self.alloc_mem.getID())
+        interfaceslave.unique_id = self.alloc_mem.unique_id
         instanceslave.getGeneric(
             genericname="id").setValue(
-                str(interfaceslave.getID()))
+                str(interfaceslave.unique_id))
 
-    def setID(self, unique_id):
-        """ Set the Identifiant number"""
-        self.setAttribute("unique_id", str(unique_id))
-
-    def getID(self):
+    @property
+    def unique_id(self):
         """ Get the Identifiant number"""
         try:
             return self.getAttributeValue("unique_id")
         except PodError:
             return None
 
+    @unique_id.setter
+    def unique_id(self, unique_id):
+        """ Set the Identifiant number"""
+        self.setAttribute("unique_id", str(unique_id))
+
     def autoconnect_pins(self):
         """ autoconnect pin """
         for port in self.ports:
             port.autoconnect_pins()
 
-    def connectClkDomain(self, instancedestname, interfacedestname):
+    def connect_clk_domain(self, instancedestname, interfacedestname):
         """ Connect clock domain
         """
-        for slave in self.getSlavesList():
+        for slave in self.slaves:
             if slave.instancename == instancedestname\
                     and slave.interfacename == interfacedestname:
                 raise PodError("Clock connection " + instancedestname +
@@ -355,64 +361,51 @@ class Interface(WrapperXml):
         self.addSubNode(nodename="slaves", subnodename="slave",
                         attributedict={"instancename": instancedestname,
                                        "interfacename": interfacedestname})
-        self.slaveslist.append(Slave(self,
-                                     instancename=instancedestname,
-                                     interfacename=interfacedestname))
+        self._slaveslist.append(
+            Slave(self,
+                  instancename=instancedestname,
+                  interfacename=interfacedestname))
 
-    def getRegister(self, registername):
-        for register in self.getRegisterList():
+    def get_register(self, registername):
+        """ Get register by name """
+        for register in self.registers:
             if register.name == registername:
                 return register
         raise PodError("No register with name " + registername, 0)
 
-    def getRegisterList(self):
-        return self.registerslist
+    @property
+    def registers(self):
+        """ return registers list """
+        return self._registerslist
 
-    def getRegisterMap(self):
-        """ Return the memory mapping for slave interface
-        """
-        if len(self.registerslist) != 0:
+    @property
+    def registers_map(self):
+        """ Return the memory mapping for slave interface """
+        if len(self._registerslist) != 0:
             listreg = []
             # sort registers dict by offset order
-            self.registerslist.sort(lambda x, y: cmp(int(x.getOffset(), 16),
-                                    int(y.getOffset(), 16)))
+            self._registerslist.sort(lambda x, y: cmp(int(x.getOffset(), 16),
+                                     int(y.getOffset(), 16)))
             # display each register
-            for register in self.registerslist:
+            for register in self._registerslist:
                 listreg.append(
-                    {"offset": int(register.getOffset(), 16) * self.regStep() +
+                    {"offset": int(register.getOffset(), 16) * self.regstep +
                         self.base_addr, "name": register.name})
             return listreg
         else:
-            return [{"offset": self.base_addr,
-                     "name": self.name}]
+            return [{"offset": self.base_addr, "name": self.name}]
 
-    def regStep(self):
+    @property
+    def regstep(self):
         """ Step between two register """
         return int(self.bus.getDataSize()) / 8
 
-    def getSysconInstance(self):
-        """ Return syscon instance that drive master interface """
-        for instance in self.parent.parent.instances:
-            for interface in instance.getInterfacesList():
-                if interface.interface_class == "clk_rst":
-                    for slave in interface.getSlavesList():
-                        if slave.instancename ==\
-                            self.parent.instancename and\
-                                slave.interfacename == self.name:
-                            return instance
-        raise PodError("No syscon for interface " + self.name +
-                       " of instance " + self.parent.instancename, 0)
-
-    def addRegister(self, register_name):
-        if self.getBusName() is None:
+    def add_reg(self, register_name):
+        """ adding a register by name """
+        if self.bus_name is None:
             raise PodError("Interface must be a bus")
         elif self.interface_class != "slave":
             raise PodError("Bus must be a slave")
-        # TODO: check if enough space in memory mapping to add register
         register = Register(self, register_name=register_name)
-        self.registerslist.append(register)
+        self._registerslist.append(register)
         self.addSubNode(nodename="registers", subnode=register)
-
-    def delRegister(self, register_name):
-        # TODO
-        pass

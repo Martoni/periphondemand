@@ -159,7 +159,7 @@ class Project(WrapperXml):
 
         # Set bus master-slave
         for masterinterface in self.interfaces_master:
-            for slave in masterinterface.getSlavesList():
+            for slave in masterinterface.slaves:
                 slaveinterface = slave.getInterface()
                 masterinterface.alloc_mem.addInterfaceSlave(slaveinterface)
                 slaveinterface.master = masterinterface
@@ -258,7 +258,7 @@ class Project(WrapperXml):
         """
         instance = self.get_instance(portdict["instance"])
         interface = instance.getInterface(portdict["interface"])
-        port = interface.getPort(portdict["port"])
+        port = interface.get_port(portdict["port"])
         port.set_unconnected_value(value)
         self.save()
 
@@ -271,7 +271,7 @@ class Project(WrapperXml):
                            " FPGAs (" + str(interfaces_list) +
                            ") and multiple FPGA project " +
                            "is not implemented yet.")
-        port = interfaces_list[0].getPort(portname)
+        port = interfaces_list[0].get_port(portname)
         if port.direction == "in":
             raise PodError("The value of this port can't be set " +
                            "because of it's direction (in)")
@@ -591,10 +591,10 @@ class Project(WrapperXml):
     def connect_pin_cmd(self, pin_source, pin_dest):
         """ connect pin between two instances
         """
-        if pin_source.parent.parent.isBus():
+        if pin_source.parent.parent.is_bus():
             raise PodError("One of this pin is under a bus interface." +
                            "Please use connectbus.")
-        if pin_dest.parent.parent.isBus():
+        if pin_dest.parent.parent.is_bus():
             raise PodError("One of this pin is under a bus interface." +
                            "Please use connectbus.")
         pin_source.connectPin(pin_dest)
@@ -610,7 +610,7 @@ class Project(WrapperXml):
         instance_source = self.get_instance(sourcedict["instance"])
         interface_source =\
             instance_source.getInterface(sourcedict["interface"])
-        port_source = interface_source.getPort(sourcedict["port"])
+        port_source = interface_source.get_port(sourcedict["port"])
         if sourcedict["num"] is None:
             if(port_source.size) == 1:
                 sourcedict["num"] = "0"
@@ -626,7 +626,7 @@ class Project(WrapperXml):
            (destdict["num"] is not None):
             instance_dest = self.get_instance(destdict["instance"])
             interface_dest = instance_dest.getInterface(destdict["interface"])
-            port_dest = interface_dest.getPort(destdict["port"])
+            port_dest = interface_dest.get_port(destdict["port"])
             pin_dest = port_dest.get_pin(destdict["num"])
 
             pin_source.delConnection(pin_dest)
@@ -637,7 +637,7 @@ class Project(WrapperXml):
                 instance_dest = self.get_instance(connection["instance_dest"])
                 interface_dest =\
                     instance_dest.getInterface(connection["interface_dest"])
-                port_dest = interface_dest.getPort(connection["port_dest"])
+                port_dest = interface_dest.get_port(connection["port_dest"])
                 pin_dest = port_dest.get_pin(connection["pin_dest"])
 
                 pin_source.delConnection(pin_dest)
@@ -674,11 +674,11 @@ class Project(WrapperXml):
         instance_source = self.get_instance(sourcedict["instance"])
         interface_source =\
             instance_source.getInterface(sourcedict["interface"])
-        port_source = interface_source.getPort(sourcedict["port"])
+        port_source = interface_source.get_port(sourcedict["port"])
 
         instance_dest = self.get_instance(destdict["instance"])
         interface_dest = instance_dest.getInterface(destdict["interface"])
-        port_dest = interface_dest.getPort(destdict["port"])
+        port_dest = interface_dest.get_port(destdict["port"])
 
         port_source.connect_port(port_dest)
         self.save()
@@ -732,12 +732,12 @@ class Project(WrapperXml):
         elif len(masters) > 1:
             for i in range(len(masters) - 1):
                 for j in range(i + 1, len(masters)):
-                    if (masters[i].getBusName() == masters[j].getBusName()):
+                    if (masters[i].bus_name == masters[j].bus_name):
                         raise PodError(masters[i].parent.instancename +
                                        " and " +
                                        masters[j].parent.instancename +
                                        " has the same bus type : , " +
-                                       masters[i].getBusName() +
+                                       masters[i].bus_name +
                                        " bus connection " +
                                        "must be made by hand", 0)
         # find slaves bus
@@ -748,7 +748,7 @@ class Project(WrapperXml):
         # connect each slave with the same bus name than master
         for master in masters:
             for interfaceslave in slaves:
-                if interfaceslave.getBusName() == master.getBusName():
+                if interfaceslave.bus_name == master.bus_name:
                     try:
                         # connect bus
                         master.connect_bus(interfaceslave.parent,
@@ -782,7 +782,7 @@ class Project(WrapperXml):
 
         # Delete all slaves component from listslave
         for master in listmaster:
-            for slave in master.getSlavesList():
+            for slave in master.slaves:
                 for slave2 in listslave:
                     if slave2.parent.instancename ==\
                         slave.instancename and \
@@ -803,8 +803,8 @@ class Project(WrapperXml):
             if (master.name != "candroutput"):
                 newmaster.append(master)
         for master in newmaster:
-            for slave in master.getSlavesList():
-                for register in slave.getInterface().getRegisterMap():
+            for slave in master.slaves:
+                for register in slave.getInterface().registers_map:
                     if register["offset"] in dict_reg:
                         DISPLAY.msg(
                             "Register conflict at " +
@@ -896,13 +896,13 @@ class Project(WrapperXml):
             masterinstance = master.parent
             text += "\n  " + masterinstance.instancename + "." +\
                     master.name + ":\n"
-            for slave in master.getSlavesList():
+            for slave in master.slaves:
                 interfaceslave = slave.getInterface()
                 instance = interfaceslave.parent
                 text += ONETAB + instance.instancename +\
                     "." + interfaceslave.name + ":\n"
                 try:
-                    for reg in interfaceslave.getRegisterMap():
+                    for reg in interfaceslave.registers_map:
                         text += ONETAB + "  " +\
                             "0x%02x : %s\n" % (reg["offset"], reg["name"])
                 except PodError:

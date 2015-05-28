@@ -57,7 +57,7 @@ class Intercon(Component):
         self.generateXML(masterinterface)
         # Write Code for component
 
-        masterinterface.getBus().generate_intercon(self)
+        masterinterface.bus.generate_intercon(self)
 
         DISPLAY.msg("Intercon with name : " + self.instancename + " Done")
 
@@ -82,7 +82,7 @@ class Intercon(Component):
 
         # Create interface for each component connected on intercon
         # for slaves and master:
-        slaveslist = masterinterface.getSlavesList()
+        slaveslist = masterinterface.slaves
         interfaceslist = [slave.getInterface() for slave in slaveslist]
         interfaceslist.append(masterinterface)
 
@@ -106,7 +106,7 @@ class Intercon(Component):
                 newport.direction = self.invertDir(port.direction)
                 newport.size = port.size
                 # adding port on bus interface
-                bus.addPort(newport)
+                bus.add_port(newport)
                 # connect port new port on instance interface
                 port.connect_all_pins(newport)
 

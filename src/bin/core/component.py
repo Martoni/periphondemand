@@ -150,7 +150,7 @@ class Component(WrapperXml):
             for element in self.getSubNodeList("interrupts", "interrupt"):
                 self.interruptslist.append(
                     self.getInterface(
-                        element.getAttributeValue("interface")).getPort(
+                        element.getAttributeValue("interface")).get_port(
                             element.getAttributeValue("port")))
 
         if self.getNode("constraints") is not None:
@@ -332,24 +332,19 @@ class Component(WrapperXml):
         if dirname == "inout":
             return "inout"
 
-    def deletePin(self,
-                  instancedest, interfacedest=None, portdest=None,
-                  pindest=None, interfacesource=None, portsource=None,
-                  pinsource=None):
+    def del_pin(self, instancedest, interfacedest=None, portdest=None,
+                pindest=None, interfacesource=None, portsource=None,
+                pinsource=None):
         """ Delete component pin connection, if only instancedest given,
             all connection towards this instance are removed
         """
         if interfacesource is None:
             for interface in self.getInterfacesList():
-                interface.deletePin(instancedest=instancedest)
+                interface.del_pin(instancedest=instancedest)
         else:
             interface = self.getInterface(interfacesource)
-            interface.deletePin(instancedest,
-                                interfacedest,
-                                portdest,
-                                pindest,
-                                portsource,
-                                pinsource)
+            interface.del_pin(instancedest, interfacedest, portdest,
+                              pindest, portsource, pinsource)
 
     def connect_bus(self, interfacemaster, instanceslave, interfaceslave):
         """ Connect an interface bus master to slave """
@@ -371,13 +366,13 @@ class Component(WrapperXml):
             interface = self.getInterface(interfacemaster)
             interface.del_bus(instanceslavename, interfaceslavename)
 
-    def connectClkDomain(self, instancedestname, interfacesourcename,
-                         interfacedestname):
+    def connect_clk_domain(self, instancedestname, interfacesourcename,
+                           interfacedestname):
         """ Connect clock domain """
         interface = self.getInterface(interfacesourcename)
-        interface.connectClkDomain(instancedestname, interfacedestname)
+        interface.connect_clk_domain(instancedestname, interfacedestname)
 
-    def addPort(self, portname, interfacename):
+    def add_port(self, portname, interfacename):
         """ Add port named portname in interface named interfacename """
         # verify if portname exist in vhdl file
         hdltop = self.getHDLTop()
@@ -397,9 +392,9 @@ class Component(WrapperXml):
         # take interface
         interface = self.getInterface(interfacename)
         # create port object
-        port = hdltop.getPort(portname)
+        port = hdltop.get_port(portname)
         # place port in interface
-        interface.addPort(port)
+        interface.add_port(port)
 
     def portIsInFreeList(self, portname):
         """ If port named portname is not in interface, return 1
@@ -501,7 +496,7 @@ class Component(WrapperXml):
         if attribute_name == "name":
             interface.name = attribute_value
         elif attribute_name == "bus":
-            interface.setBus(attribute_value)
+            interface.bus = attribute_value
         elif attribute_name == "class":
             interface.interface_class = attribute_value
         elif attribute_name == "clockandreset":
@@ -513,7 +508,7 @@ class Component(WrapperXml):
                 attribute_name, attribute_value):
         """ Setting port"""
         interface = self.getInterface(interface_name)
-        port = interface.getPort(port_name)
+        port = interface.get_port(port_name)
         if attribute_name == "name":
             port.name = attribute_value
         elif attribute_name == "type":
@@ -529,7 +524,7 @@ class Component(WrapperXml):
                     attribute_name, attribute_value):
         """ Setting register """
         interface = self.getInterface(interface_name)
-        register = interface.getRegister(register_name)
+        register = interface.get_register(register_name)
         if attribute_name == "name":
             register.name = attribute_value
         elif attribute_name == "offset":
@@ -541,7 +536,7 @@ class Component(WrapperXml):
         else:
             raise PodError("Attribute " + str(attribute_name) + " unknown")
 
-    def addRegister(self, interface_name, register_name):
+    def add_reg(self, interface_name, register_name):
         """ Add register in interface, interface must be a bus slave"""
         interface = self.getInterface(interface_name)
-        interface.addRegister(register_name)
+        interface.add_reg(register_name)

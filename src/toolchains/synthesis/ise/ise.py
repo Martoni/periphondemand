@@ -150,13 +150,13 @@ def generate_pinout(self, filename=None):
                         self.project.get_instance(connect["instance_dest"])
                     interfacedest =\
                         instancedest.getInterface(connect["interface_dest"])
-                    portdest = interfacedest.getPort(connect["port_dest"])
+                    portdest = interfacedest.get_port(connect["port_dest"])
 
                     out = out + 'NET "' +\
                         connect["instance_dest"] + "_" + connect["port_dest"]
                     if self.project.get_instance(
                             connect["instance_dest"]).getInterface(
-                                connect["interface_dest"]).getPort(
+                                connect["interface_dest"]).get_port(
                                     connect["port_dest"]).size != "1":
                         if portdest.is_fully_connected():
                             out = out + "<" + connect["pin_dest"] + ">"

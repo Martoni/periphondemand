@@ -72,7 +72,7 @@ def generatepinoutContent(self):
                             connect[0]["port_dest"]
                         if self.project.get_instance(
                             connect[0]["instance_dest"]).getInterface(
-                                connect[0]["interface_dest"]).getPort(
+                                connect[0]["interface_dest"]).get_port(
                                     connect[0]["port_dest"]).size != "1":
                             out = out + "[" + connect[0]["pin_dest"] + "]"
                         out = out + ';\n'

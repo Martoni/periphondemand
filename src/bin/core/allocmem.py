@@ -48,7 +48,8 @@ class AllocMem:
         self.lastaddress = 0
         self.instancescount = 1
 
-    def getID(self):
+    @property
+    def unique_id(self):
         """ Return an unique identificator number for the slave """
         self.instancescount = self.instancescount + 1
         return self.instancescount - 1
@@ -60,7 +61,7 @@ class AllocMem:
         # add slave interface to list
         self.listinterfaceslave.append(interface)
         # set base address
-        size = interface.getMemorySize()
+        size = interface.mem_size
         if size > 0:
             try:
                 base = interface.base_addr
@@ -113,9 +114,9 @@ class AllocMem:
             mappinglist.append([hex(interface.base_addr),
                                 interface.parent.instancename +
                                 "." + interface.name,
-                                interface.getMemorySize(),
-                                interface.getID()])
-            baseaddress = baseaddress + interface.getMemorySize()
+                                interface.mem_size,
+                                interface.unique_id])
+            baseaddress = baseaddress + interface.mem_size
         return mappinglist
 
     def __str__(self):

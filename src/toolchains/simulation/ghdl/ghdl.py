@@ -97,7 +97,7 @@ def constant(clockhalfperiod):
         str(clockhalfperiod) + " ns;  -- Half clock period\n"
     for instance in SETTINGS.active_project.instances:
         for interface in instance.getInterfacesList():
-            for register in interface.getRegisterList():
+            for register in interface.registers:
                 constant = constant + ONETAB + "CONSTANT " +\
                     instance.instancename.upper() + "_" +\
                     register.name.upper() +\

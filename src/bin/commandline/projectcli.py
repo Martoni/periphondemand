@@ -589,11 +589,11 @@ Connect pin between instances
             SETTINGS.active_project.connect_pin_cmd(
                 SETTINGS.active_project.get_instance(
                     source[0]).getInterface(
-                        source[1]).getPort(
+                        source[1]).get_port(
                             source[2]).get_pin(source[3]),
                 SETTINGS.active_project.get_instance(
                     dest[0]).getInterface(
-                        dest[1]).getPort(dest[2]).get_pin(dest[3]))
+                        dest[1]).get_port(dest[2]).get_pin(dest[3]))
         except PodError, error:
             print(str(DISPLAY))
             print(str(error))
@@ -1108,13 +1108,13 @@ Print instance information
             print("%15s : " % generic.name + generic.getValue())
         print("->Interfaces")
         for interface in instance.getInterfacesList():
-            if interface.getBusName() is not None:
+            if interface.bus_name is not None:
                 if interface.interface_class == "slave":
                     print("%-15s " % interface.name +
                           " Base address:" + hex(interface.base_addr))
                 elif interface.interface_class == "master":
                     print("%-15s :" % interface.name)
-                    for slave in interface.getSlavesList():
+                    for slave in interface.slaves:
                         print(" " * 10 + "slave -> " +
                               slave.instancename + "." +
                               slave.interfacename)

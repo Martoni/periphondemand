@@ -101,7 +101,7 @@ class Pin(WrapperXml):
                     connection["instance_dest"])
                 interface_dest =\
                     instance_dest.getInterface(connection["interface_dest"])
-                port_dest = interface_dest.getPort(connection["port_dest"])
+                port_dest = interface_dest.get_port(connection["port_dest"])
                 pin_dest = port_dest.get_pin(connection["pin_dest"])
             except PodError:
                 pass
@@ -140,7 +140,7 @@ class Pin(WrapperXml):
         for connect in self.getConnections():
             pinlist.append(project.get_instance(
                 connect["instance_dest"]).getInterface(
-                    connect["interface_dest"]).getPort(
+                    connect["interface_dest"]).get_port(
                         connect["port_dest"]).get_pin(
                             connect["pin_dest"]))
         return pinlist
@@ -253,7 +253,7 @@ class Pin(WrapperXml):
                 if connection["instance_dest"] == project.platform_name:
                     pin_dest = project.get_instance(
                         connection["instance_dest"]).getInterface(
-                            connection["interface_dest"]).getPort(
+                            connection["interface_dest"]).get_port(
                                 connection["port_dest"]).get_pin(
                                     connection["pin_dest"])
                     pindest_list.append(pin_dest)

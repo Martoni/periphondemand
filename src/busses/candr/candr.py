@@ -90,25 +90,25 @@ def architectureHead(masterinterface, intercon):
 def connectClockandReset(masterinterface, intercon):
     """ Connect clock and reset
     """
-    bus = masterinterface.getBus()
+    bus = masterinterface.bus
     masterinstance = masterinterface.parent
     masterinstancename = masterinstance.instancename
     masterresetname = masterinstancename + "_" +\
-        masterinterface.getPortByType(bus.getSignalName("master",
-                                                        "reset")).name
+        masterinterface.get_port_by_type(bus.getSignalName("master",
+                                                           "reset")).name
     masterclockname = masterinstancename + "_" +\
-        masterinterface.getPortByType(bus.getSignalName("master",
-                                                        "clock")).name
+        masterinterface.get_port_by_type(bus.getSignalName("master",
+                                                           "clock")).name
 
     out = "\n" + ONETAB + "-- Clock and Reset connection\n"
-    for slave in masterinterface.getSlavesList():
+    for slave in masterinterface.slaves:
         slaveinterface = slave.getInterface()
         slaveinstancename = slave.instancename
         slaveresetname = slaveinstancename + "_" +\
-            slaveinterface.getPortByType(
+            slaveinterface.get_port_by_type(
                 bus.getSignalName("slave", "reset")).name
         slaveclockname = slaveinstancename + "_" +\
-            slaveinterface.getPortByType(
+            slaveinterface.get_port_by_type(
                 bus.getSignalName("slave", "clock")).name
         out = out + "\n" + ONETAB + "-- for " + slaveinstancename + "\n"
         # reset

@@ -147,7 +147,7 @@ class Driver(WrapperXml):
                 iterator = exp.finditer(writeline)
                 for match in iterator:
                     attributevalue = instance.getInterface(
-                        match.group(1)).getRegister(
+                        match.group(1)).get_register(
                             match.group(2)).getAttributeValue(
                                 match.group(3))
                     if not attributevalue:
