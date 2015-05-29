@@ -63,7 +63,7 @@ def entity(intercon):
     """
     entity = "Entity " + intercon.name + " is\n"
     entity = entity + ONETAB + "port\n" + ONETAB + "(\n"
-    for interface in intercon.getInterfacesList():
+    for interface in intercon.interfaces:
         entity = entity + "\n" + ONETAB * 2 + "-- " +\
             interface.name + " connection\n"
         for port in interface.ports:
@@ -114,7 +114,7 @@ def connectClockandReset(masterinterface, intercon):
 
     for slave in masterinterface.slaves:
         slaveinstance = slave.get_instance()
-        slaveinterface = slave.getInterface()
+        slaveinterface = slave.get_interface()
         slaveinstancename = slave.instancename
         slaveresetname = slaveinstancename + "_" +\
             slaveinterface.get_port_by_type(
@@ -154,11 +154,11 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
     out = out + ONETAB + "-----------------------\n"
     for slave in masterinterface.slaves:
         slaveinstance = slave.get_instance()
-        slaveinterface = slave.getInterface()
-        slavesizeaddr = slave.getInterface().addr_port_size
+        slaveinterface = slave.get_interface()
+        slavesizeaddr = slave.get_interface().addr_port_size
         slavebase_address = slaveinterface.base_addr
         if slavesizeaddr > 0:
-            slaveaddressport = slave.getInterface().get_port_by_type(
+            slaveaddressport = slave.get_interface().get_port_by_type(
                 bus.getSignalName("slave", "address"))
             slavename_addr = slaveinstance.instancename + "_" +\
                 slaveaddressport.name
@@ -177,7 +177,7 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
     out = out + ONETAB*2 + "if " + rst_name + "='1' then\n"
     for slave in masterinterface.slaves:
         slaveinstance = slave.get_instance()
-        slaveinterface = slave.getInterface()
+        slaveinterface = slave.get_interface()
         chipselectname = slaveinstance.instancename + "_" +\
             slaveinterface.name + "_cs"
         out = out + ONETAB*3 + chipselectname + " <= '0';\n"
@@ -185,13 +185,13 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
 
     for slave in masterinterface.slaves:
         slaveinstance = slave.get_instance()
-        slaveinterface = slave.getInterface()
+        slaveinterface = slave.get_interface()
         chipselectname = slaveinstance.instancename + "_" +\
             slaveinterface.name + "_cs"
-        slavesizeaddr = slave.getInterface().addr_port_size
+        slavesizeaddr = slave.get_interface().addr_port_size
         slavebase_address = slaveinterface.base_addr
         if slavesizeaddr > 0:
-            slaveaddressport = slave.getInterface().get_port_by_type(
+            slaveaddressport = slave.get_interface().get_port_by_type(
                 bus.getSignalName("slave", "address"))
             slavename_addr = slaveinstance.instancename + "_" +\
                 slaveaddressport.name
@@ -235,7 +235,7 @@ def controlslave(masterinterface, intercon):
 
     for slave in masterinterface.slaves:
         slaveinstance = slave.get_instance()
-        slaveinterface = slave.getInterface()
+        slaveinterface = slave.get_interface()
         slaveinstancename = slave.instancename
         slavestrobename = slaveinstancename + "_" +\
             slaveinterface.get_port_by_type(
@@ -327,7 +327,7 @@ def controlmaster(masterinterface, intercon):
     # READDATA
     for slave in masterinterface.slaves:
         slaveinstance = slave.get_instance()
-        slaveinterface = slave.getInterface()
+        slaveinterface = slave.get_interface()
         slaveinterfacename = slaveinterface.name
         slaveinstancename = slave.instancename
         try:
@@ -351,7 +351,7 @@ def controlmaster(masterinterface, intercon):
     if masterinterface.slaves:
         for slave in masterinterface.slaves:
             slaveinstance = slave.get_instance()
-            slaveinterface = slave.getInterface()
+            slaveinterface = slave.get_interface()
             slaveinterfacename = slaveinterface.name
             slaveinstancename = slave.instancename
             if count == 0:
@@ -392,8 +392,8 @@ def generate_intercon(masterinterface, intercon):
     listslave = masterinterface.slaves
     listinterfacesyscon = []
     for slaveinstance in [slave.get_instance() for slave in listslave]:
-        listinterfacesyscon.append(slaveinstance.getSysconInterface())
-    listinterfacesyscon.append(masterinstance.getSysconInterface())
+        listinterfacesyscon.append(slaveinstance.get_one_syscon())
+    listinterfacesyscon.append(masterinstance.get_one_syscon())
 
     # Clock and Reset connection
     VHDLcode = VHDLcode + connectClockandReset(masterinterface,
@@ -427,5 +427,5 @@ def generate_intercon(masterinterface, intercon):
     hdl = Hdl_file(intercon,
                    filename=intercon.instancename + VHDLEXT,
                    istop=1, scope="both")
-    intercon.addHdl_file(hdl)
+    intercon.add_hdl_file(hdl)
     return VHDLcode

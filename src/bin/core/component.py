@@ -39,10 +39,8 @@ class Component(WrapperXml):
     """Manage components
 
     attributes:
-        tree           -- root tree xml component
-        settings       -- Settings object with system settings
-        interfaceslist -- list of interfaces
-        genericslist   -- list of generics
+        _interfaceslist -- list of interfaces
+        _genericslist   -- list of generics
 
     """
 
@@ -52,19 +50,19 @@ class Component(WrapperXml):
         """
 
         WrapperXml.__init__(self, nodename="void")
-        self.interfaceslist = []
-        self.genericslist = []
-        self.hdl_fileslist = []
-        self.driver_templateslist = []
-        self.interruptslist = []
-        self.constraintslist = []
+        self._interfaceslist = []
+        self._genericslist = []
+        self._hdl_fileslist = []
+        self._driver_templateslist = []
+        self._interruptslist = []
+        self._constraintslist = []
 
         # Project that use the component
         self.parent = SETTINGS.active_project
         self.void = 0
 
-    def loadNewInstance(self, libraryname, componentname,
-                        componentversion, instancename):
+    def load_new_instance(self, libraryname, componentname,
+                          componentversion, instancename):
         """ Load a new component from library
         """
         project = self.parent
@@ -130,163 +128,159 @@ class Component(WrapperXml):
         # Fill objects list
         if self.getNode("interfaces") is not None:
             for element in self.getSubNodeList("interfaces", "interface"):
-                self.interfaceslist.append(Interface(self, node=element))
+                self._interfaceslist.append(Interface(self, node=element))
 
         if self.getNode("generics") is not None:
             for element in self.getSubNodeList("generics", "generic"):
-                self.genericslist.append(Generic(self, node=element))
+                self._genericslist.append(Generic(self, node=element))
 
         if self.getNode("hdl_files") is not None:
             for element in self.getSubNodeList("hdl_files", "hdl_file"):
-                self.hdl_fileslist.append(Hdl_file(self, node=element))
+                self._hdl_fileslist.append(Hdl_file(self, node=element))
 
         if self.getNode("driver_files") is not None:
             for element in\
                     self.getSubNodeList("driver_files", "driver_templates"):
-                self.driver_templateslist.append(
+                self._driver_templateslist.append(
                     DriverTemplates(self, node=element))
 
         if self.getNode("interrupts") is not None:
             for element in self.getSubNodeList("interrupts", "interrupt"):
-                self.interruptslist.append(
-                    self.getInterface(
+                self._interruptslist.append(
+                    self.get_interface(
                         element.getAttributeValue("interface")).get_port(
                             element.getAttributeValue("port")))
 
         if self.getNode("constraints") is not None:
             for element in self.getSubNodeList("constraints", "constraint"):
-                self.constraintslist.append(element)
+                self._constraintslist.append(element)
 
         self.instancename = instancename
 
-    def getConstraintsList(self):
+    @property
+    def constraints(self):
         """ Get list of constraints """
-        return self.constraintslist
+        return self._constraintslist
 
     def autoconnect_pins(self):
         """ Auto connect platform default pins
         """
-        for interface in self.getInterfacesList():
+        for interface in self.interfaces:
             interface.autoconnect_pins()
 
-    def getHdl_filesList(self):
+    @property
+    def hdl_files(self):
         """ Get list of HDL files """
-        return self.hdl_fileslist
+        return self._hdl_fileslist
 
-    def getHDLTop(self):
+    def get_hdl_top(self):
         """ Get hdl top file """
-        for hdlfile in self.getHdl_filesList():
+        for hdlfile in self.hdl_files:
             if hdlfile.isTop():
                 return hdlfile
         return None
 
-    def getHDLFile(self, filename):
+    def get_hdl(self, filename):
         """ get hdl file """
-        for hdlfile in self.getHdl_filesList():
+        for hdlfile in self.hdl_files:
             if hdlfile.getFileName() == filename:
                 return hdlfile
         raise PodError("no hdl file named " + filename)
 
-    def addHdl_file(self, hdl_file):
+    def add_hdl_file(self, hdl_file):
         """ add hdl file """
         self.addSubNode(nodename="hdl_files", subnode=hdl_file)
-        return self.hdl_fileslist.append(hdl_file)
+        return self._hdl_fileslist.append(hdl_file)
 
-    def getComponentPath(self):
-        """ return path of component in system
-        """
-        librarypath = SETTINGS.active_library.getLibraryPath()
-        return os.path.join(librarypath, self.name)
-
-    def getInterruptList(self):
+    @property
+    def interrupts(self):
         """ Get interrupt list """
-        return self.interruptslist
+        return self._interruptslist
 
-    def getGenericsList(self):
+    @property
+    def generics(self):
         """ Get generics parameters list """
-        return self.genericslist
+        return self._genericslist
 
-    def getFPGAGenericsList(self):
+    @property
+    def fpga_generics(self):
         """ Get fpga specifics generic list """
         fpgalist = []
-        for generic in self.getGenericsList():
+        for generic in self.generics:
             if generic.getDestination() == "fpga" or\
                     generic.getDestination() == "both":
                 fpgalist.append(generic)
         return fpgalist
 
-    def getGeneric(self, genericname):
+    def get_generic(self, genericname):
         """ get a generic """
-        for generic in self.getGenericsList():
+        for generic in self.generics:
             if generic.name == genericname:
                 return generic
         raise PodError("No generic with name " + genericname, 0)
 
-    def addGeneric(self, generic):
-        """ Adding a generic """
-        generic.parent = self
-        self.genericslist.append(generic)
-        self.addSubNode(nodename="generics", subnode=generic)
-
-    def getInterface(self, interfacename):
+    def get_interface(self, interfacename):
         """ Get an interface by name """
-        for interface in self.interfaceslist:
+        for interface in self._interfaceslist:
             if interface.name == interfacename:
                 return interface
         raise PodError("Interface " + str(interfacename) +
                        " does not exists", 0)
 
-    def getMasterInterfaceList(self):
+    @property
+    def master_interfaces(self):
         """ return a list of master interface """
         interfacelist = []
-        for interface in self.getInterfacesList():
+        for interface in self.interfaces:
             if interface.interface_class == "master":
                 interfacelist.append(interface)
         return interfacelist
 
-    def getSlaveInterfaceList(self):
+    @property
+    def slave_interfaces(self):
         """ return a list of slave interface """
         interfacelist = []
-        for interface in self.getInterfacesList():
+        for interface in self.interfaces:
             if interface.interface_class == "slave":
                 interfacelist.append(interface)
         return interfacelist
 
-    def getSysconInterface(self):
-        """ Get the syscon interface"""
-        for interface in self.getInterfacesList():
+    def get_one_syscon(self):
+        """ Get the syscon interface
+            raise an error if more than one syscon
+        """
+        syscons = []
+        for interface in self.interfaces:
             if interface.interface_class == "clk_rst":
-                break
-        return interface
+                syscons.append(interface)
+        if len(syscons) > 1:
+            raise PodError("More than one (" + len(syscons) +
+                           ") in the instance " + self.name)
+        if syscons == []:
+            return None
+        return syscons[0]
 
-    def createInterface(self, interfacename):
-        """ Create an interface and add it in component """
-        if interfacename in [interface.name for
-                             interface in self.getInterfacesList()]:
-            raise PodError("Interface " + interfacename +
-                           " already exist in component")
-        interface = Interface(self, name=interfacename)
-        self.addInterface(interface)
-
-    def addInterface(self, interface):
+    def add_interface(self, interface):
         """ Add an interface in component """
         interface.parent = self
-        self.interfaceslist.append(interface)
+        self._interfaceslist.append(interface)
         self.addSubNode(nodename="interfaces", subnode=interface)
 
-    def getInterfacesList(self):
+    @property
+    def interfaces(self):
         """ Get the list of interfaces """
-        return self.interfaceslist
+        return self._interfaceslist
 
-    def getDriver_TemplateList(self):
+    @property
+    def driver_templates(self):
         """ get the driver template list """
-        return self.driver_templateslist
+        return self._driver_templateslist
 
-    def getDriver_Template(self, architecture):
+    def get_driver_template(self, architecturename):
         """ Get a driver template """
-        for driverT in self.getDriver_TemplateList():
-            if driverT.architecture_name == architecture:
-                return driverT
+        for drivert in self.driver_templates:
+            if drivert.architecture_name == architecturename:
+                return drivert
         return None
 
     def save(self):
@@ -299,7 +293,7 @@ class Component(WrapperXml):
                      self.instancename + "/" +
                      self.instancename + ".xml")
 
-    def delInstance(self):
+    def del_instance(self):
         """ suppress component instance """
         if not self.is_platform():
             sy.delDirectory(SETTINGS.projectpath + COMPONENTSPATH + "/" +
@@ -314,14 +308,6 @@ class Component(WrapperXml):
     def instancename(self, instancename):
         """ set the name of this instance """
         return self.setAttribute("instance_name", instancename)
-
-    def setNum(self, num):
-        """ select the instance number """
-        return self.setAttribute("num", str(num))
-
-    def getNum(self):
-        """ Get the instance number """
-        return self.getAttributeValue("num")
 
     def invertDir(self, dirname):
         """ invert direction given in params """
@@ -339,16 +325,16 @@ class Component(WrapperXml):
             all connection towards this instance are removed
         """
         if interfacesource is None:
-            for interface in self.getInterfacesList():
+            for interface in self.interfaces:
                 interface.del_pin(instancedest=instancedest)
         else:
-            interface = self.getInterface(interfacesource)
+            interface = self.get_interface(interfacesource)
             interface.del_pin(instancedest, interfacedest, portdest,
                               pindest, portsource, pinsource)
 
     def connect_bus(self, interfacemaster, instanceslave, interfaceslave):
         """ Connect an interface bus master to slave """
-        interface = self.getInterface(interfacemaster)
+        interface = self.get_interface(interfacemaster)
         if interface.name is None:
             raise PodError(interfacemaster + " is not a bus", 1)
         interface.connect_bus(instanceslave, interfaceslave)
@@ -357,25 +343,25 @@ class Component(WrapperXml):
                 interfaceslavename=None):
         """ Delete bus connection that refer to instanceslavename """
         if interfacemaster is None:
-            for interface in self.getInterfacesList():
+            for interface in self.interfaces:
                 try:
                     interface.del_bus(instanceslavename)
                 except PodError:
                     pass
         else:
-            interface = self.getInterface(interfacemaster)
+            interface = self.get_interface(interfacemaster)
             interface.del_bus(instanceslavename, interfaceslavename)
 
     def connect_clk_domain(self, instancedestname, interfacesourcename,
                            interfacedestname):
         """ Connect clock domain """
-        interface = self.getInterface(interfacesourcename)
+        interface = self.get_interface(interfacesourcename)
         interface.connect_clk_domain(instancedestname, interfacedestname)
 
     def add_port(self, portname, interfacename):
         """ Add port named portname in interface named interfacename """
         # verify if portname exist in vhdl file
-        hdltop = self.getHDLTop()
+        hdltop = self.get_hdl_top()
         if not hdltop:
             raise PodError("No HDL top file in component " +
                            str(self.name))
@@ -390,7 +376,7 @@ class Component(WrapperXml):
             raise PodError("Port named " + portname +
                            " is already placed in " + interface_old)
         # take interface
-        interface = self.getInterface(interfacename)
+        interface = self.get_interface(interfacename)
         # create port object
         port = hdltop.get_port(portname)
         # place port in interface
@@ -400,7 +386,7 @@ class Component(WrapperXml):
         """ If port named portname is not in interface, return 1
             else return 0 and interface
         """
-        interfaceslist = self.getInterfacesList()
+        interfaceslist = self.interfaces
         for interface in interfaceslist:
             portlist = interface.ports
             for port in portlist:
@@ -410,7 +396,7 @@ class Component(WrapperXml):
 
     def getFreePortsList(self):
         """ return not assignated ports list """
-        ports_list = self.getHDLTop().ports
+        ports_list = self.get_hdl_top().ports
         freeportlist = []
         for port in ports_list:
             if self.portIsInFreeList(port.name):
@@ -424,10 +410,10 @@ class Component(WrapperXml):
                 {"interfacename":[portname1,portname2]}
         """
         display_port = {}
-        tophdlfile = self.getHDLTop()
+        tophdlfile = self.get_hdl_top()
         notassignedports = [port.name for
                             port in tophdlfile.ports]
-        interfacelist = self.getInterfacesList()
+        interfacelist = self.interfaces
         for interface in interfacelist:
             key = interface.name
             display_port[key] = []
@@ -455,7 +441,7 @@ class Component(WrapperXml):
     def setGeneric(self, generic_name, attribute_name,
                    attribute_value):
         """Add or modify attribute value for a node """
-        generic = self.getGeneric(generic_name)
+        generic = self.get_generic(generic_name)
         if attribute_name == "name":
             generic.name = attribute_value
         elif attribute_name == "public":
@@ -474,7 +460,7 @@ class Component(WrapperXml):
     def setHDL(self, file_name, attribute_name,
                attribute_value):
         """ Setting HDL files """
-        HDL = self.getHDLFile(file_name)
+        HDL = self.get_hdl(file_name)
         if attribute_name == "filename":
             HDL.setFileName(attribute_value)
         elif attribute_name == "scope":
@@ -492,7 +478,7 @@ class Component(WrapperXml):
     def setInterface(self, interface_name, attribute_name,
                      attribute_value):
         """Add or modify attribute value for a node """
-        interface = self.getInterface(interface_name)
+        interface = self.get_interface(interface_name)
         if attribute_name == "name":
             interface.name = attribute_value
         elif attribute_name == "bus":
@@ -507,7 +493,7 @@ class Component(WrapperXml):
     def setPort(self, interface_name, port_name,
                 attribute_name, attribute_value):
         """ Setting port"""
-        interface = self.getInterface(interface_name)
+        interface = self.get_interface(interface_name)
         port = interface.get_port(port_name)
         if attribute_name == "name":
             port.name = attribute_value
@@ -523,7 +509,7 @@ class Component(WrapperXml):
     def setRegister(self, interface_name, register_name,
                     attribute_name, attribute_value):
         """ Setting register """
-        interface = self.getInterface(interface_name)
+        interface = self.get_interface(interface_name)
         register = interface.get_register(register_name)
         if attribute_name == "name":
             register.name = attribute_value
@@ -538,5 +524,5 @@ class Component(WrapperXml):
 
     def add_reg(self, interface_name, register_name):
         """ Add register in interface, interface must be a bus slave"""
-        interface = self.getInterface(interface_name)
+        interface = self.get_interface(interface_name)
         interface.add_reg(register_name)

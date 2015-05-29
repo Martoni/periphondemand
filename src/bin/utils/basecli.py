@@ -357,7 +357,7 @@ fpga_attributes    : give list of fpga attributes in platform
                 return []
         if len(listargs) > 1:
             if listargs[1][0] == "interfacename":
-                interface = instance.getInterface(listargs[1][1])
+                interface = instance.get_interface(listargs[1][1])
                 interfacename = interface.name
             elif listargs[1][0] == "componentname":
                 componentname = listargs[1][1]
@@ -385,13 +385,13 @@ fpga_attributes    : give list of fpga attributes in platform
                     for instance in SETTINGS.active_project.instances]
         elif subargt == "interfacename":
             return ["" + instancename + "." + interface.name
-                    for interface in instance.getInterfacesList()]
+                    for interface in instance.interfaces]
         elif subargt == "masterinterfacename":
             return ["" + instancename + "." + interface.name
-                    for interface in instance.getMasterInterfaceList()]
+                    for interface in instance.master_interfaces]
         elif subargt == "slaveinterfacename":
             return ["" + instancename + "." + interface.name
-                    for interface in instance.getSlaveInterfaceList()]
+                    for interface in instance.slave_interfaces]
         elif subargt == "portname":
             return ["" + instancename + "." + interfacename + "." +
                     port.name for port in interface.ports]
@@ -453,7 +453,7 @@ fpga_attributes    : give list of fpga attributes in platform
 
         elif subargt == "genericname":
             return ["" + instancename + "." + generic.name
-                    for generic in instance.getGenericsList()]
+                    for generic in instance.generics]
 
         elif subargt == "simulationtoolchain":
             return SETTINGS.active_project.get_simulation_toolchains()

@@ -56,7 +56,7 @@ ONETAB = "    "
 
 def generatepinoutContent(self):
     out = ""
-    for interface in self.project.platform.getInterfacesList():
+    for interface in self.project.platform.interfaces:
         for port in interface.ports:
             if port.force_defined():
                 out = out + ONETAB + 'set_location_assignment ' + \
@@ -71,7 +71,7 @@ def generatepinoutContent(self):
                             connect[0]["instance_dest"] + "_" + \
                             connect[0]["port_dest"]
                         if self.project.get_instance(
-                            connect[0]["instance_dest"]).getInterface(
+                            connect[0]["instance_dest"]).get_interface(
                                 connect[0]["interface_dest"]).get_port(
                                     connect[0]["port_dest"]).size != "1":
                             out = out + "[" + connect[0]["pin_dest"] + "]"

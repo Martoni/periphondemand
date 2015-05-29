@@ -127,7 +127,7 @@ class Generic(WrapperXml):
             if self.getOp() == "realsizeof":
                 # return the number of connected pin
                 return str(int(
-                    component.getInterface(
+                    component.get_interface(
                         target[0]).get_port(target[1]).max_pin_num) + 1)
             else:
                 raise PodError("Operator unknown " + self.getOp(), 1)

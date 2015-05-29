@@ -302,3 +302,13 @@ class WrapperXml(object):
 
     def isVoid(self):
         return self.void
+
+    @property
+    def num(self):
+        """ Get the instance number """
+        return self.getAttributeValue("num")
+
+    @num.setter
+    def num(self, num):
+        """ select the instance number """
+        return self.setAttribute("num", str(num))

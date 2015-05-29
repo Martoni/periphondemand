@@ -56,7 +56,7 @@ class Platform(Component):
 
         if self.getNode("interfaces") is not None:
             for element in self.getNode("interfaces").getNodeList("interface"):
-                self.interfaceslist.append(Interface(self, node=element))
+                self._interfaceslist.append(Interface(self, node=element))
         self.librarieslist = []
         if self.getNode("simulation") is not None:
             for library in self.getNode("simulation").getNodeList("simlib"):
@@ -68,7 +68,7 @@ class Platform(Component):
     def forces(self):
         """ get the list of forces """
         forcelist = []
-        interfaces_list = self.getInterfacesList()
+        interfaces_list = self.interfaces
         if len(interfaces_list) != 1:
             raise PodError("I found " + str(len(interfaces_list)) +
                            " FPGAs (" + str(interfaces_list) +
@@ -110,7 +110,7 @@ class Platform(Component):
         """
         portlist = []
         # loop for each connection in platform interface
-        for interface in self.getInterfacesList():
+        for interface in self.interfaces:
             for port in interface.ports:
                 # add forced port in list
                 if port.force_defined():
@@ -185,7 +185,7 @@ class Platform(Component):
     def platform_ports(self):
         """ Get all port in platform """
         portslist = []
-        for interface in self.getInterfacesList():
+        for interface in self.interfaces:
             for port in interface.ports:
                 portslist.append(port)
         return portslist

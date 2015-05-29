@@ -540,7 +540,7 @@ List instance interface
             interfacelist =\
                 [interface.name for interface in
                     SETTINGS.active_project.get_instance(
-                        line).getInterfacesList()]
+                        line).interfaces]
         except PodError, error:
             print(str(DISPLAY))
             print(str(error))
@@ -588,11 +588,11 @@ Connect pin between instances
         try:
             SETTINGS.active_project.connect_pin_cmd(
                 SETTINGS.active_project.get_instance(
-                    source[0]).getInterface(
+                    source[0]).get_interface(
                         source[1]).get_port(
                             source[2]).get_pin(source[3]),
                 SETTINGS.active_project.get_instance(
-                    dest[0]).getInterface(
+                    dest[0]).get_interface(
                         dest[1]).get_port(dest[2]).get_pin(dest[3]))
         except PodError, error:
             print(str(DISPLAY))
@@ -983,8 +983,7 @@ Set the base address of slave interface
         names = arg[0].split('.')
         if len(names) < 2:
             masterinterface =\
-                SETTINGS.active_project.get_instance(
-                    names[0]).getSlaveInterfaceList()
+                SETTINGS.active_project.get_instance(names[0]).slave_interfaces
             if len(masterinterface) != 1:
                 print DISPLAY
                 print("PodError, need a slave interface name")
@@ -994,7 +993,7 @@ Set the base address of slave interface
         try:
             interfaceslave =\
                 SETTINGS.active_project.get_instance(
-                    names[0]).getInterface(names[1])
+                    names[0]).get_interface(names[1])
             interfacemaster = interfaceslave.master
             interfacemaster.alloc_mem.setAddressSlave(interfaceslave, arg[1])
         except PodError, error:
@@ -1047,7 +1046,7 @@ Return mapping for a master interface
         try:
             masterinterface =\
                 SETTINGS.active_project.get_instance(
-                    names[0]).getInterface(names[1])
+                    names[0]).get_interface(names[1])
             print(str(masterinterface.alloc_mem))
         except PodError, error:
             print(str(DISPLAY))
@@ -1104,10 +1103,10 @@ Print instance information
         print("Component  name :" + instance.name)
         print("description : " + instance.getDescription().strip())
         print("->Generics")
-        for generic in instance.getGenericsList():
+        for generic in instance.generics:
             print("%15s : " % generic.name + generic.getValue())
         print("->Interfaces")
-        for interface in instance.getInterfacesList():
+        for interface in instance.interfaces:
             if interface.bus_name is not None:
                 if interface.interface_class == "slave":
                     print("%-15s " % interface.name +
@@ -1126,8 +1125,8 @@ Print instance information
                       " s" + port.size)
                 for pin in port.pins:
                     print(" " * 8 + "pin"),
-                    if pin.getNum() is not None:
-                        print(pin.getNum() + ":"),
+                    if pin.num is not None:
+                        print(pin.num + ":"),
                     elif pin.isAll():
                         print "all",
                     first = True
@@ -1170,7 +1169,7 @@ Set generic parameter
         names = args[0].split(".")
         try:
             instance = SETTINGS.active_project.get_instance(names[0])
-            generic = instance.getGeneric(names[1])
+            generic = instance.get_generic(names[1])
             if generic.isPublic() == "true":
                 generic.setValue(args[1])
             else:

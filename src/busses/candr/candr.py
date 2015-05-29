@@ -59,7 +59,7 @@ def entity(intercon):
     """
     entity = "Entity " + intercon.name + " is\n"
     entity = entity + ONETAB + "port\n" + ONETAB + "(\n"
-    for interface in intercon.getInterfacesList():
+    for interface in intercon.interfaces:
         entity = entity + "\n" + ONETAB * 2 + "-- " +\
             interface.name + " connection\n"
         for port in interface.ports:
@@ -102,7 +102,7 @@ def connectClockandReset(masterinterface, intercon):
 
     out = "\n" + ONETAB + "-- Clock and Reset connection\n"
     for slave in masterinterface.slaves:
-        slaveinterface = slave.getInterface()
+        slaveinterface = slave.get_interface()
         slaveinstancename = slave.instancename
         slaveresetname = slaveinstancename + "_" +\
             slaveinterface.get_port_by_type(
@@ -158,5 +158,5 @@ def generate_intercon(masterinterface, intercon):
     hdl = Hdl_file(intercon,
                    filename=intercon.instancename + VHDLEXT,
                    istop=1, scope="both")
-    intercon.addHdl_file(hdl)
+    intercon.add_hdl_file(hdl)
     return VHDLcode

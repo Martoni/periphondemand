@@ -54,7 +54,7 @@ class AllocMem:
         self.instancescount = self.instancescount + 1
         return self.instancescount - 1
 
-    def addInterfaceSlave(self, interface):
+    def add_interfaceSlave(self, interface):
         if interface.interface_class != "slave":
             raise PodError(interface.name + " is not a slave", 0)
 

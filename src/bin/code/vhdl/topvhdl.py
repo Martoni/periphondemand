@@ -133,7 +133,7 @@ class TopVHDL(TopGen):
                                 self.project.platform):
                             out = out + ONETAB * 2 + \
                                 instancename + "_" + portname + "_pin" +\
-                                str(pin.getNum()) + " : " +\
+                                str(pin.num) + " : " +\
                                 port.direction + " std_logic;\n"
         # Suppress the #!@ last semicolon
         out = out[:-2]
@@ -179,9 +179,9 @@ class TopVHDL(TopGen):
                     break
 
             out = out + "\n" + ONETAB + "component " + compname + "\n"
-            if component.getFPGAGenericsList() != []:
+            if component.fpga_generics != []:
                 out = out + ONETAB * 2 + "generic(\n"
-                for generic in component.getFPGAGenericsList():
+                for generic in component.fpga_generics:
                     out = out + ONETAB * 3 +\
                         generic.name + " : " +\
                         generic.generictype + " := " +\
@@ -192,7 +192,7 @@ class TopVHDL(TopGen):
                 out = out + ONETAB * 2 + ");\n"
 
             out = out + ONETAB * 2 + "port (\n"
-            for interface in component.getInterfacesList():
+            for interface in component.interfaces:
                 out = out + ONETAB * 3 + "-- " + interface.name + "\n"
                 for port in interface.ports:
                     out = out + ONETAB * 3 +\
@@ -224,7 +224,7 @@ class TopVHDL(TopGen):
                 continue
             out = out + "\n" + ONETAB + "-- " +\
                 component.instancename + "\n"
-            for interface in component.getInterfacesList():
+            for interface in component.interfaces:
                 out = out + ONETAB + "-- " + interface.name + "\n"
 
                 for port in interface.ports:
@@ -273,9 +273,9 @@ class TopVHDL(TopGen):
                 if self.project.vhdl_version == "vhdl93":
                     out = out + "entity work."
                 out = out + component.name + "\n"
-                if component.getFPGAGenericsList() != []:
+                if component.fpga_generics != []:
                     out = out + ONETAB + "generic map (\n"
-                    for generic in component.getFPGAGenericsList():
+                    for generic in component.fpga_generics:
                         out = out + ONETAB * 3 +\
                             generic.name + " => " +\
                             str(generic.getValue()) +\
@@ -285,7 +285,7 @@ class TopVHDL(TopGen):
                     out = out + ONETAB * 2 + ")\n"
 
                 out = out + ONETAB + "port map (\n"
-                for interface in component.getInterfacesList():
+                for interface in component.interfaces:
 
                     out = out + ONETAB * 3 + "-- " + interface.name + "\n"
                     for port in interface.ports:
@@ -364,7 +364,7 @@ class TopVHDL(TopGen):
                 # to several other ports
                 for pin in port.pins:
                     # Connect pin individualy
-                    if pin.getNum() is not None and\
+                    if pin.num is not None and\
                             len(pin.getConnections()) != 0:
                         connect = pin.getConnections()[0]
                         if connect["instance_dest"] != platformname:
@@ -372,7 +372,7 @@ class TopVHDL(TopGen):
                                 component.instancename +\
                                 "_" + port.name
                             if int(port.size) > 1:
-                                out = out + "(" + pin.getNum() + ")"
+                                out = out + "(" + pin.num + ")"
                             out = out + " <= " + connect["instance_dest"] +\
                                 "_" + connect["port_dest"]
                             # is destination vector or simple net ?
@@ -380,7 +380,7 @@ class TopVHDL(TopGen):
                                 if comp.instancename !=\
                                         connect["instance_dest"]:
                                     continue
-                                for inter in comp.getInterfacesList():
+                                for inter in comp.interfaces:
                                     if inter.name !=\
                                             connect["interface_dest"]:
                                         continue
@@ -411,7 +411,6 @@ class TopVHDL(TopGen):
 
         platform = self.project.platform
         platformname = platform.instancename
-        print("DEBUG platformname : " + str(platformname))
         # connect incomplete_external_ports_list
         for port in incomplete_external_ports_list:
             if not port.force_defined():
@@ -442,7 +441,7 @@ class TopVHDL(TopGen):
                 continue
             out = out + "\n" + ONETAB + "-- connect " +\
                 component.instancename + "\n"
-            for interface in component.getInterfacesList():
+            for interface in component.interfaces:
                 out = out + ONETAB * 2 + "-- " + interface.name + "\n"
                 for port in interface.ports:
                     if port.direction == "in":

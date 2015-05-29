@@ -61,8 +61,8 @@ class Driver(WrapperXml):
         if op_sys is None:
             raise PodError("Operating system must be selected", 0)
         for component in project.instances:
-            if component.getNum() == "0":
-                driver_template = component.getDriver_Template(op_sys)
+            if component.num == "0":
+                driver_template = component.get_driver_template(op_sys)
                 if driver_template is not None:
                     if sy.dirExist(SETTINGS.projectpath + DRIVERSPATH +
                                    "/" + component.name):
@@ -87,8 +87,8 @@ class Driver(WrapperXml):
         if op_sys is None:
             raise PodError("Operating system must be selected", 0)
         for component in project.instances:
-            if component.getNum() == "0":
-                driver_template = component.getDriver_Template(op_sys)
+            if component.num == "0":
+                driver_template = component.get_driver_template(op_sys)
                 if driver_template is not None:
                     DISPLAY.msg("Copy and fill template for " +
                                 component.name)
@@ -122,7 +122,7 @@ class Driver(WrapperXml):
                                    writeline)
                 # instance_num
                 writeline = re.sub(r'\/\*\$instance_num\$\*\/',
-                                   instance.getNum(),
+                                   instance.num,
                                    writeline)
                 # generic:generic_name
                 exp = re.compile(r'\/\*\$generic\:(.*?)\$\*\/')
@@ -130,7 +130,7 @@ class Driver(WrapperXml):
                 for generic in iterator:
                     writeline = re.sub(
                         r'\/\*\$generic:' + generic.group(1) + r'\$\*\/',
-                        instance.getGeneric(generic.group(1)).getValue(),
+                        instance.get_generic(generic.group(1)).getValue(),
                         writeline)
                 # register_base_address:interface_name
                 exp = re.compile(r'\/\*\$registers_base_address:(.*?)\$\*\/')
@@ -139,14 +139,14 @@ class Driver(WrapperXml):
                     writeline = re.sub(
                         r'\/\*\$registers_base_address:' +
                         interface.group(1) + r'\$\*\/',
-                        hex(instance.getInterface(
+                        hex(instance.get_interface(
                             interface.group(1)).base_addr),
                         writeline)
                 # register:interfacename:registername:attribute
                 exp = re.compile(r'\/\*\$register:(.*?):(.*?):(.*?)\$\*\/')
                 iterator = exp.finditer(writeline)
                 for match in iterator:
-                    attributevalue = instance.getInterface(
+                    attributevalue = instance.get_interface(
                         match.group(1)).get_register(
                             match.group(2)).getAttributeValue(
                                 match.group(3))
@@ -163,7 +163,7 @@ class Driver(WrapperXml):
                 # interrupt_number
                 if re.search(r'\/\*\$interrupt_number\$\*\/',
                              writeline) is not None:
-                    interruptlist = instance.getInterruptList()
+                    interruptlist = instance.interrupts
                     if len(interruptlist) == 0:
                         raise PodError("No interruption port in " +
                                        instance.instancename, 0)

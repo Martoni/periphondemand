@@ -75,7 +75,7 @@ class Port(WrapperXml):
         if int(num) >= self.size:
             raise PodError("Pin number " + str(num) + " not in port size")
         for pin in self.pins:
-            if pin.getNum() == str(num):
+            if pin.num == str(num):
                 return pin
         pin = Pin(self, num=str(num))
         self.pinlist.append(pin)
@@ -230,8 +230,8 @@ class Port(WrapperXml):
                 return True
             tab = []
             for pin in listofpin:
-                if pin.getNum() is not None:
-                    tab.append(int(pin.getNum()))
+                if pin.num is not None:
+                    tab.append(int(pin.num))
             tab.sort()
             if (len(tab) - 1) != tab[-1]:
                 return False
@@ -255,10 +255,10 @@ class Port(WrapperXml):
         if listofpin == []:
             return str(int(self.size) - 1)
         for pin in listofpin:
-            if pin.getNum() is None:
+            if pin.num is None:
                 return str(int(self.size) - 1)
-            if int(pin.getNum()) > int(num):
-                num = pin.getNum()
+            if int(pin.num) > int(num):
+                num = pin.num
         return num
 
     @property
@@ -269,10 +269,10 @@ class Port(WrapperXml):
         if listofpin == []:
             return "0"
         for pin in self.pins:
-            if pin.getNum() is None:
+            if pin.num is None:
                 return "0"
-            if int(pin.getNum()) < int(num):
-                num = pin.getNum()
+            if int(pin.num) < int(num):
+                num = pin.num
         return num
 
     def check_connection(self, portdest):
@@ -371,8 +371,8 @@ class Port(WrapperXml):
         num = -1
         for pin in self.pins:
             if pin.isConnected():
-                if int(pin.getNum()) > num:
-                    num = int(pin.getNum())
+                if int(pin.num) > num:
+                    num = int(pin.num)
         return num
 
     def isVoid(self):

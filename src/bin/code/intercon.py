@@ -51,7 +51,7 @@ class Intercon(Component):
         self.addNode(nodename="component")
 
         masterinstance = self.parent.get_instance(masterinstancename)
-        masterinterface = masterinstance.getInterface(masterinterfacename)
+        masterinterface = masterinstance.get_interface(masterinterfacename)
 
         # Write xml description
         self.generateXML(masterinterface)
@@ -83,7 +83,7 @@ class Intercon(Component):
         # Create interface for each component connected on intercon
         # for slaves and master:
         slaveslist = masterinterface.slaves
-        interfaceslist = [slave.getInterface() for slave in slaveslist]
+        interfaceslist = [slave.get_interface() for slave in slaveslist]
         interfaceslist.append(masterinterface)
 
         # For each slave and master interface, create interface in intercon
@@ -96,7 +96,7 @@ class Intercon(Component):
                             "_" + interface.name)
             bus.interface_class = "intercon"
             # Adding bus interface on intercon
-            self.addInterface(bus)
+            self.add_interface(bus)
 
             # Creating port with invert direction value
             for port in interface.ports:
@@ -111,4 +111,4 @@ class Intercon(Component):
                 port.connect_all_pins(newport)
 
         bus.interface_class = "intercon"
-        self.setNum("0")
+        self.num = "0"

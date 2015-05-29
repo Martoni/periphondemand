@@ -91,7 +91,7 @@ class Synthesis(WrapperXml):
         """ copy all hdl file in synthesis project directory
         """
         for component in self.parent.instances:
-            if component.getNum() == "0":
+            if component.num == "0":
                 # Make directory
                 compdir = SETTINGS.projectpath +\
                     SYNTHESISPATH + "/" +\
@@ -103,7 +103,7 @@ class Synthesis(WrapperXml):
                 sy.makeDirectory(compdir)
                 DISPLAY.msg("Make directory for " + component.name)
                 # copy hdl files
-                for hdlfile in component.getHdl_filesList():
+                for hdlfile in component.hdl_files:
                     try:
                         sy.copyFile(
                             SETTINGS.projectpath +
