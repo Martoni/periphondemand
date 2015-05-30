@@ -309,7 +309,7 @@ class Component(WrapperXml):
         """ set the name of this instance """
         return self.setAttribute("instance_name", instancename)
 
-    def invertDir(self, dirname):
+    def inv_direction(self, dirname):
         """ invert direction given in params """
         if dirname == "in":
             return "out"
@@ -371,8 +371,8 @@ class Component(WrapperXml):
                            hdltop.getFileName())
 
         # verify if port is not already placed
-        isinfreelist, interface_old = self.portIsInFreeList(portname)
-        if not isinfreelist:
+        isinfreelist, interface_old = self.port_is_in_free_list(portname)
+        if isinfreelist is False:
             raise PodError("Port named " + portname +
                            " is already placed in " + interface_old)
         # take interface
@@ -382,7 +382,7 @@ class Component(WrapperXml):
         # place port in interface
         interface.add_port(port)
 
-    def portIsInFreeList(self, portname):
+    def port_is_in_free_list(self, portname):
         """ If port named portname is not in interface, return 1
             else return 0 and interface
         """
@@ -391,17 +391,8 @@ class Component(WrapperXml):
             portlist = interface.ports
             for port in portlist:
                 if port.name == portname:
-                    return (0, interface.name)
-        return (1, "")
-
-    def getFreePortsList(self):
-        """ return not assignated ports list """
-        ports_list = self.get_hdl_top().ports
-        freeportlist = []
-        for port in ports_list:
-            if self.portIsInFreeList(port.name):
-                freeportlist.append(port)
-        return freeportlist
+                    return (False, interface.name)
+        return (True, "")
 
     @property
     def ports(self):
@@ -438,7 +429,7 @@ class Component(WrapperXml):
         return False
 
     # Settings attributes for nodes
-    def setGeneric(self, generic_name, attribute_name,
+    def set_generic(self, generic_name, attribute_name,
                    attribute_value):
         """Add or modify attribute value for a node """
         generic = self.get_generic(generic_name)
@@ -456,73 +447,3 @@ class Component(WrapperXml):
             generic.setDestination(attribute_value)
         else:
             raise PodError("Unknown attribute " + str(attribute_name))
-
-    def setHDL(self, file_name, attribute_name,
-               attribute_value):
-        """ Setting HDL files """
-        HDL = self.get_hdl(file_name)
-        if attribute_name == "filename":
-            HDL.setFileName(attribute_value)
-        elif attribute_name == "scope":
-            HDL.setScope(attribute_value)
-        elif attribute_name == "istop":
-            if attribute_value == "1":
-                HDL.setTop()
-            elif attribute_value == "0":
-                HDL.unsetTop()
-            else:
-                raise PodError("Unknown top value " + str(attribute_value))
-        else:
-            raise PodError("Unknown attribute " + str(attribute_name))
-
-    def setInterface(self, interface_name, attribute_name,
-                     attribute_value):
-        """Add or modify attribute value for a node """
-        interface = self.get_interface(interface_name)
-        if attribute_name == "name":
-            interface.name = attribute_value
-        elif attribute_name == "bus":
-            interface.bus = attribute_value
-        elif attribute_name == "class":
-            interface.interface_class = attribute_value
-        elif attribute_name == "clockandreset":
-            interface.setClockAndReset(attribute_value)
-        else:
-            raise PodError("Unknown attribute " + str(attribute_name))
-
-    def setPort(self, interface_name, port_name,
-                attribute_name, attribute_value):
-        """ Setting port"""
-        interface = self.get_interface(interface_name)
-        port = interface.get_port(port_name)
-        if attribute_name == "name":
-            port.name = attribute_value
-        elif attribute_name == "type":
-            port.setType(attribute_value)
-        elif attribute_name == "size":
-            port.size = attribute_value
-        elif attribute_name == "dir":
-            port.direction = attribute_value
-        else:
-            raise PodError("Attribute " + str(attribute_name) + " unknown")
-
-    def setRegister(self, interface_name, register_name,
-                    attribute_name, attribute_value):
-        """ Setting register """
-        interface = self.get_interface(interface_name)
-        register = interface.get_register(register_name)
-        if attribute_name == "name":
-            register.name = attribute_value
-        elif attribute_name == "offset":
-            register.setOffset(attribute_value)
-        elif attribute_name == "size":
-            register.size = attribute_value
-        elif attribute_name == "rows":
-            register.setRows(attribute_value)
-        else:
-            raise PodError("Attribute " + str(attribute_name) + " unknown")
-
-    def add_reg(self, interface_name, register_name):
-        """ Add register in interface, interface must be a bus slave"""
-        interface = self.get_interface(interface_name)
-        interface.add_reg(register_name)

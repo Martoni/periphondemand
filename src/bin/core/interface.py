@@ -399,13 +399,3 @@ class Interface(WrapperXml):
     def regstep(self):
         """ Step between two register """
         return int(self.bus.getDataSize()) / 8
-
-    def add_reg(self, register_name):
-        """ adding a register by name """
-        if self.bus_name is None:
-            raise PodError("Interface must be a bus")
-        elif self.interface_class != "slave":
-            raise PodError("Bus must be a slave")
-        register = Register(self, register_name=register_name)
-        self._registerslist.append(register)
-        self.addSubNode(nodename="registers", subnode=register)

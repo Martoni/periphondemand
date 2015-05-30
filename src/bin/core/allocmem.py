@@ -38,7 +38,7 @@ from periphondemand.bin.utils.poderror import PodError
 DISPLAY = Display()
 
 
-class AllocMem:
+class AllocMem(object):
     """ Manage memory mapping, and instances identifiers
     """
 

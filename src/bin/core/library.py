@@ -36,7 +36,7 @@ from periphondemand.bin.utils import wrappersystem as sy
 SETTINGS = Settings()
 
 
-class Library:
+class Library(object):
     """ Libraries management class
     """
 

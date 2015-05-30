@@ -103,7 +103,7 @@ class Intercon(Component):
                 newport = Port(bus,
                                name=instance.instancename +
                                "_" + port.name)
-                newport.direction = self.invertDir(port.direction)
+                newport.direction = self.inv_direction(port.direction)
                 newport.size = port.size
                 # adding port on bus interface
                 bus.add_port(newport)
