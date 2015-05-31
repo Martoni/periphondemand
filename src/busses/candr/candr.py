@@ -94,11 +94,11 @@ def connectClockandReset(masterinterface, intercon):
     masterinstance = masterinterface.parent
     masterinstancename = masterinstance.instancename
     masterresetname = masterinstancename + "_" +\
-        masterinterface.get_port_by_type(bus.getSignalName("master",
-                                                           "reset")).name
+        masterinterface.get_port_by_type(bus.sig_name("master",
+                                                      "reset")).name
     masterclockname = masterinstancename + "_" +\
-        masterinterface.get_port_by_type(bus.getSignalName("master",
-                                                           "clock")).name
+        masterinterface.get_port_by_type(bus.sig_name("master",
+                                                      "clock")).name
 
     out = "\n" + ONETAB + "-- Clock and Reset connection\n"
     for slave in masterinterface.slaves:
@@ -106,10 +106,10 @@ def connectClockandReset(masterinterface, intercon):
         slaveinstancename = slave.instancename
         slaveresetname = slaveinstancename + "_" +\
             slaveinterface.get_port_by_type(
-                bus.getSignalName("slave", "reset")).name
+                bus.sig_name("slave", "reset")).name
         slaveclockname = slaveinstancename + "_" +\
             slaveinterface.get_port_by_type(
-                bus.getSignalName("slave", "clock")).name
+                bus.sig_name("slave", "clock")).name
         out = out + "\n" + ONETAB + "-- for " + slaveinstancename + "\n"
         # reset
         out = out + ONETAB + slaveresetname + " <= " + masterresetname + ";\n"

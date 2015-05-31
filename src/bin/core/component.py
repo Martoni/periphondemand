@@ -430,7 +430,7 @@ class Component(WrapperXml):
 
     # Settings attributes for nodes
     def set_generic(self, generic_name, attribute_name,
-                   attribute_value):
+                    attribute_value):
         """Add or modify attribute value for a node """
         generic = self.get_generic(generic_name)
         if attribute_name == "name":

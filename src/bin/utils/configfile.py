@@ -108,7 +108,12 @@ class ConfigFile(WrapperXml):
     def get_synthesis_tool_command(self, synthesisName):
         """ Return the path to synthesis command """
         from periphondemand.bin.utils import wrappersystem as sy
-        for anode in self.getNode("tools").getNodeList("tool"):
+        try:
+            tools = self.getNode("tools").getNodeList("tool")
+        except AttributeError, error:
+            raise PodError("No synthesis command in .podrc. (" +
+                           str(error) + ")")
+        for anode in tools:
             if (anode.getAttributeValue(key="name") == synthesisName):
                 command_name = anode.getAttributeValue(key="command")
                 command_path = anode.getAttributeValue(key="default_path")

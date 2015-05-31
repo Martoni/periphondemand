@@ -151,7 +151,7 @@ class Interface(WrapperXml):
         try:
             return int(
                 self.get_port_by_type(
-                    self.bus.getSignalName("slave", "address")).size)
+                    self.bus.sig_name("slave", "address")).size)
         except PodError:
             return 0
 
@@ -398,4 +398,4 @@ class Interface(WrapperXml):
     @property
     def regstep(self):
         """ Step between two register """
-        return int(self.bus.getDataSize()) / 8
+        return int(self.bus.data_size) / 8

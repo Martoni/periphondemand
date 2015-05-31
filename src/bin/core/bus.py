@@ -45,7 +45,8 @@ class Bus(WrapperXml):
         WrapperXml.__init__(self, file=(SETTINGS.path + BUSPATH + "/" +
                             name + "/" + name + ".xml"))
 
-    def getDataSize(self):
+    @property
+    def data_size(self):
         """ Get size of data"""
         size = self.getAttributeValue("datasize")
         if size is None:
@@ -53,7 +54,7 @@ class Bus(WrapperXml):
         else:
             return size
 
-    def getSignalName(self, classname, typename):
+    def sig_name(self, classname, typename):
         """ return the signal name for a given type
         """
         for classnode in self.getNodeList("class"):
