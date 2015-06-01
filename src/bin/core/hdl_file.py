@@ -75,7 +75,7 @@ class Hdl_file(WrapperXml):
 
     def getFilePath(self):
         """ return an open file pointer of HDL file """
-        librarypath = SETTINGS.active_library.getLibraryPath()
+        librarypath = SETTINGS.active_library.library_path()
         componentname = self.parent.name
         filepath = os.path.join(librarypath, componentname,
                                 "hdl", self.getFileName())

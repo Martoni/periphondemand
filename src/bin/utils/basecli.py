@@ -400,7 +400,7 @@ fpga_attributes    : give list of fpga attributes in platform
                     "." + portname + "." + str(i)
                     for i in range(int(port.size))]
         elif subargt == "libraryname":
-            arglist = SETTINGS.active_project.library.listLibraries()
+            arglist = SETTINGS.active_project.library.libraries
             return arglist
 
         elif subargt == "platformlib":
@@ -419,10 +419,10 @@ fpga_attributes    : give list of fpga attributes in platform
             try:
                 libraryname.lower()
             except:
-                return SETTINGS.active_library.listComponents()
+                return SETTINGS.active_library.list_components()
             arglist = [libraryname + "." + componentname
                        for componentname in
-                       SETTINGS.active_library.listComponents(
+                       SETTINGS.active_library.list_components(
                            libraryname)]
             return arglist
         elif subargt == "componentversion":
@@ -430,7 +430,7 @@ fpga_attributes    : give list of fpga attributes in platform
             try:
                 libraryname.lower()
             except:
-                libraryname = SETTINGS.active_library.getLibName()
+                libraryname = SETTINGS.active_library.lib_name
                 return [componentname + "." + version
                         for version in
                         SETTINGS.active_project.get_components_versions(

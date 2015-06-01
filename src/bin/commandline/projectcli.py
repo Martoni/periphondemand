@@ -446,10 +446,10 @@ Usage : listcomponents [libraryname]
 List components available in the library
         """
         if line.strip() == "":
-            return self.columnize(SETTINGS.active_library.listLibraries())
+            return self.columnize(SETTINGS.active_library.libraries)
         else:
             return self.columnize(
-                SETTINGS.active_library.listComponents(line))
+                SETTINGS.active_library.list_components(line))
 
     def listinstances(self):
         """ List instances in project completion"""

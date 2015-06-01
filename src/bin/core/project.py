@@ -868,7 +868,7 @@ class Project(WrapperXml):
     def get_components_versions(self, libraryname, componentname):
         """ list component version name in archive
         """
-        filelist = sy.listFiles(self.library.getLibraryPath(libraryname) +
+        filelist = sy.listFiles(self.library.library_path(libraryname) +
                                 "/" + componentname)
         outlist = []
         for name in filelist:

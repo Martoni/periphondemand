@@ -60,7 +60,7 @@ class ConfigFile(WrapperXml):
         except:
             self.personal_platformlib_list = []
 
-    def delLibrary(self, path):
+    def del_library(self, path):
         """ Delete library path in config file"""
         path = os.path.expanduser(path)
         path = os.path.abspath(path)
@@ -76,7 +76,7 @@ class ConfigFile(WrapperXml):
                         value=path)
         self.savefile()
 
-    def addLibrary(self, path):
+    def add_library(self, path):
         """ Adding a library path in config file """
         path = os.path.expanduser(path)
         path = os.path.abspath(path)

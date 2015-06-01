@@ -71,7 +71,7 @@ class Component(WrapperXml):
             raise PodError("Instance name can't be " +
                            "the same name as projectname", 0)
         # test if component exist
-        if not sy.fileExist(project.library.getLibraryPath(libraryname) +
+        if not sy.fileExist(project.library.library_path(libraryname) +
                             "/" + componentname):
             raise PodError("No component with name " +
                            libraryname + "." + componentname, 0)
@@ -95,7 +95,7 @@ class Component(WrapperXml):
                 len(project.get_instances_list_of_component(componentname))
 
         # copy and rename directory
-        sy.copyDirectory(project.library.getLibraryPath(libraryname) +
+        sy.copyDirectory(project.library.library_path(libraryname) +
                          "/" + componentname,
                          SETTINGS.projectpath + COMPONENTSPATH)
         try:
