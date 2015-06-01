@@ -67,7 +67,7 @@ def include():
         for line in library.getDescription().split("\n"):
             include = include + "-- " + line + "\n"
         include = include + "use " +\
-            SETTINGS.active_project.simulation_toolchain.getLibrary() +\
+            SETTINGS.active_project.simulation_toolchain.lib_name +\
             "." + library.getFileName().replace(VHDLEXT, ".all") + ";\n"
     return include
 
@@ -204,7 +204,7 @@ def endarch():
         return "end architecture RTL;\n"
 
 
-def generateTemplate():
+def generate_template():
     """ generate Template Testbench
     """
     filename = SETTINGS.projectpath + SIMULATIONPATH +\
@@ -255,7 +255,7 @@ def generateTemplate():
     return filename
 
 
-def generateMakefile():
+def generate_makefile():
     """ generate makefile for ghdl
     """
     # include file list:

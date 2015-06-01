@@ -42,11 +42,9 @@ class Library(object):
 
     def __init__(self):
         self.libname = None
-        pass
 
     def listLibraries(self):
-        """ Return a list of libraries availables
-        """
+        """ Return a list of libraries availables """
         componentlist = sy.listDirectory(SETTINGS.path + LIBRARYPATH)
         componentlist.extend(self.getPersonalLibName())
         componentlist.extend(self.getComponentsLibName())

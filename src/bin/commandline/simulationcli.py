@@ -105,8 +105,8 @@ Make projects files for simulation (makefile and testbench sources)
                 print(str(toolchain.name))
             return
         try:
-            filename = SETTINGS.active_project.simulation.generateTemplate()
-            filename = SETTINGS.active_project.simulation.generateMakefile()
+            filename = SETTINGS.active_project.simulation.generate_template()
+            filename = SETTINGS.active_project.simulation.generate_makefile()
         except PodError, error:
             print(str(error))
             return

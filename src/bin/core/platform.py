@@ -27,7 +27,6 @@
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.poderror import PodError
-from periphondemand.bin.utils import wrappersystem as sy
 
 from periphondemand.bin.core.component import Component
 from periphondemand.bin.core.interface import Interface
@@ -63,6 +62,7 @@ class Platform(Component):
                 self.librarieslist.append(SimulationLib(self, node=library))
 
         self.instancename = self.name
+        self.parent = parent
 
     @property
     def forces(self):

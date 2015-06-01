@@ -51,17 +51,23 @@ class Simulation(WrapperXml):
             raise PodError("No simulation project found", 3)
         WrapperXml.__init__(self, file=filepath)
 
-    def generate_project(self):
+    @classmethod
+    def generate_project(cls):
+        """TODO: Generate the project """
         DISPLAY.msg("TODO")
-        pass
 
-    def getLibrary(self):
+    @property
+    def lib_name(self):
+        """ Get library name """
         return self.getNode("library").getAttributeValue("name")
 
-    def getLanguage(self):
+    @property
+    def lang_name(self):
+        """ Get langage name """
         return self.getNode("language").getAttributeValue("name")
 
-    def generateTemplate(self):
+    def generate_template(self):
+        """ Generate simulation template """
         import sys
         sys.path.append(SETTINGS.path + TOOLCHAINPATH +
                         SIMULATIONPATH + "/" + self.name)
@@ -73,9 +79,10 @@ class Simulation(WrapperXml):
             raise PodError(str(error), 0)
         sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                         SIMULATIONPATH + "/" + self.name)
-        return plugin.generateTemplate()
+        return plugin.generate_template()
 
-    def generateMakefile(self):
+    def generate_makefile(self):
+        """ Generate simulation makefile """
         import sys
         sys.path.append(SETTINGS.path + TOOLCHAINPATH +
                         SIMULATIONPATH + "/" + self.name)
@@ -87,8 +94,9 @@ class Simulation(WrapperXml):
             raise PodError(str(error), 0)
         sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                         SIMULATIONPATH + "/" + self.name)
-        return plugin.generateMakefile()
+        return plugin.generate_makefile()
 
     def save(self):
+        """ save project """
         self.saveXml(SETTINGS.projectpath +
                      "/simulation/simulation" + XMLEXT)
