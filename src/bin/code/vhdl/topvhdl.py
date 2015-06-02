@@ -185,7 +185,7 @@ class TopVHDL(TopGen):
                     out = out + ONETAB * 3 +\
                         generic.name + " : " +\
                         generic.generictype + " := " +\
-                        str(generic.getValue()) +\
+                        str(generic.value) +\
                         ";\n"
                 # suppress comma
                 out = out[:-2] + "\n"
@@ -278,7 +278,7 @@ class TopVHDL(TopGen):
                     for generic in component.fpga_generics:
                         out = out + ONETAB * 3 +\
                             generic.name + " => " +\
-                            str(generic.getValue()) +\
+                            str(generic.value) +\
                             ",\n"
                     # suppress comma
                     out = out[:-2] + "\n"

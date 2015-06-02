@@ -1104,7 +1104,7 @@ Print instance information
         print("description : " + instance.getDescription().strip())
         print("->Generics")
         for generic in instance.generics:
-            print("%15s : " % generic.name + generic.getValue())
+            print("%15s : " % generic.name + generic.value)
         print("->Interfaces")
         for interface in instance.interfaces:
             if interface.bus_name is not None:
@@ -1170,8 +1170,8 @@ Set generic parameter
         try:
             instance = SETTINGS.active_project.get_instance(names[0])
             generic = instance.get_generic(names[1])
-            if generic.isPublic() == "true":
-                generic.setValue(args[1])
+            if generic.is_public() is True:
+                generic.value = args[1]
             else:
                 raise PodError("this generic can't be modified by user", 0)
         except PodError, error:

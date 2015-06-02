@@ -23,14 +23,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
 """ Manage generic values """
-
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 import re
 from periphondemand.bin.utils.wrapperxml import WrapperXml
@@ -52,43 +45,44 @@ class Generic(WrapperXml):
         """
         self.parent = parent
         if "node" in keys:
-            self.__initnode(keys["node"])
+            WrapperXml.__init__(self, node=keys["node"])
         elif "nodestring" in keys:
-            self.__initnodestring(keys["nodestring"])
+            WrapperXml.__init__(self, nodestring=keys["nodestring"])
         elif "name" in keys:
-            self.__initname(keys["name"])
+            WrapperXml.__init__(self, nodename="generic")
+            self.name = keys["name"]
         else:
             raise PodError("Keys unknown in Generic init()", 0)
 
-    def __initnode(self, node):
-        WrapperXml.__init__(self, node=node)
-
-    def __initnodestring(self, nodestring):
-        WrapperXml.__init__(self, nodestring=nodestring)
-
-    def __initname(self, name):
-        WrapperXml.__init__(self, nodename="generic")
-        self.name = name
-
-    def getOp(self):
+    @property
+    def operator(self):
+        """ return the operator """
         return self.getAttributeValue("op")
 
-    def setOp(self, op):
-        self.setAttribute("op", op)
+    @operator.setter
+    def operator(self, operator):
+        """ set operator """
+        self.setAttribute("op", operator)
 
-    def getTarget(self):
+    @property
+    def target(self):
+        """ getting target attribute """
         return self.getAttributeValue("target")
 
-    def setTarget(self, target):
+    @target.setter
+    def target(self, target):
+        """ setting target attribute """
         self.setAttribute("target", target)
 
-    def isPublic(self):
+    def is_public(self):
+        """ is this generic public ? """
         if self.getAttributeValue("public") == "true":
-            return "true"
+            return True
         else:
-            return "false"
+            return False
 
-    def setPublic(self, public):
+    def set_public(self, public):
+        """ Setting public or not """
         public = public.lower()
         if public not in PUBLIC:
             raise PodError("Public value " + str(public) + " wrong")
@@ -96,6 +90,7 @@ class Generic(WrapperXml):
 
     @property
     def generictype(self):
+        """ get the generic type """
         the_type = self.getAttributeValue("type")
         if the_type is None:
             raise PodError("Generic " + self.name +
@@ -105,47 +100,56 @@ class Generic(WrapperXml):
 
     @generictype.setter
     def generictype(self, atype):
+        """ set the generic type """
         self.setAttribute("type", atype)
 
-    def getMatch(self):
+    @property
+    def match(self):
+        """ get the matching regexp """
         try:
             return self.getAttributeValue("match").encode("utf-8")
         except AttributeError:
             return None
 
-    def setMatch(self, match):
+    @match.setter
+    def match(self, match):
+        """ set the matching regexp """
         self.setAttribute("match", match)
 
-    def getValue(self):
-        """ return the generic value
-        """
+    @property
+    def value(self):
+        """ return the generic value """
         component = self.parent
-        if self.getOp() is None:
+        if self.operator is None:
             return self.getAttributeValue("value")
         else:
-            target = self.getTarget().split(".")
-            if self.getOp() == "realsizeof":
+            target = self.target.split(".")
+            if self.operator == "realsizeof":
                 # return the number of connected pin
                 return str(int(
                     component.get_interface(
                         target[0]).get_port(target[1]).max_pin_num) + 1)
             else:
-                raise PodError("Operator unknown " + self.getOp(), 1)
+                raise PodError("Operator unknown " + self.operator, 1)
 
-    def setValue(self, value):
-        if self.getMatch() is None:
+    @value.setter
+    def value(self, value):
+        """ setting the value """
+        if self.match is None:
             self.setAttribute("value", value)
-        elif re.compile(self.getMatch()).match(value):
+        elif re.compile(self.match).match(value):
             self.setAttribute("value", value)
         else:
             raise PodError("Value doesn't match for attribute " + str(value))
 
-    def getDestination(self):
-        """ return the generic destination (fpga,driver or both)
-        """
+    @property
+    def destination(self):
+        """ return the generic destination (fpga,driver or both) """
         return self.getAttributeValue("destination")
 
-    def setDestination(self, destination):
+    @destination.setter
+    def destination(self, destination):
+        """ setting destination """
         destination = destination.lower()
         if destination not in DESTINATION:
             raise PodError("Destination value " + str(destination) +

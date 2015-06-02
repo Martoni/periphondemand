@@ -130,7 +130,7 @@ class Driver(WrapperXml):
                 for generic in iterator:
                     writeline = re.sub(
                         r'\/\*\$generic:' + generic.group(1) + r'\$\*\/',
-                        instance.get_generic(generic.group(1)).getValue(),
+                        instance.get_generic(generic.group(1)).value,
                         writeline)
                 # register_base_address:interface_name
                 exp = re.compile(r'\/\*\$registers_base_address:(.*?)\$\*\/')

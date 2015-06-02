@@ -207,8 +207,8 @@ class Component(WrapperXml):
         """ Get fpga specifics generic list """
         fpgalist = []
         for generic in self.generics:
-            if generic.getDestination() == "fpga" or\
-                    generic.getDestination() == "both":
+            if generic.destination == "fpga" or\
+                    generic.destination == "both":
                 fpgalist.append(generic)
         return fpgalist
 
@@ -436,14 +436,14 @@ class Component(WrapperXml):
         if attribute_name == "name":
             generic.name = attribute_value
         elif attribute_name == "public":
-            generic.setPublic(attribute_value)
+            generic.set_public(attribute_value)
         elif attribute_name == "value":
-            generic.setValue(attribute_value)
+            generic.value = attribute_value
         elif attribute_name == "match":
-            generic.setMatch(attribute_value)
+            generic.match = attribute_value
         elif attribute_name == "type":
             generic.setType(attribute_value)
         elif attribute_name == "destination":
-            generic.setDestination(attribute_value)
+            generic.destination = attribute_value
         else:
             raise PodError("Unknown attribute " + str(attribute_name))

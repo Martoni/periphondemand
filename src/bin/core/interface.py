@@ -327,9 +327,8 @@ class Interface(WrapperXml):
         self.alloc_mem.add_interfaceSlave(interfaceslave)
         interfaceslave.master = self
         interfaceslave.unique_id = self.alloc_mem.unique_id
-        instanceslave.get_generic(
-            genericname="id").setValue(
-                str(interfaceslave.unique_id))
+        instanceslave.get_generic(genericname="id").value =\
+            str(interfaceslave.unique_id)
 
     @property
     def unique_id(self):
