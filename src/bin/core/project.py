@@ -124,7 +124,7 @@ class Project(WrapperXml):
         if(components):
             for node in components.getNodeList("component"):
                 if node.getAttributeValue("platform") is None:
-                    comp = Component(self)
+                    comp = Component()
                 else:
                     comp = Platform(self, node=self.getNode("platform"))
                 try:
