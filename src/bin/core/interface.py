@@ -226,7 +226,7 @@ class Interface(WrapperXml):
 
     def del_slave(self, slave):
         """ Delet slave """
-        self.alloc_mem.delInterfaceSlave(slave.get_interface())
+        self.alloc_mem.del_slave_interface(slave.get_interface())
         self._slaveslist.remove(slave)
         self.delSubNode("slaves", "slave",
                         {"instancename": slave.instancename,
@@ -324,7 +324,7 @@ class Interface(WrapperXml):
             Slave(self,
                   instancename=instanceslave.instancename,
                   interfacename=interfaceslavename))
-        self.alloc_mem.add_interfaceSlave(interfaceslave)
+        self.alloc_mem.add_slave_interface(interfaceslave)
         interfaceslave.master = self
         interfaceslave.unique_id = self.alloc_mem.unique_id
         instanceslave.get_generic(genericname="id").value =\

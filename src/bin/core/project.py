@@ -161,7 +161,7 @@ class Project(WrapperXml):
         for masterinterface in self.interfaces_master:
             for slave in masterinterface.slaves:
                 slaveinterface = slave.get_interface()
-                masterinterface.alloc_mem.add_interfaceSlave(slaveinterface)
+                masterinterface.alloc_mem.add_slave_interface(slaveinterface)
                 slaveinterface.master = masterinterface
 
         # set bsp directory
@@ -825,7 +825,7 @@ class Project(WrapperXml):
                         " size        ")
             DISPLAY.msg("-----------------------------" +
                         "----------------------------")
-            for register in master.alloc_mem.getMapping():
+            for register in master.alloc_mem.mapping:
                 DISPLAY.msg("%8s" % register[0] + " | " +
                             "%30s" % register[1] +
                             " | " + "%10s" % register[2])

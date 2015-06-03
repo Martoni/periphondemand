@@ -23,14 +23,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # ----------------------------------------------------------------------------
-# Revision list :
-#
-# Date       By        Changes
-#
-# ----------------------------------------------------------------------------
 """ Class that manage memory map for bus assignement """
-
-__author__ = "Fabien Marteau <fabien.marteau@armadeus.com>"
 
 from periphondemand.bin.utils.display import Display
 from periphondemand.bin.utils.poderror import PodError
@@ -48,13 +41,27 @@ class AllocMem(object):
         self.lastaddress = 0
         self.instancescount = 1
 
+    def __str__(self):
+        out = "Address  |     instance.interface         |  size  |   ID   |\n"
+        out = out + "------------------------------" +\
+                    "-------------------------------\n"
+        for register in self.mapping:
+            out = out + "%8s" % register[0] + " | " +\
+                        "%30s" % register[1] + " | " +\
+                        "%4s  " % register[2] + " | " +\
+                        "%4s   " % register[3] + "|\n"
+        out = out + "------------------------------" +\
+                    "-------------------------------\n"
+        return out
+
     @property
     def unique_id(self):
         """ Return an unique identificator number for the slave """
         self.instancescount = self.instancescount + 1
         return self.instancescount - 1
 
-    def add_interfaceSlave(self, interface):
+    def add_slave_interface(self, interface):
+        """ adding slave interface """
         if interface.interface_class != "slave":
             raise PodError(interface.name + " is not a slave", 0)
 
@@ -82,15 +89,18 @@ class AllocMem(object):
         else:
             DISPLAY.msg("No addressing value in this type of bus")
 
-    def delInterfaceSlave(self, interface):
+    def del_slave_interface(self, interface):
+        """ delete slave interface from list """
         self.listinterfaceslave.remove(interface)
 
-    def setAddressSlave(self, interfaceslave, address):
+    @classmethod
+    def set_slave_addr(cls, interfaceslave, address):
         """ set base address for interfaceslave,
             address in hexa """
         interfaceslave.base_addr = address
 
-    def getMapping(self):
+    @property
+    def mapping(self):
         """ return a list mapping
             list = [[baseaddress, instancename, size, id],
                     [baseaddress,    "void"   , size, "void" ],
@@ -99,8 +109,7 @@ class AllocMem(object):
         """
         mappinglist = []
         # sorting slave interface
-        self.listinterfaceslave.sort(
-            lambda x,  y: x.base_addr - y.base_addr)
+        self.listinterfaceslave.sort(lambda x, y: x.base_addr - y.base_addr)
 
         baseaddress = 0
         for interface in self.listinterfaceslave:
@@ -118,16 +127,3 @@ class AllocMem(object):
                                 interface.unique_id])
             baseaddress = baseaddress + interface.mem_size
         return mappinglist
-
-    def __str__(self):
-        out = "Address  |     instance.interface         |  size  |   ID   |\n"
-        out = out + "------------------------------" +\
-                    "-------------------------------\n"
-        for register in self.getMapping():
-            out = out + "%8s" % register[0] + " | " +\
-                        "%30s" % register[1] + " | " +\
-                        "%4s  " % register[2] + " | " +\
-                        "%4s   " % register[3] + "|\n"
-        out = out + "------------------------------" +\
-                    "-------------------------------\n"
-        return out

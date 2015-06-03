@@ -995,7 +995,7 @@ Set the base address of slave interface
                 SETTINGS.active_project.get_instance(
                     names[0]).get_interface(names[1])
             interfacemaster = interfaceslave.master
-            interfacemaster.alloc_mem.setAddressSlave(interfaceslave, arg[1])
+            interfacemaster.alloc_mem.set_slave_addr(interfaceslave, arg[1])
         except PodError, error:
             print DISPLAY
             print(str(error))
