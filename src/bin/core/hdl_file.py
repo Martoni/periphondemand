@@ -37,12 +37,12 @@ from periphondemand.bin.utils.poderror import PodError
 SETTINGS = Settings()
 
 
-class Hdl_file(WrapperXml):
+class HdlFile(WrapperXml):
     """ Manage source files
     """
 
     def __init__(self, parent, **keys):
-        """ Init Hdl_file,
+        """ Init HdlFile,
             __init__(self, parent, node)
             __init__(self, filename, istop, scope)
         """
@@ -56,7 +56,7 @@ class Hdl_file(WrapperXml):
                                 istop=keys["istop"],
                                 scope=keys["scope"])
         else:
-            raise PodError("Keys unknown in Hdl_file", 0)
+            raise PodError("Keys unknown in HdlFile", 0)
 
     def __initfilename(self, filename, istop, scope):
         WrapperXml.__init__(self, nodename="hdl_file")

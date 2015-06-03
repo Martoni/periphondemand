@@ -42,7 +42,7 @@ from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.core.component import Component
 from periphondemand.bin.core.port import Port
 from periphondemand.bin.core.interface import Interface
-from periphondemand.bin.core.hdl_file import Hdl_file
+from periphondemand.bin.core.hdl_file import HdlFile
 
 SETTINGS = Settings()
 
@@ -424,8 +424,8 @@ def generate_intercon(masterinterface, intercon):
     afile.write(VHDLcode)
     afile.close()
     # hdl file path
-    hdl = Hdl_file(intercon,
-                   filename=intercon.instancename + VHDLEXT,
-                   istop=1, scope="both")
+    hdl = HdlFile(intercon,
+                  filename=intercon.instancename + VHDLEXT,
+                  istop=1, scope="both")
     intercon.add_hdl_file(hdl)
     return VHDLcode

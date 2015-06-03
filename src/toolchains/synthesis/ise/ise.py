@@ -49,7 +49,7 @@ from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.core.component import Component
 from periphondemand.bin.core.port import Port
 from periphondemand.bin.core.interface import Interface
-from periphondemand.bin.core.hdl_file import Hdl_file
+from periphondemand.bin.core.hdl_file import HdlFile
 
 SETTINGS = Settings()
 DISPLAY = Display()

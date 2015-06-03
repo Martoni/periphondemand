@@ -26,7 +26,7 @@ from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils.display import Display
 
 from periphondemand.bin.core.interface import Interface
-from periphondemand.bin.core.hdl_file import Hdl_file
+from periphondemand.bin.core.hdl_file import HdlFile
 from periphondemand.bin.core.driver_templates import DriverTemplates
 from periphondemand.bin.core.generic import Generic
 
@@ -135,7 +135,7 @@ class Component(WrapperXml):
 
         if self.getNode("hdl_files") is not None:
             for element in self.getSubNodeList("hdl_files", "hdl_file"):
-                self._hdl_fileslist.append(Hdl_file(self, node=element))
+                self._hdl_fileslist.append(HdlFile(self, node=element))
 
         if self.getNode("driver_files") is not None:
             for element in\
