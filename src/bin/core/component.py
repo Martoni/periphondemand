@@ -16,7 +16,6 @@
 # ----------------------------------------------------------------------------
 """ Manage component class """
 
-import os
 from periphondemand.bin.define import COMPONENTSPATH
 from periphondemand.bin.define import XMLEXT
 
