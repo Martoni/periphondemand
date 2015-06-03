@@ -146,7 +146,8 @@ class Library(object):
         """ Get the list names of Personnal library"""
         return SETTINGS.personal_lib_name_list
 
-    def get_pers_lib_path(self, name):
+    @classmethod
+    def get_pers_lib_path(cls, name):
         """ Get the path library"""
         for libpath in SETTINGS.personal_lib_path_list:
             if libpath.split("/")[-1] == name:
