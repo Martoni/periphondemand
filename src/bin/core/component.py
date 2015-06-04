@@ -175,14 +175,14 @@ class Component(WrapperXml):
     def get_hdl_top(self):
         """ Get hdl top file """
         for hdlfile in self.hdl_files:
-            if hdlfile.isTop():
+            if hdlfile.istop():
                 return hdlfile
         return None
 
     def get_hdl(self, filename):
         """ get hdl file """
         for hdlfile in self.hdl_files:
-            if hdlfile.getFileName() == filename:
+            if hdlfile.filename == filename:
                 return hdlfile
         raise PodError("no hdl file named " + filename)
 
@@ -367,7 +367,7 @@ class Component(WrapperXml):
         portlist = hdltop.ports
         if portname not in [port.name for port in portlist]:
             raise PodError("Port named " + portname + " can't be found in " +
-                           hdltop.getFileName())
+                           hdltop.filename)
 
         # verify if port is not already placed
         isinfreelist, interface_old = self.port_is_in_free_list(portname)

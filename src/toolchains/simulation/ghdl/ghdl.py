@@ -68,7 +68,7 @@ def include():
             include = include + "-- " + line + "\n"
         include = include + "use " +\
             SETTINGS.active_project.simulation_toolchain.lib_name +\
-            "." + library.getFileName().replace(VHDLEXT, ".all") + ";\n"
+            "." + library.filename.replace(VHDLEXT, ".all") + ";\n"
     return include
 
 
@@ -268,12 +268,12 @@ def generate_makefile():
         if component.num == "0":
             compdir = ".." + SYNTHESISPATH + "/" + component.name + "/"
             for hdlfile in component.hdl_files:
-                srclist.append(compdir + hdlfile.getFileName().split("/")[-1])
+                srclist.append(compdir + hdlfile.filename.split("/")[-1])
 
     librarylist = []
     for library in platform.libraries:
-        srclist.append(library.getFileName())
-        librarylist.append(library.getFileName())
+        srclist.append(library.filename)
+        librarylist.append(library.filename)
 
     makefile = open(SETTINGS.path + TEMPLATESPATH +
                     "/" + MAKEFILETEMPLATE, "r").read()

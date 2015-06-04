@@ -29,7 +29,6 @@ import os
 
 from periphondemand.bin.define import HDLEXT
 
-from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.poderror import PodError
@@ -51,52 +50,59 @@ class HdlFile(WrapperXml):
         if "node" in keys:
             WrapperXml.__init__(self,
                                 node=keys["node"])
+
         elif "filename" in keys:
-            self.__initfilename(filename=keys["filename"],
-                                istop=keys["istop"],
-                                scope=keys["scope"])
+            WrapperXml.__init__(self, nodename="hdl_file")
+            if keys["istop"] == 1:
+                self.settop()
+            self.scope = keys["scope"]
+            self.filename = keys["filename"]
         else:
             raise PodError("Keys unknown in HdlFile", 0)
 
-    def __initfilename(self, filename, istop, scope):
-        WrapperXml.__init__(self, nodename="hdl_file")
-        if istop == 1:
-            self.setTop()
-        self.setScope(scope)
-        self.setFileName(filename)
-
-    def getFileName(self):
+    @property
+    def filename(self):
+        """ get filename """
         return self.getAttributeValue("filename")
 
-    def setFileName(self, filename):
+    @filename.setter
+    def filename(self, filename):
+        """ set filename """
         if filename.split(".")[-1] not in HDLEXT:
             raise PodError("File " + str(filename) + " is not an HDL file")
         self.setAttribute("filename", filename)
 
-    def getFilePath(self):
+    @property
+    def filepath(self):
         """ return an open file pointer of HDL file """
         librarypath = SETTINGS.active_library.library_path()
         componentname = self.parent.name
         filepath = os.path.join(librarypath, componentname,
-                                "hdl", self.getFileName())
+                                "hdl", self.filename)
         return filepath
 
-    def isTop(self):
+    def istop(self):
+        """ is it top HDL file ? """
         if self.getAttributeValue("istop") == "1":
-            return 1
+            return True
         else:
-            return 0
+            return False
 
-    def setTop(self):
-        self.setAttribute("istop", "1")
+    def settop(self, istop=True):
+        """ Set HDL as top component """
+        if istop:
+            self.setAttribute("istop", "1")
+        else:
+            self.setAttribute("istop", "0")
 
-    def unsetTop(self):
-        self.setAttribute("istop", "0")
-
-    def getScope(self):
+    @property
+    def scope(self):
+        """ getting scope """
         return self.getAttributeValue("scope")
 
-    def setScope(self, scope):
+    @scope.setter
+    def scope(self, scope):
+        """ setting scope """
         lscope = ["both", "fpga", "driver"]
         if scope.lower() in lscope:
             self.setAttribute("scope", scope)

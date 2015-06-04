@@ -109,7 +109,7 @@ class Synthesis(WrapperXml):
                             SETTINGS.projectpath +
                             COMPONENTSPATH + "/" +
                             component.instancename +
-                            "/hdl/" + hdlfile.getFileName(),
+                            "/hdl/" + hdlfile.filename,
                             compdir + "/")
                     except IOError, error:
                         print DISPLAY
