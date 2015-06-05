@@ -150,21 +150,6 @@ class Pin(WrapperXml):
                 return True
         return False
 
-    def isEmpty(self):
-        if len(self.connections) == 0:
-            return True
-        else:
-            return False
-
-    def isAll(self):  # To Be Remove ?
-        if self.getAttributeValue("all") == "true":
-            return True
-        else:
-            return False
-
-    def setAll(self):
-        self.setAttribute("all", "true")
-
     def connectPin(self, pin_dest):
         """ Make connection between two pin
         """

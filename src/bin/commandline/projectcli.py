@@ -1127,8 +1127,6 @@ Print instance information
                     print(" " * 8 + "pin"),
                     if pin.num is not None:
                         print(pin.num + ":"),
-                    elif pin.isAll():
-                        print "all",
                     first = True
                     for connection in pin.connections:
                         if first is not True:
