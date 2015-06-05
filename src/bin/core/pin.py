@@ -102,7 +102,7 @@ class Pin(WrapperXml):
 
     def del_connection(self, pin_dest):
         """ delete connection to pin_dest """
-        if not self.connectionExists(pin_dest):
+        if not self.is_connection_exists(pin_dest):
             return False
         return self.del_connection_force(pin_dest)
 
@@ -138,7 +138,7 @@ class Pin(WrapperXml):
                             connect["pin_dest"]))
         return pinlist
 
-    def connectionExists(self, pin_dest):
+    def is_connection_exists(self, pin_dest):
         """ check if this connection exists
         """
         for connect in self.connections:
@@ -203,12 +203,12 @@ class Pin(WrapperXml):
         interface_source = self.parent.parent
         instance_source = interface_source.parent
 
-        if not self.connectionExists(pin_dest):
+        if not self.is_connection_exists(pin_dest):
             self.__addConnection(instance_dest.instancename,
                                  interface_dest.name,
                                  pin_dest.parent.name,
                                  pin_dest.num)
-        if not pin_dest.connectionExists(self):
+        if not pin_dest.is_connection_exists(self):
             pin_dest.__addConnection(instance_source.instancename,
                                      interface_source.name,
                                      self.parent.name,
