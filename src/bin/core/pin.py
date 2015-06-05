@@ -102,7 +102,7 @@ class Pin(WrapperXml):
                 pass
             self.delConnectionForce(pin_dest)
 
-    def delConnection(self, pin_dest):
+    def del_connection(self, pin_dest):
         if not self.connectionExists(pin_dest):
             return False
         return self.delConnectionForce(pin_dest)
@@ -191,8 +191,8 @@ class Pin(WrapperXml):
         if self.parent.direction == "in":
             if len(self.connections) != 0:
                 try:
-                    pin_dest.delConnection(self)
-                    self.delConnection(pin_dest)
+                    pin_dest.del_connection(self)
+                    self.del_connection(pin_dest)
                 except:
                     pass
             if len(self.connections) != 0:

@@ -627,8 +627,8 @@ class Project(WrapperXml):
             port_dest = interface_dest.get_port(destdict["port"])
             pin_dest = port_dest.get_pin(destdict["num"])
 
-            pin_source.delConnection(pin_dest)
-            pin_dest.delConnection(pin_source)
+            pin_source.del_connection(pin_dest)
+            pin_dest.del_connection(pin_source)
             # if only instance_source given,
         else:  # delete all connection from this instance_source
             for connection in pin_source.connections:
@@ -638,8 +638,8 @@ class Project(WrapperXml):
                 port_dest = interface_dest.get_port(connection["port_dest"])
                 pin_dest = port_dest.get_pin(connection["pin_dest"])
 
-                pin_source.delConnection(pin_dest)
-                pin_dest.delConnection(pin_source)
+                pin_source.del_connection(pin_dest)
+                pin_dest.del_connection(pin_source)
         self.save()
 
     def generate_intercon(self, interfacedict):
