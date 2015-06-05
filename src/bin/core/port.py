@@ -318,7 +318,7 @@ class Port(WrapperXml):
         for pin_num in range(int(self.size)):
             pin_source = self.get_pin(pin_num)
             pin_dest = port_dest.get_pin(pin_num)
-            pin_source.connectPin(pin_dest)
+            pin_source.connect_pin(pin_dest)
 
     def autoconnect_pins(self):
         """ If there are platform defaut connection

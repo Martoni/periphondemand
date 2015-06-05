@@ -595,7 +595,7 @@ class Project(WrapperXml):
         if pin_dest.parent.parent.is_bus():
             raise PodError("One of this pin is under a bus interface." +
                            "Please use connectbus.")
-        pin_source.connectPin(pin_dest)
+        pin_source.connect_pin(pin_dest)
         self.save()
 
     def delete_pin_connection_cmd(self, sourcedict, destdict):

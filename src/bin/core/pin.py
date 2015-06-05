@@ -150,7 +150,7 @@ class Pin(WrapperXml):
                 return True
         return False
 
-    def connectPin(self, pin_dest):
+    def connect_pin(self, pin_dest):
         """ Make connection between two pin
         """
         message = "trying to connect " +\
@@ -176,7 +176,7 @@ class Pin(WrapperXml):
                 try:
                     pin_dest.del_connection(self)
                     self.del_connection(pin_dest)
-                except:
+                except PodError:
                     pass
             if len(self.connections) != 0:
                 raise PodError(message + " : Can't connect more than " +
@@ -231,7 +231,7 @@ class Pin(WrapperXml):
                     pindest_list.append(pin_dest)
         self.del_connections_forces()
         for pin_dest in pindest_list:
-            self.connectPin(pin_dest)
+            self.connect_pin(pin_dest)
 
     def isConnected(self):
         """ Return True if pin is connected to something, else return False """
