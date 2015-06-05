@@ -370,7 +370,7 @@ class Port(WrapperXml):
         """
         num = -1
         for pin in self.pins:
-            if pin.isConnected():
+            if pin.is_connected():
                 if int(pin.num) > num:
                     num = int(pin.num)
         return num
@@ -380,7 +380,7 @@ class Port(WrapperXml):
             on another pin
         """
         for pin in self.pins:
-            if pin.isConnected():
+            if pin.is_connected():
                 return False
         return True
 
@@ -389,6 +389,6 @@ class Port(WrapperXml):
         if len(self.pins) != int(self.size):
             return False
         for pin in self.pins:
-            if not pin.isConnected():
+            if not pin.is_connected():
                 return False
         return True

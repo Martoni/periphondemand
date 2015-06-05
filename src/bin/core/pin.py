@@ -233,7 +233,7 @@ class Pin(WrapperXml):
         for pin_dest in pindest_list:
             self.connect_pin(pin_dest)
 
-    def isConnected(self):
+    def is_connected(self):
         """ Return True if pin is connected to something, else return False """
         if len(self.connected_pins) > 0:
             return True
