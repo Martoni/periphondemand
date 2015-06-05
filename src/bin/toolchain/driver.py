@@ -175,7 +175,7 @@ class Driver(WrapperXml):
                     interruptport = interruptlist[0]
 
                     try:
-                        connect = interruptport.get_pin(0).getConnections()
+                        connect = interruptport.get_pin(0).connections
                     except PodError:
                         raise PodError(
                             "Interrupt " + interruptport.name +

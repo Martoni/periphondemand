@@ -483,8 +483,8 @@ class Project(WrapperXml):
                             (port.size == "1") and \
                                 (port.porttype == "CLK"):
                             for pin in port.getPinsList():
-                                if len(pin.getConnections()) == 1:
-                                    connection = pin.getConnections()[0]
+                                if len(pin.connections) == 1:
+                                    connection = pin.connections[0]
                                     if connection["instance_dest"] == \
                                             platformname:
                                         portlist.append(port)
@@ -631,7 +631,7 @@ class Project(WrapperXml):
             pin_dest.delConnection(pin_source)
             # if only instance_source given,
         else:  # delete all connection from this instance_source
-            for connection in pin_source.getConnections():
+            for connection in pin_source.connections:
                 instance_dest = self.get_instance(connection["instance_dest"])
                 interface_dest =\
                     instance_dest.get_interface(connection["interface_dest"])

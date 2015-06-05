@@ -232,7 +232,7 @@ class TopVHDL(TopGen):
                         continue
                     if len(port.pins) == 0:
                         continue
-                    connection_list = port.pins[0].getConnections()
+                    connection_list = port.pins[0].connections
                     if len(connection_list) == 0:
                         continue
                     if connection_list[0]["instance_dest"] == platformname:
@@ -351,7 +351,7 @@ class TopVHDL(TopGen):
                 # If port is completely connected to one
                 # and only one other port
                 pin = port.pins[0]
-                connect = pin.getConnections()[0]
+                connect = pin.connections[0]
                 if connect["instance_dest"] != platformname:
                     out = out + ONETAB * 2 +\
                         component.instancename +\
@@ -365,8 +365,8 @@ class TopVHDL(TopGen):
                 for pin in port.pins:
                     # Connect pin individualy
                     if pin.num is not None and\
-                            len(pin.getConnections()) != 0:
-                        connect = pin.getConnections()[0]
+                            len(pin.connections) != 0:
+                        connect = pin.connections[0]
                         if connect["instance_dest"] != platformname:
                             out = out + ONETAB * 2 +\
                                 component.instancename +\

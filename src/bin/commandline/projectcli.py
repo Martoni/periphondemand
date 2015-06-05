@@ -1130,7 +1130,7 @@ Print instance information
                     elif pin.isAll():
                         print "all",
                     first = True
-                    for connection in pin.getConnections():
+                    for connection in pin.connections:
                         if first is not True:
                             print(" " * 8 + "|" + " " * 5),
                         first = False

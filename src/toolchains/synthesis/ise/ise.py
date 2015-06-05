@@ -114,9 +114,9 @@ def generate_pinout(self, filename=None):
                 pin = pin[0]
                 # Only one connection per platform pin can be branched.
                 # If several connections found, only first is used
-                if pin.getConnections() != []:
+                if pin.connections != []:
                     # XXX use getConnectedPinList
-                    connect = pin.getConnections()
+                    connect = pin.connections
                     if len(connect) > 1:
                         same_connections_ports = []
                         DISPLAY.msg("severals pin connected to " +

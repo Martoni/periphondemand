@@ -54,7 +54,8 @@ class Pin(WrapperXml):
         else:
             raise PodError("Keys unknown in Pin", 0)
 
-    def getConnections(self):
+    @property
+    def connections(self):
         """ return a list of pin connection
             return ("instance_dest":string,
                     "interface_dest":string,
@@ -78,7 +79,7 @@ class Pin(WrapperXml):
     def delAllConnectionsForce(self):
         """ Delete all connections in this pin without any check
         """
-        for connection in self.getConnections():
+        for connection in self.connections:
             self.delNode(
                 "connect",
                 {"instance_dest": connection["instance_dest"],
@@ -89,7 +90,7 @@ class Pin(WrapperXml):
     def delAllConnections(self):
         """ Delete all connection from or to this pin
         """
-        for connection in self.getConnections():
+        for connection in self.connections:
             try:
                 instance_dest = SETTINGS.active_project.get_instance(
                     connection["instance_dest"])
@@ -131,7 +132,7 @@ class Pin(WrapperXml):
         """
         project = self.parent.parent.parent.parent
         pinlist = []
-        for connect in self.getConnections():
+        for connect in self.connections:
             pinlist.append(project.get_instance(
                 connect["instance_dest"]).get_interface(
                     connect["interface_dest"]).get_port(
@@ -142,7 +143,7 @@ class Pin(WrapperXml):
     def connectionExists(self, pin_dest):
         """ check if this connection exists
         """
-        for connect in self.getConnections():
+        for connect in self.connections:
             if connect == {"instance_dest":
                            pin_dest.parent.parent.parent.instancename,
                            "interface_dest": pin_dest.parent.parent.name,
@@ -152,7 +153,7 @@ class Pin(WrapperXml):
         return False
 
     def isEmpty(self):
-        if len(self.getConnections()) == 0:
+        if len(self.connections) == 0:
             return True
         else:
             return False
@@ -188,13 +189,13 @@ class Pin(WrapperXml):
                            " is forced, can't be connected")
 
         if self.parent.direction == "in":
-            if len(self.getConnections()) != 0:
+            if len(self.connections) != 0:
                 try:
                     pin_dest.delConnection(self)
                     self.delConnection(pin_dest)
                 except:
                     pass
-            if len(self.getConnections()) != 0:
+            if len(self.connections) != 0:
                 raise PodError(message + " : Can't connect more than " +
                                "one pin on 'in' pin")
 
@@ -237,7 +238,7 @@ class Pin(WrapperXml):
         project = SETTINGS.active_project
         pindest_list = []
         if project.platform_name is not None:
-            for connection in self.getConnections():
+            for connection in self.connections:
                 if connection["instance_dest"] == project.platform_name:
                     pin_dest = project.get_instance(
                         connection["instance_dest"]).get_interface(
@@ -261,7 +262,7 @@ class Pin(WrapperXml):
         else return False
         """
         instance_name = instance.instancename
-        for connexion in self.getConnections():
+        for connexion in self.connections:
             if connexion["instance_dest"] == instance_name:
                 return True
         return False

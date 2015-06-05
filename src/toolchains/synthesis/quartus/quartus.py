@@ -64,8 +64,8 @@ def generatepinoutContent(self):
                     ' -to force_' + str(port.name) + ";\n"
             else:
                 for pin in port.pins:
-                    if pin.getConnections() != []:
-                        connect = pin.getConnections()
+                    if pin.connections != []:
+                        connect = pin.connections
                         out = out + ONETAB + 'set_location_assignment ' + \
                             port.position + " -to " + \
                             connect[0]["instance_dest"] + "_" + \
