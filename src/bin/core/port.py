@@ -345,7 +345,7 @@ class Port(WrapperXml):
         dest_port_list = []
         for pin in self.pins:
             port_connections =\
-                [pin.parent for pin in pin.getConnectedPinList()]
+                [pin.parent for pin in pin.connected_pins]
             for port_connect in port_connections:
                 if port_connect not in dest_port_list:
                     dest_port_list.append(port_connect)
@@ -358,11 +358,11 @@ class Port(WrapperXml):
             only works with port on externals I/O (platform). If only this
             one port is connected to one pin, self port is returned.
         """
-        pin_dest_list = self.get_pin(0).getConnectedPinList()
+        pin_dest_list = self.get_pin(0).connected_pins
         if (len(pin_dest_list) == 0):
             return []
         first_pin = pin_dest_list[0]
-        return [pin.parent for pin in first_pin.getConnectedPinList()]
+        return [pin.parent for pin in first_pin.connected_pins]
 
     @property
     def connected_msb(self):

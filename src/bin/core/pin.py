@@ -125,7 +125,8 @@ class Pin(WrapperXml):
              "pin_dest": str(self.num)})
         return True
 
-    def getConnectedPinList(self):
+    @property
+    def connected_pins(self):
         """ return list of pins connected to this pin """
         project = self.parent.parent.parent.parent
         pinlist = []
@@ -249,7 +250,7 @@ class Pin(WrapperXml):
 
     def isConnected(self):
         """ Return True if pin is connected to something, else return False """
-        if len(self.getConnectedPinList()) > 0:
+        if len(self.connected_pins) > 0:
             return True
         else:
             return False
