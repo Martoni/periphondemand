@@ -240,7 +240,7 @@ class Pin(WrapperXml):
         else:
             return False
 
-    def isConnectedToInstance(self, instance):
+    def is_connected_to_inst(self, instance):
         """ Return True if pin is connected to instance given,
         else return False
         """

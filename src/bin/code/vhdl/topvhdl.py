@@ -129,7 +129,7 @@ class TopVHDL(TopGen):
                 # port not completely connected
                 else:
                     for pin in port.pins:
-                        if pin.isConnectedToInstance(
+                        if pin.is_connected_to_inst(
                                 self.project.platform):
                             out = out + ONETAB * 2 + \
                                 instancename + "_" + portname + "_pin" +\
@@ -421,7 +421,7 @@ class TopVHDL(TopGen):
                     str(portname) + " pins\n"
                 for pinnum in range(int(port.real_size)):
                     pin = port.get_pin(pinnum)
-                    if pin.isConnectedToInstance(platform):
+                    if pin.is_connected_to_inst(platform):
                         if port.direction == "in":
                             out = out + ONETAB + instancename + "_" +\
                                 portname + "(" + str(pinnum) +\
