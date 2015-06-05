@@ -87,7 +87,7 @@ class Pin(WrapperXml):
                  "port_dest": connection["port_dest"],
                  "pin_dest": connection["pin_dest"]})
 
-    def delAllConnections(self):
+    def del_connections(self):
         """ Delete all connection from or to this pin
         """
         for connection in self.connections:

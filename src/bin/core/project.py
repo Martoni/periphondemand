@@ -560,7 +560,7 @@ class Project(WrapperXml):
         for interface in instance.interfaces:
             for port in interface.ports:
                 for pin in port.getPinsList():
-                    pin.delAllConnections()
+                    pin.del_connections()
         # remove busses connections from project instances to this instancename
         for comp in self.instances:
             if comp.name != "platform":
