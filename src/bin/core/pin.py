@@ -189,18 +189,18 @@ class Pin(WrapperXml):
         instance_source = interface_source.parent
 
         if not self.is_connection_exists(pin_dest):
-            self.__addConnection(instance_dest.instancename,
-                                 interface_dest.name,
-                                 pin_dest.parent.name,
-                                 pin_dest.num)
+            self.add_connection_raw(instance_dest.instancename,
+                                    interface_dest.name,
+                                    pin_dest.parent.name,
+                                    pin_dest.num)
         if not pin_dest.is_connection_exists(self):
-            pin_dest.__addConnection(instance_source.instancename,
-                                     interface_source.name,
-                                     self.parent.name,
-                                     self.num)
+            pin_dest.add_connection_raw(instance_source.instancename,
+                                        interface_source.name,
+                                        self.parent.name,
+                                        self.num)
 
-    def __addConnection(self, instance_destname, interface_destname,
-                        port_destname, pin_destnum=None):
+    def add_connection_raw(self, instance_destname, interface_destname,
+                           port_destname, pin_destnum=None):
         """ add pin connection and check direction compatibility
         """
         if pin_destnum is not None:
