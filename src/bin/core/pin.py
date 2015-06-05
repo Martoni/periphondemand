@@ -76,7 +76,7 @@ class Pin(WrapperXml):
                         str(element.getAttributeValue("pin_dest"))})
         return connectionslist
 
-    def delAllConnectionsForce(self):
+    def del_connections_forces(self):
         """ Delete all connections in this pin without any check
         """
         for connection in self.connections:
@@ -246,7 +246,7 @@ class Pin(WrapperXml):
                                 connection["port_dest"]).get_pin(
                                     connection["pin_dest"])
                     pindest_list.append(pin_dest)
-        self.delAllConnectionsForce()
+        self.del_connections_forces()
         for pin_dest in pindest_list:
             self.connectPin(pin_dest)
 
