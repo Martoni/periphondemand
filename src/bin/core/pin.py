@@ -77,8 +77,7 @@ class Pin(WrapperXml):
         return connectionslist
 
     def del_connections_forces(self):
-        """ Delete all connections in this pin without any check
-        """
+        """ Delete all connections in this pin without any check """
         for connection in self.connections:
             self.delNode(
                 "connect",
@@ -88,8 +87,7 @@ class Pin(WrapperXml):
                  "pin_dest": connection["pin_dest"]})
 
     def del_connections(self):
-        """ Delete all connection from or to this pin
-        """
+        """ Delete all connection from or to this pin """
         for connection in self.connections:
             try:
                 instance_dest = SETTINGS.active_project.get_instance(
@@ -100,16 +98,16 @@ class Pin(WrapperXml):
                 pin_dest = port_dest.get_pin(connection["pin_dest"])
             except PodError:
                 pass
-            self.delConnectionForce(pin_dest)
+            self.del_connection_force(pin_dest)
 
     def del_connection(self, pin_dest):
+        """ delete connection to pin_dest """
         if not self.connectionExists(pin_dest):
             return False
-        return self.delConnectionForce(pin_dest)
+        return self.del_connection_force(pin_dest)
 
-    def delConnectionForce(self, pin_dest):
-        """ Delete connection from this pin to pin_dest
-        """
+    def del_connection_force(self, pin_dest):
+        """ Delete connection from this pin to pin_dest """
         self.delNode(
             "connect",
             {"instance_dest":
@@ -128,8 +126,7 @@ class Pin(WrapperXml):
         return True
 
     def getConnectedPinList(self):
-        """ return list of pins connected to this pin
-        """
+        """ return list of pins connected to this pin """
         project = self.parent.parent.parent.parent
         pinlist = []
         for connect in self.connections:
