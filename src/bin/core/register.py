@@ -31,6 +31,7 @@
 """ Manage registers """
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
+from periphondemand.bin.utils.poderror import PodError
 
 
 class Register(WrapperXml):
