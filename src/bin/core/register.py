@@ -57,11 +57,14 @@ class Register(WrapperXml):
 
         self.parent = parent
 
-    def getOffset(self):
+    @property
+    def offset(self):
+        """ Get the offset value """
         return self.getAttributeValue("offset")
 
-    def setOffset(self, offset):
-        # TODO: check if offset is valid
+    @offset.setter
+    def offset(self, offset):
+        """ Set the offset value """
         self.setAttribute("offset", offset)
 
     def getRows(self):

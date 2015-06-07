@@ -383,12 +383,12 @@ class Interface(WrapperXml):
         if len(self._registerslist) != 0:
             listreg = []
             # sort registers dict by offset order
-            self._registerslist.sort(lambda x, y: cmp(int(x.getOffset(), 16),
-                                     int(y.getOffset(), 16)))
+            self._registerslist.sort(lambda x, y: cmp(int(x.offset, 16),
+                                     int(y.offset, 16)))
             # display each register
             for register in self._registerslist:
                 listreg.append(
-                    {"offset": int(register.getOffset(), 16) * self.regstep +
+                    {"offset": int(register.offset, 16) * self.regstep +
                         self.base_addr, "name": register.name})
             return listreg
         else:
