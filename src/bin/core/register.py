@@ -67,17 +67,11 @@ class Register(WrapperXml):
         """ Set the offset value """
         self.setAttribute("offset", offset)
 
-    def getRows(self):
-        return self.getAttributeValue("rows")
-
-    def setRows(self, rows):
-        self.setAttribute("rows", rows)
-
-    def getAbsoluteAddr(self):
-        """ return absolute address
-        """
+    @property
+    def absolute_addr(self):
+        """ return absolute address """
         baseaddr = self.parent.base_addr
-        offset = int(self.getOffset(), 16)
+        offset = int(self.offset, 16)
         if int(self.size) == 8:
             return "%02x" % (baseaddr + offset)
         elif int(self.size) == 16:

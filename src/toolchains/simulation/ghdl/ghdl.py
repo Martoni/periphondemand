@@ -101,7 +101,7 @@ def constant(clockhalfperiod):
                 constant = constant + ONETAB + "CONSTANT " +\
                     instance.instancename.upper() + "_" +\
                     register.name.upper() +\
-                    " : std_logic_vector := x\"" + register.getAbsoluteAddr() +\
+                    " : std_logic_vector := x\"" + register.absolute_addr +\
                     "\";\n"
     return constant
 
