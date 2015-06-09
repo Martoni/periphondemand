@@ -242,10 +242,10 @@ def generate_template():
     out = out + endarch()
     #######################
     # save file
-    if sy.fileExist(filename):
+    if sy.file_exist(filename):
         DISPLAY.msg("[WARNING] File exist, file renamed in " +
                     filename + "old", 0)
-        sy.renameFile(filename, filename + "old")
+        sy.rename_file(filename, filename + "old")
     try:
         afile = open(filename, "w")
     except IOError, error:

@@ -85,7 +85,7 @@ class Project(WrapperXml):
                 SETTINGS.projectpath = projectpathname
             SETTINGS.author = ""
             name = os.path.basename(projectpathname)
-            if sy.fileExist(projectpathname):
+            if sy.file_exist(projectpathname):
                 self.load_project(projectpathname)
             else:
                 self.create_project(name)
@@ -95,19 +95,19 @@ class Project(WrapperXml):
 
     def create_project(self, name):
         """ Create a project """
-        if sy.dirExist(SETTINGS.projectpath):
+        if sy.dir_exist(SETTINGS.projectpath):
             raise PodError("Can't create project, directory " +
                            SETTINGS.projectpath +
                            " already exists", 0)
-        sy.makeDirectory(SETTINGS.projectpath)
+        sy.mkdir(SETTINGS.projectpath)
 
-        sy.makeDirectory(SETTINGS.projectpath + BINARYPROJECTPATH)
-        sy.makeDirectory(SETTINGS.projectpath + COMPONENTSPATH)
-        sy.makeDirectory(SETTINGS.projectpath + OBJSPATH)
+        sy.mkdir(SETTINGS.projectpath + BINARYPROJECTPATH)
+        sy.mkdir(SETTINGS.projectpath + COMPONENTSPATH)
+        sy.mkdir(SETTINGS.projectpath + OBJSPATH)
 
-        sy.makeDirectory(SETTINGS.projectpath + SIMULATIONPATH)
-        sy.makeDirectory(SETTINGS.projectpath + SYNTHESISPATH)
-        sy.makeDirectory(SETTINGS.projectpath + DRIVERSPATH)
+        sy.mkdir(SETTINGS.projectpath + SIMULATIONPATH)
+        sy.mkdir(SETTINGS.projectpath + SYNTHESISPATH)
+        sy.mkdir(SETTINGS.projectpath + DRIVERSPATH)
 
         self.createXml("project")
         self.name = name
@@ -183,10 +183,10 @@ class Project(WrapperXml):
         sy.copyFile(SETTINGS.path + TOOLCHAINPATH + SYNTHESISPATH +
                     "/" + toolchainname + "/" + toolchainname + XMLEXT,
                     SETTINGS.projectpath + SYNTHESISPATH + "/")
-        sy.renameFile(SETTINGS.projectpath + SYNTHESISPATH +
-                      "/" + toolchainname + XMLEXT,
-                      SETTINGS.projectpath + SYNTHESISPATH +
-                      "/synthesis" + XMLEXT)
+        sy.rename_file(SETTINGS.projectpath + SYNTHESISPATH +
+                       "/" + toolchainname + XMLEXT,
+                       SETTINGS.projectpath + SYNTHESISPATH +
+                       "/synthesis" + XMLEXT)
         self.synthesis = Synthesis(self)
         self.save()
 
@@ -225,10 +225,10 @@ class Project(WrapperXml):
         sy.copyFile(SETTINGS.path + TOOLCHAINPATH + SIMULATIONPATH +
                     "/" + toolchainname + "/" + toolchainname + XMLEXT,
                     SETTINGS.projectpath + SIMULATIONPATH + "/")
-        sy.renameFile(SETTINGS.projectpath + SIMULATIONPATH +
-                      "/" + toolchainname + XMLEXT,
-                      SETTINGS.projectpath + SIMULATIONPATH +
-                      "/simulation" + XMLEXT)
+        sy.rename_file(SETTINGS.projectpath + SIMULATIONPATH +
+                       "/" + toolchainname + XMLEXT,
+                       SETTINGS.projectpath + SIMULATIONPATH +
+                       "/simulation" + XMLEXT)
         self.simulation = Simulation(self)
         self.save()
 
@@ -245,10 +245,10 @@ class Project(WrapperXml):
         sy.copyFile(SETTINGS.path + TOOLCHAINPATH + DRIVERSPATH +
                     "/" + toolchainname + "/" + toolchainname + XMLEXT,
                     SETTINGS.projectpath + DRIVERSPATH + "/")
-        sy.renameFile(SETTINGS.projectpath + DRIVERSPATH +
-                      "/" + toolchainname + XMLEXT,
-                      SETTINGS.projectpath + DRIVERSPATH +
-                      "/drivers" + XMLEXT)
+        sy.rename_file(SETTINGS.projectpath + DRIVERSPATH +
+                       "/" + toolchainname + XMLEXT,
+                       SETTINGS.projectpath + DRIVERSPATH +
+                       "/drivers" + XMLEXT)
         self.driver = Driver(self)
         self.save()
 
@@ -299,7 +299,7 @@ class Project(WrapperXml):
 
     def add_component_lib(self, path):
         """ Adding a component library under the project """
-        if sy.dirExist(path):
+        if sy.dir_exist(path):
             if self.getNode("componentslibs") is None:
                 self.addNode(nodename="componentslibs")
             self.addSubNode(nodename="componentslibs",
@@ -313,7 +313,7 @@ class Project(WrapperXml):
 
     def add_platforms_lib(self, path):
         """ Adding a platforms library under the project """
-        if sy.dirExist(path):
+        if sy.dir_exist(path):
             if self.getNode("platformlibs") is None:
                 self.addNode(nodename="platformlibs")
             self.addSubNode(nodename="platformlibs",
@@ -521,7 +521,7 @@ class Project(WrapperXml):
                     raise PodError("Platform name error")
         platform = Platform(self, file=platformdir + platformname + XMLEXT)
 
-        if sy.fileExist(platformdir + SIMULATIONPATH):
+        if sy.file_exist(platformdir + SIMULATIONPATH):
             sy.copyAllFile(platformdir + SIMULATIONPATH,
                            SETTINGS.projectpath + SIMULATIONPATH)
         self.add_instance(component=platform)

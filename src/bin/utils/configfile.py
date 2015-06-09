@@ -119,7 +119,7 @@ class ConfigFile(WrapperXml):
                 command_path = anode.getAttributeValue(key="default_path")
                 command_name = command_path + "/" + command_name
                 break
-        if not sy.commandExist(command_name):
+        if not sy.cmd_exist(command_name):
             raise PodError("Synthesis tool tcl shell command named " +
                            command_name +
                            " doesn't exist in .podrc")

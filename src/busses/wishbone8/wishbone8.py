@@ -413,10 +413,10 @@ def generate_intercon(masterinterface, intercon):
     VHDLcode = VHDLcode + architectureFoot(intercon)
 
     # saving
-    if not sy.dirExist(SETTINGS.projectpath + COMPONENTSPATH + "/" +
-                       intercon.instancename + "/" + HDLDIR):
-        sy.makeDirectory(SETTINGS.projectpath + COMPONENTSPATH + "/" +
-                         intercon.instancename + "/" + HDLDIR)
+    if not sy.dir_exist(SETTINGS.projectpath + COMPONENTSPATH + "/" +
+                        intercon.instancename + "/" + HDLDIR):
+        sy.mkdir(SETTINGS.projectpath + COMPONENTSPATH + "/" +
+                 intercon.instancename + "/" + HDLDIR)
     afile = open(SETTINGS.projectpath + COMPONENTSPATH + "/" +
                  intercon.instancename + "/" + HDLDIR + "/" +
                  intercon.instancename + VHDLEXT, "w")

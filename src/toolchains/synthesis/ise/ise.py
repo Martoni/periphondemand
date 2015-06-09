@@ -290,7 +290,7 @@ def generate_bitstream(self, commandname, scriptname):
     sy.chdir(SETTINGS.projectpath + SYNTHESISPATH)
     commandname = commandname + " < "
 
-    for line in sy.launchAShell(commandname, scriptname):
+    for line in sy.launch_as_shell(commandname, scriptname):
         if SETTINGS.color() == 1:
             print COLOR_SHELL + line + COLOR_END,
         else:

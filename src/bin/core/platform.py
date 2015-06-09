@@ -25,7 +25,6 @@
 # ----------------------------------------------------------------------------
 """ Platform management """
 
-from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.poderror import PodError
 
 from periphondemand.bin.core.component import Component
@@ -45,11 +44,10 @@ class Platform(Component):
             __init__(self, parent, node)
             __init__(self, parent, file)
         """
-        Component.__init__(self)
         if "node" in keys:
-            WrapperXml.__init__(self, node=keys["node"])
+            Component.__init__(self, node=keys["node"])
         elif "file" in keys:
-            WrapperXml.__init__(self, file=keys["file"])
+            Component.__init__(self, afile=keys["file"])
         else:
             raise PodError("Keys unknown in Platform constructor", 0)
 

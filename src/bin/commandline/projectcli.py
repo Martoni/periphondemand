@@ -151,7 +151,7 @@ create new project
             print(str(error))
             return 0
         dirname = os.path.abspath(line)
-        if sy.dirExist(dirname):
+        if sy.dir_exist(dirname):
             print("Project " + line + " already exists")
             return 0
         else:
@@ -188,10 +188,10 @@ Load a project
         except PodError, error:
             print(str(error))
             return
-        if sy.dirExist(line):
+        if sy.dir_exist(line):
             head, projectname = os.path.split(line)
             line = os.path.join(head, projectname, projectname + ".xml")
-        if not sy.fileExist(line):
+        if not sy.file_exist(line):
             print PodError("File doesn't exists")
             return
         try:

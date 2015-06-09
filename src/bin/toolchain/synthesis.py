@@ -51,7 +51,7 @@ class Synthesis(WrapperXml):
         filepath = SETTINGS.projectpath +\
             "/" + SYNTHESISPATH +\
             "/synthesis" + XMLEXT
-        if not sy.fileExist(filepath):
+        if not sy.file_exist(filepath):
             raise PodError("No synthesis project found", 3)
         WrapperXml.__init__(self, file=filepath)
         # adding path for toolchain plugin
@@ -82,7 +82,7 @@ class Synthesis(WrapperXml):
             command_path = self.getAttributeValue(key="default_path",
                                                   subnodename="tool")
             command_name = command_path + "/" + command_name
-            if not sy.commandExist(command_name):
+            if not sy.cmd_exist(command_name):
                 raise PodError("Synthesis tool tcl shell command named " +
                                command_name + " doesn't exist in PATH")
             return command_name
@@ -96,11 +96,11 @@ class Synthesis(WrapperXml):
                 compdir = SETTINGS.projectpath +\
                     SYNTHESISPATH + "/" +\
                     component.name
-                if sy.dirExist(compdir):
+                if sy.dir_exist(compdir):
                     DISPLAY.msg("Directory " + compdir +
                                 " exist, will be deleted")
                     sy.delDirectory(compdir)
-                sy.makeDirectory(compdir)
+                sy.mkdir(compdir)
                 DISPLAY.msg("Make directory for " + component.name)
                 # copy hdl files
                 for hdlfile in component.hdl_files:

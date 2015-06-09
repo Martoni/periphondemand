@@ -43,12 +43,18 @@ class Component(WrapperXml):
 
     """
 
-    def __init__(self):
+    def __init__(self, node=None, afile=None):
         """ Init Component,
             __init__(self)
         """
 
-        WrapperXml.__init__(self, nodename="void")
+        if node is not None:
+            WrapperXml.__init__(self, node=node)
+        elif afile is not None:
+            WrapperXml.__init__(self, file=afile)
+        else:
+            WrapperXml.__init__(self, nodename="void")
+
         self._interfaceslist = []
         self._genericslist = []
         self._hdl_fileslist = []
@@ -70,8 +76,8 @@ class Component(WrapperXml):
             raise PodError("Instance name can't be " +
                            "the same name as projectname", 0)
         # test if component exist
-        if not sy.fileExist(project.library.library_path(libraryname) +
-                            "/" + componentname):
+        if not sy.file_exist(project.library.library_path(libraryname) +
+                             "/" + componentname):
             raise PodError("No component with name " +
                            libraryname + "." + componentname, 0)
 
@@ -98,19 +104,18 @@ class Component(WrapperXml):
                          "/" + componentname,
                          SETTINGS.projectpath + COMPONENTSPATH)
         try:
-            sy.renameDirectory(SETTINGS.projectpath +
-                               COMPONENTSPATH + "/" + componentname,
-                               SETTINGS.projectpath + COMPONENTSPATH +
-                               "/" + instancename)
+            sy.rename_dir(SETTINGS.projectpath +
+                          COMPONENTSPATH + "/" + componentname,
+                          SETTINGS.projectpath + COMPONENTSPATH +
+                          "/" + instancename)
         except PodError:  # if directory exist
             pass
         # Rename xml file
-        sy.renameFile(SETTINGS.projectpath +
-                      COMPONENTSPATH + "/" + instancename +
-                      "/" + componentversion + XMLEXT,
-                      SETTINGS.projectpath + COMPONENTSPATH +
-                      "/" + instancename + "/" + instancename + XMLEXT)
-
+        sy.rename_file(SETTINGS.projectpath +
+                       COMPONENTSPATH + "/" + instancename +
+                       "/" + componentversion + XMLEXT,
+                       SETTINGS.projectpath + COMPONENTSPATH +
+                       "/" + instancename + "/" + instancename + XMLEXT)
         # load component
         self.load(instancename)
         # Connect platform connection
@@ -284,10 +289,10 @@ class Component(WrapperXml):
 
     def save(self):
         """ Save component in project directory files """
-        if not sy.dirExist(SETTINGS.projectpath + COMPONENTSPATH +
-                           "/" + self.instancename):
-            sy.makeDirectory(SETTINGS.projectpath + COMPONENTSPATH +
-                             "/" + self.instancename)
+        if not sy.dir_exist(SETTINGS.projectpath + COMPONENTSPATH +
+                            "/" + self.instancename):
+            sy.mkdir(SETTINGS.projectpath + COMPONENTSPATH +
+                     "/" + self.instancename)
         self.saveXml(SETTINGS.projectpath + COMPONENTSPATH + "/" +
                      self.instancename + "/" +
                      self.instancename + ".xml")

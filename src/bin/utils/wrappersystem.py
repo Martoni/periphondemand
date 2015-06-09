@@ -37,25 +37,25 @@ from periphondemand.bin.define import COLOR_DEBUG
 from periphondemand.bin.define import COLOR_END
 
 
-def inttobin(n, size):
-    """ convert a number n, in binary string with length size
+def inttobin(num, size):
+    """ convert a number num, in binary string with length size
     """
-    if n < 0:
+    if num < 0:
         raise PodError("Must be positive number", 1)
-    s = ''
-    while n != 0:
-        if n % 2 == 0:
+    snum = ''
+    while num != 0:
+        if num % 2 == 0:
             bit = '0'
         else:
             bit = '1'
-        s = bit + s
-        n >>= 1
-    if len(s) < size:
-        return '0' * (size - len(s)) + s
-    elif len(s) > size:
-        return s[len(s)-size:]
+        snum = bit + snum
+        num >>= 1
+    if len(snum) < size:
+        return '0' * (size - len(snum)) + snum
+    elif len(snum) > size:
+        return snum[len(snum)-size:]
     else:
-        return s
+        return snum
 
 
 def check_name(name):
@@ -82,25 +82,26 @@ def check_name(name):
         raise PodError(" '_' at the end forbiden", 0)
 
 
-def launchAShell(shell_name, commands_file_name):
+def launch_as_shell(shell_name, commands_file_name):
     """ launch a shell named shell_name, with a
     command script named commands_file_name
     """
     return os.popen("" + shell_name + " " + commands_file_name)
 
 
-def dirExist(dirname):
+def dir_exist(dirname):
+    """ Return True if directory exists"""
     dirname = os.path.expanduser(dirname)
     return os.path.isdir(dirname)
 
 
-def fileExist(filename):
+def file_exist(filename):
     """ test if file exist """
     filename = os.path.expanduser(filename)
     return os.path.exists(filename)
 
 
-def commandExist(commandname):
+def cmd_exist(commandname):
     """ test if a command exist in system """
     ret = os.popen("which " + commandname).read()
     ret.split()
@@ -110,7 +111,7 @@ def commandExist(commandname):
         return 1
 
 
-def renameFile(oldfilepath, newfilepath):
+def rename_file(oldfilepath, newfilepath):
     """ rename file
     """
     try:
@@ -120,18 +121,17 @@ def renameFile(oldfilepath, newfilepath):
                        str(oldfilepath) + " in " + str(newfilepath))
 
 
-def renameDirectory(olddir, newdir):
+def rename_dir(olddir, newdir):
     olddir = os.path.expanduser(olddir)
     newdir = os.path.expanduser(newdir)
     if(os.path.exists(newdir)):
         raise PodError("Directory " + newdir + " exists", 0)
     else:
-        return renameFile(olddir, newdir)
+        return rename_file(olddir, newdir)
 
 
-def makeDirectory(name):
-    """ make dir
-    """
+def mkdir(name):
+    """ make directory """
     try:
         return os.makedirs(name)
     except OSError, error:
@@ -294,7 +294,7 @@ def printDebug(message):
 
 if __name__ == "__main__":
     print listDirectory("/home/fabien/podmylib")
-    print commandExist("xtclsh")
+    print cmd_exist("xtclsh")
     sys.exit(0)
     # test
     try:

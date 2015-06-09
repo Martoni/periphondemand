@@ -49,7 +49,7 @@ class Driver(WrapperXml):
         self.project = project
         filepath = SETTINGS.projectpath + "/" +\
             DRIVERSPATH + "/drivers" + XMLEXT
-        if not sy.fileExist(filepath):
+        if not sy.file_exist(filepath):
             raise PodError("No driver project found", 3)
         WrapperXml.__init__(self, file=filepath)
         self.bspdir = None
@@ -64,8 +64,8 @@ class Driver(WrapperXml):
             if component.num == "0":
                 driver_template = component.get_driver_template(op_sys)
                 if driver_template is not None:
-                    if sy.dirExist(SETTINGS.projectpath + DRIVERSPATH +
-                                   "/" + component.name):
+                    if sy.dir_exist(SETTINGS.projectpath + DRIVERSPATH +
+                                    "/" + component.name):
                         DISPLAY.msg("Driver directory for " +
                                     component.name +
                                     " allready exist. suppressing it")
@@ -74,9 +74,9 @@ class Driver(WrapperXml):
                     DISPLAY.msg("Create directory for " +
                                 component.name + " driver")
                     # create component directory
-                    sy.makeDirectory(SETTINGS.projectpath +
-                                     DRIVERSPATH + "/" +
-                                     component.name)
+                    sy.mkdir(SETTINGS.projectpath +
+                             DRIVERSPATH + "/" +
+                             component.name)
                 else:
                     DISPLAY.msg("No driver for " + component.name)
 
@@ -259,7 +259,7 @@ class Driver(WrapperXml):
         if lastdir != "POD":
             raise PodError("The directory must be named POD and not " +
                            lastdir, 0)
-        if sy.dirExist(directory):
+        if sy.dir_exist(directory):
             if self.getNode(nodename="bsp") is not None:
                 self.getNode(nodename="bsp").setAttribute("directory",
                                                           directory)
