@@ -44,7 +44,7 @@ class Library(object):
     @property
     def libraries(self):
         """ Return a list of libraries availables """
-        componentlist = sy.listDirectory(SETTINGS.path + LIBRARYPATH)
+        componentlist = sy.list_dir(SETTINGS.path + LIBRARYPATH)
         componentlist.extend(self.personnal_libraries)
         componentlist.extend(self.get_component_lib_name())
         return componentlist
@@ -52,7 +52,7 @@ class Library(object):
     @property
     def official_libraries(self):
         """ Get list of official libraries"""
-        return sy.listDirectory(SETTINGS.path + LIBRARYPATH)
+        return sy.list_dir(SETTINGS.path + LIBRARYPATH)
 
     def library_path(self, libraryname=None):
         """ Get the library path """
@@ -77,15 +77,15 @@ class Library(object):
         componentlist = []
         if libraryname in official_component_type:
             componentlist =\
-                sy.listDirectory(SETTINGS.path +
+                sy.list_dir(SETTINGS.path +
                                  LIBRARYPATH + "/" +
                                  libraryname)
         elif libraryname in self.personnal_libraries:
             componentlist =\
-                sy.listDirectory(self.get_pers_lib_path(libraryname))
+                sy.list_dir(self.get_pers_lib_path(libraryname))
         elif libraryname in self.get_component_lib_name():
             componentlist =\
-                sy.listDirectory(self.get_component_lib_path(libraryname))
+                sy.list_dir(self.get_component_lib_path(libraryname))
         return componentlist
 
     def add_library(self, path):
@@ -110,7 +110,7 @@ class Library(object):
         if libname in self.libraries:
             raise PodError("Library " + libname + " already exist", 0)
         # check if components under library are new
-        componentlist = sy.listDirectory(path)
+        componentlist = sy.list_dir(path)
         for component in componentlist:
             for libraryname in self.libraries:
                 if component in self.list_components(libraryname):

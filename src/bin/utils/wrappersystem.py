@@ -28,13 +28,12 @@
 
 import os  # rename, copyfile, ...
 import re  # regexp
-import sys
 import shutil
-from os.path import join, splitext, split, exists
+from os.path import join
+from os.path import split
+from os.path import exists
 import glob
 from periphondemand.bin.utils.poderror import PodError
-from periphondemand.bin.define import COLOR_DEBUG
-from periphondemand.bin.define import COLOR_END
 
 
 def inttobin(num, size):
@@ -122,6 +121,7 @@ def rename_file(oldfilepath, newfilepath):
 
 
 def rename_dir(olddir, newdir):
+    """ Rename directory """
     olddir = os.path.expanduser(olddir)
     newdir = os.path.expanduser(newdir)
     if(os.path.exists(newdir)):
@@ -138,7 +138,7 @@ def mkdir(name):
         raise PodError("can't make directory " + name + " :\n" + str(error))
 
 
-def copyDirectory(source, target):
+def cp_dir(source, target):
     """ Copy directory
     """
     source = os.path.expanduser(source)
@@ -151,8 +151,8 @@ def copyDirectory(source, target):
     for root, dirs, files in os.walk(source):
         if '.svn' in dirs:
             dirs.remove('.svn')  # don't visit .svn directories
-        for file in files:
-            from_ = join(root, file)
+        for afile in files:
+            from_ = join(root, afile)
             to_ = from_.replace(source, target, 1)
             to_directory = split(to_)[0]
             if not exists(to_directory):
@@ -160,25 +160,24 @@ def copyDirectory(source, target):
             shutil.copyfile(from_, to_)
 
 
-def copyAllFile(source, target):
+def copy_all_files(source, target):
     """ Copy all file in directory to another directory
     """
     source = os.path.expanduser(source)
     target = os.path.expanduser(target)
     for name in glob.glob(source + "/" + r'*'):
-        copyFile(name, target)
+        cp_file(name, target)
 
 
-def copyFile(filepath, dirpath):
+def cp_file(filepath, dirpath):
     """ Copy file from filepath to dirpath
     """
     filepath = os.path.expanduser(filepath)
     dirpath = os.path.expanduser(dirpath)
-    namefile = filepath.split("/")[-1]
     return shutil.copy(filepath, dirpath + "/")
 
 
-def delDirectory(dirpath):
+def rm_dir(dirpath):
     """ delete a directory
     """
     dirpath = os.path.expanduser(dirpath)
@@ -189,17 +188,17 @@ def delDirectory(dirpath):
                        " doesn't exists can't be deleted", 1)
 
 
-def delFile(dirpath):
-    dirpath = os.path.expanduser(dirpath)
+def rm_file(filepath):
+    """ Delete a file """
+    filepath = os.path.expanduser(filepath)
     try:
-        return os.remove(dirpath)
+        return os.remove(filepath)
     except OSError:
         return None
 
 
-def listFiles(dirpath):
-    """ list file in directory
-    """
+def list_files(dirpath):
+    """ list file in directory """
     if(dirpath.strip() == ""):
         dirpath = "."
     else:
@@ -213,22 +212,22 @@ def listFiles(dirpath):
     return listout
 
 
-def listFileType(dirpath, ext):
+def list_file_type(dirpath, ext):
     """ list file of certain extension """
-    listfile = listFiles(dirpath)
+    listfile = list_files(dirpath)
     listfile = [filename for filename in listfile if filename.find(".") != -1]
     return [filename for filename in
             listfile if filename.split(".")[-1] == ext]
 
 
-def listDirectory(dirpath):
+def list_dir(dirpath):
     """ list directory in directory, ignore hiding dir (.something)
     """
     if(dirpath.strip() == ""):
         dirpath = "."
     else:
         dirpath = os.path.expanduser(dirpath)
-    thelist = listFiles(dirpath)
+    thelist = list_files(dirpath)
     returnlist = []
     # Suppressing files, keep only directory
     for thefile in thelist:
@@ -237,32 +236,34 @@ def listDirectory(dirpath):
     return returnlist
 
 
-def deleteAll(dirpath):
+def del_all(dirpath):
     """ delete all files and directory in dirpath """
     dirpath = os.path.expanduser(dirpath)
-    deleteAllDir(dirpath)
-    deleteAllFiles(dirpath)
+    del_all_dir(dirpath)
+    del_all_files(dirpath)
 
 
-def deleteAllDir(dirpath):
+def del_all_dir(dirpath):
+    """ Delete all directories under path """
     dirpath = os.path.expanduser(dirpath)
     try:
-        for thedir in listDirectory(dirpath):
-            delDirectory(dirpath + "/" + thedir)
+        for thedir in list_dir(dirpath):
+            rm_dir(dirpath + "/" + thedir)
     except IOError, error:
         raise PodError(str(error), 0)
 
 
-def deleteAllFiles(dirpath):
+def del_all_files(dirpath):
+    """ Delete all files under path """
     dirpath = os.path.expanduser(dirpath)
     try:
-        for thefile in listFiles(dirpath):
+        for thefile in list_files(dirpath):
             os.remove(dirpath + "/" + thefile)
     except IOError, error:
         raise PodError(str(error), 0)
 
 
-def ls(dirpath):
+def shell_ls(dirpath):
     """ use the operating system command to list file"""
     os.system("ls --color " + dirpath)
 
@@ -274,49 +275,5 @@ def pwd():
 
 
 def chdir(path):
+    """ Change current directory """
     os.chdir(path)
-
-
-def printDebug(message):
-    """ print debug message with color if settings.color is set """
-    try:
-        from periphondemand.utils.settings import Settings
-    except ImportError:
-        print "Warning: cannot import settings"
-        print "DEBUG: " + message
-        return
-    settings = Settings()
-
-    if settings.color() == 1:
-        print COLOR_DEBUG + message + COLOR_END
-    else:
-        print "DEBUG: " + message
-
-if __name__ == "__main__":
-    print listDirectory("/home/fabien/podmylib")
-    print cmd_exist("xtclsh")
-    sys.exit(0)
-    # test
-    try:
-        check_name("plop0")
-        check_name("plop_plop8")
-        check_name("plop*plop0")
-    except PodError, error:
-        print error
-    try:
-        check_name("plop-plop")
-    except PodError, error:
-        print error
-
-    try:
-        check_name("_plop")
-    except PodError, error:
-        print error
-    try:
-        check_name("plop_")
-    except PodError, error:
-        print error
-    try:
-        check_name("plop__plop")
-    except PodError, error:
-        print error

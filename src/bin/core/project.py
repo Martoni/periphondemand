@@ -180,9 +180,9 @@ class Project(WrapperXml):
         """ Set the synthesis toolchain """
         if toolchainname not in self.get_synthesis_toolchains():
             raise PodError("No toolchain named " + toolchainname + " in POD")
-        sy.copyFile(SETTINGS.path + TOOLCHAINPATH + SYNTHESISPATH +
-                    "/" + toolchainname + "/" + toolchainname + XMLEXT,
-                    SETTINGS.projectpath + SYNTHESISPATH + "/")
+        sy.cp_file(SETTINGS.path + TOOLCHAINPATH + SYNTHESISPATH +
+                   "/" + toolchainname + "/" + toolchainname + XMLEXT,
+                   SETTINGS.projectpath + SYNTHESISPATH + "/")
         sy.rename_file(SETTINGS.projectpath + SYNTHESISPATH +
                        "/" + toolchainname + XMLEXT,
                        SETTINGS.projectpath + SYNTHESISPATH +
@@ -222,9 +222,9 @@ class Project(WrapperXml):
         """ Set simulation toolchain """
         if toolchainname not in self.get_simulation_toolchains():
             raise PodError("No toolchain named " + toolchainname + " in POD")
-        sy.copyFile(SETTINGS.path + TOOLCHAINPATH + SIMULATIONPATH +
-                    "/" + toolchainname + "/" + toolchainname + XMLEXT,
-                    SETTINGS.projectpath + SIMULATIONPATH + "/")
+        sy.cp_file(SETTINGS.path + TOOLCHAINPATH + SIMULATIONPATH +
+                   "/" + toolchainname + "/" + toolchainname + XMLEXT,
+                   SETTINGS.projectpath + SIMULATIONPATH + "/")
         sy.rename_file(SETTINGS.projectpath + SIMULATIONPATH +
                        "/" + toolchainname + XMLEXT,
                        SETTINGS.projectpath + SIMULATIONPATH +
@@ -242,9 +242,9 @@ class Project(WrapperXml):
         """ set driver toolchain """
         if toolchainname not in self.get_driver_toolchains():
             raise PodError("No toolchain named " + toolchainname + " in POD")
-        sy.copyFile(SETTINGS.path + TOOLCHAINPATH + DRIVERSPATH +
-                    "/" + toolchainname + "/" + toolchainname + XMLEXT,
-                    SETTINGS.projectpath + DRIVERSPATH + "/")
+        sy.cp_file(SETTINGS.path + TOOLCHAINPATH + DRIVERSPATH +
+                   "/" + toolchainname + "/" + toolchainname + XMLEXT,
+                   SETTINGS.projectpath + DRIVERSPATH + "/")
         sy.rename_file(SETTINGS.projectpath + DRIVERSPATH +
                        "/" + toolchainname + XMLEXT,
                        SETTINGS.projectpath + DRIVERSPATH +
@@ -522,8 +522,8 @@ class Project(WrapperXml):
         platform = Platform(self, file=platformdir + platformname + XMLEXT)
 
         if sy.file_exist(platformdir + SIMULATIONPATH):
-            sy.copyAllFile(platformdir + SIMULATIONPATH,
-                           SETTINGS.projectpath + SIMULATIONPATH)
+            sy.copy_all_files(platformdir + SIMULATIONPATH,
+                              SETTINGS.projectpath + SIMULATIONPATH)
         self.add_instance(component=platform)
         self.addNode(node=platform)
         # Adding platform default components
@@ -549,7 +549,7 @@ class Project(WrapperXml):
     def availables_plat(cls):
         """ List all supported platforms names
         """
-        platformlist = sy.listDirectory(SETTINGS.path + PLATFORMPATH)
+        platformlist = sy.list_dir(SETTINGS.path + PLATFORMPATH)
         return platformlist
 
     def del_instance(self, instancename):
@@ -835,21 +835,21 @@ class Project(WrapperXml):
     @classmethod
     def get_simulation_toolchains(cls):
         """ list all toolchain availables """
-        filelist = sy.listDirectory(SETTINGS.path +
+        filelist = sy.list_dir(SETTINGS.path +
                                     TOOLCHAINPATH + SIMULATIONPATH)
         return filelist
 
     @classmethod
     def get_synthesis_toolchains(cls):
         """ list all toolchains availables """
-        filelist = sy.listDirectory(SETTINGS.path +
+        filelist = sy.list_dir(SETTINGS.path +
                                     TOOLCHAINPATH + SYNTHESISPATH)
         return filelist
 
     @classmethod
     def get_driver_toolchains(cls):
         """ list all toolchains availables """
-        filelist = sy.listDirectory(SETTINGS.path +
+        filelist = sy.list_dir(SETTINGS.path +
                                     TOOLCHAINPATH + DRIVERSPATH)
         return filelist
 
@@ -868,7 +868,7 @@ class Project(WrapperXml):
     def get_components_versions(self, libraryname, componentname):
         """ list component version name in archive
         """
-        filelist = sy.listFiles(self.library.library_path(libraryname) +
+        filelist = sy.list_files(self.library.library_path(libraryname) +
                                 "/" + componentname)
         outlist = []
         for name in filelist:

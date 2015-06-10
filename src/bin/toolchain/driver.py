@@ -69,8 +69,8 @@ class Driver(WrapperXml):
                         DISPLAY.msg("Driver directory for " +
                                     component.name +
                                     " allready exist. suppressing it")
-                        sy.delDirectory(SETTINGS.projectpath + DRIVERSPATH +
-                                        "/" + component.name)
+                        sy.rm_dir(SETTINGS.projectpath + DRIVERSPATH +
+                                  "/" + component.name)
                     DISPLAY.msg("Create directory for " +
                                 component.name + " driver")
                     # create component directory
@@ -242,12 +242,12 @@ class Driver(WrapperXml):
         if bspdir is None:
             raise PodError("Set directory before", 0)
         # deleting all directory in POD dir
-        sy.deleteAllDir(bspdir)
+        sy.del_all_dir(bspdir)
         for directory in \
-                sy.listDirectory(SETTINGS.projectpath + DRIVERSPATH + "/"):
-            sy.copyDirectory(SETTINGS.projectpath + DRIVERSPATH +
-                             "/" + directory,
-                             self.get_bsp_dir())
+                sy.list_dir(SETTINGS.projectpath + DRIVERSPATH + "/"):
+            sy.cp_dir(SETTINGS.projectpath + DRIVERSPATH +
+                      "/" + directory,
+                      self.get_bsp_dir())
 
     def get_bsp_dir(self):
         """ return the directory where drivers files are copied """

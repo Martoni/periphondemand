@@ -99,18 +99,17 @@ class Synthesis(WrapperXml):
                 if sy.dir_exist(compdir):
                     DISPLAY.msg("Directory " + compdir +
                                 " exist, will be deleted")
-                    sy.delDirectory(compdir)
+                    sy.rm_dir(compdir)
                 sy.mkdir(compdir)
                 DISPLAY.msg("Make directory for " + component.name)
                 # copy hdl files
                 for hdlfile in component.hdl_files:
                     try:
-                        sy.copyFile(
-                            SETTINGS.projectpath +
-                            COMPONENTSPATH + "/" +
-                            component.instancename +
-                            "/hdl/" + hdlfile.filename,
-                            compdir + "/")
+                        sy.cp_file(SETTINGS.projectpath +
+                                   COMPONENTSPATH + "/" +
+                                   component.instancename +
+                                   "/hdl/" + hdlfile.filename,
+                                   compdir + "/")
                     except IOError, error:
                         print DISPLAY
                         raise PodError(str(error), 0)
@@ -155,10 +154,10 @@ class Synthesis(WrapperXml):
         try:
             plugin = __import__(self.name)
         except ImportError, error:
-            sy.delFile(SETTINGS.path + TOOLCHAINPATH +
+            sy.rm_file(SETTINGS.path + TOOLCHAINPATH +
                        SYNTHESISPATH + "/" + self.name)
             raise PodError(str(error))
-        sy.delFile(SETTINGS.path + TOOLCHAINPATH +
+        sy.rm_file(SETTINGS.path + TOOLCHAINPATH +
                    SYNTHESISPATH + "/" + self.name)
 
         plugin.generate_pinout(self, filename)

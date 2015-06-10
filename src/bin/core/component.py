@@ -100,9 +100,9 @@ class Component(WrapperXml):
                 len(project.get_instances_list_of_component(componentname))
 
         # copy and rename directory
-        sy.copyDirectory(project.library.library_path(libraryname) +
-                         "/" + componentname,
-                         SETTINGS.projectpath + COMPONENTSPATH)
+        sy.cp_dir(project.library.library_path(libraryname) +
+                  "/" + componentname,
+                  SETTINGS.projectpath + COMPONENTSPATH)
         try:
             sy.rename_dir(SETTINGS.projectpath +
                           COMPONENTSPATH + "/" + componentname,
@@ -300,8 +300,8 @@ class Component(WrapperXml):
     def del_instance(self):
         """ suppress component instance """
         if not self.is_platform():
-            sy.delDirectory(SETTINGS.projectpath + COMPONENTSPATH + "/" +
-                            self.instancename)
+            sy.rm_dir(SETTINGS.projectpath + COMPONENTSPATH +
+                      "/" + self.instancename)
 
     @property
     def instancename(self):

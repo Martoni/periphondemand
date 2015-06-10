@@ -110,7 +110,7 @@ directory must be selected with setprojecttree
             path = "/".join(path) + "/"
         else:  # sub/sub
             path = "/".join(path.split("/")[0:-1]) + "/"
-        listdir = sy.listDirectory(path)
+        listdir = sy.list_dir(path)
         return self.completelist(line, text, listdir)
 
     def do_selectprojecttree(self, line):

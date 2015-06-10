@@ -448,7 +448,7 @@ fpga_attributes    : give list of fpga attributes in platform
             else:
                 return [platformlib + "." + name
                         for name in
-                        sy.listFiles(
+                        sy.list_files(
                             SETTINGS.getPlatformLibPath(platformlib))]
 
         elif subargt == "genericname":
@@ -564,7 +564,7 @@ fpga_attributes    : give list of fpga attributes in platform
         """ ls
         list files and directory in the current directory
         """
-        sy.ls(line)
+        sy.shell_ls(line)
 
 
 class Statekeeper(object):

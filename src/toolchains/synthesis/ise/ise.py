@@ -239,10 +239,10 @@ def generate_tcl(self, filename=None):
     tclfile.write("xfile add .." + SYNTHESISPATH + "/top_" +
                   SETTINGS.active_project.name + VHDLEXT + "\n")
 
-    for directory in sy.listDirectory(SETTINGS.projectpath + SYNTHESISPATH):
-        for afile in sy.listFiles(SETTINGS.projectpath +
-                                  SYNTHESISPATH +
-                                  "/" + directory):
+    for directory in sy.list_dir(SETTINGS.projectpath + SYNTHESISPATH):
+        for afile in sy.list_files(SETTINGS.projectpath +
+                                   SYNTHESISPATH +
+                                   "/" + directory):
             tclfile.write("xfile add .." + SYNTHESISPATH + "/" +
                           directory + "/" + afile + "\n")
 
@@ -286,7 +286,7 @@ def generate_tcl(self, filename=None):
 def generate_bitstream(self, commandname, scriptname):
     """ generate the bitstream """
     pwd = sy.pwd()
-    sy.deleteAll(SETTINGS.projectpath + OBJSPATH)
+    sy.del_all(SETTINGS.projectpath + OBJSPATH)
     sy.chdir(SETTINGS.projectpath + SYNTHESISPATH)
     commandname = commandname + " < "
 

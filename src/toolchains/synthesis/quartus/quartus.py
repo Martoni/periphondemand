@@ -136,10 +136,10 @@ def generate_tcl(self, filename=None):
                   SYNTHESISPATH + "/top_" +
                   settings.active_project.name + VHDLEXT + "\n")
 
-    for directory in sy.listDirectory(settings.projectpath + SYNTHESISPATH):
-        for file in sy.listFiles(settings.projectpath +
-                                 SYNTHESISPATH +
-                                 "/" + directory):
+    for directory in sy.list_dir(settings.projectpath + SYNTHESISPATH):
+        for file in sy.list_files(settings.projectpath +
+                                  SYNTHESISPATH +
+                                  "/" + directory):
             tclfile.write("set_global_assignment -name VHDL_FILE .." +
                           SYNTHESISPATH + "/" + directory +
                           "/" + file + "\n")
@@ -159,7 +159,7 @@ def generate_tcl(self, filename=None):
 def generate_bitstream(self, commandname, scriptname):
     """ generate the bitstream """
     pwd = sy.pwd()
-    sy.deleteAll(settings.projectpath + OBJSPATH)
+    sy.del_all(settings.projectpath + OBJSPATH)
     sy.chdir(settings.projectpath + SYNTHESISPATH)
     commandname = commandname + " -t "
 

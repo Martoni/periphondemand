@@ -173,8 +173,8 @@ create new project
             path = "/".join(path) + "/"
         else:  # sub/sub
             path = "/".join(path.split("/")[0:-1]) + "/"
-        listdir = sy.listDirectory(path)
-        listfile = sy.listFileType(path, XMLEXT[1:])
+        listdir = sy.list_dir(path)
+        listfile = sy.list_file_type(path, XMLEXT[1:])
         listfile.extend(listdir)
         return self.completelist(line, text, listfile)
 
@@ -1356,8 +1356,8 @@ Set 1 if you want color output, 0 else
             path = "/".join(path) + "/"
         else:  # sub/sub
             path = "/".join(path.split("/")[0:-1]) + "/"
-        listdir = sy.listDirectory(path)
-        listfile = sy.listFileType(path, PODSCRIPTEXT[1:])
+        listdir = sy.list_dir(path)
+        listfile = sy.list_file_type(path, PODSCRIPTEXT[1:])
         listfile.extend(listdir)
         return self.completelist(line, text, listfile)
 
