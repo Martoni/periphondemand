@@ -122,7 +122,7 @@ class Project(WrapperXml):
         components = self.getNode("components")
         # load components
         if(components):
-            for node in components.getNodeList("component"):
+            for node in components.get_nodes("component"):
                 if node.getAttributeValue("platform") is None:
                     comp = Component()
                 else:

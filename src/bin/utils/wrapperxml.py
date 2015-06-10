@@ -89,13 +89,13 @@ class WrapperXml(object):
         """
         nodelist = []
         try:
-            for element in self.getNode(nodename).getNodeList(subnodename):
+            for element in self.getNode(nodename).get_nodes(subnodename):
                 nodelist.append(element)
             return nodelist
         except AttributeError:
             return []
 
-    def getNodeList(self, nodename):
+    def get_nodes(self, nodename):
         """ Return a list of nodes
         """
         nodelist = []
@@ -108,7 +108,7 @@ class WrapperXml(object):
         """ return the first node found
         """
         try:
-            return self.getNodeList(nodename)[0]
+            return self.get_nodes(nodename)[0]
         except IndexError:
             return None
 
@@ -174,7 +174,7 @@ class WrapperXml(object):
         """
         if type(node) == str:
             nodename = node
-            for element in self.getNodeList(nodename):
+            for element in self.get_nodes(nodename):
                 if(element.tree.tag == nodename):
                     if attribute is None:
                         self.tree.remove(element.tree)

@@ -57,9 +57,9 @@ class Bus(WrapperXml):
     def sig_name(self, classname, typename):
         """ return the signal name for a given type
         """
-        for classnode in self.getNodeList("class"):
+        for classnode in self.get_nodes("class"):
             if classnode.getAttributeValue("type") == classname:
-                for signal in classnode.getNodeList("type"):
+                for signal in classnode.get_nodes("type"):
                     if signal.getAttributeValue("type") == typename:
                         return signal.getAttributeValue("name")
         return None

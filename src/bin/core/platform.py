@@ -52,11 +52,11 @@ class Platform(Component):
             raise PodError("Keys unknown in Platform constructor", 0)
 
         if self.getNode("interfaces") is not None:
-            for element in self.getNode("interfaces").getNodeList("interface"):
+            for element in self.getNode("interfaces").get_nodes("interface"):
                 self._interfaceslist.append(Interface(self, node=element))
         self.librarieslist = []
         if self.getNode("simulation") is not None:
-            for library in self.getNode("simulation").getNodeList("simlib"):
+            for library in self.getNode("simulation").get_nodes("simlib"):
                 self.librarieslist.append(SimulationLib(self, node=library))
 
         self.instancename = self.name

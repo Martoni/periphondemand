@@ -53,7 +53,7 @@ class Port(WrapperXml):
             raise PodError("Keys not known in Port ", 0)
 
         self.pinlist = []
-        for element in self.getNodeList("pin"):
+        for element in self.get_nodes("pin"):
             pin = Pin(self, node=element)
             self.pinlist.append(pin)
 
