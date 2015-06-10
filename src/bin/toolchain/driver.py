@@ -262,11 +262,11 @@ class Driver(WrapperXml):
         if sy.dir_exist(directory):
             if self.get_node(nodename="bsp") is not None:
                 self.get_node(nodename="bsp").setAttribute("directory",
-                                                          directory)
+                                                           directory)
             else:
                 self.add_node(nodename="bsp",
-                             attributename="directory",
-                             value=directory)
+                              attributename="directory",
+                              value=directory)
             self.bspdir = directory
         else:
             raise PodError("Directory " + directory + " does not exist", 0)

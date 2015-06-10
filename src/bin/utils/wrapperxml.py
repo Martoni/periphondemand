@@ -128,11 +128,11 @@ class WrapperXml(object):
                 subnodename = keys["subnodename"]
                 if "attributename" in keys:
                     return node.add_node(nodename=subnodename,
-                                        attributename=keys["attributename"],
-                                        value=keys["value"])
+                                         attributename=keys["attributename"],
+                                         value=keys["value"])
                 elif "attributedict" in keys:
                     return node.add_node(nodename=subnodename,
-                                        attributedict=keys["attributedict"])
+                                         attributedict=keys["attributedict"])
                 else:
                     raise PodError("Key not known in addSubNode " + str(keys))
             else:
@@ -167,10 +167,10 @@ class WrapperXml(object):
         return node
 
     def del_node(self, node, attribute=None, value=None):
-        """ delete a node, attribute can be single or, if they're multiple
-            attribute, attribute is a dictionnary
-            del_node(self, node, attribute=None, value=None)
-            del_node(self, node_name, {attribute1:value1, attribute1:value1,..})
+        """delete a node, attribute can be single or, if they're multiple
+           attribute, attribute is a dictionnary
+           del_node(self, node, attribute=None, value=None)
+           del_node(self, node_name, {attribute1:value1, attribute1:value1,..})
         """
         if type(node) == str:
             nodename = node

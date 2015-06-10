@@ -316,10 +316,10 @@ class Interface(WrapperXml):
                            "." + interfaceslave.name +
                            " is not a slave", 1)
         self.add_subnode(nodename="slaves",
-                        subnodename="slave",
-                        attributedict={
-                            "instancename": instanceslave.instancename,
-                            "interfacename": interfaceslavename})
+                         subnodename="slave",
+                         attributedict={
+                             "instancename": instanceslave.instancename,
+                             "interfacename": interfaceslavename})
         self._slaveslist.append(
             Slave(self,
                   instancename=instanceslave.instancename,
@@ -358,8 +358,8 @@ class Interface(WrapperXml):
                                "." + interfacedestname + " exists", 1)
 
         self.add_subnode(nodename="slaves", subnodename="slave",
-                        attributedict={"instancename": instancedestname,
-                                       "interfacename": interfacedestname})
+                         attributedict={"instancename": instancedestname,
+                                        "interfacename": interfacedestname})
         self._slaveslist.append(
             Slave(self,
                   instancename=instancedestname,

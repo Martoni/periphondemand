@@ -56,7 +56,7 @@ class ConfigFile(WrapperXml):
             self.personal_platformlib_list = \
                 [node.getAttributeValue("path")
                     for node in self.get_subnodes("platforms",
-                                                    "platform")]
+                                                  "platform")]
         except:
             self.personal_platformlib_list = []
 
@@ -67,7 +67,7 @@ class ConfigFile(WrapperXml):
         # check if lib doesn't exists in config file
         libpathlist = [node.getAttributeValue("path") for node in
                        self.get_subnodes(nodename="libraries",
-                                           subnodename="lib")]
+                                         subnodename="lib")]
         if not (path in libpathlist):
             raise PodError("Library " + path + " doesn't exist in config", 0)
         self.delSubNode(nodename="libraries",
@@ -83,15 +83,15 @@ class ConfigFile(WrapperXml):
         # check if lib doesn't exists in config file
         libpathlist = [node.getAttributeValue("path") for node in
                        self.get_subnodes(nodename="libraries",
-                                           subnodename="lib")]
+                                         subnodename="lib")]
         if path in libpathlist:
             raise PodError("This library is already in POD", 0)
         # check if directory exist then add it
         if os.path.exists(path):
             self.add_subnode(nodename="libraries",
-                            subnodename="lib",
-                            attributename="path",
-                            value=path)
+                             subnodename="lib",
+                             attributename="path",
+                             value=path)
             self.personal_lib_list.append(path)
             self.savefile()
         else:

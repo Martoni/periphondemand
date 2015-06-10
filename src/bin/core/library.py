@@ -125,7 +125,7 @@ class Library(object):
         try:
             for node in\
                     SETTINGS.active_project.get_subnodes("componentslibs",
-                                                           "componentslib"):
+                                                         "componentslib"):
                 path_list.append(node.getAttributeValue(key="path"))
             for libpath in path_list:
                 if libpath.split("/")[-1] == name:

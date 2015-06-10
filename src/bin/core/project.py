@@ -303,9 +303,9 @@ class Project(WrapperXml):
             if self.get_node("componentslibs") is None:
                 self.add_node(nodename="componentslibs")
             self.add_subnode(nodename="componentslibs",
-                            subnodename="componentslib",
-                            attributename="path",
-                            value=path)
+                             subnodename="componentslib",
+                             attributename="path",
+                             value=path)
             self.save()
         else:
             raise PodError("ComponentsLib directory " +
@@ -317,9 +317,9 @@ class Project(WrapperXml):
             if self.get_node("platformlibs") is None:
                 self.add_node(nodename="platformlibs")
             self.add_subnode(nodename="platformlibs",
-                            subnodename="platformlib",
-                            attributename="path",
-                            value=path)
+                             subnodename="platformlib",
+                             attributename="path",
+                             value=path)
             self.save()
         else:
             raise PodError("ComponentsLib directory " + str(path) +
@@ -378,14 +378,14 @@ class Project(WrapperXml):
         self._instanceslist.append(comp)
         if comp.name != "platform":
             self.add_subnode(nodename="components",
-                            subnodename="component",
-                            attributename="name",
-                            value=instancename)
+                             subnodename="component",
+                             attributename="name",
+                             value=instancename)
         else:
             attrib = {"name": instancename, "platform": "true"}
             self.add_subnode(nodename="components",
-                            subnodename="component",
-                            attributedict=attrib)
+                             subnodename="component",
+                             attributedict=attrib)
         DISPLAY.msg("Component " + comp.name + " added as " + instancename)
         self.save()
 
