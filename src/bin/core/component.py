@@ -193,7 +193,7 @@ class Component(WrapperXml):
 
     def add_hdl_file(self, hdl_file):
         """ add hdl file """
-        self.addSubNode(nodename="hdl_files", subnode=hdl_file)
+        self.add_subnode(nodename="hdl_files", subnode=hdl_file)
         return self._hdl_fileslist.append(hdl_file)
 
     @property
@@ -268,7 +268,7 @@ class Component(WrapperXml):
         """ Add an interface in component """
         interface.parent = self
         self._interfaceslist.append(interface)
-        self.addSubNode(nodename="interfaces", subnode=interface)
+        self.add_subnode(nodename="interfaces", subnode=interface)
 
     @property
     def interfaces(self):

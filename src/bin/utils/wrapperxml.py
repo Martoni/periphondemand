@@ -112,11 +112,11 @@ class WrapperXml(object):
         except IndexError:
             return None
 
-    def addSubNode(self, **keys):
+    def add_subnode(self, **keys):
         """ Add a subnode in the object tree
-            addSubNode(self,nodename,subnode)
-            addSubNode(self,nodename,subnodename,attributename,value)
-            addSubNode(self,nodename,subnodename,attributedict)
+            add_subnode(self,nodename,subnode)
+            add_subnode(self,nodename,subnodename,attributename,value)
+            add_subnode(self,nodename,subnodename,attributedict)
         """
         if "nodename" in keys:
             node = self.getNode(nodename=keys["nodename"])

@@ -302,7 +302,7 @@ class Project(WrapperXml):
         if sy.dir_exist(path):
             if self.getNode("componentslibs") is None:
                 self.addNode(nodename="componentslibs")
-            self.addSubNode(nodename="componentslibs",
+            self.add_subnode(nodename="componentslibs",
                             subnodename="componentslib",
                             attributename="path",
                             value=path)
@@ -316,7 +316,7 @@ class Project(WrapperXml):
         if sy.dir_exist(path):
             if self.getNode("platformlibs") is None:
                 self.addNode(nodename="platformlibs")
-            self.addSubNode(nodename="platformlibs",
+            self.add_subnode(nodename="platformlibs",
                             subnodename="platformlib",
                             attributename="path",
                             value=path)
@@ -377,13 +377,13 @@ class Project(WrapperXml):
         # Add component to project
         self._instanceslist.append(comp)
         if comp.name != "platform":
-            self.addSubNode(nodename="components",
+            self.add_subnode(nodename="components",
                             subnodename="component",
                             attributename="name",
                             value=instancename)
         else:
             attrib = {"name": instancename, "platform": "true"}
-            self.addSubNode(nodename="components",
+            self.add_subnode(nodename="components",
                             subnodename="component",
                             attributedict=attrib)
         DISPLAY.msg("Component " + comp.name + " added as " + instancename)

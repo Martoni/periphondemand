@@ -88,7 +88,7 @@ class ConfigFile(WrapperXml):
             raise PodError("This library is already in POD", 0)
         # check if directory exist then add it
         if os.path.exists(path):
-            self.addSubNode(nodename="libraries",
+            self.add_subnode(nodename="libraries",
                             subnodename="lib",
                             attributename="path",
                             value=path)

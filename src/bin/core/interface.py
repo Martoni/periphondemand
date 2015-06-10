@@ -198,7 +198,7 @@ class Interface(WrapperXml):
         """ Adding a port """
         port.parent = self
         self.portslist.append(port)
-        self.addSubNode(nodename="ports", subnode=port)
+        self.add_subnode(nodename="ports", subnode=port)
 
     def get_port_by_type(self, porttypename):
         """ Get port using port type name as argument"""
@@ -315,7 +315,7 @@ class Interface(WrapperXml):
             raise PodError(instanceslave.instancename +
                            "." + interfaceslave.name +
                            " is not a slave", 1)
-        self.addSubNode(nodename="slaves",
+        self.add_subnode(nodename="slaves",
                         subnodename="slave",
                         attributedict={
                             "instancename": instanceslave.instancename,
@@ -357,7 +357,7 @@ class Interface(WrapperXml):
                 raise PodError("Clock connection " + instancedestname +
                                "." + interfacedestname + " exists", 1)
 
-        self.addSubNode(nodename="slaves", subnodename="slave",
+        self.add_subnode(nodename="slaves", subnodename="slave",
                         attributedict={"instancename": instancedestname,
                                        "interfacename": interfacedestname})
         self._slaveslist.append(
