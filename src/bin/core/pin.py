@@ -212,7 +212,7 @@ class Pin(WrapperXml):
             attributes = {"instance_dest": str(instance_destname),
                           "interface_dest": str(interface_destname),
                           "port_dest": str(port_destname)}
-        self.addNode(nodename="connect", attributedict=attributes)
+        self.add_node(nodename="connect", attributedict=attributes)
 
     def autoconnect_pin(self):
         """ connect all platform connection, if connection is not

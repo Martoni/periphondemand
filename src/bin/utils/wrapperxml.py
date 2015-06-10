@@ -121,17 +121,17 @@ class WrapperXml(object):
         if "nodename" in keys:
             node = self.getNode(nodename=keys["nodename"])
             if node is None:
-                node = self.addNode(nodename=keys["nodename"])
+                node = self.add_node(nodename=keys["nodename"])
             if "subnode" in keys:
-                return node.addNode(node=keys["subnode"])
+                return node.add_node(node=keys["subnode"])
             elif "subnodename" in keys:
                 subnodename = keys["subnodename"]
                 if "attributename" in keys:
-                    return node.addNode(nodename=subnodename,
+                    return node.add_node(nodename=subnodename,
                                         attributename=keys["attributename"],
                                         value=keys["value"])
                 elif "attributedict" in keys:
-                    return node.addNode(nodename=subnodename,
+                    return node.add_node(nodename=subnodename,
                                         attributedict=keys["attributedict"])
                 else:
                     raise PodError("Key not known in addSubNode " + str(keys))
@@ -140,12 +140,12 @@ class WrapperXml(object):
         else:
             raise PodError("Key not known in addSubNode" + str(keys))
 
-    def addNode(self, **keys):
+    def add_node(self, **keys):
         """ Add a node in the tree,
-            addNode(self,node)
-            addNode(self,nodename)
-            addNode(self,nodename,attributename,value)
-            addNode(self,nodename,attributedict)
+            add_node(self,node)
+            add_node(self,nodename)
+            add_node(self,nodename,attributename,value)
+            add_node(self,nodename,attributedict)
         """
         if "node" in keys:
             node = keys["node"]

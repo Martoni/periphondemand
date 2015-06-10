@@ -301,7 +301,7 @@ class Project(WrapperXml):
         """ Adding a component library under the project """
         if sy.dir_exist(path):
             if self.getNode("componentslibs") is None:
-                self.addNode(nodename="componentslibs")
+                self.add_node(nodename="componentslibs")
             self.add_subnode(nodename="componentslibs",
                             subnodename="componentslib",
                             attributename="path",
@@ -315,7 +315,7 @@ class Project(WrapperXml):
         """ Adding a platforms library under the project """
         if sy.dir_exist(path):
             if self.getNode("platformlibs") is None:
-                self.addNode(nodename="platformlibs")
+                self.add_node(nodename="platformlibs")
             self.add_subnode(nodename="platformlibs",
                             subnodename="platformlib",
                             attributename="path",
@@ -525,7 +525,7 @@ class Project(WrapperXml):
             sy.copy_all_files(platformdir + SIMULATIONPATH,
                               SETTINGS.projectpath + SIMULATIONPATH)
         self.add_instance(component=platform)
-        self.addNode(node=platform)
+        self.add_node(node=platform)
         # Adding platform default components
         for component in platform.components:
             self.add_instance(libraryname=component["type"],

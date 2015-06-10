@@ -79,7 +79,7 @@ class Port(WrapperXml):
                 return pin
         pin = Pin(self, num=str(num))
         self.pinlist.append(pin)
-        self.addNode(node=pin)
+        self.add_node(node=pin)
         return pin
 
     @property

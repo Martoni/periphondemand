@@ -48,7 +48,7 @@ class Intercon(Component):
 
         Component.__init__(self)
         self.interfaceslist = []
-        self.addNode(nodename="component")
+        self.add_node(nodename="component")
 
         masterinstance = self.parent.get_instance(masterinstancename)
         masterinterface = masterinstance.get_interface(masterinterfacename)

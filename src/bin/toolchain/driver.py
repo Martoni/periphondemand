@@ -264,7 +264,7 @@ class Driver(WrapperXml):
                 self.getNode(nodename="bsp").setAttribute("directory",
                                                           directory)
             else:
-                self.addNode(nodename="bsp",
+                self.add_node(nodename="bsp",
                              attributename="directory",
                              value=directory)
             self.bspdir = directory
