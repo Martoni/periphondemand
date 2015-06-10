@@ -836,21 +836,21 @@ class Project(WrapperXml):
     def get_simulation_toolchains(cls):
         """ list all toolchain availables """
         filelist = sy.list_dir(SETTINGS.path +
-                                    TOOLCHAINPATH + SIMULATIONPATH)
+                               TOOLCHAINPATH + SIMULATIONPATH)
         return filelist
 
     @classmethod
     def get_synthesis_toolchains(cls):
         """ list all toolchains availables """
         filelist = sy.list_dir(SETTINGS.path +
-                                    TOOLCHAINPATH + SYNTHESISPATH)
+                               TOOLCHAINPATH + SYNTHESISPATH)
         return filelist
 
     @classmethod
     def get_driver_toolchains(cls):
         """ list all toolchains availables """
         filelist = sy.list_dir(SETTINGS.path +
-                                    TOOLCHAINPATH + DRIVERSPATH)
+                               TOOLCHAINPATH + DRIVERSPATH)
         return filelist
 
     def get_ios(self):
@@ -869,7 +869,7 @@ class Project(WrapperXml):
         """ list component version name in archive
         """
         filelist = sy.list_files(self.library.library_path(libraryname) +
-                                "/" + componentname)
+                                 "/" + componentname)
         outlist = []
         for name in filelist:
             # take only xml file

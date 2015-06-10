@@ -78,8 +78,8 @@ class Library(object):
         if libraryname in official_component_type:
             componentlist =\
                 sy.list_dir(SETTINGS.path +
-                                 LIBRARYPATH + "/" +
-                                 libraryname)
+                            LIBRARYPATH + "/" +
+                            libraryname)
         elif libraryname in self.personnal_libraries:
             componentlist =\
                 sy.list_dir(self.get_pers_lib_path(libraryname))
