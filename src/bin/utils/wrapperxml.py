@@ -40,6 +40,8 @@ class WrapperXml(object):
             self.parent = None
         if not hasattr(self, 'tree'):
             self.tree = None
+        if not hasattr(self, 'void'):
+            self.void = True
 
         if "node" in args:
             self.__initnode(args["node"])
@@ -191,10 +193,12 @@ class WrapperXml(object):
             self.tree.remove(node.tree)
 
     def delSubNode(self, nodename, subnodename, attribute=None, value=None):
+        """ Delete a subnode """
         node = self.get_node(nodename)
         node.del_node(subnodename, attribute, value)
 
     def getAttributeValue(self, key, subnodename=None):
+        """ Get attribute value of node """
         if subnodename is None:
             return self.tree.get(key)
         else:
@@ -206,6 +210,7 @@ class WrapperXml(object):
                        " for tag " + str(subnodename))
 
     def getAttributeNameList(self, subnodename=None):
+        """ get attribute name list """
         if subnodename is None:
             return self.tree.keys()
         else:
@@ -216,6 +221,7 @@ class WrapperXml(object):
         raise PodError("getAttributeNameList error")
 
     def setAttribute(self, key, value, subname=None):
+        """ set an attribute value """
         if subname is None:
             self.tree.attrib[key] = value
             return value
@@ -226,12 +232,14 @@ class WrapperXml(object):
             return value
 
     def getDescription(self):
+        """ get description """
         try:
             return self.tree.find("description").text
         except AttributeError:
             return ""
 
     def setDescription(self, description):
+        """ set description """
         if self.tree.find("description") is not None:
             self.tree.find("description").text = description
         else:
@@ -241,10 +249,12 @@ class WrapperXml(object):
 
     @property
     def size(self):
+        """ get size """
         return self.getAttributeValue("size")
 
     @size.setter
     def size(self, size):
+        """ set size """
         self.setAttribute("size", str(size))
 
     @property
@@ -291,15 +301,14 @@ class WrapperXml(object):
                                filename + " :\n" + str(error))
 
     def createXml(self, tag):
+        """ create xml with tag as top"""
         self.tree = ET.Element(tag)
 
     def saveXml(self, pathname):
-        f = open(pathname, "w")
-        f.write(str(self))
-        f.close()
-
-    def isVoid(self):
-        return self.void
+        """ save xml in file """
+        fxml = open(pathname, "w")
+        fxml.write(str(self))
+        fxml.close()
 
     @property
     def num(self):

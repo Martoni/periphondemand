@@ -1279,7 +1279,7 @@ Generate a report of the project
     def is_project_open(self):
         """ check if project is open, raise error if not
         """
-        if SETTINGS.active_project.isVoid():
+        if SETTINGS.active_project.void:
             raise PodError("No project open", 0)
 
     @classmethod

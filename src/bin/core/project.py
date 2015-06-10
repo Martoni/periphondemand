@@ -74,7 +74,7 @@ class Project(WrapperXml):
 
         self.bspdir = None
         self.bspos = None
-        if not self.isVoid():
+        if not self.void:
             if projectpathname.find(XMLEXT) >= 0:
                 try:
                     SETTINGS.projectpath =\
