@@ -109,7 +109,7 @@ class ConfigFile(WrapperXml):
         """ Return the path to synthesis command """
         from periphondemand.bin.utils import wrappersystem as sy
         try:
-            tools = self.getNode("tools").get_nodes("tool")
+            tools = self.get_node("tools").get_nodes("tool")
         except AttributeError, error:
             raise PodError("No synthesis command in .podrc. (" +
                            str(error) + ")")

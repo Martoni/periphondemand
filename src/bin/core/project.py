@@ -119,14 +119,14 @@ class Project(WrapperXml):
         """ Load the  project
         """
         self.openXml(pathname)
-        components = self.getNode("components")
+        components = self.get_node("components")
         # load components
         if(components):
             for node in components.get_nodes("component"):
                 if node.getAttributeValue("platform") is None:
                     comp = Component()
                 else:
-                    comp = Platform(self, node=self.getNode("platform"))
+                    comp = Platform(self, node=self.get_node("platform"))
                 try:
                     comp.load(node.getAttributeValue("name"))
                 except IOError:
@@ -140,12 +140,12 @@ class Project(WrapperXml):
                     self._instanceslist.append(comp)
 
         # load toolchains
-        # toolchains = self.getNode("toolchain")
+        # toolchains = self.get_node("toolchain")
         # if(toolchains):
-        #       node = toolchains.getNode("simulation")
+        #       node = toolchains.get_node("simulation")
         #       if node!=None:
         #           self.simulation = Simulation(self, node.name)
-        #       node = toolchains.getNode("synthesis")
+        #       node = toolchains.get_node("synthesis")
         #       if node!=None:
         #           self.synthesis = Synthesis(self, node.name)
         try:
@@ -165,8 +165,8 @@ class Project(WrapperXml):
                 slaveinterface.master = masterinterface
 
         # set bsp directory
-        if self.getNode(nodename="bsp") is not None:
-            self.bspdir = self.getNode(
+        if self.get_node(nodename="bsp") is not None:
+            self.bspdir = self.get_node(
                 nodename="bsp").getAttributeValue("directory")
         self.void = 0
 
@@ -300,7 +300,7 @@ class Project(WrapperXml):
     def add_component_lib(self, path):
         """ Adding a component library under the project """
         if sy.dir_exist(path):
-            if self.getNode("componentslibs") is None:
+            if self.get_node("componentslibs") is None:
                 self.add_node(nodename="componentslibs")
             self.add_subnode(nodename="componentslibs",
                             subnodename="componentslib",
@@ -314,7 +314,7 @@ class Project(WrapperXml):
     def add_platforms_lib(self, path):
         """ Adding a platforms library under the project """
         if sy.dir_exist(path):
-            if self.getNode("platformlibs") is None:
+            if self.get_node("platformlibs") is None:
                 self.add_node(nodename="platformlibs")
             self.add_subnode(nodename="platformlibs",
                             subnodename="platformlib",
@@ -465,7 +465,7 @@ class Project(WrapperXml):
     @property
     def platform_name(self):
         """ return platform name """
-        return self.getNode("platform").getAttributeValue("name")
+        return self.get_node("platform").getAttributeValue("name")
 
     @property
     def clock_ports(self):

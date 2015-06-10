@@ -260,8 +260,8 @@ class Driver(WrapperXml):
             raise PodError("The directory must be named POD and not " +
                            lastdir, 0)
         if sy.dir_exist(directory):
-            if self.getNode(nodename="bsp") is not None:
-                self.getNode(nodename="bsp").setAttribute("directory",
+            if self.get_node(nodename="bsp") is not None:
+                self.get_node(nodename="bsp").setAttribute("directory",
                                                           directory)
             else:
                 self.add_node(nodename="bsp",

@@ -140,7 +140,7 @@ class Synthesis(WrapperXml):
     @tcl_scriptname.setter
     def tcl_scriptname(self, filename):
         """ set the tcl script filename """
-        if self.getNode("script") is None:
+        if self.get_node("script") is None:
             self.add_node(nodename="script",
                          attributename="filename",
                          value=str(filename))

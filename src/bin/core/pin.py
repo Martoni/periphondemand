@@ -63,7 +63,7 @@ class Pin(WrapperXml):
                     "pin_dest":string)
         """
         connectionslist = []
-        if(self.getNode("connect") is not None):
+        if(self.get_node("connect") is not None):
             for element in self.get_nodes("connect"):
                 connectionslist.append(
                     {"instance_dest":

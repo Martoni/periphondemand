@@ -51,12 +51,12 @@ class Platform(Component):
         else:
             raise PodError("Keys unknown in Platform constructor", 0)
 
-        if self.getNode("interfaces") is not None:
-            for element in self.getNode("interfaces").get_nodes("interface"):
+        if self.get_node("interfaces") is not None:
+            for element in self.get_node("interfaces").get_nodes("interface"):
                 self._interfaceslist.append(Interface(self, node=element))
         self.librarieslist = []
-        if self.getNode("simulation") is not None:
-            for library in self.getNode("simulation").get_nodes("simlib"):
+        if self.get_node("simulation") is not None:
+            for library in self.get_node("simulation").get_nodes("simlib"):
                 self.librarieslist.append(SimulationLib(self, node=library))
 
         self.instancename = self.name
@@ -142,37 +142,37 @@ class Platform(Component):
     @property
     def family(self):
         """ get the family name """
-        return self.getNode("fpga").getAttributeValue("family")
+        return self.get_node("fpga").getAttributeValue("family")
 
     @property
     def device(self):
         """ get device name """
-        return self.getNode("fpga").getAttributeValue("device")
+        return self.get_node("fpga").getAttributeValue("device")
 
     @device.setter
     def device(self, device):
         """ set device name """
-        self.getNode("fpga").setAttribute("device", device)
+        self.get_node("fpga").setAttribute("device", device)
 
     @property
     def package(self):
         """ get package name """
-        return self.getNode("fpga").getAttributeValue("package")
+        return self.get_node("fpga").getAttributeValue("package")
 
     @property
     def speed(self):
         """ get speed """
-        return self.getNode("fpga").getAttributeValue("speed")
+        return self.get_node("fpga").getAttributeValue("speed")
 
     @speed.setter
     def speed(self, speed):
         """ set speed """
-        return self.getNode("fpga").setAttribute("speed", speed)
+        return self.get_node("fpga").setAttribute("speed", speed)
 
     @property
     def main_clock(self):
         """ get main clock """
-        return self.getNode("fpga").getAttributeValue("main_clock")
+        return self.get_node("fpga").getAttributeValue("main_clock")
 
     @classmethod
     def is_platform(cls):

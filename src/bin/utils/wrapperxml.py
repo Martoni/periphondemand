@@ -89,24 +89,22 @@ class WrapperXml(object):
         """
         nodelist = []
         try:
-            for element in self.getNode(nodename).get_nodes(subnodename):
+            for element in self.get_node(nodename).get_nodes(subnodename):
                 nodelist.append(element)
             return nodelist
         except AttributeError:
             return []
 
     def get_nodes(self, nodename):
-        """ Return a list of nodes
-        """
+        """ Return a list of nodes """
         nodelist = []
         for node in self.tree.findall(nodename):
             tmp = WrapperXml(etnode=node)
             nodelist.append(tmp)
         return nodelist
 
-    def getNode(self, nodename):
-        """ return the first node found
-        """
+    def get_node(self, nodename):
+        """ return the first node found """
         try:
             return self.get_nodes(nodename)[0]
         except IndexError:
@@ -119,7 +117,7 @@ class WrapperXml(object):
             add_subnode(self,nodename,subnodename,attributedict)
         """
         if "nodename" in keys:
-            node = self.getNode(nodename=keys["nodename"])
+            node = self.get_node(nodename=keys["nodename"])
             if node is None:
                 node = self.add_node(nodename=keys["nodename"])
             if "subnode" in keys:
@@ -193,7 +191,7 @@ class WrapperXml(object):
             self.tree.remove(node.tree)
 
     def delSubNode(self, nodename, subnodename, attribute=None, value=None):
-        node = self.getNode(nodename)
+        node = self.get_node(nodename)
         node.del_node(subnodename, attribute, value)
 
     def getAttributeValue(self, key, subnodename=None):
