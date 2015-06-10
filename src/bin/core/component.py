@@ -131,32 +131,32 @@ class Component(WrapperXml):
 
         # Fill objects list
         if self.getNode("interfaces") is not None:
-            for element in self.getSubNodeList("interfaces", "interface"):
+            for element in self.get_subnodes("interfaces", "interface"):
                 self._interfaceslist.append(Interface(self, node=element))
 
         if self.getNode("generics") is not None:
-            for element in self.getSubNodeList("generics", "generic"):
+            for element in self.get_subnodes("generics", "generic"):
                 self._genericslist.append(Generic(self, node=element))
 
         if self.getNode("hdl_files") is not None:
-            for element in self.getSubNodeList("hdl_files", "hdl_file"):
+            for element in self.get_subnodes("hdl_files", "hdl_file"):
                 self._hdl_fileslist.append(HdlFile(self, node=element))
 
         if self.getNode("driver_files") is not None:
             for element in\
-                    self.getSubNodeList("driver_files", "driver_templates"):
+                    self.get_subnodes("driver_files", "driver_templates"):
                 self._driver_templateslist.append(
                     DriverTemplates(self, node=element))
 
         if self.getNode("interrupts") is not None:
-            for element in self.getSubNodeList("interrupts", "interrupt"):
+            for element in self.get_subnodes("interrupts", "interrupt"):
                 self._interruptslist.append(
                     self.get_interface(
                         element.getAttributeValue("interface")).get_port(
                             element.getAttributeValue("port")))
 
         if self.getNode("constraints") is not None:
-            for element in self.getSubNodeList("constraints", "constraint"):
+            for element in self.get_subnodes("constraints", "constraint"):
                 self._constraintslist.append(element)
 
         self.instancename = instancename

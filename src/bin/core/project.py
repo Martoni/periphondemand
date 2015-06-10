@@ -513,7 +513,7 @@ class Project(WrapperXml):
                 # if not personnal platform, try project specific
                 # platform (added with add_platforms_lib cmd)
                 platformdir = ""
-                for node in self.getSubNodeList("platformlibs", "platformlib"):
+                for node in self.get_subnodes("platformlibs", "platformlib"):
                     apath = node.getAttributeValue("path")
                     if apath.split("/")[-1] == platformlibname:
                         platformdir = apath + "/" + platformname + "/"

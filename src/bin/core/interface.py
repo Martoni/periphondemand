@@ -69,15 +69,15 @@ class Interface(WrapperXml):
             self.interfacemaster = None
 
         if self.getNode("slaves") is not None:
-            for element in self.getSubNodeList("slaves", "slave"):
+            for element in self.get_subnodes("slaves", "slave"):
                 self._slaveslist.append(Slave(self, node=element))
 
         if self.getNode("registers") is not None:
-            for element in self.getSubNodeList("registers", "register"):
+            for element in self.get_subnodes("registers", "register"):
                 self._registerslist.append(Register(self, node=element))
 
         if self.getNode("ports") is not None:
-            for node in self.getSubNodeList("ports", "port"):
+            for node in self.get_subnodes("ports", "port"):
                 self.portslist.append(Port(self, node=node))
 
         # set bus

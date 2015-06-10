@@ -82,7 +82,7 @@ class Platform(Component):
         """ Return platform dependent components list """
         componentslist = []
         try:
-            for element in self.getSubNodeList("components", "component"):
+            for element in self.get_subnodes("components", "component"):
                 component = element.getAttributeValue("name").split("/")
                 componentslist.append({"type": component[0],
                                        "name": component[1]})

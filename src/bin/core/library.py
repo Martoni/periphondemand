@@ -124,7 +124,7 @@ class Library(object):
         path_list = []
         try:
             for node in\
-                    SETTINGS.active_project.getSubNodeList("componentslibs",
+                    SETTINGS.active_project.get_subnodes("componentslibs",
                                                            "componentslib"):
                 path_list.append(node.getAttributeValue(key="path"))
             for libpath in path_list:
