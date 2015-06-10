@@ -542,7 +542,7 @@ class Project(WrapperXml):
             raise PodError("No platform in project", 2)
 
         self.del_instance(platform.instancename)
-        self.delNode("platform")
+        self.del_node("platform")
         self.save()
 
     @classmethod

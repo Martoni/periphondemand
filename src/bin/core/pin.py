@@ -79,7 +79,7 @@ class Pin(WrapperXml):
     def del_connections_forces(self):
         """ Delete all connections in this pin without any check """
         for connection in self.connections:
-            self.delNode(
+            self.del_node(
                 "connect",
                 {"instance_dest": connection["instance_dest"],
                  "interface_dest": connection["interface_dest"],
@@ -108,7 +108,7 @@ class Pin(WrapperXml):
 
     def del_connection_force(self, pin_dest):
         """ Delete connection from this pin to pin_dest """
-        self.delNode(
+        self.del_node(
             "connect",
             {"instance_dest":
              pin_dest.parent.parent.parent.instancename,
@@ -116,7 +116,7 @@ class Pin(WrapperXml):
              "port_dest": pin_dest.parent.name,
              "pin_dest": str(pin_dest.num)})
 
-        pin_dest.delNode(
+        pin_dest.del_node(
             "connect",
             {"instance_dest":
                 self.parent.parent.parent.instancename,

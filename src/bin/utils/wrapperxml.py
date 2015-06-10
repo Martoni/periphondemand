@@ -166,11 +166,11 @@ class WrapperXml(object):
             self.tree = node.tree
         return node
 
-    def delNode(self, node, attribute=None, value=None):
+    def del_node(self, node, attribute=None, value=None):
         """ delete a node, attribute can be single or, if they're multiple
             attribute, attribute is a dictionnary
-            delNode(self, node, attribute=None, value=None)
-            delNode(self, node_name, {attribute1:value1, attribute1:value1,..})
+            del_node(self, node, attribute=None, value=None)
+            del_node(self, node_name, {attribute1:value1, attribute1:value1,..})
         """
         if type(node) == str:
             nodename = node
@@ -194,7 +194,7 @@ class WrapperXml(object):
 
     def delSubNode(self, nodename, subnodename, attribute=None, value=None):
         node = self.getNode(nodename)
-        node.delNode(subnodename, attribute, value)
+        node.del_node(subnodename, attribute, value)
 
     def getAttributeValue(self, key, subnodename=None):
         if subnodename is None:
