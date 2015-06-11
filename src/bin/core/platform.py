@@ -83,7 +83,7 @@ class Platform(Component):
         componentslist = []
         try:
             for element in self.get_subnodes("components", "component"):
-                component = element.getAttributeValue("name").split("/")
+                component = element.get_attr_value("name").split("/")
                 componentslist.append({"type": component[0],
                                        "name": component[1]})
         except AttributeError:
@@ -142,37 +142,37 @@ class Platform(Component):
     @property
     def family(self):
         """ get the family name """
-        return self.get_node("fpga").getAttributeValue("family")
+        return self.get_node("fpga").get_attr_value("family")
 
     @property
     def device(self):
         """ get device name """
-        return self.get_node("fpga").getAttributeValue("device")
+        return self.get_node("fpga").get_attr_value("device")
 
     @device.setter
     def device(self, device):
         """ set device name """
-        self.get_node("fpga").setAttribute("device", device)
+        self.get_node("fpga").set_attr("device", device)
 
     @property
     def package(self):
         """ get package name """
-        return self.get_node("fpga").getAttributeValue("package")
+        return self.get_node("fpga").get_attr_value("package")
 
     @property
     def speed(self):
         """ get speed """
-        return self.get_node("fpga").getAttributeValue("speed")
+        return self.get_node("fpga").get_attr_value("speed")
 
     @speed.setter
     def speed(self, speed):
         """ set speed """
-        return self.get_node("fpga").setAttribute("speed", speed)
+        return self.get_node("fpga").set_attr("speed", speed)
 
     @property
     def main_clock(self):
         """ get main clock """
-        return self.get_node("fpga").getAttributeValue("main_clock")
+        return self.get_node("fpga").get_attr_value("main_clock")
 
     @classmethod
     def is_platform(cls):

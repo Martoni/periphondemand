@@ -63,8 +63,8 @@ def generatelibraryconstraints(self):
     for instance in self.project.instances:
         for constraint in instance.constraints:
             instanceName = instance.instancename
-            attrValName = str(constraint.getAttributeValue("name"))
-            if constraint.getAttributeValue("type") == "clk":
+            attrValName = str(constraint.get_attr_value("name"))
+            if constraint.get_attr_value("type") == "clk":
                 attrValNameUnder = attrValName.replace('/', '_')
                 out += "NET \"" + instanceName + "/" + attrValName +\
                        "\" TNM_NET = " + instanceName + "/" +\
@@ -74,16 +74,16 @@ def generatelibraryconstraints(self):
                        "/" + attrValName + "\""
                 out += " %g" %\
                     (1000 /
-                        float(constraint.getAttributeValue("frequency"))) +\
+                        float(constraint.get_attr_value("frequency"))) +\
                     " ns HIGH 50%;\n"
-            elif constraint.getAttributeValue("type") == "placement":
+            elif constraint.get_attr_value("type") == "placement":
                 out += "INST \"" + instanceName + "/" +\
                     attrValName + "\" LOC=" +\
-                    constraint.getAttributeValue("loc") + ";\n"
+                    constraint.get_attr_value("loc") + ";\n"
             else:
                 raise PodError("component " + instance.name +
                                " has an unknown type " +
-                               constraint.getAttributeValue("type"), 0)
+                               constraint.get_attr_value("type"), 0)
     return out
 
 

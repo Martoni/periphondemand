@@ -59,22 +59,22 @@ class Slave(WrapperXml):
     @property
     def instancename(self):
         """ Get instance name """
-        return self.getAttributeValue("instancename")
+        return self.get_attr_value("instancename")
 
     @instancename.setter
     def instancename(self, instancename):
         """ Set instance name """
-        self.setAttribute("instancename", instancename)
+        self.set_attr("instancename", instancename)
 
     @property
     def interfacename(self):
         """ get interface name """
-        return self.getAttributeValue("interfacename")
+        return self.get_attr_value("interfacename")
 
     @interfacename.setter
     def interfacename(self, interfacename):
         """ set interface name """
-        self.setAttribute("interfacename", interfacename)
+        self.set_attr("interfacename", interfacename)
 
     def get_instance(self):
         """ get the parent instance of this slave interface """

@@ -152,8 +152,8 @@ class Component(WrapperXml):
             for element in self.get_subnodes("interrupts", "interrupt"):
                 self._interruptslist.append(
                     self.get_interface(
-                        element.getAttributeValue("interface")).get_port(
-                            element.getAttributeValue("port")))
+                        element.get_attr_value("interface")).get_port(
+                            element.get_attr_value("port")))
 
         if self.get_node("constraints") is not None:
             for element in self.get_subnodes("constraints", "constraint"):
@@ -293,9 +293,9 @@ class Component(WrapperXml):
                             "/" + self.instancename):
             sy.mkdir(SETTINGS.projectpath + COMPONENTSPATH +
                      "/" + self.instancename)
-        self.saveXml(SETTINGS.projectpath + COMPONENTSPATH + "/" +
-                     self.instancename + "/" +
-                     self.instancename + ".xml")
+        self.save_xml(SETTINGS.projectpath + COMPONENTSPATH + "/" +
+                      self.instancename + "/" +
+                      self.instancename + ".xml")
 
     def del_instance(self):
         """ suppress component instance """
@@ -306,12 +306,12 @@ class Component(WrapperXml):
     @property
     def instancename(self):
         """ get the name of this component instance"""
-        return self.getAttributeValue("instance_name")
+        return self.get_attr_value("instance_name")
 
     @instancename.setter
     def instancename(self, instancename):
         """ set the name of this instance """
-        return self.setAttribute("instance_name", instancename)
+        return self.set_attr("instance_name", instancename)
 
     def inv_direction(self, dirname):
         """ invert direction given in params """

@@ -89,7 +89,7 @@ class Project(WrapperXml):
                 self.load_project(projectpathname)
             else:
                 self.create_project(name)
-            self.setDescription(description)
+            self.description = description
 
             SETTINGS.active_project = self
 
@@ -109,7 +109,7 @@ class Project(WrapperXml):
         sy.mkdir(SETTINGS.projectpath + SYNTHESISPATH)
         sy.mkdir(SETTINGS.projectpath + DRIVERSPATH)
 
-        self.createXml("project")
+        self.create_xml("project")
         self.name = name
         self.version = "1.0"
         self.void = 0
@@ -118,23 +118,23 @@ class Project(WrapperXml):
     def load_project(self, pathname):
         """ Load the  project
         """
-        self.openXml(pathname)
+        self.open_xml(pathname)
         components = self.get_node("components")
         # load components
         if(components):
             for node in components.get_nodes("component"):
-                if node.getAttributeValue("platform") is None:
+                if node.get_attr_value("platform") is None:
                     comp = Component()
                 else:
                     comp = Platform(self, node=self.get_node("platform"))
                 try:
-                    comp.load(node.getAttributeValue("name"))
+                    comp.load(node.get_attr_value("name"))
                 except IOError:
-                    self.delSubNode("components",
+                    self.del_subnode("components",
                                     "component",
-                                    "name", node.getAttributeValue("name"))
+                                    "name", node.get_attr_value("name"))
                     raise PodError("Can't open " +
-                                   node.getAttributeValue("name") +
+                                   node.get_attr_value("name") +
                                    " directory", 0)
                 else:
                     self._instanceslist.append(comp)
@@ -167,7 +167,7 @@ class Project(WrapperXml):
         # set bsp directory
         if self.get_node(nodename="bsp") is not None:
             self.bspdir = self.get_node(
-                nodename="bsp").getAttributeValue("directory")
+                nodename="bsp").get_attr_value("directory")
         self.void = 0
 
     @property
@@ -465,7 +465,7 @@ class Project(WrapperXml):
     @property
     def platform_name(self):
         """ return platform name """
-        return self.get_node("platform").getAttributeValue("name")
+        return self.get_node("platform").get_attr_value("name")
 
     @property
     def clock_ports(self):
@@ -514,7 +514,7 @@ class Project(WrapperXml):
                 # platform (added with add_platforms_lib cmd)
                 platformdir = ""
                 for node in self.get_subnodes("platformlibs", "platformlib"):
-                    apath = node.getAttributeValue("path")
+                    apath = node.get_attr_value("path")
                     if apath.split("/")[-1] == platformlibname:
                         platformdir = apath + "/" + platformname + "/"
                 if platformdir == "":
@@ -568,7 +568,7 @@ class Project(WrapperXml):
         # Remove components from project
         self._instanceslist.remove(instance)
         self.reorder_instances(instance.name)
-        self.delSubNode("components",
+        self.del_subnode("components",
                         "component",
                         "name",
                         instance.instancename)
@@ -584,7 +584,7 @@ class Project(WrapperXml):
             self.synthesis.save()
         if self.simulation is not None:
             self.simulation.save()
-        self.saveXml(SETTINGS.projectpath + "/" + self.name + XMLEXT)
+        self.save_xml(SETTINGS.projectpath + "/" + self.name + XMLEXT)
 
     def connect_pin_cmd(self, pin_source, pin_dest):
         """ connect pin between two instances

@@ -148,7 +148,7 @@ class Driver(WrapperXml):
                 for match in iterator:
                     attributevalue = instance.get_interface(
                         match.group(1)).get_register(
-                            match.group(2)).getAttributeValue(
+                            match.group(2)).get_attr_value(
                                 match.group(3))
                     if not attributevalue:
                         raise PodError(
@@ -261,7 +261,7 @@ class Driver(WrapperXml):
                            lastdir, 0)
         if sy.dir_exist(directory):
             if self.get_node(nodename="bsp") is not None:
-                self.get_node(nodename="bsp").setAttribute("directory",
+                self.get_node(nodename="bsp").set_attr("directory",
                                                            directory)
             else:
                 self.add_node(nodename="bsp",

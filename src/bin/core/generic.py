@@ -57,26 +57,26 @@ class Generic(WrapperXml):
     @property
     def operator(self):
         """ return the operator """
-        return self.getAttributeValue("op")
+        return self.get_attr_value("op")
 
     @operator.setter
     def operator(self, operator):
         """ set operator """
-        self.setAttribute("op", operator)
+        self.set_attr("op", operator)
 
     @property
     def target(self):
         """ getting target attribute """
-        return self.getAttributeValue("target")
+        return self.get_attr_value("target")
 
     @target.setter
     def target(self, target):
         """ setting target attribute """
-        self.setAttribute("target", target)
+        self.set_attr("target", target)
 
     def is_public(self):
         """ is this generic public ? """
-        if self.getAttributeValue("public") == "true":
+        if self.get_attr_value("public") == "true":
             return True
         else:
             return False
@@ -86,12 +86,12 @@ class Generic(WrapperXml):
         public = public.lower()
         if public not in PUBLIC:
             raise PodError("Public value " + str(public) + " wrong")
-        self.setAttribute("public", public)
+        self.set_attr("public", public)
 
     @property
     def generictype(self):
         """ get the generic type """
-        the_type = self.getAttributeValue("type")
+        the_type = self.get_attr_value("type")
         if the_type is None:
             raise PodError("Generic " + self.name +
                            " description malformed, type must be defined", 0)
@@ -101,27 +101,27 @@ class Generic(WrapperXml):
     @generictype.setter
     def generictype(self, atype):
         """ set the generic type """
-        self.setAttribute("type", atype)
+        self.set_attr("type", atype)
 
     @property
     def match(self):
         """ get the matching regexp """
         try:
-            return self.getAttributeValue("match").encode("utf-8")
+            return self.get_attr_value("match").encode("utf-8")
         except AttributeError:
             return None
 
     @match.setter
     def match(self, match):
         """ set the matching regexp """
-        self.setAttribute("match", match)
+        self.set_attr("match", match)
 
     @property
     def value(self):
         """ return the generic value """
         component = self.parent
         if self.operator is None:
-            return self.getAttributeValue("value")
+            return self.get_attr_value("value")
         else:
             target = self.target.split(".")
             if self.operator == "realsizeof":
@@ -136,16 +136,16 @@ class Generic(WrapperXml):
     def value(self, value):
         """ setting the value """
         if self.match is None:
-            self.setAttribute("value", value)
+            self.set_attr("value", value)
         elif re.compile(self.match).match(value):
-            self.setAttribute("value", value)
+            self.set_attr("value", value)
         else:
             raise PodError("Value doesn't match for attribute " + str(value))
 
     @property
     def destination(self):
         """ return the generic destination (fpga,driver or both) """
-        return self.getAttributeValue("destination")
+        return self.get_attr_value("destination")
 
     @destination.setter
     def destination(self, destination):
@@ -154,4 +154,4 @@ class Generic(WrapperXml):
         if destination not in DESTINATION:
             raise PodError("Destination value " + str(destination) +
                            " unknown")
-        self.setAttribute("destination", destination)
+        self.set_attr("destination", destination)

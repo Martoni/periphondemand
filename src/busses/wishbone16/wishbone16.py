@@ -54,7 +54,7 @@ def header(author, intercon):
     header = header.replace("$tpl:author$", author)
     header = header.replace("$tpl:date$", str(datetime.date.today()))
     header = header.replace("$tpl:filename$", intercon.name + VHDLEXT)
-    header = header.replace("$tpl:abstract$", intercon.getDescription())
+    header = header.replace("$tpl:abstract$", intercon.description)
     return header
 
 

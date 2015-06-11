@@ -48,13 +48,13 @@ class ConfigFile(WrapperXml):
         # fill library path list:
         try:
             self.personal_lib_list =\
-                [node.getAttributeValue("path") for
+                [node.get_attr_value("path") for
                     node in self.get_subnodes("libraries", "lib")]
         except:
             self.personal_lib_list = []
         try:
             self.personal_platformlib_list = \
-                [node.getAttributeValue("path")
+                [node.get_attr_value("path")
                     for node in self.get_subnodes("platforms",
                                                   "platform")]
         except:
@@ -65,12 +65,12 @@ class ConfigFile(WrapperXml):
         path = os.path.expanduser(path)
         path = os.path.abspath(path)
         # check if lib doesn't exists in config file
-        libpathlist = [node.getAttributeValue("path") for node in
+        libpathlist = [node.get_attr_value("path") for node in
                        self.get_subnodes(nodename="libraries",
                                          subnodename="lib")]
         if not (path in libpathlist):
             raise PodError("Library " + path + " doesn't exist in config", 0)
-        self.delSubNode(nodename="libraries",
+        self.del_subnode(nodename="libraries",
                         subnodename="lib",
                         attribute="path",
                         value=path)
@@ -81,7 +81,7 @@ class ConfigFile(WrapperXml):
         path = os.path.expanduser(path)
         path = os.path.abspath(path)
         # check if lib doesn't exists in config file
-        libpathlist = [node.getAttributeValue("path") for node in
+        libpathlist = [node.get_attr_value("path") for node in
                        self.get_subnodes(nodename="libraries",
                                          subnodename="lib")]
         if path in libpathlist:
@@ -114,9 +114,9 @@ class ConfigFile(WrapperXml):
             raise PodError("No synthesis command in .podrc. (" +
                            str(error) + ")")
         for anode in tools:
-            if (anode.getAttributeValue(key="name") == synthesisName):
-                command_name = anode.getAttributeValue(key="command")
-                command_path = anode.getAttributeValue(key="default_path")
+            if (anode.get_attr_value(key="name") == synthesisName):
+                command_name = anode.get_attr_value(key="command")
+                command_path = anode.get_attr_value(key="default_path")
                 command_name = command_path + "/" + command_name
                 break
         if not sy.cmd_exist(command_name):

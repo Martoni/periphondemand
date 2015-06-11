@@ -67,13 +67,13 @@ class Pin(WrapperXml):
             for element in self.get_nodes("connect"):
                 connectionslist.append(
                     {"instance_dest":
-                        str(element.getAttributeValue("instance_dest")),
+                        str(element.get_attr_value("instance_dest")),
                      "interface_dest":
-                        str(element.getAttributeValue("interface_dest")),
+                        str(element.get_attr_value("interface_dest")),
                      "port_dest":
-                        str(element.getAttributeValue("port_dest")),
+                        str(element.get_attr_value("port_dest")),
                      "pin_dest":
-                        str(element.getAttributeValue("pin_dest"))})
+                        str(element.get_attr_value("pin_dest"))})
         return connectionslist
 
     def del_connections_forces(self):

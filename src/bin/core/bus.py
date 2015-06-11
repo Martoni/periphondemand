@@ -48,7 +48,7 @@ class Bus(WrapperXml):
     @property
     def data_size(self):
         """ Get size of data"""
-        size = self.getAttributeValue("datasize")
+        size = self.get_attr_value("datasize")
         if size is None:
             raise PodError("No datasize attribute in bus " + self.name, 0)
         else:
@@ -58,10 +58,10 @@ class Bus(WrapperXml):
         """ return the signal name for a given type
         """
         for classnode in self.get_nodes("class"):
-            if classnode.getAttributeValue("type") == classname:
+            if classnode.get_attr_value("type") == classname:
                 for signal in classnode.get_nodes("type"):
-                    if signal.getAttributeValue("type") == typename:
-                        return signal.getAttributeValue("name")
+                    if signal.get_attr_value("type") == typename:
+                        return signal.get_attr_value("name")
         return None
 
     def generate_intercon(self, intercon):

@@ -46,7 +46,7 @@ class Port(WrapperXml):
 
         if "name" in keys:
             WrapperXml.__init__(self, nodename="port")
-            self.setAttribute("name", keys["name"])
+            self.set_attr("name", keys["name"])
         elif "node" in keys:
             WrapperXml.__init__(self, node=keys["node"])
         else:
@@ -85,30 +85,30 @@ class Port(WrapperXml):
     @property
     def porttype(self):
         """ get type of port """
-        return self.getAttributeValue("type")
+        return self.get_attr_value("type")
 
     @porttype.setter
     def porttype(self, the_type):
         """ set type of port """
-        self.setAttribute("type", the_type)
+        self.set_attr("type", the_type)
 
     @property
     def direction(self):
         """ get port direction """
-        return self.getAttributeValue("dir")
+        return self.get_attr_value("dir")
 
     @direction.setter
     def direction(self, direction):
         """ set port direction """
         if not direction.lower() in ["out", "in", "inout"]:
             raise PodError("Direction wrong : " + str(direction))
-        self.setAttribute("dir", direction)
+        self.set_attr("dir", direction)
 
     @property
     def unconnected_value(self):
         """ Get unconnected value """
         try:
-            ucvalue = self.getAttributeValue("unconnected_value")
+            ucvalue = self.get_attr_value("unconnected_value")
             if ucvalue is None:
                 return "0"
             else:
@@ -123,7 +123,7 @@ class Port(WrapperXml):
             raise PodError("Unconnected Value can be set only on 'in' port")
         if str(value).isdigit():
             if int(value) in [0, 1]:
-                self.setAttribute("unconnected_value", str(value))
+                self.set_attr("unconnected_value", str(value))
             else:
                 raise PodError("Wrong value : " + str(value))
         else:
@@ -132,37 +132,37 @@ class Port(WrapperXml):
     @property
     def port_option(self):
         """ get port option """
-        return self.getAttributeValue("port_option")
+        return self.get_attr_value("port_option")
 
     @port_option.setter
     def port_option(self, port_option):
         """ set port option """
-        self.setAttribute("port_option", port_option)
+        self.set_attr("port_option", port_option)
 
     @property
     def standard(self):
         """ Set standard value """
-        return self.getAttributeValue("standard")
+        return self.get_attr_value("standard")
 
     @standard.setter
     def standard(self, standard):
         """ Get standard value """
-        self.setAttribute("standard", standard)
+        self.set_attr("standard", standard)
 
     @property
     def drive(self):
         """ get drive """
-        return self.getAttributeValue("drive")
+        return self.get_attr_value("drive")
 
     @drive.setter
     def drive(self, drive):
         """ Set drive """
-        self.setAttribute("drive", drive)
+        self.set_attr("drive", drive)
 
     @property
     def force(self):
         """ Get a force platform io value """
-        return self.getAttributeValue("force")
+        return self.get_attr_value("force")
 
     @force.setter
     def force(self, force):
@@ -175,24 +175,24 @@ class Port(WrapperXml):
 
         forcevalues = ["gnd", "vcc", "undef"]
         if force in forcevalues:
-            self.setAttribute("force", force)
+            self.set_attr("force", force)
         else:
             raise PodError("force value must be in " + str(forcevalues))
 
     @property
     def position(self):
         """ Get position """
-        return self.getAttributeValue("position")
+        return self.get_attr_value("position")
 
     @position.setter
     def position(self, position):
         """ Set position """
-        self.setAttribute("position", position)
+        self.set_attr("position", position)
 
     @property
     def frequency(self):
         """ Get a frequency for this port (if it's clock port) """
-        freq = self.getAttributeValue("freq")
+        freq = self.get_attr_value("freq")
         if freq is None:
             raise PodError("No frequency attribute for " + self.name)
         return freq
@@ -211,7 +211,7 @@ class Port(WrapperXml):
     def isvariable(self):
         """ Is size of this port is variable ? """
         try:
-            if self.getAttributeValue("variable_size") == "1":
+            if self.get_attr_value("variable_size") == "1":
                 return 1
             else:
                 return 0

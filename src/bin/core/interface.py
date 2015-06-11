@@ -107,20 +107,20 @@ class Interface(WrapperXml):
     @property
     def interface_class(self):
         """ Get the class interface """
-        return self.getAttributeValue("class")
+        return self.get_attr_value("class")
 
     @interface_class.setter
     def interface_class(self, classname):
         """ Set the class interface """
         if classname not in INTERFACE_CLASS:
             raise PodError("classname " + classname + " unknown")
-        self.setAttribute("class", classname)
+        self.set_attr("class", classname)
 
     @property
     def base_addr(self):
         """ get base address register value """
         try:
-            base = self.getAttributeValue("base", "registers")
+            base = self.get_attr_value("base", "registers")
             if base is None:
                 raise PodError("Base address register not set", 0)
             return int(base, 16)
@@ -143,7 +143,7 @@ class Interface(WrapperXml):
         size = self.mem_size
         if (baseoffset % size) != 0:
             raise PodError("Offset must be a multiple of " + hex(size), 1)
-        self.setAttribute("base", hex(baseoffset), "registers")
+        self.set_attr("base", hex(baseoffset), "registers")
 
     @property
     def addr_port_size(self):
@@ -163,7 +163,7 @@ class Interface(WrapperXml):
     @property
     def bus_name(self):
         """ Get the bus name """
-        return self.getAttributeValue("bus")
+        return self.get_attr_value("bus")
 
     @property
     def bus(self):
@@ -174,7 +174,7 @@ class Interface(WrapperXml):
     def bus(self, attribute):
         """ Set bus attribute"""
         self._bus = Bus(self, name=attribute)
-        self.setAttribute("bus", attribute)
+        self.set_attr("bus", attribute)
 
     def is_bus(self):
         """ Test if this interface is a bus """
@@ -228,7 +228,7 @@ class Interface(WrapperXml):
         """ Delet slave """
         self.alloc_mem.del_slave_interface(slave.get_interface())
         self._slaveslist.remove(slave)
-        self.delSubNode("slaves", "slave",
+        self.del_subnode("slaves", "slave",
                         {"instancename": slave.instancename,
                          "interfacename": slave.interfacename})
 
@@ -334,14 +334,14 @@ class Interface(WrapperXml):
     def unique_id(self):
         """ Get the Identifiant number"""
         try:
-            return self.getAttributeValue("unique_id")
+            return self.get_attr_value("unique_id")
         except PodError:
             return None
 
     @unique_id.setter
     def unique_id(self, unique_id):
         """ Set the Identifiant number"""
-        self.setAttribute("unique_id", str(unique_id))
+        self.set_attr("unique_id", str(unique_id))
 
     def autoconnect_pins(self):
         """ autoconnect pin """

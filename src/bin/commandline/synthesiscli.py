@@ -409,7 +409,7 @@ Set fpga attributes
         att_value = arg[1]
         try:
             platform = SETTINGS.active_project.platform
-            platform.setAttribute(att_name, att_value, "fpga")
+            platform.set_attr(att_name, att_value, "fpga")
         except PodError, error:
             print(str(DISPLAY))
             print(str(error))
@@ -442,7 +442,7 @@ get fpga attributes values
         att_name = arg[0]
         try:
             platform = SETTINGS.active_project.platform
-            print(str(platform.getAttributeValue(att_name, "fpga")))
+            print(str(platform.get_attr_value(att_name, "fpga")))
         except PodError, error:
             print(str(DISPLAY))
             print(str(error))

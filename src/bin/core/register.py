@@ -60,12 +60,12 @@ class Register(WrapperXml):
     @property
     def offset(self):
         """ Get the offset value """
-        return self.getAttributeValue("offset")
+        return self.get_attr_value("offset")
 
     @offset.setter
     def offset(self, offset):
         """ Set the offset value """
-        self.setAttribute("offset", offset)
+        self.set_attr("offset", offset)
 
     @property
     def absolute_addr(self):

@@ -1101,7 +1101,7 @@ Print instance information
             return
         print("Instance name :" + instance.instancename)
         print("Component  name :" + instance.name)
-        print("description : " + instance.getDescription().strip())
+        print("description : " + instance.description.strip())
         print("->Generics")
         for generic in instance.generics:
             print("%15s : " % generic.name + generic.value)
@@ -1185,7 +1185,7 @@ Set generic parameter
 Usage : description <some word for description>
 set the project description
         """
-        SETTINGS.active_project.setDescription(line)
+        SETTINGS.active_project.description = line
         print DISPLAY
         print("Description set : " + line)
         return

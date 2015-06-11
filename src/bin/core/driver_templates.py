@@ -48,16 +48,16 @@ class DriverTemplates(WrapperXml):
     @property
     def template_names(self):
         """ return a list of templates file name """
-        return [template.getAttributeValue("name") for
+        return [template.get_attr_value("name") for
                 template in self.get_nodes("file")]
 
     @property
     def versions(self):
         """ return a list of version supported """
-        return [version.getAttributeValue("version") for
+        return [version.get_attr_value("version") for
                 version in self.get_nodes("support")]
 
     @property
     def architecture_name(self):
         """ return arcitecture name """
-        return self.getAttributeValue("architecture")
+        return self.get_attr_value("architecture")

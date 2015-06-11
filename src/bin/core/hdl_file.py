@@ -63,14 +63,14 @@ class HdlFile(WrapperXml):
     @property
     def filename(self):
         """ get filename """
-        return self.getAttributeValue("filename")
+        return self.get_attr_value("filename")
 
     @filename.setter
     def filename(self, filename):
         """ set filename """
         if filename.split(".")[-1] not in HDLEXT:
             raise PodError("File " + str(filename) + " is not an HDL file")
-        self.setAttribute("filename", filename)
+        self.set_attr("filename", filename)
 
     @property
     def filepath(self):
@@ -83,7 +83,7 @@ class HdlFile(WrapperXml):
 
     def istop(self):
         """ is it top HDL file ? """
-        if self.getAttributeValue("istop") == "1":
+        if self.get_attr_value("istop") == "1":
             return True
         else:
             return False
@@ -91,20 +91,20 @@ class HdlFile(WrapperXml):
     def settop(self, istop=True):
         """ Set HDL as top component """
         if istop:
-            self.setAttribute("istop", "1")
+            self.set_attr("istop", "1")
         else:
-            self.setAttribute("istop", "0")
+            self.set_attr("istop", "0")
 
     @property
     def scope(self):
         """ getting scope """
-        return self.getAttributeValue("scope")
+        return self.get_attr_value("scope")
 
     @scope.setter
     def scope(self, scope):
         """ setting scope """
         lscope = ["both", "fpga", "driver"]
         if scope.lower() in lscope:
-            self.setAttribute("scope", scope)
+            self.set_attr("scope", scope)
         else:
             raise PodError("Unknown scope " + str(scope))

@@ -72,10 +72,8 @@ class Intercon(Component):
         self.instancename = masterinstance.instancename +\
             "_" + masterinterface.name +\
             "_intercon"
-        self.setDescription("Connect slaves to " +
-                            masterinterface.name +
-                            " from " +
-                            masterinstance.instancename)
+        self.description = "Connect slaves to " + masterinterface.name +\
+            " from " + masterinstance.instancename
 
         # Save to make directories
         self.save()

@@ -56,7 +56,7 @@ def header():
     header = header.replace("$tpl:filename$", "Top_" +
                             SETTINGS.active_project.name + "_tb.vhd")
     header = header.replace("$tpl:abstract$",
-                            SETTINGS.active_project.getDescription())
+                            SETTINGS.active_project.description)
     return header
 
 
@@ -64,7 +64,7 @@ def include():
     include = ""
     platform = SETTINGS.active_project.platform
     for library in platform.libraries:
-        for line in library.getDescription().split("\n"):
+        for line in library.description.split("\n"):
             include = include + "-- " + line + "\n"
         include = include + "use " +\
             SETTINGS.active_project.simulation_toolchain.lib_name +\

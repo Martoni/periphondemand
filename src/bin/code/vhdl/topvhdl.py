@@ -60,7 +60,7 @@ class TopVHDL(TopGen):
                                 SETTINGS.active_project.name + ".vhd")
         header = header.replace(
             "$tpl:abstract$",
-            SETTINGS.active_project.getDescription())
+            SETTINGS.active_project.description)
         return header
 
     def entity(self, entityname, portlist):

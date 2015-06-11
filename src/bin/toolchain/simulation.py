@@ -59,12 +59,12 @@ class Simulation(WrapperXml):
     @property
     def lib_name(self):
         """ Get library name """
-        return self.get_node("library").getAttributeValue("name")
+        return self.get_node("library").get_attr_value("name")
 
     @property
     def lang_name(self):
         """ Get langage name """
-        return self.get_node("language").getAttributeValue("name")
+        return self.get_node("language").get_attr_value("name")
 
     def generate_template(self):
         """ Generate simulation template """
@@ -98,5 +98,5 @@ class Simulation(WrapperXml):
 
     def save(self):
         """ save project """
-        self.saveXml(SETTINGS.projectpath +
-                     "/simulation/simulation" + XMLEXT)
+        self.save_xml(SETTINGS.projectpath +
+                      "/simulation/simulation" + XMLEXT)

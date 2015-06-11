@@ -59,7 +59,7 @@ class WrapperXml(object):
     def __initfile(self, filename):
         """ initialize with filename"""
         try:
-            self.openXml(filename)
+            self.open_xml(filename)
         except IOError, error:
             raise PodError(str(error), 0)
 
@@ -152,11 +152,11 @@ class WrapperXml(object):
         elif "nodename" in keys:
             node = WrapperXml(nodename=keys["nodename"])
             if "attributename" in keys:
-                node.setAttribute(keys["attributename"], keys["value"])
+                node.set_attr(keys["attributename"], keys["value"])
             elif "attributedict" in keys:
                 attributedict = keys["attributedict"]
                 for key in attributedict:
-                    node.setAttribute(key, attributedict[key])
+                    node.set_attr(key, attributedict[key])
         else:
             raise PodError("Keys not known in addNode", 0)
 
@@ -179,12 +179,12 @@ class WrapperXml(object):
                     if attribute is None:
                         self.tree.remove(element.tree)
                     elif (type(attribute) == str) and\
-                            (element.getAttributeValue(attribute) == value):
+                            (element.get_attr_value(attribute) == value):
                         self.tree.remove(element.tree)
                     elif type(attribute) == dict:
                         match = 1
                         for key in attribute:
-                            if element.getAttributeValue(key) !=\
+                            if element.get_attr_value(key) !=\
                                     attribute[key]:
                                 match = 0
                         if match == 1:
@@ -192,12 +192,12 @@ class WrapperXml(object):
         else:
             self.tree.remove(node.tree)
 
-    def delSubNode(self, nodename, subnodename, attribute=None, value=None):
+    def del_subnode(self, nodename, subnodename, attribute=None, value=None):
         """ Delete a subnode """
         node = self.get_node(nodename)
         node.del_node(subnodename, attribute, value)
 
-    def getAttributeValue(self, key, subnodename=None):
+    def get_attr_value(self, key, subnodename=None):
         """ Get attribute value of node """
         if subnodename is None:
             return self.tree.get(key)
@@ -209,7 +209,7 @@ class WrapperXml(object):
         raise PodError("No attribute named " + key +
                        " for tag " + str(subnodename))
 
-    def getAttributeNameList(self, subnodename=None):
+    def get_attr_names(self, subnodename=None):
         """ get attribute name list """
         if subnodename is None:
             return self.tree.keys()
@@ -218,9 +218,9 @@ class WrapperXml(object):
             if node is None:
                 raise PodError("No tag named " + str(subnodename))
             return node.keys()
-        raise PodError("getAttributeNameList error")
+        raise PodError("get_attr_names error")
 
-    def setAttribute(self, key, value, subname=None):
+    def set_attr(self, key, value, subname=None):
         """ set an attribute value """
         if subname is None:
             self.tree.attrib[key] = value
@@ -231,14 +231,16 @@ class WrapperXml(object):
             self.tree.find(subname).attrib[key] = value
             return value
 
-    def getDescription(self):
+    @property
+    def description(self):
         """ get description """
         try:
             return self.tree.find("description").text
         except AttributeError:
             return ""
 
-    def setDescription(self, description):
+    @description.setter
+    def description(self, description):
         """ set description """
         if self.tree.find("description") is not None:
             self.tree.find("description").text = description
@@ -250,34 +252,34 @@ class WrapperXml(object):
     @property
     def size(self):
         """ get size """
-        return self.getAttributeValue("size")
+        return self.get_attr_value("size")
 
     @size.setter
     def size(self, size):
         """ set size """
-        self.setAttribute("size", str(size))
+        self.set_attr("size", str(size))
 
     @property
     def name(self):
         """ return the name of the tree """
-        return self.getAttributeValue("name")
+        return self.get_attr_value("name")
 
     @name.setter
     def name(self, value):
         """ set the name of the tree """
-        return self.setAttribute("name", value)
+        return self.set_attr("name", value)
 
     @property
     def version(self):
         """ get the version """
-        return self.getAttributeValue("version")
+        return self.get_attr_value("version")
 
     @version.setter
     def version(self, version):
         """ set the version """
-        return self.setAttribute("version", version)
+        return self.set_attr("version", version)
 
-    def openXml(self, filename, string=None):
+    def open_xml(self, filename, string=None):
         """ open xml, parameters can be filename or xml string
         """
         if type(filename) == str and string is not None:
@@ -300,11 +302,11 @@ class WrapperXml(object):
                 raise PodError("Xml malformed in " +
                                filename + " :\n" + str(error))
 
-    def createXml(self, tag):
+    def create_xml(self, tag):
         """ create xml with tag as top"""
         self.tree = ET.Element(tag)
 
-    def saveXml(self, pathname):
+    def save_xml(self, pathname):
         """ save xml in file """
         fxml = open(pathname, "w")
         fxml.write(str(self))
@@ -313,9 +315,9 @@ class WrapperXml(object):
     @property
     def num(self):
         """ Get the instance number """
-        return self.getAttributeValue("num")
+        return self.get_attr_value("num")
 
     @num.setter
     def num(self, num):
         """ select the instance number """
-        return self.setAttribute("num", str(num))
+        return self.set_attr("num", str(num))

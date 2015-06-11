@@ -307,8 +307,8 @@ class BaseCli(cmd.Cmd):
         for subargl, subargt, i in zip(subargline,
                                        subargtemplate,
                                        range(len(subargline))):
-            m = re.match(r'^[\[|\<](.*?)[\]|\>]$', subargt)
-            subargt = m.group(1)
+            ma = re.match(r'^[\[|\<](.*?)[\]|\>]$', subargt)
+            subargt = ma.group(1)
             if i < len(subargline) - 1:
                 listargs.append([subargt, subargl])
             else:
@@ -415,7 +415,6 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "forcestate":
             return ["gnd", "vcc", "undef"]
         elif subargt == "componentname":
-            # XXX: detect if libraryname defined with proper function
             try:
                 libraryname.lower()
             except:
@@ -426,7 +425,6 @@ fpga_attributes    : give list of fpga attributes in platform
                            libraryname)]
             return arglist
         elif subargt == "componentversion":
-            # XXX: beuhark!
             try:
                 libraryname.lower()
             except:
@@ -467,7 +465,7 @@ fpga_attributes    : give list of fpga attributes in platform
                     SETTINGS.active_project.get_ios()]
         elif subargt == "fpga_attributes":
             platform = SETTINGS.active_project.platform
-            return platform.getAttributeNameList("fpga")
+            return platform.get_attr_names("fpga")
         else:
             return []
 
@@ -487,10 +485,10 @@ fpga_attributes    : give list of fpga attributes in platform
                                                                   template), 0)
 
         for argl, argt in zip(argline, argtemplate):
-            if re.match("^\.\.", argl):
+            if re.match(r"^\.\.", argl):
                 subargline = argl[2:].split(".")
                 subargline[0] = ".." + subargline[0]
-            elif re.match("^\.", argl):
+            elif re.match(r"^\.", argl):
                 subargline = argl[1:].split(".")
                 subargline[0] = "." + subargline[0]
             else:
@@ -555,19 +553,20 @@ fpga_attributes    : give list of fpga attributes in platform
                 # suppress POD root
                 wline = ".".join(line.split('.')[1:])
                 # suppress the project name
-                regexp = re.compile('(.*)\:(.*?)(\..*)')
+                regexp = re.compile(r'(.*)\:(.*?)(\..*)')
                 wline = regexp.sub(r'\1\3', wline)
                 historyfile.write(wline + "\n")
         print("History wrote")
 
     def do_ls(self, line):
         """ ls
-        list files and directory in the current directory
+list files and directory in the current directory
         """
         sy.shell_ls(line)
 
 
 class Statekeeper(object):
+    """ save and restore state """
 
     def __init__(self, obj, attribs):
         self.obj = obj
@@ -576,9 +575,11 @@ class Statekeeper(object):
         self.save()
 
     def save(self):
+        """ save state """
         for attrib in self.attrib_names:
             self.attribs[attrib] = getattr(self.obj, attrib)
 
     def restore(self):
+        """ restore state """
         for attrib in self.attrib_names:
             setattr(self.obj, attrib, self.attribs[attrib])

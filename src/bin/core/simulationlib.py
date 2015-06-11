@@ -55,4 +55,4 @@ class SimulationLib(WrapperXml):
     @property
     def filename(self):
         """ get the simulation filename """
-        return self.getAttributeValue("filename")
+        return self.get_attr_value("filename")

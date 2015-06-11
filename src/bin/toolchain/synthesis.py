@@ -60,13 +60,13 @@ class Synthesis(WrapperXml):
 
     def save(self):
         """ Save xml """
-        self.saveXml(SETTINGS.projectpath +
-                     "/synthesis/synthesis" + XMLEXT)
+        self.save_xml(SETTINGS.projectpath +
+                      "/synthesis/synthesis" + XMLEXT)
 
     @property
     def synthesis_toolname(self):
         """ return synthesis tool name """
-        return self.getAttributeValue(key="name", subnodename="tool")
+        return self.get_attr_value(key="name", subnodename="tool")
 
     @property
     def synthesis_toolcommandname(self):
@@ -77,9 +77,9 @@ class Synthesis(WrapperXml):
                 self.synthesis_toolname)
         except PodError:
             # else use toolchain default
-            command_name = self.getAttributeValue(key="command",
+            command_name = self.get_attr_value(key="command",
                                                   subnodename="tool")
-            command_path = self.getAttributeValue(key="default_path",
+            command_path = self.get_attr_value(key="default_path",
                                                   subnodename="tool")
             command_name = command_path + "/" + command_name
             if not sy.cmd_exist(command_name):
@@ -132,7 +132,7 @@ class Synthesis(WrapperXml):
     def tcl_scriptname(self):
         """ get the tcl script filename """
         try:
-            return self.getAttributeValue(key="filename",
+            return self.get_attr_value(key="filename",
                                           subnodename="script")
         except PodError:
             raise PodError("TCL script must be generated before")
@@ -145,7 +145,7 @@ class Synthesis(WrapperXml):
                           attributename="filename",
                           value=str(filename))
         else:
-            self.setAttribute(key="filename",
+            self.set_attr(key="filename",
                               value=filename,
                               subname="script")
 
