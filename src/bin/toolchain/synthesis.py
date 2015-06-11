@@ -78,9 +78,9 @@ class Synthesis(WrapperXml):
         except PodError:
             # else use toolchain default
             command_name = self.get_attr_value(key="command",
-                                                  subnodename="tool")
+                                               subnodename="tool")
             command_path = self.get_attr_value(key="default_path",
-                                                  subnodename="tool")
+                                               subnodename="tool")
             command_name = command_path + "/" + command_name
             if not sy.cmd_exist(command_name):
                 raise PodError("Synthesis tool tcl shell command named " +
@@ -133,7 +133,7 @@ class Synthesis(WrapperXml):
         """ get the tcl script filename """
         try:
             return self.get_attr_value(key="filename",
-                                          subnodename="script")
+                                       subnodename="script")
         except PodError:
             raise PodError("TCL script must be generated before")
 

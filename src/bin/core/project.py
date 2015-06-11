@@ -131,8 +131,8 @@ class Project(WrapperXml):
                     comp.load(node.get_attr_value("name"))
                 except IOError:
                     self.del_subnode("components",
-                                    "component",
-                                    "name", node.get_attr_value("name"))
+                                     "component",
+                                     "name", node.get_attr_value("name"))
                     raise PodError("Can't open " +
                                    node.get_attr_value("name") +
                                    " directory", 0)
@@ -569,9 +569,9 @@ class Project(WrapperXml):
         self._instanceslist.remove(instance)
         self.reorder_instances(instance.name)
         self.del_subnode("components",
-                        "component",
-                        "name",
-                        instance.instancename)
+                         "component",
+                         "name",
+                         instance.instancename)
         instance.del_instance()
         DISPLAY.msg("Component " + instancename + " deleted")
         self.save()

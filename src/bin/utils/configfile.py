@@ -71,9 +71,9 @@ class ConfigFile(WrapperXml):
         if not (path in libpathlist):
             raise PodError("Library " + path + " doesn't exist in config", 0)
         self.del_subnode(nodename="libraries",
-                        subnodename="lib",
-                        attribute="path",
-                        value=path)
+                         subnodename="lib",
+                         attribute="path",
+                         value=path)
         self.savefile()
 
     def add_library(self, path):

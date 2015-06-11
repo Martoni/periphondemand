@@ -261,8 +261,7 @@ class Driver(WrapperXml):
                            lastdir, 0)
         if sy.dir_exist(directory):
             if self.get_node(nodename="bsp") is not None:
-                self.get_node(nodename="bsp").set_attr("directory",
-                                                           directory)
+                self.get_node(nodename="bsp").set_attr("directory", directory)
             else:
                 self.add_node(nodename="bsp",
                               attributename="directory",

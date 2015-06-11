@@ -229,8 +229,8 @@ class Interface(WrapperXml):
         self.alloc_mem.del_slave_interface(slave.get_interface())
         self._slaveslist.remove(slave)
         self.del_subnode("slaves", "slave",
-                        {"instancename": slave.instancename,
-                         "interfacename": slave.interfacename})
+                         {"instancename": slave.instancename,
+                          "interfacename": slave.interfacename})
 
     def del_bus(self, instanceslavename, interfaceslavename=None):
         """ delete slave bus connection
