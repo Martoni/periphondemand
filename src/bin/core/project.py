@@ -497,7 +497,7 @@ class Project(WrapperXml):
         try:
             self.del_platform()
         except PodError, error:
-            if error.getLevel() < 2:
+            if error.level < 2:
                 raise error
             print error
 
@@ -752,7 +752,7 @@ class Project(WrapperXml):
                         master.connect_bus(interfaceslave.parent,
                                            interfaceslave.name)
                     except PodError, error:
-                        error.setLevel(2)
+                        error.level = 2
                         DISPLAY.msg(str(error))
 
         DISPLAY.msg("Bus connected")

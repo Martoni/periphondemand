@@ -53,12 +53,15 @@ class PodError(Exception):
     def __repr__(self):
         return self.message
 
-    def _get_message(self):
+    @property
+    def message(self):
+        """ get message """
         return self._message
 
-    def _set_message(self, message):
+    @message.setter
+    def message(self, message):
+        """ Set message """
         self._message = message
-    message = property(_get_message, _set_message)
 
     def __str__(self):
         if self.level == 0:
@@ -68,10 +71,8 @@ class PodError(Exception):
                     return COLOR_ERROR + "[ERROR]" + COLOR_END + "  : " +\
                         COLOR_ERROR_MESSAGE + self.message +\
                         COLOR_END
-                else:
-                    return standardmsg
             except NameError:
-                return standardmsg
+                pass
         elif self.level == 1:
             standardmsg = "[WARNING] : " + self.message
             try:
@@ -79,26 +80,17 @@ class PodError(Exception):
                     return COLOR_WARNING + "[WARNING]" + COLOR_END +\
                         ": " + COLOR_WARNING_MESSAGE + self.message +\
                         COLOR_END
-                else:
-                    return standardmsg
             except NameError:
-                return standardmsg
+                pass
         else:
             standardmsg = "[INFO] : " + self.message
             try:
                 if SETTINGS.color() == 1:
                     return COLOR_INFO + "[INFO]" + COLOR_END + "   : " +\
                         COLOR_INFO_MESSAGE + self.message + COLOR_END
-                else:
-                    return standardmsg
             except NameError:
-                return standardmsg
-
-    def setLevel(self, level):
-        self.level = int(str(level))
-
-    def getLevel(self):
-        return self.level
+                pass
+        return standardmsg
 
 from periphondemand.bin.utils.settings import Settings
 SETTINGS = Settings()
