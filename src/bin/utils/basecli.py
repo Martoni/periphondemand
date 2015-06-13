@@ -123,7 +123,7 @@ class BaseCli(cmd.Cmd):
                     line = self.precmd(line)
                     if line == "exit":
                         sys.exit(0)
-                    if SETTINGS.isScript():
+                    if SETTINGS.is_script():
                         print "$ " + line
                     stop = self.onecmd(line)
                     stop = self.postcmd(stop, line)
@@ -447,7 +447,7 @@ fpga_attributes    : give list of fpga attributes in platform
                 return [platformlib + "." + name
                         for name in
                         sy.list_files(
-                            SETTINGS.getPlatformLibPath(platformlib))]
+                            SETTINGS.get_platform_lib_path(platformlib))]
 
         elif subargt == "genericname":
             return ["" + instancename + "." + generic.name

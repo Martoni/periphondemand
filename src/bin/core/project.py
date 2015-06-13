@@ -507,7 +507,7 @@ class Project(WrapperXml):
         else:
             # if not standard platform, try personnal platform
             try:
-                platformdir = SETTINGS.getPlatformLibPath(platformlibname) +\
+                platformdir = SETTINGS.get_platform_lib_path(platformlibname) +\
                     "/" + platformname + "/"
             except TypeError:
                 # if not personnal platform, try project specific

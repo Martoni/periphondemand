@@ -1341,7 +1341,7 @@ Set 1 if you want color output, 0 else
         value = arg[-1].strip()
 
         try:
-            SETTINGS.setColor(value)
+            SETTINGS.set_color(value)
         except PodError, error:
             print DISPLAY
             print error
@@ -1381,9 +1381,9 @@ Runs command(s) from a file.
                 return
         self.use_rawinput = False
         self.prompt = self.continuation_prompt = ''
-        SETTINGS.setScript(1)
+        SETTINGS.set_script(1)
         self.cmdloop()
-        SETTINGS.setScript(0)
+        SETTINGS.set_script(0)
         self.stdin.close()
         keepstate.restore()
         self.lastcmd = ''

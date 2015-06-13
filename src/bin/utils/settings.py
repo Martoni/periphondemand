@@ -11,8 +11,6 @@
 # ----------------------------------------------------------------------------
 """Session settings and project parameters"""
 
-import cmd
-import re
 import os
 import sys
 
@@ -42,7 +40,7 @@ class Settings(object):
 
     def __init__(self):
         if self.__do_init:
-            pathname, scriptname = os.path.split(sys.argv[0])
+            pathname, _ = os.path.split(sys.argv[0])
             self.history = []
             self.historyroot = []
             self.__script_dir = os.path.abspath(pathname)
@@ -66,7 +64,7 @@ class Settings(object):
 
             try:
                 self.personal_platformlib_list =\
-                    self.configfile.getPlatformLibPath()
+                    self.configfile.get_platform_lib_path()
                 self.personal_platformlib_name_list =\
                     [pathlib.split("/")[-1]
                         for pathlib in self.personal_platformlib_list]
@@ -77,34 +75,41 @@ class Settings(object):
             self.active_library = None
             self.active_component = None
 
-    def getPlatformLibPath(self, platformlib_name):
+    def get_platform_lib_path(self, platformlib_name):
+        """ get platform lib path """
         for path in self.personal_platformlib_list:
             if path.split("/")[-1] == platformlib_name:
                 return path
 
     def color(self):
+        """ is color printed ?"""
         return self.color_status
 
-    def setColor(self, value=1):
+    def set_color(self, value=1):
+        """ set color status """
         self.color_status = value
 
-    def getDir(self, sub_dir=None):
+    def get_directory(self, sub_dir=None):
+        """ get directory """
         if sub_dir:
             return os.path.join(self.__script_dir, sub_dir)
         else:
             return ""
 
-    def isScript(self):
+    def is_script(self):
+        """ is script ? """
         return self.script
 
-    def setScript(self, value):
+    def set_script(self, value):
+        """ set as script """
         if value:
             self.script = 1
         else:
             self.script = 0
 
-    def get_synthesis_tool_command(self, synthesisName):
-        return self.configfile.get_synthesis_tool_command(synthesisName)
+    def get_synthesis_tool_command(self, synthesisname):
+        """ get the synthesis tool command """
+        return self.configfile.get_synthesis_tool_command(synthesisname)
 
-    components_dir = property(lambda self: self.getDir("components"))
-    board_dir = property(lambda self: self.getDir("boards"))
+    components_dir = property(lambda self: self.get_directory("components"))
+    board_dir = property(lambda self: self.get_directory("boards"))

@@ -101,7 +101,7 @@ class ConfigFile(WrapperXml):
         """ return a list of library path """
         return self.personal_lib_list
 
-    def getPlatformLibPath(self):
+    def get_platform_lib_path(self):
         """ Return a list of platformlib path """
         return self.personal_platformlib_list
 
