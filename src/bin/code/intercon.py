@@ -25,14 +25,11 @@
 # ----------------------------------------------------------------------------
 """ Manage intercon """
 
-from periphondemand.bin.utils.poderror import PodError
-from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.display import Display
 
 from periphondemand.bin.core.component import Component
 from periphondemand.bin.core.port import Port
 from periphondemand.bin.core.interface import Interface
-from periphondemand.bin.core.hdl_file import HdlFile
 
 DISPLAY = Display()
 
@@ -54,14 +51,14 @@ class Intercon(Component):
         masterinterface = masterinstance.get_interface(masterinterfacename)
 
         # Write xml description
-        self.generateXML(masterinterface)
+        self.generate_xml(masterinterface)
         # Write Code for component
 
         masterinterface.bus.generate_intercon(self)
 
         DISPLAY.msg("Intercon with name : " + self.instancename + " Done")
 
-    def generateXML(self, masterinterface):
+    def generate_xml(self, masterinterface):
         """ Generate intercon code
         """
         masterinstance = masterinterface.parent

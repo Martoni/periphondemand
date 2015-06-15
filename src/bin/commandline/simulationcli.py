@@ -22,6 +22,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
+# pylint: disable=W0613
 # ----------------------------------------------------------------------------
 """ Command line for simulation environement """
 
@@ -30,8 +31,6 @@ from periphondemand.bin.utils.basecli import BaseCli
 from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils.display import Display
-
-from periphondemand.bin.toolchain.simulation import Simulation
 
 SETTINGS = Settings()
 DISPLAY = Display()
@@ -45,6 +44,7 @@ class SimulationCli(BaseCli):
         BaseCli.__init__(self, parent)
 
     def complete_selecttoolchain(self, text, line, begidx, endidx):
+        """ selecttoolchain command completion """
         alist = []
         try:
             alist = self.completeargs(text, line,
