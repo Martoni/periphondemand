@@ -22,6 +22,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
+# pylint: disable=W0613
 # ----------------------------------------------------------------------------
 """ Commandline for driver environment """
 
@@ -45,15 +46,17 @@ class DriverCli(BaseCli):
         self.project = SETTINGS.active_project
 
     def testIfToolChainSelected(self):
+        """ test if toolchain selected """
         if self.driver is None:
             raise PodError("No toolchain selected " +
                            "(use selecttoolchain command)")
 
     def complete_generateproject(self, text, line, begidx, endidx):
+        """ complete generate project """
         toollist = []
         try:
             toollist = self.completeargs(text, line, "[drivertoolchain]")
-        except Exception, error:
+        except PodError, error:
             print error
         return toollist
 
@@ -131,7 +134,7 @@ select software developpement tree, to copy driver
         toolchainlist = []
         try:
             toolchainlist = self.completeargs(text, line, "[drivertoolchain]")
-        except Exception, error:
+        except PodError, error:
             print error
         return toolchainlist
 

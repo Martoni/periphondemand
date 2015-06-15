@@ -52,7 +52,7 @@ class SynthesisCli(BaseCli):
         try:
             toolchainlist = self.completeargs(text, line,
                                               "[synthesistoolchain]")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return toolchainlist
 
@@ -93,7 +93,7 @@ select toolchain used for simulation
         try:
             toollist = self.completeargs(text, line,
                                          "[synthesistoolchain]")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return toollist
 
@@ -179,6 +179,7 @@ ise
 Usage : generatebitstream
 generate the bitstream for fpga configuration
         """
+        del line
         if SETTINGS.active_project.synthesis is None:
             print PodError("Select toolchain before")
             return
@@ -196,7 +197,7 @@ generate the bitstream for fpga configuration
         iolist = []
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
-        except Exception, error:
+        except PodError, error:
             print error
         return iolist
 
@@ -207,7 +208,7 @@ set IO standard value
         """
         try:
             self.checkargs(line, "<IO_name> <standard_value>")
-        except Exception, error:
+        except PodError, error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -228,7 +229,7 @@ set IO standard value
         iolist = []
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return iolist
 
@@ -239,7 +240,7 @@ get IO standard value
         """
         try:
             self.checkargs(line, "<IO_name>")
-        except Exception, error:
+        except PodError, error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -247,9 +248,9 @@ get IO standard value
         io_name = arg[0]
         try:
             print SETTINGS.active_project.get_io(io_name).standard
-        except PodError, e:
+        except PodError, error:
             print DISPLAY
-            print e
+            print error
             return
         print DISPLAY
 
@@ -260,7 +261,7 @@ get IO standard value
         iolist = []
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return iolist
 
@@ -271,7 +272,7 @@ set IO standard value
         """
         try:
             self.checkargs(line, "<IO_name> <port_option_value>")
-        except Exception, error:
+        except PodError, error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -293,7 +294,7 @@ set IO standard value
         iolist = []
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return iolist
 
@@ -304,17 +305,17 @@ get IO Port option value
         """
         try:
             self.checkargs(line, "<IO_name>")
-        except Exception, e:
+        except PodError, error:
             print DISPLAY
-            print e
+            print error
             return
         arg = line.split(' ')
         io_name = arg[0]
         try:
             print SETTINGS.active_project.get_io(io_name).port_option
-        except PodError, e:
+        except PodError, error:
             print DISPLAY
-            print e
+            print error
             return
         print DISPLAY
 
@@ -325,7 +326,7 @@ get IO Port option value
         iolist = []
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return iolist
 
@@ -336,9 +337,9 @@ set IO drive value
         """
         try:
             self.checkargs(line, "<IO_name> <drive_value>")
-        except Exception, error:
+        except PodError, error:
             print(str(DISPLAY))
-            print(str(errror))
+            print(str(error))
             return
         arg = line.split(' ')
         io_name = arg[0]
@@ -357,7 +358,7 @@ set IO drive value
         iolist = []
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return iolist
 
@@ -368,7 +369,7 @@ get IO drive value
         """
         try:
             self.checkargs(line, "<IO_name>")
-        except Exception, error:
+        except PodError, error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -389,7 +390,7 @@ get IO drive value
         attributes = []
         try:
             attributes = self.completeargs(text, line, "<fpga_attributes>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return attributes
 
@@ -400,7 +401,7 @@ Set fpga attributes
         """
         try:
             self.checkargs(line, "<fpga_attributes> <attribute_value>")
-        except Exception, error:
+        except PodError, error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -423,7 +424,7 @@ Set fpga attributes
         attributes = []
         try:
             attributes = self.completeargs(text, line, "<fpga_attributes>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return attributes
 
@@ -434,7 +435,7 @@ get fpga attributes values
         """
         try:
             self.checkargs(line, "<fpga_attributes>")
-        except Exception, error:
+        except PodError, error:
             print(str(DISPLAY))
             print(str(error))
             return

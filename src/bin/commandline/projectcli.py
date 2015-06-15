@@ -370,7 +370,7 @@ Adding platforms library
                     text, line,
                     "<libraryname>.<componentname>.[componentversion] " +
                     "[newinstancename]")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return componentlist
 
@@ -436,7 +436,7 @@ Add component in project
         componentlist = []
         try:
             componentlist = self.completeargs(text, line, "[libraryname]")
-        except Exception:
+        except PodError:
             pass
         return componentlist
 
@@ -479,7 +479,7 @@ List all project instances
         try:
             platformlist = self.completeargs(text, line,
                                              "<platformlib>.<platformname>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return platformlist
 
@@ -521,11 +521,12 @@ List platform available
             print(str(error))
 
     def complete_listinterfaces(self, text, line, begidx, endidx):
+        """ complete listinterfaces command """
         pinlist = []
         try:
             pinlist = self.completeargs(text, line,
                                         "<instancename>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return pinlist
 
@@ -556,7 +557,7 @@ List instance interface
                 text, line,
                 "<instancename>.<interfacename>.<portname>.<pinnum> " +
                 "<instancename>.<interfacename>.<portname>.<pinnum>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return pinlist
 
@@ -608,7 +609,7 @@ Connect pin between instances
                 self.completeargs(
                     text, line,
                     "<instancename>.<interfacename>.<portname> <uvalue>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return portlist
 
@@ -622,7 +623,7 @@ Force input port unconnected value
             self.checkargs(
                 line,
                 "<instancename>.<interfacename>.<portname> <uvalue>")
-        except Exception, error:
+        except PodError, error:
             print DISPLAY
             print(str(error))
             return
@@ -655,7 +656,7 @@ Force input port unconnected value
                 text, line,
                 "<instancename>.<interfacename>.<portname> " +
                 "<instancename>.<interfacename>.<portname>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return portlist
 
@@ -672,7 +673,7 @@ Connect all pins of two same size ports.
                 line,
                 "<instancename>.<interfacename>.<portname> " +
                 "<instancename>.<interfacename>.<portname>")
-        except Exception, error:
+        except PodError, error:
             print DISPLAY
             print(str(error))
             return
@@ -699,12 +700,13 @@ Connect all pins of two same size ports.
         print DISPLAY
 
     def complete_connectinterface(self, text, line, begidx, endix):
+        """ complete connectinterface command """
         buslist = []
         try:
             buslist = self.completeargs(text, line,
                                         "<instancename>.<interfacename> " +
                                         "<instancename>.<interfacename>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return buslist
 
@@ -721,7 +723,7 @@ Connect interface between two components
             self.checkargs(line,
                            "<instancename>.<interfacename> " +
                            "<instancename>.<interfacename>")
-        except Exception, error:
+        except PodError, error:
             print DISPLAY
             print(str(error))
             return
@@ -752,7 +754,7 @@ Connect interface between two components
                     text, line,
                     "<masterinstancename>.<masterinterfacename> " +
                     "<slaveinstancename>.<slaveinterfacename>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return connectlist
 
@@ -770,7 +772,7 @@ Suppress a pin connection
                 line,
                 "<masterinstancename>.<masterinterfacename> " +
                 "<slaveinstancename>.<slaveinterfacename>")
-        except Exception, error:
+        except PodError, error:
             print DISPLAY
             print(str(error))
             return
@@ -798,7 +800,7 @@ Suppress a pin connection
                 text, line,
                 "<masterinstancename>.<masterinterfacename> " +
                 "<slaveinstancename>.<slaveinterfacename>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return buslist
 
@@ -816,7 +818,7 @@ Connect slave to master bus
                 line,
                 "<masterinstancename>.<masterinterfacename> " +
                 "<slaveinstancename>.<slaveinterfacename>")
-        except Exception, error:
+        except PodError, error:
             print DISPLAY
             print(str(error))
             return
@@ -859,7 +861,7 @@ Autoconnect bus if only one master in project
                     text, line,
                     "<instancename>.<interfacename>.<portname>.<pinnum> " +
                     "<instancename>.<interfacename>.<portname>.<pinnum>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return connectlist
 
@@ -912,10 +914,11 @@ Suppress a pin connection
         print "Connection deleted"
 
     def complete_delinstance(self, text, line, begidx, endidx):
+        """ complete delinstance command """
         componentlist = []
         try:
             componentlist = self.completeargs(text, line, "<instancename>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return componentlist
 
@@ -961,7 +964,7 @@ Check the project before code generation
                     text, line,
                     "<slaveinstancename>.<slaveinterfacename> " +
                     "<addressinhexa>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return addrlist
 
@@ -1025,7 +1028,7 @@ List master interface
             mappinglist = \
                 self.completeargs(text, line,
                                   "<masterinstancename>.<masterinterfacename>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return mappinglist
 
@@ -1058,7 +1061,7 @@ Return mapping for a master interface
         printlist = []
         try:
             printlist = self.completeargs(text, line, "<instancename>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return printlist
 
@@ -1082,7 +1085,7 @@ Print instance in XML format
         infolist = []
         try:
             infolist = self.completeargs(text, line, "<instancename>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return infolist
 
@@ -1146,7 +1149,7 @@ Print instance information
                 self.completeargs(
                     text, line,
                     "<instancename>.<genericname> <genericvalue>")
-        except Exception, error:
+        except PodError, error:
             print(str(error))
         return genericlist
 
@@ -1214,7 +1217,7 @@ Close the project
                 self.completeargs(
                     text, line,
                     "<masterinstancename>.<masterinterfacename>")
-        except Exception, error:
+        except PodError, error:
             print error
         return interconlist
 
@@ -1276,7 +1279,7 @@ Generate a report of the project
         print text
 
     @classmethod
-    def is_project_open(self):
+    def is_project_open(cls):
         """ check if project is open, raise error if not
         """
         if SETTINGS.active_project.void:
@@ -1302,7 +1305,7 @@ List all force configured for this project
         pinlist = []
         try:
             pinlist = self.completeargs(text, line, "<forcename> <forcestate>")
-        except Exception, error:
+        except PodError, error:
             print error
         return pinlist
 

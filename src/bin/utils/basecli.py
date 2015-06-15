@@ -49,6 +49,8 @@ class BaseCli(cmd.Cmd):
             self.stdout = parent.stdout
             self.use_rawinput = parent.use_rawinput
 
+        self.continuation_prompt = ""
+
     def finishStatement(self, firstline):
         """ finish the statement """
         statement = firstline
