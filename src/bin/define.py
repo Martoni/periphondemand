@@ -15,6 +15,10 @@ SIMULATIONPATH = "/simulation"
 SYNTHESISPATH = "/synthesis"
 DRIVERSPATH = "/drivers"
 
+# command line
+BASE_PROMPT = "POD"
+
+
 # extension
 TCLEXT = ".tcl"
 ARCHIVEEXT = ".zip"

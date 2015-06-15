@@ -8,6 +8,7 @@
 #
 # Created:  2008/01/17
 # Licence:  GPLv3 or newer
+# pylint: disable=W0613
 # ----------------------------------------------------------------------------
 """Basic Command Line Interface"""
 
@@ -18,6 +19,7 @@ import sys
 import readline
 
 from periphondemand.bin.define import PODSCRIPTEXT
+from periphondemand.bin.define import BASE_PROMPT
 
 from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils.settings import Settings
@@ -43,13 +45,16 @@ class BaseCli(cmd.Cmd):
         SETTINGS.history = SETTINGS.history[:-1]
 
         if parent is None:
-            self.setPrompt("POD")
+            self.setPrompt(BASE_PROMPT)
         else:
             self.stdin = parent.stdin
             self.stdout = parent.stdout
             self.use_rawinput = parent.use_rawinput
 
+        self.base_prompt = BASE_PROMPT
         self.continuation_prompt = ""
+        self._locals = {}
+        self._globals = {}
 
     def finishStatement(self, firstline):
         """ finish the statement """
@@ -187,7 +192,7 @@ class BaseCli(cmd.Cmd):
             (sub_cmd, end_cmd) = command.split('.', 1)
             command = sub_cmd
             args = ' '.join([end_cmd, args])
-        except:
+        except ValueError, error:
             pass
 
         if self.case_insensitive:
@@ -224,8 +229,9 @@ class BaseCli(cmd.Cmd):
         try:
             if str(line)[0] in str(self.comment_marks):
                 return ""
-        except:
-            return ""
+        except Exception, error:
+            raise error
+            # return ""
 
         if line:
             SETTINGS.history.append(self.base_prompt + "." + line.strip())
@@ -236,13 +242,8 @@ class BaseCli(cmd.Cmd):
            In that case we execute the line as Python code.
         """
 
-        self.stdout.write("*** Unknown Syntax : %s" % line +
-                          "(type help for a list of valid command\n")
-
-        try:
-            exec(line) in self._locals, self._globals
-        except Exception, error:
-            print error.__class__, ":", error
+        print("*** Unknown Syntax : %s" % line +
+              "\n(type help for a list of valid command)\n")
 
     def do_shell(self, arg):
         """Pass command to a system shell when line begins with '!'."""
@@ -289,6 +290,7 @@ class BaseCli(cmd.Cmd):
         self.continuation_prompt = " " * len(self.base_prompt) + "> "
 
     def completelist(self, line, text, alist):
+        """ Complete list """
         completion = [a for a in alist if a.startswith(text)]
         return completion
 
@@ -309,8 +311,8 @@ class BaseCli(cmd.Cmd):
         for subargl, subargt, i in zip(subargline,
                                        subargtemplate,
                                        range(len(subargline))):
-            ma = re.match(r'^[\[|\<](.*?)[\]|\>]$', subargt)
-            subargt = ma.group(1)
+            thematching = re.match(r'^[\[|\<](.*?)[\]|\>]$', subargt)
+            subargt = thematching.group(1)
             if i < len(subargline) - 1:
                 listargs.append([subargt, subargl])
             else:
@@ -419,8 +421,9 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "componentname":
             try:
                 libraryname.lower()
-            except:
-                return SETTINGS.active_library.list_components()
+            except Exception, error:
+                raise error
+                # return SETTINGS.active_library.list_components()
             arglist = [libraryname + "." + componentname
                        for componentname in
                        SETTINGS.active_library.list_components(
@@ -429,12 +432,13 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "componentversion":
             try:
                 libraryname.lower()
-            except:
-                libraryname = SETTINGS.active_library.lib_name
-                return [componentname + "." + version
-                        for version in
-                        SETTINGS.active_project.get_components_versions(
-                            libraryname, componentname)]
+            except Exception, error:
+                raise error
+                # libraryname = SETTINGS.active_library.lib_name
+                # return [componentname + "." + version
+                #         for version in
+                #         SETTINGS.active_project.get_components_versions(
+                #             libraryname, componentname)]
             return [libraryname + "." + componentname + "." + comp
                     for comp in
                     SETTINGS.active_project.get_components_versions(
@@ -495,7 +499,6 @@ fpga_attributes    : give list of fpga attributes in platform
                 subargline[0] = "." + subargline[0]
             else:
                 subargline = argl.split(".")
-            subargtemplate = argt.split(".")
             if (len(subargline) < self.minArgNumber(argt, '.')) or\
                     (len(subargline) > self.maxArgNumber(argt, '.')):
                 raise PodError(
@@ -515,7 +518,6 @@ fpga_attributes    : give list of fpga attributes in platform
     def maxArgNumber(self, template, separator):
         """ return the maximum argument number
         """
-        argnumber = 0
         args = template.split(separator)
         return len(args)
 
