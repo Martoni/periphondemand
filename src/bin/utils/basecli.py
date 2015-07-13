@@ -225,13 +225,12 @@ class BaseCli(cmd.Cmd):
             it has been interpreted.
         """
         # SETTINGS.addHistory(line)
-        # Remove comments lines
+        # Remove comments lines and void line
         try:
             if str(line)[0] in str(self.comment_marks):
                 return ""
-        except Exception, error:
-            raise error
-            # return ""
+        except IndexError:
+            return ""
 
         if line:
             SETTINGS.history.append(self.base_prompt + "." + line.strip())
