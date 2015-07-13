@@ -192,7 +192,7 @@ class BaseCli(cmd.Cmd):
             (sub_cmd, end_cmd) = command.split('.', 1)
             command = sub_cmd
             args = ' '.join([end_cmd, args])
-        except ValueError, error:
+        except ValueError:
             pass
 
         if self.case_insensitive:
@@ -364,8 +364,6 @@ fpga_attributes    : give list of fpga attributes in platform
                 interfacename = interface.name
             elif listargs[1][0] == "componentname":
                 componentname = listargs[1][1]
-            elif listargs[1][0] == "componentversion":
-                componentversion = listargs[1][1]
             else:
                 return []
         if len(listargs) > 2:
