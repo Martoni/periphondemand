@@ -87,6 +87,15 @@ class Synthesis(WrapperXml):
                                command_name + " doesn't exist in PATH")
             return command_name
 
+    def get_synthesis_value(self, value):
+        """ Return toolchain config content
+        """
+        try:
+            return SETTINGS.get_synthesis_value(self.synthesis_toolname,
+                                                value)
+        except PodError:
+            raise PodError("sais pas quoi faire")
+
     def generate_project(self):
         """ copy all hdl file in synthesis project directory
         """
