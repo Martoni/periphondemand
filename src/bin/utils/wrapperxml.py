@@ -86,6 +86,22 @@ class WrapperXml(object):
         return ('<?xml version="1.0" encoding="utf-8"?>\n' +
                 ET.tostring(self.tree, "utf-8"))
 
+    @property
+    def text(self):
+        """ Return node's text content
+        """
+        text = self.tree.text
+        if not text:
+            return ""
+        else:
+            return text
+
+    @text.setter
+    def text(self, text):
+        """ set node's text content
+        """
+        self.tree.text = text
+
     def get_subnodes(self, nodename, subnodename):
         """ Return a list of subnodes
         """
