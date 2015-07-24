@@ -89,10 +89,8 @@ def getListSize(masterinterface):
     for slave in masterinterface.slaves:
         for i in slave.get_instance().interfaces:
             if i.bus_name == "wishboneExt":
-                for p in i.ports:
-                    if p.porttype == "DAT_I":
-                        data_size.append(int(p.real_size))
-    return data_size
+                data_size.append(int(i.data_size))
+    return list(set(data_size))
 
 
 def architectureHead(masterinterface, intercon):
