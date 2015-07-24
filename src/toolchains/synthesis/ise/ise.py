@@ -296,11 +296,11 @@ def generate_bitstream(self, commandname, scriptname):
         else:
             print "SHELL>" + line,
     try:
-        sy.copyFile(SETTINGS.projectpath + OBJSPATH + "/" +
+        sy.cp_file(SETTINGS.projectpath + OBJSPATH + "/" +
                     BINARY_PREFIX + SETTINGS.active_project.name +
                     XILINX_BITSTREAM_SUFFIX,
                     SETTINGS.projectpath + BINARYPROJECTPATH + "/")
-        sy.copyFile(SETTINGS.projectpath + OBJSPATH + "/" +
+        sy.cp_file(SETTINGS.projectpath + OBJSPATH + "/" +
                     BINARY_PREFIX + SETTINGS.active_project.name +
                     XILINX_BINARY_SUFFIX,
                     SETTINGS.projectpath + BINARYPROJECTPATH + "/")
