@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bus name="wishboneExt" version="1.0" datasize="16">
+    <description></description>
+    <class name="WBM" type="master">
+        <type name="RST" type="reset" dir="out" />
+        <type name="CLK" type="clock" dir="out" />
+        <type name="ADR" type="address"   dir="out" />
+        <type name="BUE" type="busen"   dir="out" />
+        <type name="BYE" type="byen"   dir="out" />
+        <type name="RW" type="rwn"   dir="out" />
+        <type name="DAT_I" type="datain"  dir="in" />
+        <type name="DAT_O" type="dataout" dir="out" />
+        <type name="ACK" type="ack"    dir="in" />
+        <type name="irq" type="irq"    dir="in" />
+        <type name="WE"  type="write"  dir="out" />
+        <type name="SEL" type="select" dir="out" />
+        <type name="CYC" type="cycle"  dir="out" />
+        <type name="STB" type="strobe" dir="out" />
+    </class>
+    <class name="WBS" type="slave">
+        <type name="RST"   type="reset"   dir="in" />
+        <type name="CLK"   type="clock"   dir="in" />
+        <type name="ADR"   type="address" dir="in" />
+        <type name="DAT_I" type="datain"  dir="in" />
+        <type name="DAT_O" type="dataout" dir="out" />
+        <type name="WE"  type="write"  dir="in" />
+        <type name="SEL" type="select" dir="in" />
+        <type name="ACK" type="ack"    dir="out" />
+        <type name="CYC" type="cycle"  dir="in" />
+        <type name="STB" type="strobe" dir="in" />
+    </class>
+</bus>
