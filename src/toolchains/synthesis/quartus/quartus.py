@@ -235,6 +235,14 @@ def generate_tcl(self, filename=None):
     return settings.active_project.name + TCLEXT
 
 
+def launch_as_shell(self, commandname, option):
+    for line in sy.launch_as_shell(commandname, option):
+        if settings.color() == 1:
+            print COLOR_SHELL + line + COLOR_END,
+        else:
+            print "SHELL>" + line,
+
+
 def generate_bitstream(self, commandname, scriptname):
     """ generate the bitstream """
     pwd = sy.pwd()
@@ -242,11 +250,7 @@ def generate_bitstream(self, commandname, scriptname):
     sy.chdir(settings.projectpath + SYNTHESISPATH)
     commandname = commandname + " -t "
 
-    for line in sy.launch_as_shell(commandname, scriptname):
-        if settings.color() == 1:
-            print COLOR_SHELL + line + COLOR_END,
-        else:
-            print "SHELL>" + line,
+    launch_as_shell(self, commandname, scriptname)
     try:
         print(settings.projectpath + OBJSPATH + "/" +
               BINARY_PREFIX + settings.active_project.name +
