@@ -187,3 +187,8 @@ class Platform(Component):
             for port in interface.ports:
                 portslist.append(port)
         return portslist
+
+    @property
+    def output_format(self):
+        """ get speed """
+        return self.get_node("fpga").get_attr_value("out_bin")
