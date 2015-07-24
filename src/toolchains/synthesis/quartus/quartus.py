@@ -258,11 +258,20 @@ def launch_as_shell(self, commandname, option):
 
 def generate_bitstream(self, commandname, scriptname):
     """ generate the bitstream """
+    default_path = self.get_synthesis_value("default_path")
     pwd = sy.pwd()
     sy.del_all(settings.projectpath + OBJSPATH)
     sy.chdir(settings.projectpath + SYNTHESISPATH)
     commandname = commandname + " -t "
 
+    if needqsys(self):
+        qsys_path = self.get_synthesis_value("qsys_path")
+        qsys_script = self.get_synthesis_value("qsys_script")
+        qsys_commandname = default_path + "/" + qsys_path + "/" + \
+            qsys_script
+        launch_as_shell(self, qsys_commandname,
+                        " --script=" + settings.projectpath +
+                        SYNTHESISPATH + "/" + "imx6_sp_wrapper_qsys.tcl")
     launch_as_shell(self, commandname, scriptname)
     try:
         print(settings.projectpath + OBJSPATH + "/" +
