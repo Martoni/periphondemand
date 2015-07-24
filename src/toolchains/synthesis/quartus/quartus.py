@@ -54,6 +54,80 @@ display = Display()
 ONETAB = "    "
 
 
+def needqsys(self):
+    for component in self.parent.instances:
+        qsys_node = component.get_nodes("qsys")
+        if not (len(qsys_node) == 0):
+            return 1
+    return 0
+
+
+def generateQsysScript(self):
+    project_name = "imx6_sp_wrapper_qsys"
+
+    platform = settings.active_project.platform
+    out = "\n"
+    out += "package require -exact qsys 12.0\n"
+    out += "# module properties ('module' here means 'system' " + \
+        "or 'top level module')\n"
+    out += "set_module_property NAME {" + project_name + "}\n"
+    out += "set_module_property GENERATION_ID {0x00000000}\n"
+    out += "\n"
+    out += "# project properties\n"
+    out += "set_project_property DEVICE_FAMILY {" + platform.family + "}\n"
+    out += "set_project_property DEVICE {" + platform.device + "}\n"
+    out += "\n"
+    out += "# instances and instance parameters\n"
+
+    for component in self.parent.instances:
+        qsys_node = component.get_nodes("qsys")
+        if not (len(qsys_node) == 0):
+            qsys_components = qsys_node[0].get_subnodes("qsys_components",
+                                                        "qsys_component")
+            for qsys_component in qsys_components:
+                instance_name = qsys_component.get_attr_value("instance_name")
+                out += "add_instance " + instance_name + \
+                    " " + qsys_component.get_attr_value("name") + "\n"
+                for parameter in qsys_component.get_nodes("parameter"):
+                    out += "set_instance_parameter_value " + instance_name + \
+                        " " + parameter.get_attr_value("name") + \
+                        " {" + parameter.text + "}\n"
+
+            out += "\n"
+            out += "# connections and connection parameters"
+            out += "\n"
+            qsys_connections = qsys_node[0].get_subnodes("connections",
+                                                         "connection")
+            for connection in qsys_connections:
+                src_inst = connection.get_attr_value("src")
+                dest_inst = connection.get_attr_value("dest")
+                out += "add_connection " + src_inst + " " + dest_inst + "\n"
+                for parameter in connection.get_nodes("parameter"):
+                    out += "set_connection_parameter_value " + src_inst + \
+                        "/" + dest_inst + " " + parameter.get_attr_value("name") + \
+                        " {" + parameter.text + "}\n"
+
+            out += "\n"
+            out += "# exported interfaces"
+            out += "\n"
+
+            exports = qsys_node[0].get_subnodes("exports", "export")
+            for export in exports:
+                export_name = export.get_attr_value("name")
+                out += "add_interface " + export_name + " " + \
+                    export.get_attr_value("type") + "\n"
+                out += "set_interface_property " + export_name + \
+                    " EXPORT_OF " + export.get_attr_value("src") + "\n"
+
+    out += "\n"
+    out += "# disabled instances\n"
+
+    out += "save_system " + project_name + ".qsys\n"
+    tclfile = open(settings.projectpath + SYNTHESISPATH + "/" +
+                   project_name + ".tcl", "w")
+    tclfile.write(out)
+
+
 def generatepinoutContent(self):
     out = ""
     for interface in self.project.platform.interfaces:
@@ -143,6 +217,11 @@ def generate_tcl(self, filename=None):
             tclfile.write("set_global_assignment -name VHDL_FILE .." +
                           SYNTHESISPATH + "/" + directory +
                           "/" + file + "\n")
+
+    if needqsys(self):
+        generateQsysScript(self)
+        tclfile.write("set_global_assignment -name QSYS_FILE " +
+                      ".." + SYNTHESISPATH + "/imx6_sp_wrapper_qsys.qsys\n")
 
     tclfile.write(generatepinoutContent(self))
     # Commit assignments
