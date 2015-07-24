@@ -204,6 +204,11 @@ def generate_tcl(self, filename=None):
                   platform.device + "\n")
     tclfile.write("set_global_assignment -name PROJECT_OUTPUT_DIRECTORY " +
                   settings.projectpath + BINARYPROJECTPATH + "/\n")
+    platform_option = settings.active_project.platform.get_node("toolchain")
+    if platform_option:
+        for option in platform_option.get_nodes("option"):
+            tclfile.write("set_global_assignment -name " +
+                          option.name + " " + option.text + "\n")
     # tclfile.write("project set package "+platform.package+"\n")
     # tclfile.write("project set speed "+platform.speed+"\n")
     # tclfile.write("project set {Preferred Language} VHDL\n")
