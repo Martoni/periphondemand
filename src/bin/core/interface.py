@@ -161,6 +161,15 @@ class Interface(WrapperXml):
         return ((2 ** self.addr_port_size) * self.regstep)
 
     @property
+    def data_size(self):
+        """ Get bus size """
+        size = self.get_attr_value("data_size")
+        if size is None:
+            return self.bus.data_size
+        else:
+            return size
+
+    @property
     def bus_name(self):
         """ Get the bus name """
         return self.get_attr_value("bus")
@@ -397,4 +406,4 @@ class Interface(WrapperXml):
     @property
     def regstep(self):
         """ Step between two register """
-        return int(self.bus.data_size) / 8
+        return int(self.data_size) / 8
