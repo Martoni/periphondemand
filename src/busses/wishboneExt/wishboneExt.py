@@ -129,9 +129,15 @@ def architectureHead(masterinterface, intercon):
                        slave.interfacename + "_cs") +\
             " : std_logic := '0' ;\n"
         # slave readdata reconstruct to match master readdata
-        archead = archead + ONETAB + "signal " +\
-            "%-20s" % (slave.instancename + "_readdata_s") + \
-            " : std_logic_vector(" + str(data_size) + " downto 0);\n"
+        slaveit = slave.get_interface()
+        try:
+            slaveit.get_port_by_type(
+                bus.sig_name("slave", "dataout"))
+            archead = archead + ONETAB + "signal " +\
+                "%-20s" % (slave.instancename + "_readdata_s") + \
+                " : std_logic_vector(" + str(data_size) + " downto 0);\n"
+        except PodError:
+            pass
     archead = archead + "begin\n"
     return archead
 
@@ -437,6 +443,8 @@ def controlmaster(masterinterface, intercon):
         slaveinterfacename = slaveinterface.name
         slaveinstancename = slave.instancename
         try:
+            slaveinterface.get_port_by_type(
+                bus.sig_name("slave", "dataout"))
             dataoutname = slaveinstancename + "_readdata_s"
             out = out + " " + dataoutname
             out = out + " when " + slaveinstancename + "_" +\
@@ -484,8 +492,12 @@ def selectWrite(masterinterface, intercon):
 
     for slave in masterinterface.slaves:
         interface = slave.get_interface()
-        slave_bus_name = slave.get_instance().instancename + "_" + \
-            interface.get_port_by_type(bus.sig_name("slave", "dataout")).name
+        try:
+            slave_bus_name = slave.get_instance().instancename + "_" + \
+                interface.get_port_by_type(bus.sig_name("slave", "dataout")).name
+        except PodError:
+            continue
+
         data_size = int(interface.data_size)
         out = out + ONETAB + slave.instancename + "_readdata_s <= "
         if int(data_size) == int(master_size):
