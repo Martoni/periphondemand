@@ -114,9 +114,11 @@ def architectureHead(masterinterface, intercon):
 
     # create new data signal
     for size in data_size:
+        # all writedata used with mux to adapt size
         archead = archead + ONETAB + "signal " +\
             "%-20s" % ("writedata" + str(size) + "_s") + \
             " : std_logic_vector(" + str(size-1) + " downto 0);\n"
+    # local readdata with LSB added
     archead = archead + ONETAB + "signal " + \
         "%-20s" % ("wbm_address_s") + \
         " : std_logic_vector(" + addr_size + " downto 0);\n"
@@ -126,6 +128,7 @@ def architectureHead(masterinterface, intercon):
             "%-20s" % (slave.instancename + "_" +
                        slave.interfacename + "_cs") +\
             " : std_logic := '0' ;\n"
+        # slave readdata reconstruct to match master readdata
         archead = archead + ONETAB + "signal " +\
             "%-20s" % (slave.instancename + "_readdata_s") + \
             " : std_logic_vector(" + str(data_size) + " downto 0);\n"
