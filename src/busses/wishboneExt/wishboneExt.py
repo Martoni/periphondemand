@@ -84,11 +84,18 @@ def entity(intercon):
     return entity
 
 
-def getListSize(masterinterface):
+def get_list_slave_size(masterinterface, port_name=None):
+    bus = masterinterface.bus
     data_size = []
     for slave in masterinterface.slaves:
         for i in slave.get_instance().interfaces:
             if i.bus_name == "wishboneExt":
+                if port_name is not None:
+                    try:
+                        i.get_port_by_type(
+                            bus.sig_name("slave", port_name))
+                    except PodError:
+                        continue
                 data_size.append(int(i.data_size))
     return list(set(data_size))
 
@@ -97,7 +104,7 @@ def architectureHead(masterinterface, intercon):
     """ Generate the head architecture
     """
     addr_size = masterinterface.get_port_by_type("ADR").max_pin_num
-    data_size = getListSize(masterinterface)
+    data_size = get_list_slave_size(masterinterface, "datain")
     bus = masterinterface.bus
     masterinstance = masterinterface.parent
     masterinstancename = masterinstance.instancename
@@ -130,8 +137,6 @@ def genCaseByteEnable(masterinterface):
     out = ""
     bus = masterinterface.bus
 
-    data_size = getListSize(masterinterface)
-
     byte_en = masterinterface.get_port_by_type("BYE")
     byte_en_name = masterinterface.parent.instancename + "_" + byte_en.name
     byte_en_size = int(byte_en.real_size)
@@ -148,6 +153,8 @@ def genCaseByteEnable(masterinterface):
 
     masteraddressname = "wbm_address_s"
 
+    # writedata mux generation
+    data_size = get_list_slave_size(masterinterface, "datain")
     for size in data_size:
         nb_byte = size / 8
         mask = pow(2, nb_byte)-1
@@ -168,6 +175,8 @@ def genCaseByteEnable(masterinterface):
         out = out + ";\n\n"
 
     # addr reconstruct
+    data_size = get_list_slave_size(masterinterface)
+
     if len(data_size) == 1 and data_size[0] == master_size:
         out = out + ONETAB + masteraddressname + " <= " + addr_bus + ";\n"
     else:
