@@ -122,6 +122,7 @@ def architectureHead(masterinterface, intercon):
     archead = archead + ONETAB + "signal " + \
         "%-20s" % ("wbm_address_s") + \
         " : std_logic_vector(" + addr_size + " downto 0);\n"
+
     data_size = int(masterinterface.data_size)-1
     for slave in masterinterface.slaves:
         archead = archead + ONETAB + "signal " +\
@@ -138,6 +139,13 @@ def architectureHead(masterinterface, intercon):
                 " : std_logic_vector(" + str(data_size) + " downto 0);\n"
         except PodError:
             pass
+
+    # byte_en slave
+    for size in get_list_slave_size(masterinterface, "byteen"):
+        slavesize = int(masterinterface.data_size) / size
+        archead = archead + ONETAB + "signal " + \
+            "%-20s" % ("byte_enable" + str(size) + "_s") + \
+            " : std_logic_vector(" + str(slavesize-1) + " downto 0);\n"
     archead = archead + "begin\n"
     return archead
 
@@ -207,6 +215,48 @@ def genCaseByteEnable(masterinterface):
 
         out = out + "(others => '0');\n"
 
+    return out
+
+
+def gen_byte_enable(masterinterface):
+    out = ""
+    bus = masterinterface.bus
+    try:
+        master_bye = masterinterface.get_port_by_type(
+            masterinterface.bus.sig_name("master", "byteen"))
+    except PodError:
+        return out
+    master_bye_size = int(master_bye.real_size)
+    master_bye_name = master_bye.name
+
+    out = out + "\n" + ONETAB + \
+        "-- Byte enable muxing --\n" + \
+        ONETAB + "------------------------"
+    for slave_size in get_list_slave_size(masterinterface, "byteen"):
+        nb_byte = slave_size / 8
+        nb_iter = master_bye_size / nb_byte
+        out = out + "\n" + ONETAB + "byte_enable" + \
+            str(slave_size) + "_s <= "
+        for i in range(nb_iter):
+            out = out + master_bye_name + \
+                "(" + str((nb_byte * i) + nb_byte - 1) + \
+                " downto " + str(i * nb_byte) + ")"
+            if i < nb_iter - 1:
+                out = out + " or\n" + 2 * ONETAB
+        out = out + ";\n"
+
+    out = out + "\n"
+    for slave in masterinterface.slaves:
+        slave_it = slave.get_interface()
+        try:
+            slave_bye = slave_it.get_port_by_type(
+                bus.sig_name("slave", "byteen"))
+            out = out + ONETAB + \
+                slave.instancename + "_" + slave_bye.name + \
+                " <= byte_enable" + str(slave_it.data_size) + \
+                "_s;\n"
+        except PodError:
+            continue
     return out
 
 
@@ -543,6 +593,7 @@ def generate_intercon(masterinterface, intercon):
     VHDLcode = VHDLcode + entity(intercon)
     VHDLcode = VHDLcode + architectureHead(masterinterface, intercon)
     VHDLcode = VHDLcode + genCaseByteEnable(masterinterface)
+    VHDLcode = VHDLcode + gen_byte_enable(masterinterface)
     listslave = masterinterface.slaves
     listinterfacesyscon = []
     for slaveinstance in [slave.get_instance() for slave in listslave]:
