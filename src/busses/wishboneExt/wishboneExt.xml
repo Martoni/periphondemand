@@ -5,15 +5,12 @@
         <type name="RST" type="reset" dir="out" />
         <type name="CLK" type="clock" dir="out" />
         <type name="ADR" type="address"   dir="out" />
-        <type name="BUE" type="busen"   dir="out" />
-        <type name="BYE" type="byen"   dir="out" />
-        <type name="RW" type="rwn"   dir="out" />
+        <type name="BYE" type="byteen"   dir="out" />
         <type name="DAT_I" type="datain"  dir="in" />
         <type name="DAT_O" type="dataout" dir="out" />
-        <type name="ACK" type="ack"    dir="in" />
-        <type name="irq" type="irq"    dir="in" />
         <type name="WE"  type="write"  dir="out" />
         <type name="SEL" type="select" dir="out" />
+        <type name="ACK" type="ack"    dir="in" />
         <type name="CYC" type="cycle"  dir="out" />
         <type name="STB" type="strobe" dir="out" />
     </class>
@@ -23,6 +20,7 @@
         <type name="ADR"   type="address" dir="in" />
         <type name="DAT_I" type="datain"  dir="in" />
         <type name="DAT_O" type="dataout" dir="out" />
+        <type name="BYE" type="byteen"   dir="in" />
         <type name="WE"  type="write"  dir="in" />
         <type name="SEL" type="select" dir="in" />
         <type name="ACK" type="ack"    dir="out" />
