@@ -297,13 +297,13 @@ def generate_bitstream(self, commandname, scriptname):
             print "SHELL>" + line,
     try:
         sy.cp_file(SETTINGS.projectpath + OBJSPATH + "/" +
-                    BINARY_PREFIX + SETTINGS.active_project.name +
-                    XILINX_BITSTREAM_SUFFIX,
-                    SETTINGS.projectpath + BINARYPROJECTPATH + "/")
+                   BINARY_PREFIX + SETTINGS.active_project.name +
+                   XILINX_BITSTREAM_SUFFIX,
+                   SETTINGS.projectpath + BINARYPROJECTPATH + "/")
         sy.cp_file(SETTINGS.projectpath + OBJSPATH + "/" +
-                    BINARY_PREFIX + SETTINGS.active_project.name +
-                    XILINX_BINARY_SUFFIX,
-                    SETTINGS.projectpath + BINARYPROJECTPATH + "/")
+                   BINARY_PREFIX + SETTINGS.active_project.name +
+                   XILINX_BINARY_SUFFIX,
+                   SETTINGS.projectpath + BINARYPROJECTPATH + "/")
     except IOError:
         raise PodError("Can't copy bitstream")
     sy.chdir(pwd)

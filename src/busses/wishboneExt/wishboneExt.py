@@ -494,7 +494,8 @@ def selectWrite(masterinterface, intercon):
         interface = slave.get_interface()
         try:
             slave_bus_name = slave.get_instance().instancename + "_" + \
-                interface.get_port_by_type(bus.sig_name("slave", "dataout")).name
+                interface.get_port_by_type(
+                    bus.sig_name("slave", "dataout")).name
         except PodError:
             continue
 
