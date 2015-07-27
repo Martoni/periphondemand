@@ -105,6 +105,14 @@ class Port(WrapperXml):
         self.set_attr("dir", direction)
 
     @property
+    def is_hidden(self):
+        """ get port direction """
+        if self.get_attr_value("hidden") == "true":
+            return True
+        else:
+            return False
+
+    @property
     def unconnected_value(self):
         """ Get unconnected value """
         try:
