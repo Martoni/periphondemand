@@ -172,10 +172,10 @@ def generate_bitstream(self, commandname, scriptname):
         print(settings.projectpath + OBJSPATH + "/" +
               BINARY_PREFIX + settings.active_project.name +
               ALTERA_BITSTREAM_SUFFIX)
-        sy.copyFile(settings.projectpath + OBJSPATH + "/" +
-                    BINARY_PREFIX + settings.active_project.name +
-                    ALTERA_BITSTREAM_SUFFIX,
-                    settings.projectpath + BINARYPROJECTPATH + "/")
+        sy.cp_file(settings.projectpath + OBJSPATH + "/" +
+                   BINARY_PREFIX + settings.active_project.name +
+                   ALTERA_BITSTREAM_SUFFIX,
+                   settings.projectpath + BINARYPROJECTPATH + "/")
     except IOError:
         raise PodError("Can't copy bitstream")
     sy.chdir(pwd)
