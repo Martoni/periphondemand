@@ -37,6 +37,7 @@ from periphondemand.bin.define import COLOR_SHELL
 from periphondemand.bin.define import COLOR_END
 from periphondemand.bin.define import BINARY_PREFIX
 from periphondemand.bin.define import ALTERA_BITSTREAM_SUFFIX
+from periphondemand.bin.define import ALTERA_BINARY_SUFFIX
 from periphondemand.bin.define import BINARYPROJECTPATH
 
 from periphondemand.bin.utils.settings import Settings
