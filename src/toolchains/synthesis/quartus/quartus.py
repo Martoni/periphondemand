@@ -259,6 +259,17 @@ def launch_as_shell(self, commandname, option):
 def generate_bitstream(self, commandname, scriptname):
     """ generate the bitstream """
     default_path = self.get_synthesis_value("default_path")
+    rbf_commandname = default_path + "/" + \
+        self.get_synthesis_value("rbf")
+
+    result_file = settings.projectpath + BINARYPROJECTPATH + "/" + \
+        BINARY_PREFIX + settings.active_project.name + \
+        ALTERA_BITSTREAM_SUFFIX
+
+    cnv_result_file = settings.projectpath + BINARYPROJECTPATH + "/" + \
+        BINARY_PREFIX + settings.active_project.name + \
+        ALTERA_BINARY_SUFFIX
+
     pwd = sy.pwd()
     sy.del_all(settings.projectpath + OBJSPATH)
     sy.chdir(settings.projectpath + SYNTHESISPATH)
@@ -274,13 +285,12 @@ def generate_bitstream(self, commandname, scriptname):
                         SYNTHESISPATH + "/" + "imx6_sp_wrapper_qsys.tcl")
     launch_as_shell(self, commandname, scriptname)
     try:
-        print(settings.projectpath + OBJSPATH + "/" +
-              BINARY_PREFIX + settings.active_project.name +
-              ALTERA_BITSTREAM_SUFFIX)
-        sy.cp_file(settings.projectpath + OBJSPATH + "/" +
-                   BINARY_PREFIX + settings.active_project.name +
-                   ALTERA_BITSTREAM_SUFFIX,
-                   settings.projectpath + BINARYPROJECTPATH + "/")
+        output_format = settings.active_project.platform.output_format
+        commandarg = "-c " + result_file + " " + cnv_result_file
+        if output_format == "cvp":
+            launch_as_shell(self, rbf_commandname, "--cvp " + commandarg)
+        elif output_format == "rbf":
+            launch_as_shell(self, rbf_commandname, commandarg)
     except IOError:
         raise PodError("Can't copy bitstream")
     sy.chdir(pwd)
