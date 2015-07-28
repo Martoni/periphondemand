@@ -56,15 +56,16 @@ ONETAB = "    "
 
 
 def needqsys(self):
+    list_qsys_comp = []
     for component in self.parent.instances:
         qsys_node = component.get_nodes("qsys")
         if not (len(qsys_node) == 0):
-            return 1
-    return 0
+            list_qsys_comp.append(component)
+    return list_qsys_comp
 
 
-def generateQsysScript(self):
-    project_name = "imx6_sp_wrapper_qsys"
+def generateQsysScript(self, component):
+    project_name = component.name + "_qsys"
 
     platform = settings.active_project.platform
     out = "\n"
@@ -80,45 +81,43 @@ def generateQsysScript(self):
     out += "\n"
     out += "# instances and instance parameters\n"
 
-    for component in self.parent.instances:
-        qsys_node = component.get_nodes("qsys")
-        if not (len(qsys_node) == 0):
-            qsys_components = qsys_node[0].get_subnodes("qsys_components",
+    qsys_node = component.get_nodes("qsys")
+    qsys_components = qsys_node[0].get_subnodes("qsys_components",
                                                         "qsys_component")
-            for qsys_component in qsys_components:
-                instance_name = qsys_component.get_attr_value("instance_name")
-                out += "add_instance " + instance_name + \
-                    " " + qsys_component.get_attr_value("name") + "\n"
-                for parameter in qsys_component.get_nodes("parameter"):
-                    out += "set_instance_parameter_value " + instance_name + \
-                        " " + parameter.get_attr_value("name") + \
-                        " {" + parameter.text + "}\n"
+    for qsys_component in qsys_components:
+        instance_name = qsys_component.get_attr_value("instance_name")
+        out += "add_instance " + instance_name + \
+            " " + qsys_component.get_attr_value("name") + "\n"
+        for parameter in qsys_component.get_nodes("parameter"):
+            out += "set_instance_parameter_value " + instance_name + \
+                " " + parameter.get_attr_value("name") + \
+                " {" + parameter.text + "}\n"
 
-            out += "\n"
-            out += "# connections and connection parameters"
-            out += "\n"
-            qsys_connections = qsys_node[0].get_subnodes("connections",
+    out += "\n"
+    out += "# connections and connection parameters"
+    out += "\n"
+    qsys_connections = qsys_node[0].get_subnodes("connections",
                                                          "connection")
-            for connection in qsys_connections:
-                src_inst = connection.get_attr_value("src")
-                dest_inst = connection.get_attr_value("dest")
-                out += "add_connection " + src_inst + " " + dest_inst + "\n"
-                for parameter in connection.get_nodes("parameter"):
-                    out += "set_connection_parameter_value " + src_inst + \
-                        "/" + dest_inst + " " + parameter.get_attr_value("name") + \
-                        " {" + parameter.text + "}\n"
+    for connection in qsys_connections:
+        src_inst = connection.get_attr_value("src")
+        dest_inst = connection.get_attr_value("dest")
+        out += "add_connection " + src_inst + " " + dest_inst + "\n"
+        for parameter in connection.get_nodes("parameter"):
+            out += "set_connection_parameter_value " + src_inst + \
+                "/" + dest_inst + " " + parameter.get_attr_value("name") + \
+                " {" + parameter.text + "}\n"
 
-            out += "\n"
-            out += "# exported interfaces"
-            out += "\n"
+    out += "\n"
+    out += "# exported interfaces"
+    out += "\n"
 
-            exports = qsys_node[0].get_subnodes("exports", "export")
-            for export in exports:
-                export_name = export.get_attr_value("name")
-                out += "add_interface " + export_name + " " + \
-                    export.get_attr_value("type") + "\n"
-                out += "set_interface_property " + export_name + \
-                    " EXPORT_OF " + export.get_attr_value("src") + "\n"
+    exports = qsys_node[0].get_subnodes("exports", "export")
+    for export in exports:
+        export_name = export.get_attr_value("name")
+        out += "add_interface " + export_name + " " + \
+            export.get_attr_value("type") + "\n"
+        out += "set_interface_property " + export_name + \
+            " EXPORT_OF " + export.get_attr_value("src") + "\n"
 
     out += "\n"
     out += "# disabled instances\n"
@@ -232,10 +231,13 @@ def generate_tcl(self, filename=None):
                           SYNTHESISPATH + "/" + directory +
                           "/" + file + "\n")
 
-    if needqsys(self):
-        generateQsysScript(self)
-        tclfile.write("set_global_assignment -name QSYS_FILE " +
-                      ".." + SYNTHESISPATH + "/imx6_sp_wrapper_qsys.qsys\n")
+    list_qsys_comp = needqsys(self)
+    if len(list_qsys_comp):
+        for qsys_component in list_qsys_comp:
+            generateQsysScript(self, qsys_component)
+            tclfile.write("set_global_assignment -name QSYS_FILE " +
+                ".." + SYNTHESISPATH + "/" + qsys_component.name + \
+                "_qsys.qsys\n")
 
     tclfile.write(generatepinoutContent(self))
     # Commit assignments
@@ -276,15 +278,20 @@ def generate_bitstream(self, commandname, scriptname):
     sy.chdir(settings.projectpath + SYNTHESISPATH)
     commandname = commandname + " -t "
 
-    if needqsys(self):
+    list_qsys_comp = needqsys(self)
+    if len(list_qsys_comp):
         qsys_path = self.get_synthesis_value("qsys_path")
         qsys_script = self.get_synthesis_value("qsys_script")
         qsys_commandname = default_path + "/" + qsys_path + "/" + \
             qsys_script
-        launch_as_shell(self, qsys_commandname,
-                        " --script=" + settings.projectpath +
-                        SYNTHESISPATH + "/" + "imx6_sp_wrapper_qsys.tcl")
+        for component in list_qsys_comp:
+            launch_as_shell(self, qsys_commandname,
+                            " --script=" + settings.projectpath +
+                            SYNTHESISPATH + "/" + \
+                            component.name + "_qsys.tcl")
+
     launch_as_shell(self, commandname, scriptname)
+
     try:
         output_format = settings.active_project.platform.output_format
         commandarg = "-c " + result_file + " " + cnv_result_file
