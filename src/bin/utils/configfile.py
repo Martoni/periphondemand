@@ -125,6 +125,19 @@ class ConfigFile(WrapperXml):
                            " doesn't exist in .podrc")
         return command_name
 
+    def get_synthesis_value(self, synthesis_name, value):
+        """ Return the path to synthesis command """
+        try:
+            tools = self.get_node("tools").get_nodes("tool")
+        except AttributeError, error:
+            raise PodError("No synthesis command in .podrc. (" +
+                           str(error) + ")")
+        for anode in tools:
+            if (anode.get_attr_value(key="name") == synthesis_name):
+                result = anode.get_attr_value(key=value)
+                break
+        return result
+
     def savefile(self):
         """ Write configuration file """
         self.configfile = open(self.filename, "w")
