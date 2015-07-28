@@ -202,6 +202,8 @@ def generate_tcl(self, filename=None):
                   platform.family + "\"\n")
     tclfile.write("set_global_assignment -name DEVICE " +
                   platform.device + "\n")
+    tclfile.write("set_global_assignment -name PROJECT_OUTPUT_DIRECTORY " +
+                  settings.projectpath + BINARYPROJECTPATH + "/\n")
     # tclfile.write("project set package "+platform.package+"\n")
     # tclfile.write("project set speed "+platform.speed+"\n")
     # tclfile.write("project set {Preferred Language} VHDL\n")
