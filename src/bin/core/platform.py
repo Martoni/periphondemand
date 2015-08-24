@@ -174,6 +174,26 @@ class Platform(Component):
         """ get main clock """
         return self.get_node("fpga").get_attr_value("main_clock")
 
+    @property
+    def clocks(self):
+        """ get list of clocks and frequency """
+        output_clk_list = []
+        list_clocks = self.get_subnodes("clocks", "clock")
+        for clock in list_clocks:
+            for interface in self.interfaces:
+                try:
+                    port = interface.get_port(clock.name)
+                    pin_conn = port.get_pin(0).connections[0]
+                    pin_name = pin_conn["instance_dest"] + "_" + \
+                        pin_conn["port_dest"]
+                    output_clk_list.append(
+                        {"name": pin_name,
+                         "frequency":
+                         str(clock.get_attr_value("frequency"))})
+                except PodError:
+                    continue
+        return output_clk_list
+
     @classmethod
     def is_platform(cls):
         """ is it a platform instance ? """
