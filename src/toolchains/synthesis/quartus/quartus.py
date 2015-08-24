@@ -83,7 +83,7 @@ def generateQsysScript(self, component):
 
     qsys_node = component.get_nodes("qsys")
     qsys_components = qsys_node[0].get_subnodes("qsys_components",
-                                                        "qsys_component")
+                                                "qsys_component")
     for qsys_component in qsys_components:
         instance_name = qsys_component.get_attr_value("instance_name")
         out += "add_instance " + instance_name + \
@@ -97,7 +97,7 @@ def generateQsysScript(self, component):
     out += "# connections and connection parameters"
     out += "\n"
     qsys_connections = qsys_node[0].get_subnodes("connections",
-                                                         "connection")
+                                                 "connection")
     for connection in qsys_connections:
         src_inst = connection.get_attr_value("src")
         dest_inst = connection.get_attr_value("dest")
@@ -236,8 +236,8 @@ def generate_tcl(self, filename=None):
         for qsys_component in list_qsys_comp:
             generateQsysScript(self, qsys_component)
             tclfile.write("set_global_assignment -name QSYS_FILE " +
-                ".." + SYNTHESISPATH + "/" + qsys_component.name + \
-                "_qsys.qsys\n")
+                          ".." + SYNTHESISPATH + "/" +
+                          qsys_component.name + "_qsys.qsys\n")
 
     tclfile.write(generatepinoutContent(self))
     # Commit assignments
@@ -287,7 +287,7 @@ def generate_bitstream(self, commandname, scriptname):
         for component in list_qsys_comp:
             launch_as_shell(self, qsys_commandname,
                             " --script=" + settings.projectpath +
-                            SYNTHESISPATH + "/" + \
+                            SYNTHESISPATH + "/" +
                             component.name + "_qsys.tcl")
 
     launch_as_shell(self, commandname, scriptname)
