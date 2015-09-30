@@ -112,6 +112,7 @@ class Settings(object):
         return self.configfile.get_synthesis_tool_command(synthesisname)
 
     def get_synthesis_value(self, syntesisname, value):
+        """ Get the synthesis value """
         return self.configfile.get_synthesis_value(syntesisname, value)
 
     components_dir = property(lambda self: self.get_directory("components"))

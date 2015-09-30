@@ -77,7 +77,7 @@ class TopVHDL(TopGen):
                 interfacename = port.parent.name
                 instancename = port.parent.parent.instancename
 
-                if port.is_hidden == 1:
+                if port.is_hidden:
                     continue
                 out = out + ONETAB + "-- " + instancename +\
                     "-" + interfacename + "\n"
@@ -197,7 +197,7 @@ class TopVHDL(TopGen):
             for interface in component.interfaces:
                 out = out + ONETAB * 3 + "-- " + interface.name + "\n"
                 for port in interface.ports:
-                    if port.is_hidden == 1:
+                    if port.is_hidden:
                         continue
                     out = out + ONETAB * 3 +\
                         port.name +\
@@ -232,7 +232,7 @@ class TopVHDL(TopGen):
                 out = out + ONETAB + "-- " + interface.name + "\n"
 
                 for port in interface.ports:
-                    if port.is_hidden == 1:
+                    if port.is_hidden:
                         continue
                     if port in incomplete_external_ports_list:
                         continue
@@ -295,7 +295,7 @@ class TopVHDL(TopGen):
 
                     out = out + ONETAB * 3 + "-- " + interface.name + "\n"
                     for port in interface.ports:
-                        if port.is_hidden == 1:
+                        if port.is_hidden:
                             continue
                         out = out + ONETAB * 3 + port.name + " => "
                         if len(port.pins) != 0:
@@ -338,7 +338,7 @@ class TopVHDL(TopGen):
         out = out + ONETAB + "--  Set forces   --\n"
         out = out + ONETAB + "-------------------\n"
         for port in portlist:
-            if port.is_hidden == 1:
+            if port.is_hidden:
                 continue
             if port.force_defined():
                 if port.force == "gnd":
@@ -423,7 +423,7 @@ class TopVHDL(TopGen):
         platformname = platform.instancename
         # connect incomplete_external_ports_list
         for port in incomplete_external_ports_list:
-            if port.is_hidden == 1:
+            if port.is_hidden:
                 continue
             if not port.force_defined():
                 portname = port.name

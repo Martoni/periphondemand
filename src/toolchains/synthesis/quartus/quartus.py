@@ -271,8 +271,8 @@ def generate_tcl(self, filename=None):
         for qsys_component in list_qsys_comp:
             generateQsysScript(self, qsys_component)
             tclfile.write("set_global_assignment -name QSYS_FILE " +
-                          ".." + SYNTHESISPATH + "/" +
-                          qsys_component.name + "_qsys.qsys\n")
+                          ".." + SYNTHESISPATH + "/" + qsys_component.name +
+                          "_qsys.qsys\n")
 
     tclfile.write(generatepinoutContent(self))
     # Commit assignments

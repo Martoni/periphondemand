@@ -108,9 +108,9 @@ class Port(WrapperXml):
     def is_hidden(self):
         """ get port direction """
         if self.get_attr_value("hidden") == "true":
-            return 1
+            return True
         else:
-            return 0
+            return False
 
     @property
     def unconnected_value(self):

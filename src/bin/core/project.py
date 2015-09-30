@@ -300,12 +300,14 @@ class Project(WrapperXml):
     def add_component_lib(self, path):
         """ Adding a component library under the project """
         if sy.dir_exist(path):
+            # TODO: adding node management in Library add_library() method
             if self.get_node("componentslibs") is None:
                 self.add_node(nodename="componentslibs")
             self.add_subnode(nodename="componentslibs",
                              subnodename="componentslib",
                              attributename="path",
                              value=path)
+            SETTINGS.active_library.add_library(path)
             self.save()
         else:
             raise PodError("ComponentsLib directory " +
