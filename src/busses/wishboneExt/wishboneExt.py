@@ -312,7 +312,7 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
     mastersizeaddr = masterinterface.addr_port_size
 
     out = ONETAB + "-----------------------\n"
-    out = "\n" + ONETAB + "-- Address decoding  --\n"
+    out = out + "\n" + ONETAB + "-- Address decoding  --\n"
     out = out + ONETAB + "-----------------------\n"
     for slave in masterinterface.slaves:
         slaveinstance = slave.get_instance()
