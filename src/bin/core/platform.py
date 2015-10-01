@@ -160,6 +160,11 @@ class Platform(Component):
         return self.get_node("fpga").get_attr_value("package")
 
     @property
+    def pin_count(self):
+        """ get package pin_count """
+        return self.get_node("fpga").get_attr_value("pin_count")
+
+    @property
     def speed(self):
         """ get speed """
         return self.get_node("fpga").get_attr_value("speed")
