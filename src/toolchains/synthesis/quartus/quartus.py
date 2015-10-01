@@ -282,8 +282,9 @@ def generate_tcl(self, filename=None):
         tclfile.write("set_global_assignment -name DEVICE_FILTER_PIN_COUNT " +
                       platform.pin_count + "\n")
     if platform.speed:
-        tclfile.write("set_global_assignment -name DEVICE_FILTER_SPEED_GRADE " +
-                      platform.speed + "\n")
+        tclfile.write(
+            "set_global_assignment -name DEVICE_FILTER_SPEED_GRADE " +
+            platform.speed + "\n")
     tclfile.write(generatepinoutContent(self))
     # Commit assignments
     tclfile.write("export_assignments\n")
