@@ -183,13 +183,14 @@ class Platform(Component):
             for interface in self.interfaces:
                 try:
                     port = interface.get_port(clock.name)
-                    pin_conn = port.get_pin(0).connections[0]
-                    pin_name = pin_conn["instance_dest"] + "_" + \
-                        pin_conn["port_dest"]
-                    output_clk_list.append(
-                        {"name": pin_name,
-                         "frequency":
-                         str(clock.get_attr_value("frequency"))})
+                    if port.get_pin(0).connections != []:
+                        pin_conn = port.get_pin(0).connections[0]
+                        pin_name = pin_conn["instance_dest"] + "_" + \
+                            pin_conn["port_dest"]
+                        output_clk_list.append(
+                            {"name": pin_name,
+                            "frequency":
+                            str(clock.get_attr_value("frequency"))})
                 except PodError:
                     continue
         return output_clk_list
