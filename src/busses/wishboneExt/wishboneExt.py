@@ -355,6 +355,7 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
             slaveinterface.name + "_cs"
         slavesizeaddr = slave.get_interface().addr_port_size
         slavebase_address = slaveinterface.base_addr
+        slavebase_size = int(math.log(int(slaveinterface.data_size) / 8, 2))
         if slavesizeaddr > 0:
             slaveaddressport = slave.get_interface().get_port_by_type(
                 bus.sig_name("slave", "address"))
@@ -362,11 +363,11 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
                 slaveaddressport.name
 
         out = out + "\n"
-        out = out + ONETAB*3 + "if " + masteraddressname + "(" +\
-            str(int(mastersizeaddr-1)) + " downto " + str(slavesizeaddr + 1) +\
-            ')="' +\
+        out = out + ONETAB*3 + "if " + masteraddressname + "(" + \
+            str(int(mastersizeaddr-1)) + " downto " + \
+            str(slavesizeaddr + slavebase_size) + ')="' + \
             sy.inttobin(slavebase_address,
-                        int(mastersizeaddr))[:-(slavesizeaddr + 1)] +\
+                        int(mastersizeaddr))[:-(slavesizeaddr + slavebase_size)] +\
             '"' + " and " + masterstrobename + "='1' then\n"
 
         out = out + ONETAB * 4 + chipselectname + " <= '1';\n"
