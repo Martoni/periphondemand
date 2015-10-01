@@ -206,7 +206,7 @@ class Port(WrapperXml):
             generic = self.parent.parent.get_generic(str(size))
             value = generic.get_attr_value("value")
             return value
-    
+
     @property
     def frequency(self):
         """ Get a frequency for this port (if it's clock port) """

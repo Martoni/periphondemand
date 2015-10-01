@@ -194,8 +194,8 @@ class Platform(Component):
                             pin_conn["port_dest"]
                         output_clk_list.append(
                             {"name": pin_name,
-                            "frequency":
-                            str(clock.get_attr_value("frequency"))})
+                             "frequency":
+                             str(clock.get_attr_value("frequency"))})
                 except PodError:
                     continue
         return output_clk_list
