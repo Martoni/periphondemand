@@ -74,7 +74,7 @@ synthesis commands
             print(str(error))
             return
 
-        cli = SynthesisCli(self)
+        cli = SynthesisCli(self, self._project)
         cli.setPrompt("synthesis")
         arg = str(arg)
         if len(arg) > 0:
@@ -98,7 +98,7 @@ Simulation generation environment
             return
 
         # test if only one toolchain for simulation in library
-        cli = SimulationCli(self)
+        cli = SimulationCli(self, self._project)
         cli.setPrompt("simulation")
         line = str(line)
         if len(line) > 0:
@@ -122,7 +122,7 @@ Driver generation environment
             return
 
         # test if only one toolchain for simulation in library
-        cli = DriverCli(self)
+        cli = DriverCli(self, self._project)
         cli.setPrompt("driver")
         line = str(line)
         if len(line) > 0:
