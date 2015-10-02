@@ -39,10 +39,11 @@ class BaseCli(cmd.Cmd):
     default_extension = 'txt'
     old_completer = None
 
-    def __init__(self, parent=None, *args, **kwargs):
+    def __init__(self, parent=None, project=None, *args, **kwargs):
         cmd.Cmd.__init__(self, *args, **kwargs)
         self.parent = parent
         SETTINGS.history = SETTINGS.history[:-1]
+        self._project = project
 
         if parent is None:
             self.setPrompt(BASE_PROMPT)
@@ -348,7 +349,7 @@ fpga_attributes    : give list of fpga attributes in platform
             if listargs[0][0] == "masterinstancename" or\
                listargs[0][0] == "slaveinstancename" or\
                listargs[0][0] == "instancename":
-                instance = SETTINGS.active_project.get_instance(listargs[0][1])
+                instance = self._project.get_instance(listargs[0][1])
                 instancename = instance.instancename
             elif listargs[0][0] == "platformlib":
                 platformlib = listargs[0][1]
@@ -376,14 +377,14 @@ fpga_attributes    : give list of fpga attributes in platform
         if subargt == "masterinstancename":
             return [interface.parent.instancename
                     for interface in
-                    SETTINGS.active_project.interfaces_master]
+                    self._project.interfaces_master]
         elif subargt == "slaveinstancename":
             return [interface.parent.instancename
                     for interface in
-                    SETTINGS.active_project.interfaces_slave]
+                    self._project.interfaces_slave]
         elif subargt == "instancename":
             return [instance.instancename
-                    for instance in SETTINGS.active_project.instances]
+                    for instance in self._project.instances]
         elif subargt == "interfacename":
             return ["" + instancename + "." + interface.name
                     for interface in instance.interfaces]
@@ -401,7 +402,7 @@ fpga_attributes    : give list of fpga attributes in platform
                     "." + portname + "." + str(i)
                     for i in range(int(port.size))]
         elif subargt == "libraryname":
-            arglist = SETTINGS.active_project.library.libraries
+            arglist = self._project.library.libraries
             return arglist
 
         elif subargt == "platformlib":
@@ -411,7 +412,7 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "forcename":
             arglist = ["" + port.name
                        for port in
-                       SETTINGS.active_project.platform.platform_ports]
+                       self._project.platform.platform_ports]
             return arglist
         elif subargt == "forcestate":
             return ["gnd", "vcc", "undef"]
@@ -434,18 +435,18 @@ fpga_attributes    : give list of fpga attributes in platform
                 # libraryname = SETTINGS.active_library.lib_name
                 # return [componentname + "." + version
                 #         for version in
-                #         SETTINGS.active_project.get_components_versions(
+                #         self._project.get_components_versions(
                 #             libraryname, componentname)]
             return [libraryname + "." + componentname + "." + comp
                     for comp in
-                    SETTINGS.active_project.get_components_versions(
+                    self._project.get_components_versions(
                         libraryname, componentname)]
 
         elif subargt == "platformname":
             if platformlib == "standard":
                 return ["standard." + name
                         for name in
-                        SETTINGS.active_project.availables_plat()]
+                        self._project.availables_plat()]
             else:
                 return [platformlib + "." + name
                         for name in
@@ -457,17 +458,17 @@ fpga_attributes    : give list of fpga attributes in platform
                     for generic in instance.generics]
 
         elif subargt == "simulationtoolchain":
-            return SETTINGS.active_project.get_simulation_toolchains()
+            return self._project.get_simulation_toolchains()
 
         elif subargt == "synthesistoolchain":
-            return SETTINGS.active_project.get_synthesis_toolchains()
+            return self._project.get_synthesis_toolchains()
         elif subargt == "drivertoolchain":
-            return SETTINGS.active_project.get_driver_toolchains()
+            return self._project.get_driver_toolchains()
         elif subargt == "IO_name":
             return [port.name for port in
-                    SETTINGS.active_project.get_ios()]
+                    self._project.get_ios()]
         elif subargt == "fpga_attributes":
-            platform = SETTINGS.active_project.platform
+            platform = self._project.platform
             return platform.get_attr_names("fpga")
         else:
             return []
@@ -520,7 +521,7 @@ fpga_attributes    : give list of fpga attributes in platform
 
     def isPlatformSelected(self):
         """ check if platform is selected, if not raise error """
-        SETTINGS.active_project.platform
+        self._project.platform
 
     def do_history(self, args):
         """ history
