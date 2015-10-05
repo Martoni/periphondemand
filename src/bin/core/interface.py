@@ -46,7 +46,7 @@ class Interface(WrapperXml):
             __init__(self,parent,nodestring)
         """
 
-        self.parent = parent
+        self._parent = parent
 
         if "name" in keys:
             WrapperXml.__init__(self, nodename="interface")
@@ -380,6 +380,16 @@ class Interface(WrapperXml):
             if register.name == registername:
                 return register
         raise PodError("No register with name " + registername, 0)
+
+    @property
+    def parent(self):
+        """ return parent instance """
+        return self._parent
+
+    @parent.setter
+    def parent(self, parent):
+        """ set parent instance """
+        self._parent = parent
 
     @property
     def registers(self):
