@@ -225,9 +225,9 @@ class Pin(WrapperXml):
 
             if instance_dest.is_platform() is True:
                 pin_dest = instance_dest.get_interface(
-                        connection["interface_dest"]).get_port(
-                            connection["port_dest"]).get_pin(
-                                connection["pin_dest"])
+                    connection["interface_dest"]).get_port(
+                        connection["port_dest"]).get_pin(
+                            connection["pin_dest"])
                 pindest_list.append(pin_dest)
         self.del_connections_forces()
         for pin_dest in pindest_list:
