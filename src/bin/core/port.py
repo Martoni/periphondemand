@@ -345,6 +345,9 @@ class Port(WrapperXml):
         for pin in self.pins:
             pin.autoconnect_pin()
 
+    def get_instance(self, instancename):
+        return self.parent.get_instance(instancename)
+
     @property
     def dest_port(self):
         """ get destination port connected to this port
