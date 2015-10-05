@@ -125,7 +125,7 @@ class Project(WrapperXml):
         if(components):
             for node in components.get_nodes("component"):
                 if node.get_attr_value("platform") is None:
-                    comp = Component()
+                    comp = Component(self)
                 else:
                     comp = Platform(self, node=self.get_node("platform"))
                 try:
@@ -369,7 +369,7 @@ class Project(WrapperXml):
             if (componentname == instancename):
                 raise PodError("Instance name can't be the" +
                                "same as component name", 0)
-            comp = Component()
+            comp = Component(self)
             comp.load_new_instance(libraryname, componentname,
                                    componentversion, instancename)
             comp.num = str(len(
@@ -660,7 +660,7 @@ class Project(WrapperXml):
 
         instance = self.get_instance(interfacedict["instance"])
         interface = instance.get_interface(interfacedict["interface"])
-        intercon = Intercon(interface)
+        intercon = Intercon(self, interface)
         self.add_instance(component=intercon)
         self.save()
 
