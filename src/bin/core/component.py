@@ -43,7 +43,7 @@ class Component(WrapperXml):
 
     """
 
-    def __init__(self, node=None, afile=None):
+    def __init__(self, parent, node=None, afile=None):
         """ Init Component,
             __init__(self)
         """
@@ -63,7 +63,7 @@ class Component(WrapperXml):
         self._constraintslist = []
 
         # Project that use the component
-        self.parent = SETTINGS.active_project
+        self.parent = parent
         self.void = 0
 
     def load_new_instance(self, libraryname, componentname,

@@ -45,9 +45,9 @@ class Platform(Component):
             __init__(self, parent, file)
         """
         if "node" in keys:
-            Component.__init__(self, node=keys["node"])
+            Component.__init__(self, parent, node=keys["node"])
         elif "file" in keys:
-            Component.__init__(self, afile=keys["file"])
+            Component.__init__(self, parent, afile=keys["file"])
         else:
             raise PodError("Keys unknown in Platform constructor", 0)
 
