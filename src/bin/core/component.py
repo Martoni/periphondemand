@@ -322,6 +322,10 @@ class Component(WrapperXml):
         if dirname == "inout":
             return "inout"
 
+    def get_instance(self, instancename):
+        """ get the parent instance of this interface """
+        return self.parent.get_instance(instancename)
+
     def del_pin(self, instancedest, interfacedest=None, portdest=None,
                 pindest=None, interfacesource=None, portsource=None,
                 pinsource=None):
