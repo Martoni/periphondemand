@@ -12,3 +12,4 @@ generatetop
 synthesis.selecttoolchain quartus
 synthesis.generateproject
 synthesis.generatebitstream
+exit
