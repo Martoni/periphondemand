@@ -84,6 +84,7 @@ class Project(WrapperXml):
             else:
                 SETTINGS.projectpath = projectpathname
             SETTINGS.author = ""
+            SETTINGS.active_project = self
             name = os.path.basename(projectpathname)
             if sy.file_exist(projectpathname):
                 self.load_project(projectpathname)
@@ -378,7 +379,7 @@ class Project(WrapperXml):
 
         # Add component to project
         self._instanceslist.append(comp)
-        if comp.name != "platform":
+        if comp.is_platform() is False:
             self.add_subnode(nodename="components",
                              subnodename="component",
                              attributename="name",
