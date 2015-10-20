@@ -39,6 +39,15 @@ class test_launcher(unittest.TestCase):
         self.assertTrue(os.path.isfile("apf27uartgpio/objs/top_apf27uartgpio.bit"))
         os.system("rm -rf  apf27uartgpio")
 
+    def test_apf6_wbextvalidation(self):
+        """ testing apf6_wbextvaldation script"""
+        os.system("rm -rf  apf6_validation")
+        with self.assertRaises(SystemExit):
+            pod.main(['pod', '-s', 'functionals_tests/apf6_wbextvalidation.pod'])
+        self.assertTrue(os.path.isfile("apf6_wbextvalidation/binaries/top_test_apf6_wbextvalidation.core.rbf"))
+        self.assertTrue(os.path.isfile("apf6_wbextvalidation/binaries/top_test_apf6_wbextvalidation.periph.rbf"))
+        os.system("rm -rf  apf6_validation")
+
 
 if __name__ == "__main__":
     print "Functionnals tests launcher"
