@@ -113,16 +113,19 @@ class ConfigFile(WrapperXml):
         except AttributeError, error:
             raise PodError("No synthesis command in .podrc. (" +
                            str(error) + ")")
+        command_name = None
         for anode in tools:
             if (anode.get_attr_value(key="name") == synthesisName):
                 command_name = anode.get_attr_value(key="command")
                 command_path = anode.get_attr_value(key="default_path")
                 command_name = command_path + "/" + command_name
                 break
+        if command_name is None:
+            raise PodError("No synthesis tool command in .podrc for " +
+                           synthesisName)
         if not sy.cmd_exist(command_name):
-            raise PodError("Synthesis tool tcl shell command named " +
-                           command_name +
-                           " doesn't exist in .podrc")
+            raise PodError("Synthesis tool command named " +
+                           command_name + " doesn't exist in your PATH")
         return command_name
 
     def get_synthesis_value(self, synthesis_name, value):
