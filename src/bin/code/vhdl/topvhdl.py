@@ -47,8 +47,7 @@ class TopVHDL(TopGen):
     def __init__(self, project):
         TopGen.__init__(self, project)
 
-    @classmethod
-    def header(cls):
+    def header(self):
         """ return vhdl header
         """
         header = open(SETTINGS.path + TEMPLATESPATH +
@@ -57,10 +56,10 @@ class TopVHDL(TopGen):
         header = header.replace("$tpl:date$", str(datetime.date.today()))
         header = header.replace("$tpl:filename$",
                                 "Top_" +
-                                SETTINGS.active_project.name + ".vhd")
+                                self.project.name + ".vhd")
         header = header.replace(
             "$tpl:abstract$",
-            SETTINGS.active_project.description)
+            self.project.description)
         return header
 
     def entity(self, entityname, portlist):

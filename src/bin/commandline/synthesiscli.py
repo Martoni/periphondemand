@@ -41,8 +41,8 @@ DISPLAY = Display()
 class SynthesisCli(BaseCli):
     """ Manage synthesis command line environment """
 
-    def __init__(self, parent):
-        BaseCli.__init__(self, parent)
+    def __init__(self, parent, project=None):
+        BaseCli.__init__(self, parent, project)
 
     def complete_selecttoolchain(self, text, line, begidx, endidx):
         """ Select toolchain completion """
@@ -68,19 +68,19 @@ select toolchain used for simulation
             return
 
         if line.strip() == "":
-            if len(SETTINGS.active_project.get_synthesis_toolchains()) == 1:
-                SETTINGS.active_project.synthesis_toolchain =\
-                    SETTINGS.active_project.get_synthesis_toolchains()[0]
+            if len(self._project.get_synthesis_toolchains()) == 1:
+                self._project.synthesis_toolchain =\
+                    self._project.get_synthesis_toolchains()[0]
             else:
-                if SETTINGS.active_project.synthesis_toolchain is None:
+                if self._project.synthesis_toolchain is None:
                     print("Choose a toolchain\n")
                     for toolchain in\
-                            SETTINGS.active_project.get_synthesis_toolchains():
+                            self._project.get_synthesis_toolchains():
                         print(str(toolchain))
                     return
         else:
             try:
-                SETTINGS.active_project.synthesis_toolchain = line
+                self._project.synthesis_toolchain = line
             except PodError, error:
                 print(str(error))
                 return
@@ -114,31 +114,30 @@ generate the project for synthesis tool
             except PodError, error:
                 print(str(error))
                 return
-        elif SETTINGS.active_project.synthesis is None:
+        elif self._project.synthesis is None:
             print(str(PodError("Toolchain must be selected before")))
             return
 
         # generate project
         try:
-            SETTINGS.active_project.synthesis.generate_project()
+            self._project.synthesis.generate_project()
             print(str(DISPLAY))
-            SETTINGS.active_project.synthesis.generate_pinout(None)
+            self._project.synthesis.generate_pinout(None)
             print(str(DISPLAY))
-            SETTINGS.active_project.synthesis.generate_tcl(None)
+            self._project.synthesis.generate_tcl(None)
         except PodError, error:
             print(str(error))
             return
         print(str(DISPLAY))
 
-    @classmethod
-    def do_generatetcl(cls, line):
+    def do_generatetcl(self, line):
         """\
 Usage : generatetcl [filename]
 Made a tcl script for synthesis,tools supported are:
 ise
         """
 
-        if SETTINGS.active_project.synthesis is None:
+        if self._project.synthesis is None:
             print PodError("Select toolchain before")
             return
         if line.strip() != "":
@@ -147,7 +146,7 @@ ise
         else:
             filename = None
         try:
-            SETTINGS.active_project.synthesis.generate_tcl(filename)
+            self._project.synthesis.generate_tcl(filename)
         except PodError, error:
             print(str(error))
             return
@@ -159,7 +158,7 @@ Usage : generatepinout [filename]
 generate ucf file, tool supported are :
 ise
         """
-        if SETTINGS.active_project.synthesis is None:
+        if self._project.synthesis is None:
             print(str(PodError("Select toolchain before")))
             return
         if line.strip() != "":
@@ -168,7 +167,7 @@ ise
         else:
             filename = None
         try:
-            SETTINGS.active_project.synthesis.generate_pinout(filename)
+            self._project.synthesis.generate_pinout(filename)
         except PodError, error:
             print(str(error))
             return
@@ -180,11 +179,11 @@ Usage : generatebitstream
 generate the bitstream for fpga configuration
         """
         del line
-        if SETTINGS.active_project.synthesis is None:
+        if self._project.synthesis is None:
             print PodError("Select toolchain before")
             return
         try:
-            SETTINGS.active_project.synthesis.generate_bitstream()
+            self._project.synthesis.generate_bitstream()
         except PodError, error:
             print(str(error))
             return
@@ -216,7 +215,7 @@ set IO standard value
         io_name = arg[0]
         standard_value = arg[1]
         try:
-            SETTINGS.active_project.get_io(io_name).standard = standard_value
+            self._project.get_io(io_name).standard = standard_value
         except PodError, error:
             print(str(DISPLAY))
             print(str(error))
@@ -247,7 +246,7 @@ get IO standard value
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print SETTINGS.active_project.get_io(io_name).standard
+            print self._project.get_io(io_name).standard
         except PodError, error:
             print DISPLAY
             print error
@@ -280,7 +279,7 @@ set IO standard value
         io_name = arg[0]
         port_option_value = arg[1]
         try:
-            SETTINGS.active_project.get_io(
+            self._project.get_io(
                 io_name).port_option = port_option_value
         except PodError, error:
             print(str(DISPLAY))
@@ -312,7 +311,7 @@ get IO Port option value
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print SETTINGS.active_project.get_io(io_name).port_option
+            print self._project.get_io(io_name).port_option
         except PodError, error:
             print DISPLAY
             print error
@@ -345,7 +344,7 @@ set IO drive value
         io_name = arg[0]
         drive_value = arg[1]
         try:
-            SETTINGS.active_project.get_io(io_name).drive = drive_value
+            self._project.get_io(io_name).drive = drive_value
         except PodError, error:
             print(str(DISPLAY))
             print(str(error))
@@ -376,7 +375,7 @@ get IO drive value
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print SETTINGS.active_project.get_io(io_name).drive
+            print self._project.get_io(io_name).drive
         except PodError, error:
             print(str(DISPLAY))
             print(str(error))
@@ -409,7 +408,7 @@ Set fpga attributes
         att_name = arg[0]
         att_value = arg[1]
         try:
-            platform = SETTINGS.active_project.platform
+            platform = self._project.platform
             platform.set_attr(att_name, att_value, "fpga")
         except PodError, error:
             print(str(DISPLAY))
@@ -442,7 +441,7 @@ get fpga attributes values
         arg = line.split(' ')
         att_name = arg[0]
         try:
-            platform = SETTINGS.active_project.platform
+            platform = self._project.platform
             print(str(platform.get_attr_value(att_name, "fpga")))
         except PodError, error:
             print(str(DISPLAY))

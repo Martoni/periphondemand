@@ -37,13 +37,13 @@ DISPLAY = Display()
 class Intercon(Component):
     """ Generate Intercon component """
 
-    def __init__(self, masterinterface):
+    def __init__(self, parent, masterinterface):
         """ Init fonction
         """
         masterinstancename = masterinterface.parent.instancename
         masterinterfacename = masterinterface.name
 
-        Component.__init__(self)
+        Component.__init__(self, parent)
         self.interfaceslist = []
         self.add_node(nodename="component")
 

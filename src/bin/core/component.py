@@ -43,7 +43,7 @@ class Component(WrapperXml):
 
     """
 
-    def __init__(self, node=None, afile=None):
+    def __init__(self, parent, node=None, afile=None):
         """ Init Component,
             __init__(self)
         """
@@ -63,7 +63,7 @@ class Component(WrapperXml):
         self._constraintslist = []
 
         # Project that use the component
-        self.parent = SETTINGS.active_project
+        self.parent = parent
         self.void = 0
 
     def load_new_instance(self, libraryname, componentname,
@@ -321,6 +321,10 @@ class Component(WrapperXml):
             return "in"
         if dirname == "inout":
             return "inout"
+
+    def get_instance(self, instancename):
+        """ get the parent instance of this interface """
+        return self.parent.get_instance(instancename)
 
     def del_pin(self, instancedest, interfacedest=None, portdest=None,
                 pindest=None, interfacesource=None, portsource=None,

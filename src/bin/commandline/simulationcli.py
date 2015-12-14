@@ -40,8 +40,8 @@ class SimulationCli(BaseCli):
     """ Commands line for simulation environment
     """
 
-    def __init__(self, parent=None):
-        BaseCli.__init__(self, parent)
+    def __init__(self, parent=None, project=None):
+        BaseCli.__init__(self, parent, project)
 
     def complete_selecttoolchain(self, text, line, begidx, endidx):
         """ selecttoolchain command completion """
@@ -65,20 +65,20 @@ select toolchain used for simulation
             return
 
         if line.strip() == "":
-            if len(SETTINGS.active_project.get_simulation_toolchains()) == 1:
-                SETTINGS.active_project.simulation_toolchain =\
-                    SETTINGS.active_project.get_simulation_toolchains()[0]
+            if len(self._project.get_simulation_toolchains()) == 1:
+                self._project.simulation_toolchain =\
+                    self._project.get_simulation_toolchains()[0]
             else:
-                if SETTINGS.active_project.simulation_toolchain is None:
+                if self._project.simulation_toolchain is None:
                     print "Choose a toolchain\n"
-                    project = SETTINGS.active_project
+                    project = self._project
                     for toolchain in \
                             project.get_simulation_toolchains():
                         print(str(toolchain))
                     return
         else:
             try:
-                SETTINGS.active_project.simulation_toolchain = line
+                self._project.simulation_toolchain = line
             except PodError, error:
                 print(str(error))
                 return
@@ -94,19 +94,19 @@ Make projects files for simulation (makefile and testbench sources)
             except PodError, error:
                 print(str(error))
                 return
-        elif SETTINGS.active_project.simulation is None:
+        elif self._project.simulation is None:
             print PodError("Simulation toolchain must be selected before")
             return
 
-        if SETTINGS.active_project.simulation_toolchain is None:
+        if self._project.simulation_toolchain is None:
             print PodError("Choose a toolchain before", 0)
             for toolchain in \
-                    SETTINGS.active_project.get_simulation_toolchains():
+                    self._project.get_simulation_toolchains():
                 print(str(toolchain.name))
             return
         try:
-            filename = SETTINGS.active_project.simulation.generate_template()
-            filename = SETTINGS.active_project.simulation.generate_makefile()
+            filename = self._project.simulation.generate_template()
+            filename = self._project.simulation.generate_makefile()
         except PodError, error:
             print(str(error))
             return

@@ -78,7 +78,7 @@ class Slave(WrapperXml):
 
     def get_instance(self):
         """ get the parent instance of this slave interface """
-        return SETTINGS.active_project.get_instance(self.instancename)
+        return self.parent.get_instance(self.instancename)
 
     def get_interface(self):
         """ get the parent interface of this slave interface """

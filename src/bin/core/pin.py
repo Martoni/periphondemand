@@ -90,7 +90,7 @@ class Pin(WrapperXml):
         """ Delete all connection from or to this pin """
         for connection in self.connections:
             try:
-                instance_dest = SETTINGS.active_project.get_instance(
+                instance_dest = self.parent.get_instance(
                     connection["instance_dest"])
                 interface_dest =\
                     instance_dest.get_interface(connection["interface_dest"])
@@ -218,17 +218,17 @@ class Pin(WrapperXml):
         """ connect all platform connection, if connection is not
             for this platform, delete it.
         """
-        project = SETTINGS.active_project
         pindest_list = []
-        if project.platform_name is not None:
-            for connection in self.connections:
-                if connection["instance_dest"] == project.platform_name:
-                    pin_dest = project.get_instance(
-                        connection["instance_dest"]).get_interface(
-                            connection["interface_dest"]).get_port(
-                                connection["port_dest"]).get_pin(
-                                    connection["pin_dest"])
-                    pindest_list.append(pin_dest)
+        for connection in self.connections:
+            instance_dest = self.parent.get_instance(
+                connection["instance_dest"])
+
+            if instance_dest.is_platform() is True:
+                pin_dest = instance_dest.get_interface(
+                    connection["interface_dest"]).get_port(
+                        connection["port_dest"]).get_pin(
+                            connection["pin_dest"])
+                pindest_list.append(pin_dest)
         self.del_connections_forces()
         for pin_dest in pindest_list:
             self.connect_pin(pin_dest)

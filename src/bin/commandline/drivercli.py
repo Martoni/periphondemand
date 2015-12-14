@@ -40,10 +40,9 @@ class DriverCli(BaseCli):
     """ Manage driver command line environment
     """
 
-    def __init__(self, parent):
-        BaseCli.__init__(self, parent)
-        self.driver = SETTINGS.active_project.driver
-        self.project = SETTINGS.active_project
+    def __init__(self, parent, project=None):
+        BaseCli.__init__(self, parent, project)
+        self.driver = self._project.driver
 
     def testIfToolChainSelected(self):
         """ test if toolchain selected """
@@ -150,20 +149,20 @@ select operating system to generate drivers
             print error
             return
         if line.strip() == "":
-            if len(SETTINGS.active_project.get_driver_toolchains()) == 1:
-                SETTINGS.active_project.driver_toolchain =\
-                    SETTINGS.active_project.get_driver_toolchains()[0]
+            if len(self._project.get_driver_toolchains()) == 1:
+                self._project.driver_toolchain =\
+                    self._project.get_driver_toolchains()[0]
             else:
-                if SETTINGS.active_project.driver_toolchain is None:
+                if self._project.driver_toolchain is None:
                     print "Choose a toolchain\n"
                     for toolchain in \
-                            SETTINGS.active_project.get_driver_toolchains():
+                            self._project.get_driver_toolchains():
                         print toolchain
                     return
         else:
             try:
-                SETTINGS.active_project.driver_toolchain = line
+                self._project.driver_toolchain = line
             except PodError, error:
                 print error
                 return
-        self.driver = SETTINGS.active_project.driver
+        self.driver = self._project.driver
