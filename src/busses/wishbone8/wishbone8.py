@@ -201,9 +201,9 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
         out = out + "\n"
         out = out + ONETAB * 3 + "if " + masteraddressname + "(" +\
             str(int(mastersizeaddr-1)) + " downto " + str(slavesizeaddr) +\
-            ') = "' + sy.inttobin(slavebase_address,
-                                  int(mastersizeaddr))[:-(slavesizeaddr)] +\
-            '"'\ + " and " + masterstrobename + " = '1' then\n"
+            ') = "' +\
+            sy.inttobin(slavebase_address, int(mastersizeaddr))[:-(slavesizeaddr)] +\
+            '"' + " and " + masterstrobename + " = '1' then\n"
 
         out = out + ONETAB * 4 + chipselectname + " < = '1';\n"
         out = out + ONETAB * 3 + "else\n"
