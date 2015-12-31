@@ -337,3 +337,10 @@ class WrapperXml(object):
     def num(self, num):
         """ select the instance number """
         return self.set_attr("num", str(num))
+
+    def get_instance(self, instancename=None):
+        """ get the parent instance of this interface """
+        if instancename is None:
+            instancename = self.instancename
+        return self.parent.get_instance(instancename)
+

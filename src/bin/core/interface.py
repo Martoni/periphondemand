@@ -339,10 +339,6 @@ class Interface(WrapperXml):
         instanceslave.get_generic(genericname="id").value =\
             str(interfaceslave.unique_id)
 
-    def get_instance(self, instancename):
-        """ get the parent instance of this interface """
-        return self.parent.get_instance(instancename)
-
     @property
     def unique_id(self):
         """ Get the Identifiant number"""
