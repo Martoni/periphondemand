@@ -485,7 +485,7 @@ class Project(WrapperXml):
                         if (port.direction == "in") and \
                             (port.size == "1") and \
                                 (port.porttype == "CLK"):
-                            for pin in port.getPinsList():
+                            for pin in port.pins:
                                 if len(pin.connections) == 1:
                                     connection = pin.connections[0]
                                     if connection["instance_dest"] == \
@@ -562,7 +562,7 @@ class Project(WrapperXml):
         # remove pins connections from project instances to this instancename
         for interface in instance.interfaces:
             for port in interface.ports:
-                for pin in port.getPinsList():
+                for pin in port.pins:
                     pin.del_connections()
         # remove busses connections from project instances to this instancename
         for comp in self.instances:

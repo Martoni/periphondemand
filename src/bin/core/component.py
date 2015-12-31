@@ -110,12 +110,14 @@ class Component(WrapperXml):
                           "/" + instancename)
         except PodError:  # if directory exist
             pass
+
         # Rename xml file
         sy.rename_file(SETTINGS.projectpath +
                        COMPONENTSPATH + "/" + instancename +
                        "/" + componentversion + XMLEXT,
                        SETTINGS.projectpath + COMPONENTSPATH +
                        "/" + instancename + "/" + instancename + XMLEXT)
+
         # load component
         self.load(instancename)
         # Connect platform connection

@@ -55,6 +55,11 @@ class Pin(WrapperXml):
             raise PodError("Keys unknown in Pin", 0)
 
     @property
+    def project(self):
+        """ Return the project object linked to this pin """
+        return self.parent.parent.parent.parent
+
+    @property
     def connections(self):
         """ return a list of pin connection
             return ("instance_dest":string,
@@ -128,10 +133,9 @@ class Pin(WrapperXml):
     @property
     def connected_pins(self):
         """ return list of pins connected to this pin """
-        project = self.parent.parent.parent.parent
         pinlist = []
         for connect in self.connections:
-            pinlist.append(project.get_instance(
+            pinlist.append(self.project.get_instance(
                 connect["instance_dest"]).get_interface(
                     connect["interface_dest"]).get_port(
                         connect["port_dest"]).get_pin(
@@ -220,15 +224,16 @@ class Pin(WrapperXml):
         """
         pindest_list = []
         for connection in self.connections:
-            instance_dest = self.parent.get_instance(
-                connection["instance_dest"])
+            if connection["instance_dest"] == self.project.platform_name:
+                instance_dest = self.parent.get_instance(
+                    connection["instance_dest"])
 
-            if instance_dest.is_platform() is True:
-                pin_dest = instance_dest.get_interface(
-                    connection["interface_dest"]).get_port(
-                        connection["port_dest"]).get_pin(
-                            connection["pin_dest"])
-                pindest_list.append(pin_dest)
+                if instance_dest.is_platform() is True:
+                    pin_dest = instance_dest.get_interface(
+                        connection["interface_dest"]).get_port(
+                            connection["port_dest"]).get_pin(
+                                connection["pin_dest"])
+                    pindest_list.append(pin_dest)
         self.del_connections_forces()
         for pin_dest in pindest_list:
             self.connect_pin(pin_dest)
