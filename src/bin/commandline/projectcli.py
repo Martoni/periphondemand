@@ -495,7 +495,6 @@ Select the platform to use
             self._project.select_platform(args[1], args[0])
             self._project.save()
         except PodError, error:
-            raise error  # XXX
             print(str(DISPLAY))
             print(str(error))
             return

@@ -36,6 +36,8 @@ class WrapperXml(object):
             __init__(self,file)
         """
 
+        self.instancename = None
+
         if not hasattr(self, 'parent'):
             self.parent = None
         if not hasattr(self, 'tree'):
@@ -343,4 +345,3 @@ class WrapperXml(object):
         if instancename is None:
             instancename = self.instancename
         return self.parent.get_instance(instancename)
-
