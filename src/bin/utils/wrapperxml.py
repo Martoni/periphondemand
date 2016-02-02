@@ -36,7 +36,6 @@ class WrapperXml(object):
             __init__(self,file)
         """
 
-
         if not hasattr(self, 'parent'):
             self.parent = None
         if not hasattr(self, 'tree'):

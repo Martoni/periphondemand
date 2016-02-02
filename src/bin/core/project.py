@@ -414,7 +414,7 @@ class Project(WrapperXml):
                     interfacelist.append(interface)
         return interfacelist
 
-    def get_instance(self, instancename):
+    def get_instance(self, instancename=None):
         """ Return the instance by name
         """
         for instance in self.instances:
