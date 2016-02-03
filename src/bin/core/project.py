@@ -70,7 +70,7 @@ class Project(WrapperXml):
         self.synthesis = None
         self.driver = None
 
-        self.library = Library()
+        self.library = Library(self)
 
         self.bspdir = None
         self.bspos = None
@@ -170,6 +170,11 @@ class Project(WrapperXml):
             self.bspdir = self.get_node(
                 nodename="bsp").get_attr_value("directory")
         self.void = 0
+
+    @property
+    def library(self):
+        """ Get library """
+        return self._library
 
     @property
     def synthesis_toolchain(self):
@@ -308,7 +313,7 @@ class Project(WrapperXml):
                              subnodename="componentslib",
                              attributename="path",
                              value=path)
-            SETTINGS.active_library.add_library(path)
+            SETTINGS.library.add_library(path)
             self.save()
         else:
             raise PodError("ComponentsLib directory " +
