@@ -33,7 +33,6 @@ from periphondemand.bin.utils.display import Display
 from periphondemand.bin.utils import wrappersystem as sy
 
 DISPLAY = Display()
-SETTINGS = Settings()
 
 
 class DriverCli(BaseCli):
