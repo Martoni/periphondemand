@@ -38,8 +38,9 @@ class Library(object):
     """ Libraries management class
     """
 
-    def __init__(self):
+    def __init__(self, project):
         self._libname = None
+        self._project = project
 
     @property
     def libraries(self):
@@ -62,9 +63,9 @@ class Library(object):
         if libraryname in official_component_type:
             return SETTINGS.path + LIBRARYPATH + "/" + libraryname
         elif libraryname in self.personnal_libraries():
-            return SETTINGS.active_library.get_pers_lib_path(libraryname)
+            return self.get_pers_lib_path(libraryname)
         elif libraryname in self.get_component_lib_name():
-            return SETTINGS.active_library.get_component_lib_path(libraryname)
+            return self.get_component_lib_path(libraryname)
         else:
             raise PodError("Library not found : " + str(libraryname), 0)
 
