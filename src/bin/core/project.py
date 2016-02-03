@@ -70,7 +70,7 @@ class Project(WrapperXml):
         self.synthesis = None
         self.driver = None
 
-        self.library = Library(self)
+        self._library = Library(self)
 
         self.bspdir = None
         self.bspos = None
@@ -313,7 +313,7 @@ class Project(WrapperXml):
                              subnodename="componentslib",
                              attributename="path",
                              value=path)
-            SETTINGS.library.add_library(path)
+            self.library.add_library(path)
             self.save()
         else:
             raise PodError("ComponentsLib directory " +
