@@ -45,7 +45,6 @@ from periphondemand.bin.utils.basecli import BaseCli
 from periphondemand.bin.utils.poderror import PodError
 
 from periphondemand.bin.core.project import Project
-from periphondemand.bin.core.library import Library
 
 from periphondemand.bin.code.vhdl.topvhdl import TopVHDL
 
