@@ -424,7 +424,7 @@ fpga_attributes    : give list of fpga attributes in platform
                 # return SETTINGS.active_library.list_components()
             arglist = [libraryname + "." + componentname
                        for componentname in
-                       SETTINGS.active_library.list_components(
+                       self._project.library.list_components(
                            libraryname)]
             return arglist
         elif subargt == "componentversion":

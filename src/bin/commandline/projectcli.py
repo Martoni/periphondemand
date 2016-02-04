@@ -45,7 +45,6 @@ from periphondemand.bin.utils.basecli import BaseCli
 from periphondemand.bin.utils.poderror import PodError
 
 from periphondemand.bin.core.project import Project
-from periphondemand.bin.core.library import Library
 
 from periphondemand.bin.code.vhdl.topvhdl import TopVHDL
 
@@ -59,8 +58,6 @@ class ProjectCli(BaseCli):
     def __init__(self, parent=None):
         BaseCli.__init__(self, parent)
         self._project = None
-        if SETTINGS.active_library is None:
-            SETTINGS.active_library = Library()
 
     def do_synthesis(self, arg):
         """\
@@ -442,10 +439,10 @@ Usage : listcomponents [libraryname]
 List components available in the library
         """
         if line.strip() == "":
-            return self.columnize(SETTINGS.active_library.libraries)
+            return self.columnize(self._project.library.libraries)
         else:
             return self.columnize(
-                SETTINGS.active_library.list_components(line))
+                self._project.library.list_components(line))
 
     def listinstances(self):
         """ List instances in project completion"""

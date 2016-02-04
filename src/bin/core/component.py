@@ -315,7 +315,8 @@ class Component(WrapperXml):
         """ set the name of this instance """
         return self.set_attr("instance_name", instancename)
 
-    def inv_direction(self, dirname):
+    @classmethod
+    def inv_direction(cls, dirname):
         """ invert direction given in params """
         if dirname == "in":
             return "out"

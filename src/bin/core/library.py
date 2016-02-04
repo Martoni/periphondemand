@@ -38,19 +38,20 @@ class Library(object):
     """ Libraries management class
     """
 
-    def __init__(self):
+    def __init__(self, project):
         self._libname = None
+        self._project = project
 
     @property
     def libraries(self):
         """ Return a list of libraries availables """
         componentlist = sy.list_dir(SETTINGS.path + LIBRARYPATH)
-        componentlist.extend(self.personnal_libraries)
+        componentlist.extend(self.personnal_libraries())
         componentlist.extend(self.get_component_lib_name())
         return componentlist
 
-    @property
-    def official_libraries(self):
+    @classmethod
+    def official_libraries(cls):
         """ Get list of official libraries"""
         return sy.list_dir(SETTINGS.path + LIBRARYPATH)
 
@@ -58,13 +59,13 @@ class Library(object):
         """ Get the library path """
         if libraryname is None:
             libraryname = self.lib_name
-        official_component_type = self.official_libraries
+        official_component_type = self.official_libraries()
         if libraryname in official_component_type:
             return SETTINGS.path + LIBRARYPATH + "/" + libraryname
-        elif libraryname in self.personnal_libraries:
-            return SETTINGS.active_library.get_pers_lib_path(libraryname)
+        elif libraryname in self.personnal_libraries():
+            return self.get_pers_lib_path(libraryname)
         elif libraryname in self.get_component_lib_name():
-            return SETTINGS.active_library.get_component_lib_path(libraryname)
+            return self.get_component_lib_path(libraryname)
         else:
             raise PodError("Library not found : " + str(libraryname), 0)
 
@@ -73,14 +74,14 @@ class Library(object):
         """
         if libraryname is None:
             libraryname = self.lib_name
-        official_component_type = self.official_libraries
+        official_component_type = self.official_libraries()
         componentlist = []
         if libraryname in official_component_type:
             componentlist =\
                 sy.list_dir(SETTINGS.path +
                             LIBRARYPATH + "/" +
                             libraryname)
-        elif libraryname in self.personnal_libraries:
+        elif libraryname in self.personnal_libraries():
             componentlist =\
                 sy.list_dir(self.get_pers_lib_path(libraryname))
         elif libraryname in self.get_component_lib_name():
@@ -98,7 +99,7 @@ class Library(object):
     def del_library(self, libraryname):
         """ delete library path from config file
         """
-        if libraryname in self.official_libraries:
+        if libraryname in self.official_libraries():
             raise PodError("Can't delete an official library")
         libpath = self.get_pers_lib_path(libraryname)
         SETTINGS.configfile.del_library(libpath)
@@ -141,8 +142,8 @@ class Library(object):
             name_list.append(path.split("/")[-1])
         return name_list
 
-    @property
-    def personnal_libraries(self):
+    @classmethod
+    def personnal_libraries(cls):
         """ Get the list names of Personnal library"""
         return SETTINGS.personal_lib_name_list
 
