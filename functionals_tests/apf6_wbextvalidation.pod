@@ -2,7 +2,7 @@ create apf6_wbextvalidation
 selectplatform standard.apf6_sp
 
 addinstance components.led.wb
-connectpin led00.int_led.led.0 apf6_sp.fpga.LED0
+connectpin led00.int_led.led.0 apf6_sp.fpga.D0
 
 autoconnectbus
 
