@@ -89,7 +89,7 @@ def get_list_slave_size(masterinterface, port_name=None):
     data_size = []
     for slave in masterinterface.slaves:
         for i in slave.get_instance().interfaces:
-            if i.bus_name == "wishboneExt":
+            if i.bus_name == "wishbone":
                 if port_name is not None:
                     try:
                         i.get_port_by_type(

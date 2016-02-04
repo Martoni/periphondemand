@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bus name="wishboneExt" version="1.0" datasize="16">
+<bus name="wishbone" version="1.0" datasize="16">
     <description></description>
     <class name="WBM" type="master">
         <type name="RST" type="reset" dir="out" />
