@@ -52,7 +52,6 @@ from periphondemand.bin.core.hdl_file import HdlFile
 
 settings = Settings()
 display = Display()
-ONETAB = "    "
 
 
 def needqsys(self):
