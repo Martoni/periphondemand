@@ -66,11 +66,11 @@ class TopVHDL(TopGen):
         """ return VHDL code for Top entity
         """
         out = "entity " + entityname + " is\n"
-        out = out + "\n" + ONETAB + "port\n" + ONETAB + "(\n"
+        out += "\n" + ONETAB + "port\n" + ONETAB + "(\n"
         for port in portlist:
             if port.force_defined():
                 portname = "force_" + port.name
-                out = out + ONETAB * 2 + portname + " : out std_logic;\n"
+                out += ONETAB * 2 + portname + " : out std_logic;\n"
             else:
                 portname = port.name
                 interfacename = port.parent.name
@@ -78,7 +78,7 @@ class TopVHDL(TopGen):
 
                 if port.is_hidden:
                     continue
-                out = out + ONETAB + "-- " + instancename +\
+                out += ONETAB + "-- " + instancename +\
                     "-" + interfacename + "\n"
                 if port.is_fully_connected():
                     if (port.direction == "in") or (port.direction == "inout"):
@@ -88,58 +88,58 @@ class TopVHDL(TopGen):
                             raise PodError(str(port.extended_name) +
                                            " is left unconnected")
                         elif len(same_connections_ports) == 1:
-                            out = out + ONETAB * 2 +\
+                            out += ONETAB * 2 +\
                                 instancename + "_" + portname +\
                                 " : " + port.direction
                             if port.connected_msb < 1:
-                                out = out + " std_logic;"
+                                out += " std_logic;"
                             else:
-                                out = out + " std_logic_vector(" +\
+                                out v= " std_logic_vector(" +\
                                     str(port.connected_msb) +\
                                     " downto 0);"
-                            out = out + "\n"
+                            out += "\n"
                         else:
                             same_connections_ports_names = \
                                 sorted([aport.extended_name for
                                        aport in same_connections_ports])
                             if port.extended_name ==\
                                     same_connections_ports_names[0]:
-                                out = out + ONETAB * 2 +\
+                                out += ONETAB * 2 +\
                                     instancename + "_" + portname +\
                                     " : " + port.direction
                                 if port.connected_msb < 1:
-                                    out = out + " std_logic;"
+                                    out += " std_logic;"
                                 else:
-                                    out = out + " std_logic_vector(" +\
+                                    out += " std_logic_vector(" +\
                                         str(port.connected_msb) +\
                                         " downto 0);"
-                                out = out + "\n"
+                                out += "\n"
                     else:
                         # signal declaration
-                        out = out + ONETAB * 2 +\
+                        out += ONETAB * 2 +\
                             instancename + "_" + portname +\
                             " : " + port.direction
                         if port.connected_msb < 1:
-                            out = out + " std_logic;"
+                            out += " std_logic;"
                         else:
-                            out = out + " std_logic_vector(" +\
+                            out += " std_logic_vector(" +\
                                 str(port.connected_msb) +\
                                 " downto 0);"
-                        out = out + "\n"
+                        out += "\n"
 
                 # port not completely connected
                 else:
                     for pin in port.pins:
                         if pin.is_connected_to_inst(
                                 self.project.platform):
-                            out = out + ONETAB * 2 + \
+                            out += ONETAB * 2 + \
                                 instancename + "_" + portname + "_pin" +\
                                 str(pin.num) + " : " +\
                                 port.direction + " std_logic;\n"
         # Suppress the #!@ last semicolon
         out = out[:-2]
 
-        out = out + "\n" + ONETAB + ");\nend entity " + entityname + ";\n\n"
+        out += "\n" + ONETAB + ");\nend entity " + entityname + ";\n\n"
         return out
 
     @classmethod
@@ -162,10 +162,10 @@ class TopVHDL(TopGen):
         if self.project.vhdl_version == "vhdl93":
             return ""
         out = ""
-        out = out + ONETAB + "-------------------------\n"
-        out = out + ONETAB + "-- declare components  --\n"
-        out = out + ONETAB + "-------------------------\n"
-        out = out + "\n"
+        out += ONETAB + "-------------------------\n"
+        out += ONETAB + "-- declare components  --\n"
+        out += ONETAB + "-------------------------\n"
+        out += "\n"
         component = []
         for comp in self.project.instances:
             if comp.is_platform() is False:
@@ -179,39 +179,39 @@ class TopVHDL(TopGen):
                 if component.name == compname:
                     break
 
-            out = out + "\n" + ONETAB + "component " + compname + "\n"
+            out += "\n" + ONETAB + "component " + compname + "\n"
             if component.fpga_generics != []:
-                out = out + ONETAB * 2 + "generic(\n"
+                out += ONETAB * 2 + "generic(\n"
                 for generic in component.fpga_generics:
-                    out = out + ONETAB * 3 +\
+                    out += ONETAB * 3 +\
                         generic.name + " : " +\
                         generic.generictype + " := " +\
                         str(generic.value) +\
                         ";\n"
                 # suppress comma
                 out = out[:-2] + "\n"
-                out = out + ONETAB * 2 + ");\n"
+                out += ONETAB * 2 + ");\n"
 
-            out = out + ONETAB * 2 + "port (\n"
+            out += ONETAB * 2 + "port (\n"
             for interface in component.interfaces:
-                out = out + ONETAB * 3 + "-- " + interface.name + "\n"
+                out += ONETAB * 3 + "-- " + interface.name + "\n"
                 for port in interface.ports:
                     if port.is_hidden:
                         continue
-                    out = out + ONETAB * 3 +\
+                    out += ONETAB * 3 +\
                         port.name +\
                         "  : " +\
                         port.direction
                     if int(port.size) == 1:
-                        out = out + " std_logic;\n"
+                        out += " std_logic;\n"
                     else:
-                        out = out + " std_logic_vector(" +\
+                        out += " std_logic_vector(" +\
                             str(int(port.real_size) - 1) +\
                             " downto " + port.min_pin_num + ");\n"
             # Suppress the #!@ last semicolon
             out = out[:-2] + "\n"
-            out = out + ONETAB * 2 + ");\n"
-            out = out + ONETAB + "end component;\n"
+            out += ONETAB * 2 + ");\n"
+            out += ONETAB + "end component;\n"
         return out
 
     def declareSignals(self, componentslist, incomplete_external_ports_list):
@@ -219,16 +219,16 @@ class TopVHDL(TopGen):
         """
         platformname = self.project.platform.instancename
         out = ""
-        out = out + ONETAB + "-------------------------\n"
-        out = out + ONETAB + "-- Signals declaration\n"
-        out = out + ONETAB + "-------------------------\n"
+        out += ONETAB + "-------------------------\n"
+        out += ONETAB + "-- Signals declaration\n"
+        out += ONETAB + "-------------------------\n"
         for component in componentslist:
             if component.is_platform() is True:
                 continue
-            out = out + "\n" + ONETAB + "-- " +\
+            out += "\n" + ONETAB + "-- " +\
                 component.instancename + "\n"
             for interface in component.interfaces:
-                out = out + ONETAB + "-- " + interface.name + "\n"
+                out += ONETAB + "-- " + interface.name + "\n"
 
                 for port in interface.ports:
                     if port.is_hidden:
@@ -242,25 +242,25 @@ class TopVHDL(TopGen):
                         continue
                     if connection_list[0]["instance_dest"] == platformname:
                         continue
-                    out = out + ONETAB + "signal " +\
+                    out += ONETAB + "signal " +\
                         component.instancename +\
                         "_" + port.name + ": "
                     if int(port.size) == 1:
-                        out = out + " std_logic;\n"
+                        out += " std_logic;\n"
                     else:
-                        out = out +\
+                        out +=\
                             " std_logic_vector(" +\
                             port.max_pin_num +\
                             " downto " + port.min_pin_num + ");\n"
 
-        out = out + "\n" + ONETAB + "-- void pins\n"
+        out += "\n" + ONETAB + "-- void pins\n"
 
         for port in incomplete_external_ports_list:
             if port.force_defined():
                 continue
             portname = port.name
             instancename = port.parent.parent.instancename
-            out = out + "\n" + ONETAB + "signal " + instancename +\
+            out += "\n" + ONETAB + "signal " + instancename +\
                 "_" + portname + ": std_logic_vector(" +\
                 str(int(port.real_size) - 1) + " downto 0);\n"
         return out
@@ -268,83 +268,83 @@ class TopVHDL(TopGen):
     def declareInstance(self):
         """ Declaring instances """
         out = ""
-        out = out + ONETAB + "-------------------------\n"
-        out = out + ONETAB + "-- declare instances\n"
-        out = out + ONETAB + "-------------------------\n"
+        out += ONETAB + "-------------------------\n"
+        out += ONETAB + "-- declare instances\n"
+        out += ONETAB + "-------------------------\n"
         for component in self.project.instances:
             if component.is_platform() is False:
-                out = out + "\n" + ONETAB +\
+                out += "\n" + ONETAB +\
                     component.instancename + " : "
                 if self.project.vhdl_version == "vhdl93":
-                    out = out + "entity work."
-                out = out + component.name + "\n"
+                    out += "entity work."
+                out += component.name + "\n"
                 if component.fpga_generics != []:
-                    out = out + ONETAB + "generic map (\n"
+                    out += ONETAB + "generic map (\n"
                     for generic in component.fpga_generics:
-                        out = out + ONETAB * 3 +\
+                        out += ONETAB * 3 +\
                             generic.name + " => " +\
                             str(generic.value) +\
                             ",\n"
                     # suppress comma
                     out = out[:-2] + "\n"
-                    out = out + ONETAB * 2 + ")\n"
+                    out += ONETAB * 2 + ")\n"
 
-                out = out + ONETAB + "port map (\n"
+                out += ONETAB + "port map (\n"
                 for interface in component.interfaces:
 
-                    out = out + ONETAB * 3 + "-- " + interface.name + "\n"
+                    out += ONETAB * 3 + "-- " + interface.name + "\n"
                     for port in interface.ports:
                         if port.is_hidden:
                             continue
-                        out = out + ONETAB * 3 + port.name + " => "
+                        out += ONETAB * 3 + port.name + " => "
                         if len(port.pins) != 0:
                             if (port.direction == "inout") or\
                                     (port.direction == "in"):
-                                out = out +\
+                                out +=\
                                     sorted(
                                         [aport.extended_name for aport in
                                          port.ports_with_same_connection]
                                         )[0]
-                                out = out + ",\n"
+                                out += ",\n"
                             else:
-                                out = out + port.extended_name + ",\n"
+                                out += port.extended_name + ",\n"
 
                         else:
                             if port.direction == "out":
-                                out = out + "open,\n"
+                                out += "open,\n"
                             else:
                                 if int(port.size) == 1:
-                                    out = out + "'" +\
+                                    out += "'" +\
                                         str(port.unconnected_value) +\
                                         "',\n"
                                 else:
-                                    out = out + "\"" +\
+                                    out += "\"" +\
                                         str(port.unconnected_value) *\
                                         int(port.size) +\
                                         "\",\n"
 
                 # Suppress the #!@ last comma
                 out = out[:-2] + "\n"
-                out = out + ONETAB * 3 + ");\n"
-        out = out + "\n"
+                out += ONETAB * 3 + ");\n"
+        out += "\n"
         return out
 
     @classmethod
     def connectForces(cls, portlist):
         """ Connecting Forces """
         out = "\n"
-        out = out + ONETAB + "-------------------\n"
-        out = out + ONETAB + "--  Set forces   --\n"
-        out = out + ONETAB + "-------------------\n"
+        out += ONETAB + "-------------------\n"
+        out += ONETAB + "--  Set forces   --\n"
+        out += ONETAB + "-------------------\n"
         for port in portlist:
             if port.is_hidden:
                 continue
             if port.force_defined():
                 if port.force == "gnd":
-                    out = out + ONETAB + "force_" +\
+                    out += ONETAB + "force_" +\
                         port.name + " <= '0';\n"
                 else:
-                    out = out + ONETAB + "force_" +\
+                    out += ONETAB + "force_" +\
                         port.name + " <= '1';\n"
         return out + "\n"
 
@@ -362,7 +362,7 @@ class TopVHDL(TopGen):
                 pin = port.pins[0]
                 connect = pin.connections[0]
                 if connect["instance_dest"] != platformname:
-                    out = out + ONETAB * 2 +\
+                    out += ONETAB * 2 +\
                         component.instancename +\
                         "_" + port.name +\
                         " <= " +\
@@ -377,12 +377,12 @@ class TopVHDL(TopGen):
                             len(pin.connections) != 0:
                         connect = pin.connections[0]
                         if connect["instance_dest"] != platformname:
-                            out = out + ONETAB * 2 +\
+                            out += ONETAB * 2 +\
                                 component.instancename +\
                                 "_" + port.name
                             if int(port.size) > 1:
-                                out = out + "(" + pin.num + ")"
-                            out = out + " <= " + connect["instance_dest"] +\
+                                out += "(" + pin.num + ")"
+                            out += " <= " + connect["instance_dest"] +\
                                 "_" + connect["port_dest"]
                             # is destination vector or simple net ?
                             for comp in self.project.instances:
@@ -397,9 +397,9 @@ class TopVHDL(TopGen):
                                         if port2.name ==\
                                                 connect["port_dest"]:
                                             if int(port2.size) > 1:
-                                                out = out + "(" + \
+                                                out += "(" + \
                                                     connect["pin_dest"] + ")"
-                            out = out + ";\n"
+                            out += ";\n"
         # if port is void, connect '0' or open
         else:
             message = "port " + component.instancename +\
@@ -414,9 +414,9 @@ class TopVHDL(TopGen):
         """ Connect instances
         """
         out = ""
-        out = out + ONETAB + "---------------------------\n"
-        out = out + ONETAB + "-- instances connections --\n"
-        out = out + ONETAB + "---------------------------\n"
+        out += ONETAB + "---------------------------\n"
+        out += ONETAB + "-- instances connections --\n"
+        out += ONETAB + "---------------------------\n"
 
         platform = self.project.platform
         platformname = platform.instancename
@@ -427,20 +427,20 @@ class TopVHDL(TopGen):
             if not port.force_defined():
                 portname = port.name
                 instancename = port.parent.parent.instancename
-                out = out + "\n" + ONETAB +\
+                out += "\n" + ONETAB +\
                     "-- connect incomplete external port " +\
                     str(portname) + " pins\n"
                 for pinnum in range(int(port.real_size)):
                     pin = port.get_pin(pinnum)
                     if pin.is_connected_to_inst(platform):
                         if port.direction == "in":
-                            out = out + ONETAB + instancename + "_" +\
+                            out += ONETAB + instancename + "_" +\
                                 portname + "(" + str(pinnum) +\
                                 ") <= " + instancename + "_" +\
                                 portname + "_pin" +\
                                 str(pinnum) + ";\n"
                         else:
-                            out = out + ONETAB + instancename + "_" +\
+                            out += ONETAB + instancename + "_" +\
                                 portname + "_pin" +\
                                 str(pinnum) + " <= " + instancename +\
                                 "_" + portname + "(" +\
@@ -450,10 +450,10 @@ class TopVHDL(TopGen):
         for component in self.project.instances:
             if component.is_platform():
                 continue
-            out = out + "\n" + ONETAB + "-- connect " +\
+            out += "\n" + ONETAB + "-- connect " +\
                 component.instancename + "\n"
             for interface in component.interfaces:
-                out = out + ONETAB * 2 + "-- " + interface.name + "\n"
+                out += ONETAB * 2 + "-- " + interface.name + "\n"
                 for port in interface.ports:
                     if port.direction == "in":
                         out += self.connect_in_port(component, interface, port)
