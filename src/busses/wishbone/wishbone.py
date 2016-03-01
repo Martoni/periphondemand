@@ -156,17 +156,17 @@ def genCaseByteEnable(masterinterface):
 
     byte_en = masterinterface.get_port_by_type("BYE")
     byte_en_name = masterinterface.parent.instancename + "_" + byte_en.name
-    byte_en_size = int(byte_en.real_size)
+    byte_en_size = byte_en.real_size
     write_bus = masterinterface.get_port_by_type(
         masterinterface.bus.sig_name("master", "dataout"))
     write_bus_name = masterinterface.parent.instancename + "_" + \
         write_bus.name
-    master_size = int(write_bus.real_size)
+    master_size = write_bus.real_size
     addr_inst = masterinterface.get_port_by_type(
         masterinterface.bus.sig_name("master", "address"))
     addr_bus = masterinterface.parent.instancename + "_" + addr_inst.name
     addr_size = addr_inst.max_pin_num
-    shift = int(math.log(master_size / 8, 2))
+    shift = int(math.log(int(master_size) / 8, 2))
 
     masteraddressname = "wbm_address_s"
 
@@ -538,7 +538,7 @@ def selectWrite(masterinterface, intercon):
     bus = masterinterface.bus
     byte_en = masterinterface.get_port_by_type("BYE")
     byte_en_name = masterinterface.parent.instancename + "_" + byte_en.name
-    byte_en_size = int(byte_en.real_size)
+    byte_en_size = byte_en.real_size
     out = ""
 
     for slave in masterinterface.slaves:

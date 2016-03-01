@@ -230,11 +230,11 @@ class Port(WrapperXml):
         """ Is size of this port is variable ? """
         try:
             if self.get_attr_value("variable_size") == "1":
-                return 1
+                return True
             else:
-                return 0
+                return False
         except AttributeError:
-            return 0
+            return False
 
     def check_variable_port(self):
         """ check if variable port is correctly connected.
@@ -261,9 +261,9 @@ class Port(WrapperXml):
     def real_size(self):
         """ if port is variable, return the size set by generic"""
         if self.isvariable():
-            return str(int(self.max_pin_num) + 1)
+            return int(self.max_pin_num) + 1
         else:
-            return str(self.size)
+            return int(self.size)
 
     @property
     def max_pin_num(self):

@@ -206,7 +206,7 @@ class TopVHDL(TopGen):
                         out += " std_logic;\n"
                     else:
                         out += " std_logic_vector(" +\
-                            str(int(port.real_size) - 1) +\
+                            str(port.real_size - 1) +\
                             " downto " + port.min_pin_num + ");\n"
             # Suppress the #!@ last semicolon
             out = out[:-2] + "\n"
@@ -261,7 +261,7 @@ class TopVHDL(TopGen):
             instancename = port.parent.parent.instancename
             out += "\n" + ONETAB + "signal " + instancename +\
                 "_" + portname + ": std_logic_vector(" +\
-                str(int(port.real_size) - 1) + " downto 0);\n"
+                str(port.real_size - 1) + " downto 0);\n"
         return out
 
     def declareInstance(self):
@@ -429,7 +429,7 @@ class TopVHDL(TopGen):
                 out += "\n" + ONETAB +\
                     "-- connect incomplete external port " +\
                     str(portname) + " pins\n"
-                for pinnum in range(int(port.real_size)):
+                for pinnum in range(port.real_size):
                     pin = port.get_pin(pinnum)
                     if pin.is_connected_to_inst(platform):
                         if port.direction == "in":
