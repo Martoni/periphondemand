@@ -176,44 +176,44 @@ def genCaseByteEnable(masterinterface):
         nb_byte = size / 8
         mask = pow(2, nb_byte)-1
 
-        out = out + ONETAB + "writedata" + str(size) + "_s <= "
+        out += ONETAB + "writedata" + str(size) + "_s <= "
 
         if int(size) == int(master_size):
-            out = out + write_bus_name
+            out += write_bus_name
         else:
             bitsize = byte_en_size / nb_byte
             for i in range(bitsize):
                 val = bin(int(mask * pow(2, nb_byte*i)))[2:]
-                out = out + write_bus_name + "(" + \
+                out += write_bus_name + "(" + \
                     str(((i+1) * size)-1) + " downto " + str(i * size) + ")"
                 if i < bitsize-1:
-                    out = out + ' when ' + byte_en_name + ' = "' + \
+                    out += ' when ' + byte_en_name + ' = "' + \
                         val.zfill(byte_en_size) + '" else \n' + 2 * ONETAB
-        out = out + ";\n\n"
+        out += ";\n\n"
 
     # addr reconstruct
     data_size = get_list_slave_size(masterinterface)
 
     if len(data_size) == 1 and data_size[0] == master_size:
-        out = out + ONETAB + masteraddressname + " <= " + addr_bus + ";\n"
+        out += ONETAB + masteraddressname + " <= " + addr_bus + ";\n"
     else:
         slave_addr = masteraddressname + "(" + str(shift-1) + " downto 0) <= "
-        out = out + ONETAB + masteraddressname + "(" + str(addr_size) + \
+        out += ONETAB + masteraddressname + "(" + str(addr_size) + \
             " downto " + str(shift) + ") <= " + \
             addr_bus + "(" + str(addr_size) + " downto " + str(shift) + ");\n"
-        out = out + ONETAB + slave_addr
+        out += ONETAB + slave_addr
         for size in data_size:
             if not (int(size) == int(master_size)):
                 nb_byte = size / 8
                 mask = pow(2, nb_byte)-1
                 for i in range(byte_en_size / nb_byte):
                     val = bin(int(mask * pow(2, nb_byte*i)))[2:]
-                    out = out + ' "' + \
+                    out += ' "' + \
                         str(((bin(i*(size/8))[2:]).zfill(3))) + \
                         '" when ' + byte_en_name + ' = "' + \
                         val.zfill(byte_en_size) + '" else\n' + 2 * ONETAB
 
-        out = out + "(others => '0');\n"
+        out += "(others => '0');\n"
 
     return out
 
@@ -226,32 +226,32 @@ def gen_byte_enable(masterinterface):
             masterinterface.bus.sig_name("master", "byteen"))
     except PodError:
         return out
-    master_bye_size = int(master_bye.real_size)
+    master_bye_size = master_bye.real_size
     master_bye_name = master_bye.name
 
-    out = out + "\n" + ONETAB + \
+    out += "\n" + ONETAB + \
         "-- Byte enable muxing --\n" + \
         ONETAB + "------------------------"
     for slave_size in get_list_slave_size(masterinterface, "byteen"):
         nb_byte = slave_size / 8
         nb_iter = master_bye_size / nb_byte
-        out = out + "\n" + ONETAB + "byte_enable" + \
+        out += "\n" + ONETAB + "byte_enable" + \
             str(slave_size) + "_s <= "
         for i in range(nb_iter):
-            out = out + master_bye_name + \
+            out += master_bye_name + \
                 "(" + str((nb_byte * i) + nb_byte - 1) + \
                 " downto " + str(i * nb_byte) + ")"
             if i < nb_iter - 1:
-                out = out + " or\n" + 2 * ONETAB
-        out = out + ";\n"
+                out += " or\n" + 2 * ONETAB
+        out += ";\n"
 
-    out = out + "\n"
+    out += "\n"
     for slave in masterinterface.slaves:
         slave_it = slave.get_interface()
         try:
             slave_bye = slave_it.get_port_by_type(
                 bus.sig_name("slave", "byteen"))
-            out = out + ONETAB + \
+            out += ONETAB + \
                 slave.instancename + "_" + slave_bye.name + \
                 " <= byte_enable" + str(slave_it.data_size) + \
                 "_s;\n"
@@ -287,9 +287,9 @@ def connectClockandReset(masterinterface, intercon):
             slaveinterface.get_port_by_type(
                 bus.sig_name("slave", "clock")).name
         # reset
-        out = out + ONETAB + slaveresetname + " <= " + masterresetname + ";\n"
+        out += ONETAB + slaveresetname + " <= " + masterresetname + ";\n"
         # clock
-        out = out + ONETAB + slaveclockname + " <= " + masterclockname + ";\n"
+        out += ONETAB + slaveclockname + " <= " + masterclockname + ";\n"
     return out
 
 
@@ -312,8 +312,8 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
     mastersizeaddr = masterinterface.addr_port_size
 
     out = ONETAB + "-----------------------\n"
-    out = out + "\n" + ONETAB + "-- Address decoding  --\n"
-    out = out + ONETAB + "-----------------------\n"
+    out += "\n" + ONETAB + "-- Address decoding  --\n"
+    out += ONETAB + "-----------------------\n"
     for slave in masterinterface.slaves:
         slaveinstance = slave.get_instance()
         slaveinterface = slave.get_interface()
@@ -327,26 +327,26 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
             slavename_addr = slaveinstance.instancename + "_" +\
                 slaveaddressport.name
         if slavesizeaddr == 1:
-            out = out + ONETAB + slavename_addr +\
+            out += ONETAB + slavename_addr +\
                 " <= " + masteraddressname + "(1);\n"
         elif slavesizeaddr > 1:
-            out = out + ONETAB + slavename_addr + " <= " + masteraddressname +\
+            out += ONETAB + slavename_addr + " <= " + masteraddressname +\
                 "(" + str(slavesizeaddr+slavebase_size-1) + " downto " + \
                 str(slavebase_size) + ");\n"
-    out = out + "\n"
-    out = out + ONETAB + "decodeproc : process(" + clk_name + ", " + rst_name +\
+    out += "\n"
+    out += ONETAB + "decodeproc : process(" + clk_name + ", " + rst_name +\
         ", " + masteraddressname + ")\n"
-    out = out + ONETAB + "begin\n"
+    out += ONETAB + "begin\n"
 
     # initialize
-    out = out + ONETAB*2 + "if " + rst_name + "='1' then\n"
+    out += ONETAB*2 + "if " + rst_name + "='1' then\n"
     for slave in masterinterface.slaves:
         slaveinstance = slave.get_instance()
         slaveinterface = slave.get_interface()
         chipselectname = slaveinstance.instancename + "_" +\
             slaveinterface.name + "_cs"
-        out = out + ONETAB*3 + chipselectname + " <= '0';\n"
-    out = out + ONETAB*2 + "elsif rising_edge(" + clk_name + ") then\n"
+        out += ONETAB*3 + chipselectname + " <= '0';\n"
+    out += ONETAB*2 + "elsif rising_edge(" + clk_name + ") then\n"
 
     for slave in masterinterface.slaves:
         slaveinstance = slave.get_instance()
@@ -362,20 +362,20 @@ def addressdecoding(masterinterface, masterinstancename, intercon):
             slavename_addr = slaveinstance.instancename + "_" +\
                 slaveaddressport.name
 
-        out = out + "\n"
-        out = out + ONETAB*3 + "if " + masteraddressname + "(" + \
+        out += "\n"
+        out += ONETAB*3 + "if " + masteraddressname + "(" + \
             str(int(mastersizeaddr-1)) + " downto " + \
             str(slavesizeaddr + slavebase_size) + ')="' + \
             sy.inttobin(slavebase_address,
                         int(mastersizeaddr))[:-(slavesizeaddr + slavebase_size)] +\
             '"' + " and " + masterstrobename + "='1' then\n"
 
-        out = out + ONETAB * 4 + chipselectname + " <= '1';\n"
-        out = out + ONETAB * 3 + "else\n"
-        out = out + ONETAB * 4 + chipselectname + " <= '0';\n"
-        out = out + ONETAB * 3 + "end if;\n"
+        out += ONETAB * 4 + chipselectname + " <= '1';\n"
+        out += ONETAB * 3 + "else\n"
+        out += ONETAB * 4 + chipselectname + " <= '0';\n"
+        out += ONETAB * 3 + "end if;\n"
 
-    out = out + "\n" + ONETAB * 2 + "end if;\n" +\
+    out += "\n" + ONETAB * 2 + "end if;\n" +\
         ONETAB + "end process decodeproc;\n\n"
     return out
 
@@ -396,8 +396,8 @@ def controlslave(masterinterface, intercon):
             bus.sig_name("master", "cycle")).name
 
     out = ONETAB + "-----------------------------\n"
-    out = out + ONETAB + "-- Control signals to slave\n"
-    out = out + ONETAB + "-----------------------------\n"
+    out += ONETAB + "-- Control signals to slave\n"
+    out += ONETAB + "-----------------------------\n"
 
     for slave in masterinterface.slaves:
         slaveinstance = slave.get_instance()
@@ -413,12 +413,12 @@ def controlslave(masterinterface, intercon):
         chipselectname = slaveinstancename + "_" +\
             slaveinterface.name + "_cs"
 
-        out = out + "\n" + ONETAB + "-- for " + slaveinstancename + "\n"
+        out += "\n" + ONETAB + "-- for " + slaveinstancename + "\n"
         # strobe
-        out = out + ONETAB + slavestrobename + " <= (" +\
+        out += ONETAB + slavestrobename + " <= (" +\
             masterstrobename + " and " + chipselectname + " );\n"
         # cycle
-        out = out + ONETAB + slavecyclename + " <= (" +\
+        out += ONETAB + slavecyclename + " <= (" +\
             mastercyclename + " and " + chipselectname + " );\n"
 
         # write connection if read/write, read or write
@@ -438,7 +438,7 @@ def controlslave(masterinterface, intercon):
 
         if datainname and dataoutname:
             # write
-            out = out + ONETAB +\
+            out += ONETAB +\
                 slaveinstancename + "_" +\
                 slaveinterface.get_port_by_type(
                     bus.sig_name("slave", "write")).name +\
@@ -448,20 +448,20 @@ def controlslave(masterinterface, intercon):
                 " and " + chipselectname + " );\n"
         elif datainname:
             # write
-            out = out + ONETAB +\
+            out += ONETAB +\
                 slaveinstancename + "_" +\
                 slaveinterface.get_port_by_type(
                     bus.sig_name("slave", "write")).name +\
                 " <= '1';\n"
         elif dataoutname:
             # write
-            out = out + ONETAB +\
+            out += ONETAB +\
                 slaveinstancename + "_" +\
                 slaveinterface.get_port_by_type(
                     bus.sig_name("slave", "write")).name +\
                 " <= '0';\n"
         if datainname:
-                out = out + ONETAB + slaveinstancename + "_" +\
+                out += ONETAB + slaveinstancename + "_" +\
                     slaveinterface.get_port_by_type(
                         bus.sig_name("slave", "datain")).name + \
                     " <= writedata" + slaveinterface.data_size + \
@@ -480,13 +480,13 @@ def controlmaster(masterinterface, intercon):
     masterinterfacename = masterinterface.name
 
     out = "\n\n" + ONETAB + "-------------------------------\n"
-    out = out + ONETAB + "-- Control signal for master --\n"
-    out = out + ONETAB + "-------------------------------\n"
+    out += ONETAB + "-- Control signal for master --\n"
+    out += ONETAB + "-------------------------------\n"
 
-    out = out + ONETAB + masterinstance.instancename + "_"
-    out = out + masterinterface.get_port_by_type(
+    out += ONETAB + masterinstance.instancename + "_"
+    out += masterinterface.get_port_by_type(
         bus.sig_name("master", "datain")).name
-    out = out + " <= "
+    out += " <= "
     # READDATA
     for slave in masterinterface.slaves:
         slaveinstance = slave.get_instance()
@@ -497,19 +497,19 @@ def controlmaster(masterinterface, intercon):
             slaveinterface.get_port_by_type(
                 bus.sig_name("slave", "dataout"))
             dataoutname = slaveinstancename + "_readdata_s"
-            out = out + " " + dataoutname
-            out = out + " when " + slaveinstancename + "_" +\
+            out += " " + dataoutname
+            out += " when " + slaveinstancename + "_" +\
                 slaveinterfacename + "_cs='1' else\n"
-            out = out + ONETAB * 9 + "  "
+            out += ONETAB * 9 + "  "
         except PodError, e:
             pass
-    out = out + " (others => '0');\n"
+    out += " (others => '0');\n"
 
     # ACK
-    out = out + ONETAB + masterinstance.instancename + "_"
-    out = out + masterinterface.get_port_by_type(
+    out += ONETAB + masterinstance.instancename + "_"
+    out += masterinterface.get_port_by_type(
         bus.sig_name("master", "ack")).name
-    out = out + " <= "
+    out += " <= "
     count = 0
     if masterinterface.slaves:
         for slave in masterinterface.slaves:
@@ -518,18 +518,18 @@ def controlmaster(masterinterface, intercon):
             slaveinterfacename = slaveinterface.name
             slaveinstancename = slave.instancename
             if count == 0:
-                out = out + " "
+                out += " "
                 count = 1
             else:
-                out = out + "\n" + ONETAB * 9 + "or \n"
-                out = out + ONETAB * 8
-            out = out + "(" + slaveinstancename + "_" +\
+                out += "\n" + ONETAB * 9 + "or \n"
+                out += ONETAB * 8
+            out += "(" + slaveinstancename + "_" +\
                 slaveinterface.get_port_by_type(
                     bus.sig_name("slave", "ack")).name +\
                 " and " + slaveinstancename + "_" + slaveinterfacename + "_cs)"
     else:
-        out = out + "'0'"
-    out = out + ";\n"
+        out += "'0'"
+    out += ";\n"
     return out
 
 
@@ -551,9 +551,9 @@ def selectWrite(masterinterface, intercon):
             continue
 
         data_size = int(interface.data_size)
-        out = out + ONETAB + slave.instancename + "_readdata_s <= "
+        out += ONETAB + slave.instancename + "_readdata_s <= "
         if int(data_size) == int(master_size):
-            out = out + slave_bus_name
+            out += slave_bus_name
         else:
             nb_byte = data_size / 8
             mask = pow(2, nb_byte)-1
@@ -562,15 +562,15 @@ def selectWrite(masterinterface, intercon):
                 min_pos = i * data_size
                 val = bin(int(mask * pow(2, nb_byte*i)))[2:]
                 if i < bitsize - 1:
-                    out = out + "(" + str(master_size-1) + \
+                    out += "(" + str(master_size-1) + \
                         " downto " + str(min_pos + data_size) + " => '0') & "
-                out = out + slave_bus_name + " "
+                out += slave_bus_name + " "
                 if i != 0:
-                    out = out + "& (" + str(min_pos-1) + " downto 0 => '0')"
+                    out += "& (" + str(min_pos-1) + " downto 0 => '0')"
                 if i < bitsize - 1:
-                    out = out + " when " + byte_en_name + ' = "' + \
+                    out += " when " + byte_en_name + ' = "' + \
                         val.zfill(byte_en_size) + '" else\n' + 2 * ONETAB
-        out = out + ";\n\n"
+        out += ";\n\n"
 
     return out
 

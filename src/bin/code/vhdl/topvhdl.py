@@ -94,7 +94,7 @@ class TopVHDL(TopGen):
                             if port.connected_msb < 1:
                                 out += " std_logic;"
                             else:
-                                out v= " std_logic_vector(" +\
+                                out += " std_logic_vector(" +\
                                     str(port.connected_msb) +\
                                     " downto 0);"
                             out += "\n"
@@ -220,7 +220,7 @@ class TopVHDL(TopGen):
         platformname = self.project.platform.instancename
         out = ""
         out += ONETAB + "-------------------------\n"
-        out += ONETAB + "-- Signals declaration\n"
+        out += ONETAB + "-- Signals declaration --\n"
         out += ONETAB + "-------------------------\n"
         for component in componentslist:
             if component.is_platform() is True:
@@ -248,10 +248,9 @@ class TopVHDL(TopGen):
                     if int(port.size) == 1:
                         out += " std_logic;\n"
                     else:
-                        out +=\
-                            " std_logic_vector(" +\
-                            port.max_pin_num +\
-                            " downto " + port.min_pin_num + ");\n"
+                        out += " std_logic_vector(" +\
+                               str(port.real_size - 1) +\
+                               " downto " + port.min_pin_num + ");\n"
 
         out += "\n" + ONETAB + "-- void pins\n"
 
