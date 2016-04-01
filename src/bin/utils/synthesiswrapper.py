@@ -265,7 +265,6 @@ class SynthesisWrapper:
         # Source files
         tclfile.write("## add components sources file\n")
         tclfile.write("# add top level sources file\n")
-        print ".." + SYNTHESISPATH + "/top_" + SETTINGS.active_project.name + VHDLEXT
         tclfile.write(self.add_file_to_tcl(".." + SYNTHESISPATH + "/top_" +
                       SETTINGS.active_project.name + VHDLEXT))
 
