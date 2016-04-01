@@ -38,6 +38,8 @@ from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils.display import Display
 
+import importlib
+
 SETTINGS = Settings()
 DISPLAY = Display()
 
@@ -57,6 +59,26 @@ class Synthesis(WrapperXml):
         # adding path for toolchain plugin
         sys.path.append(SETTINGS.path + TOOLCHAINPATH +
                         SYNTHESISPATH + "/" + self.name)
+
+        # specific tool instanciation
+        try:
+            base_lib = "periphondemand.toolchains.synthesis."
+            module_name = str.upper(self.name[0])+self.name[1:]
+            module = importlib.import_module(base_lib + self.name + "." +
+                                             self.name)
+            my_class = getattr(module, module_name)
+            self._plugin = my_class(parent, self)
+
+        except ImportError, error:
+            sy.rm_file(SETTINGS.path + TOOLCHAINPATH +
+                       SYNTHESISPATH + "/" + self.name)
+            raise PodError(str(error))
+
+    @property
+    def plugin(self):
+        """ return synthesis generator instance
+        """
+        return self._plugin
 
     def save(self):
         """ Save xml """
@@ -125,15 +147,9 @@ class Synthesis(WrapperXml):
 
     def generate_tcl(self, filename=None):
         """ generate tcl script to drive synthesis tool """
-        try:
-            plugin = __import__(self.name)
-        except ImportError, error:
-            sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
-                            SYNTHESISPATH + "/" + self.name)
-            raise PodError(str(error), 0)
         sys.path.append(SETTINGS.path + TOOLCHAINPATH +
                         SYNTHESISPATH + "/" + self.name)
-        filename = plugin.generate_tcl(self)
+        filename = self.plugin.generate_tcl()
         self.tcl_scriptname = str(filename)
         return None
 
@@ -160,29 +176,20 @@ class Synthesis(WrapperXml):
 
     def generate_pinout(self, filename):
         """ Generate pinout constraints file """
-        try:
-            plugin = __import__(self.name)
-        except ImportError, error:
-            sy.rm_file(SETTINGS.path + TOOLCHAINPATH +
-                       SYNTHESISPATH + "/" + self.name)
-            raise PodError(str(error))
         sy.rm_file(SETTINGS.path + TOOLCHAINPATH +
                    SYNTHESISPATH + "/" + self.name)
 
-        plugin.generate_pinout(self, filename)
+        print self.plugin
+        self.plugin.generate_pinout(filename)
         return None
 
     def generate_bitstream(self):
         """ Generate the bitstream for fpga configuration """
-        try:
-            plugin = __import__(self.name)
-        except ImportError, error:
-            raise PodError(str(error), 0)
         scriptpath = SETTINGS.projectpath +\
             SYNTHESISPATH +\
             "/" + self.tcl_scriptname
         try:
-            plugin.generate_bitstream(self,
+            self.plugin.generate_bitstream(
                                       self.synthesis_toolcommandname,
                                       scriptpath)
         except PodError, error:
