@@ -67,59 +67,59 @@ class SynthesisWrapper:
         """ return string
             for project creation
         """
-        return ""
+        raise NotImplementedError("method must be implemented", 0)
 
     def project_base_configuration(self):
         """ return basic project
             configuration
         """
-        return ""
+        raise NotImplementedError("method must be implemented", 0)
 
     @classmethod
     def add_file_to_tcl(cls, filename):
         """ return line according to the
             synthesis tool
         """
-        return ""
+        raise NotImplementedError("method must be implemented", 0)
 
     def add_constraints_file(self, filename):
         """ return line for constraints file insertion
         """
-        return ""
+        raise NotImplementedError("method must be implemented", 0)
 
     @classmethod
     def addforcepinout(cls, port):
         """ return line for pin forced
         """
-        return ""
+        raise NotImplementedError("method must be implemented", 0)
 
     def addpinconstraints(self, connect, port, portdest):
         """ return pin constraint definition
         """
-        return ""
+        raise NotImplementedError("method must be implemented", 0)
 
     def addclockconstraints(self, connect, frequency):
         """ return clock constraints line definition
         """
-        return ""
+        raise NotImplementedError("method must be implemented", 0)
 
     @classmethod
     def insert_tools_specific_commands(cls):
         """ return lines for misc stuff
             specific to a tool
         """
-        return ""
+        raise NotImplementedError("method must be implemented", 0)
 
     @classmethod
     def insert_tools_gen_cmds(cls):
         """ return lines for bitstream generation
         """
-        return ""
+        raise NotImplementedError("method must be implemented", 0)
 
     def ext_files(self):
         """ return list of bitstream files extension
         """
-        return ()
+        raise NotImplementedError("method must be implemented", 0)
 
     def generatelibraryconstraints(self):
         """ Adds constraints specified by a component,
