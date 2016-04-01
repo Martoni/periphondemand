@@ -421,7 +421,6 @@ fpga_attributes    : give list of fpga attributes in platform
                 libraryname.lower()
             except Exception, error:
                 raise error
-                # return SETTINGS.active_library.list_components()
             arglist = [libraryname + "." + componentname
                        for componentname in
                        self._project.library.list_components(
@@ -432,11 +431,6 @@ fpga_attributes    : give list of fpga attributes in platform
                 libraryname.lower()
             except Exception, error:
                 raise error
-                # libraryname = SETTINGS.active_library.lib_name
-                # return [componentname + "." + version
-                #         for version in
-                #         self._project.get_components_versions(
-                #             libraryname, componentname)]
             return [libraryname + "." + componentname + "." + comp
                     for comp in
                     self._project.get_components_versions(

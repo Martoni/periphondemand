@@ -38,6 +38,10 @@ class Ise(SynthesisWrapper):
     def __init__(self, project, parent):
         SynthesisWrapper.__init__(self, project, parent)
 
+    @classmethod
+    def constraints_file_extension(cls):
+        return ("ucf")
+
     def project_base_creation(self):
         """ return basic project
             configuration

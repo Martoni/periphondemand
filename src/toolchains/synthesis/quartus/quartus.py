@@ -55,6 +55,10 @@ class Quartus(SynthesisWrapper):
     def __init__(self, project, parent):
         SynthesisWrapper.__init__(self, project, parent)
 
+    @classmethod
+    def constraints_file_extension(cls):
+        return ("sdc")
+
     def needqsys(self):
         """ Check if design need to generate a qsys file
         """
@@ -125,6 +129,12 @@ class Quartus(SynthesisWrapper):
         tclfile = open(settings.projectpath + SYNTHESISPATH + "/" +
                        project_name + ".tcl", "w")
         tclfile.write(out)
+
+    def add_constraints_file(self, filename):
+        """ return line for constraints file insertion
+        """
+        out = self.add_file_to_tcl(".." + filename + ".sdc")
+        return out
 
     @classmethod
     def addforcepinout(cls, port):
@@ -316,6 +326,8 @@ class Quartus(SynthesisWrapper):
             out += "VERILOG_FILE"
         elif file_extension == "qip":
             out += "QIP_FILE"
+        elif file_extension == "sdc":
+            out += "SDC_FILE"
         else:
             out += "SOURCE_FILE"
 
@@ -332,7 +344,7 @@ class Quartus(SynthesisWrapper):
         sdcfile = settings.projectpath + SYNTHESISPATH + "/" + \
             self.project.name + ".sdc"
         self.generate_sdc(sdcfile)
-        out = "set_global_assignment -name SDC_FILE " + sdcfile + "\n"
+        out = ""
 
         list_qsys_comp = self.needqsys()
         if len(list_qsys_comp):

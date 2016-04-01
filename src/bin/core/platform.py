@@ -140,6 +140,11 @@ class Platform(Component):
             return []
 
     @property
+    def board_part(self):
+        """ get the board part name """
+        return self.get_node("fpga").get_attr_value("board_part")
+
+    @property
     def family(self):
         """ get the family name """
         return self.get_node("fpga").get_attr_value("family")
