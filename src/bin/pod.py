@@ -45,7 +45,7 @@ TMPFILENAME = "podtmp"
 
 def usage():
     """ print POD arg usage """
-    print """\
+    print("""\
 Usage: pod [OPTION...]
 
     -h, --help             give this help list
@@ -54,7 +54,7 @@ Usage: pod [OPTION...]
     -v, --version          print program version
 
 Report bugs to http://periphondemand.sourceforge.net/
-"""
+""")
 
 
 def main(argv):
