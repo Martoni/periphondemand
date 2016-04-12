@@ -62,9 +62,10 @@ class Synthesis(WrapperXml):
 
         # specific tool instanciation
         try:
-            base_lib = "periphondemand.toolchains.synthesis."
-            module_name = str.upper(self.name[0])+self.name[1:]
-            module = importlib.import_module(base_lib + self.name + "." +
+            base_lib = "periphondemand.toolchains.synthesis"
+            module_name = str.upper(self.name[0]) + self.name[1:]
+            module = importlib.import_module(base_lib + "." +
+                                             self.name + "." +
                                              self.name)
             my_class = getattr(module, module_name)
             self._plugin = my_class(parent, self)
@@ -192,7 +193,7 @@ class Synthesis(WrapperXml):
             "/" + self.tcl_scriptname
         try:
             cmd = self.synthesis_toolcommandname
-            plugin.generate_bitstream(self, cmd, scriptpath)
+            self.plugin.generate_bitstream(cmd, scriptpath)
         except PodError, error:
             raise PodError("Can't generate bitstream for this synthesis" +
                            " toolchain:" + self.synthesis_toolname +
