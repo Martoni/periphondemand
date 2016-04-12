@@ -79,7 +79,7 @@ class Project(WrapperXml):
                 try:
                     SETTINGS.projectpath =\
                         os.path.abspath(os.path.dirname(projectpathname))
-                except IOError, error:
+                except IOError as error:
                     raise PodError(str(error), 0)
             else:
                 SETTINGS.projectpath = projectpathname
@@ -151,11 +151,11 @@ class Project(WrapperXml):
         #           self.synthesis = Synthesis(self, node.name)
         try:
             self.synthesis = Synthesis(self)
-        except PodError, error:
+        except PodError as error:
             DISPLAY.msg(str(error))
         try:
             self.simulation = Simulation(self)
-        except PodError, error:
+        except PodError as error:
             DISPLAY.msg(str(error))
 
         # Set bus master-slave
@@ -504,7 +504,7 @@ class Project(WrapperXml):
         # suppress platform if already exists
         try:
             self.del_platform()
-        except PodError, error:
+        except PodError as error:
             if error.level < 2:
                 raise error
             print error
@@ -763,7 +763,7 @@ class Project(WrapperXml):
                         # connect bus
                         master.connect_bus(interfaceslave.parent,
                                            interfaceslave.name)
-                    except PodError, error:
+                    except PodError as error:
                         error.level = 2
                         DISPLAY.msg(str(error))
 

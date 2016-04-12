@@ -171,7 +171,7 @@ class SynthesisWrapper:
 
         try:
             afile = open(filename, "w")
-        except IOError, error:
+        except IOError as error:
             raise PodError(str(error), 0)
         afile.write(out)
         afile.close()

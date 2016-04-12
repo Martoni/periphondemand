@@ -70,7 +70,7 @@ class Synthesis(WrapperXml):
             my_class = getattr(module, module_name)
             self._plugin = my_class(parent, self)
 
-        except ImportError, error:
+        except ImportError as error:
             sy.rm_file(SETTINGS.path + TOOLCHAINPATH +
                        SYNTHESISPATH + "/" + self.name)
             raise PodError(str(error))
@@ -144,7 +144,7 @@ class Synthesis(WrapperXml):
                                    component.instancename +
                                    "/hdl/" + hdlfile.filename,
                                    compdir + "/")
-                    except IOError, error:
+                    except IOError as error:
                         print DISPLAY
                         raise PodError(str(error), 0)
 
@@ -194,7 +194,7 @@ class Synthesis(WrapperXml):
         try:
             cmd = self.synthesis_toolcommandname
             self.plugin.generate_bitstream(cmd, scriptpath)
-        except PodError, error:
+        except PodError as error:
             raise PodError("Can't generate bitstream for this synthesis" +
                            " toolchain:" + self.synthesis_toolname +
                            ", not implemented. (" + str(error) + ")")

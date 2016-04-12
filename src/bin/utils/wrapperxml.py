@@ -60,7 +60,7 @@ class WrapperXml(object):
         """ initialize with filename"""
         try:
             self.open_xml(filename)
-        except IOError, error:
+        except IOError as error:
             raise PodError(str(error), 0)
 
     def __initnode(self, node):
@@ -79,7 +79,7 @@ class WrapperXml(object):
         """ initialize with nodestring """
         try:
             self.tree = ET.fromstring(nodestring)
-        except SyntaxError, error:
+        except SyntaxError as error:
             raise PodError("XML malformed :\n" + str(error), 0)
 
     def __str__(self):
@@ -301,20 +301,20 @@ class WrapperXml(object):
         if type(filename) == str and string is not None:
             try:
                 self.tree = ET.fromstring(filename)
-            except SyntaxError, error:
+            except SyntaxError as error:
                 raise PodError("Xml malformed in " +
                                filename + " : \n" + str(error))
         else:
             try:
                 xmlfile = open(filename, 'r')
-            except IOError, error:
+            except IOError as error:
                 raise PodError(str(error), 0)
             content =\
                 xmlfile.read().replace(
                     r'<?xml version="1.0" encoding="utf-8"?>', '')
             try:
                 self.tree = ET.fromstring(content)
-            except SyntaxError, error:
+            except SyntaxError as error:
                 raise PodError("Xml malformed in " +
                                filename + " :\n" + str(error))
 

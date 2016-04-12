@@ -104,7 +104,7 @@ class Driver(WrapperXml):
                                 SETTINGS.projectpath + DRIVERSPATH + "/" +
                                 component.name + "/" + templatefile,
                                 "w")
-                        except IOError, error:
+                        except IOError as error:
                             raise PodError(str(error), 0)
                         self.fill_template(template, destfile, component)
                         template.close()

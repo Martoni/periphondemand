@@ -248,7 +248,7 @@ def generate_template():
         sy.rename_file(filename, filename + "old")
     try:
         afile = open(filename, "w")
-    except IOError, error:
+    except IOError as error:
         raise error
     afile.write(out)
     afile.close()

@@ -49,7 +49,7 @@ class SimulationCli(BaseCli):
         try:
             alist = self.completeargs(text, line,
                                       "[simulationtoolchain]")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return alist
 
@@ -60,7 +60,7 @@ select toolchain used for simulation
         """
         try:
             self.checkargs(line, "[simulationtoolchain]")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
 
@@ -79,7 +79,7 @@ select toolchain used for simulation
         else:
             try:
                 self._project.simulation_toolchain = line
-            except PodError, error:
+            except PodError as error:
                 print(str(error))
                 return
 
@@ -91,7 +91,7 @@ Make projects files for simulation (makefile and testbench sources)
         if line.strip() != "":
             try:
                 self.do_selecttoolchain(line)
-            except PodError, error:
+            except PodError as error:
                 print(str(error))
                 return
         elif self._project.simulation is None:
@@ -107,7 +107,7 @@ Make projects files for simulation (makefile and testbench sources)
         try:
             filename = self._project.simulation.generate_template()
             filename = self._project.simulation.generate_makefile()
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         print(str(DISPLAY))

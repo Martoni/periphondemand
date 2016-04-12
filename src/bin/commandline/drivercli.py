@@ -53,7 +53,7 @@ class DriverCli(BaseCli):
         toollist = []
         try:
             toollist = self.completeargs(text, line, "[drivertoolchain]")
-        except PodError, error:
+        except PodError as error:
             print error
         return toollist
 
@@ -66,7 +66,7 @@ generate a project drivers directory with templates
             self.testIfToolChainSelected()
             self.driver.generate_project()
             self.driver.fill_all_templates()
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -80,7 +80,7 @@ fill drivers templates
         try:
             self.testIfToolChainSelected()
             self.driver.fill_all_templates()
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -95,7 +95,7 @@ directory must be selected with setprojecttree
         try:
             self.testIfToolChainSelected()
             self.driver.copy_bsp_drivers()
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -121,7 +121,7 @@ select software developpement tree, to copy driver
         try:
             self.testIfToolChainSelected()
             self.driver.set_bsp_directory(line)
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -131,7 +131,7 @@ select software developpement tree, to copy driver
         toolchainlist = []
         try:
             toolchainlist = self.completeargs(text, line, "[drivertoolchain]")
-        except PodError, error:
+        except PodError as error:
             print error
         return toolchainlist
 
@@ -142,7 +142,7 @@ select operating system to generate drivers
         """
         try:
             self.checkargs(line, "[drivertoolchain]")
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -160,7 +160,7 @@ select operating system to generate drivers
         else:
             try:
                 self._project.driver_toolchain = line
-            except PodError, error:
+            except PodError as error:
                 print error
                 return
         self.driver = self._project.driver

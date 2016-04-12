@@ -419,7 +419,7 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "componentname":
             try:
                 libraryname.lower()
-            except Exception, error:
+            except Exception as error:
                 raise error
             arglist = [libraryname + "." + componentname
                        for componentname in
@@ -429,7 +429,7 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "componentversion":
             try:
                 libraryname.lower()
-            except Exception, error:
+            except Exception as error:
                 raise error
             return [libraryname + "." + componentname + "." + comp
                     for comp in
@@ -530,7 +530,7 @@ fpga_attributes    : give list of fpga attributes in platform
         """
         try:
             self.checkargs(line, "<filename>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         # Create the file
@@ -538,7 +538,7 @@ fpga_attributes    : give list of fpga attributes in platform
         filename = filename + PODSCRIPTEXT
         try:
             historyfile = open(filename, "w")
-        except IOError, error:
+        except IOError as error:
             print(str(error))
             return
         # suppress the last command (its savehistory itself)

@@ -204,7 +204,7 @@ class Quartus(SynthesisWrapper):
         out = out + "#end\n"
         try:
             file_constr = open(filename, "w")
-        except IOError, error:
+        except IOError as error:
             raise PodError(str(error), 0)
         file_constr.write(out)
         file_constr.close()
@@ -245,7 +245,7 @@ class Quartus(SynthesisWrapper):
         out = out + "derive_clock_uncertainty\n"
         try:
             sdc_file = open(filename, "w")
-        except IOError, error:
+        except IOError as error:
             raise PodError(str(error), 0)
         sdc_file.write(out)
         sdc_file.close()

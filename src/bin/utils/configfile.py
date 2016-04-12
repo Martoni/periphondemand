@@ -110,7 +110,7 @@ class ConfigFile(WrapperXml):
         from periphondemand.bin.utils import wrappersystem as sy
         try:
             tools = self.get_node("tools").get_nodes("tool")
-        except AttributeError, error:
+        except AttributeError as error:
             raise PodError("No synthesis command in .podrc. (" +
                            str(error) + ")")
         command_name = None
@@ -132,7 +132,7 @@ class ConfigFile(WrapperXml):
         """ Return the path to synthesis command """
         try:
             tools = self.get_node("tools").get_nodes("tool")
-        except AttributeError, error:
+        except AttributeError as error:
             raise PodError("No synthesis command in .podrc. (" +
                            str(error) + ")")
         for anode in tools:

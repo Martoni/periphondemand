@@ -67,7 +67,7 @@ synthesis commands
         try:
             self.is_project_open()
             self.isPlatformSelected()
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
 
@@ -90,7 +90,7 @@ Simulation generation environment
         try:
             self.is_project_open()
             self.isPlatformSelected()
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
 
@@ -114,7 +114,7 @@ Driver generation environment
         try:
             self.is_project_open()
             self.isPlatformSelected()
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
 
@@ -137,12 +137,12 @@ create new project
         """
         try:
             self.checkargs(line, "<projectname>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         try:
             sy.check_name(line)
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return 0
         dirname = os.path.abspath(line)
@@ -152,7 +152,7 @@ create new project
         else:
             try:
                 self._project = Project(dirname, void=0)
-            except PodError, error:
+            except PodError as error:
                 print(str(error))
                 return
 
@@ -180,7 +180,7 @@ Load a project
         """
         try:
             self.checkargs(line, "<projectfilename>.xml")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         if sy.dir_exist(line):
@@ -191,10 +191,10 @@ Load a project
             return
         try:
             self._project = Project(line)
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
-        except IOError, error:
+        except IOError as error:
             print(str(error))
             return
         self.setPrompt("POD:" + self._project.name)
@@ -212,13 +212,13 @@ Setting speedgrade of FPGA
         try:
             self.is_project_open()
             self.checkargs(line, "<speedgrade>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
         try:
             self._project.fpga_speed_grade = line
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -235,7 +235,7 @@ Print FPGA speed grade information
         """
         try:
             speedgrade = self._project.fpga_speed_grade
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -253,13 +253,13 @@ Setting FPGA device
         try:
             self.is_project_open()
             self.checkargs(line, "<fpgatype>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
         try:
             self._project.fpga_device = line
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -277,13 +277,13 @@ Select VHDL version
         try:
             self.is_project_open()
             self.checkargs(line, "<vhdlversion>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
         try:
             self._project.vhdl_version = line
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -300,7 +300,7 @@ Print FPGA device information
         """
         try:
             fpgadevice = self._project.fpga_device
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -318,13 +318,13 @@ Adding components library
         try:
             self.is_project_open()
             self.checkargs(line, "<componentslibpath>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
         try:
             self._project.add_component_lib(line)
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -342,13 +342,13 @@ Adding platforms library
         try:
             self.is_project_open()
             self.checkargs(line, "<platformslibpath>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
         try:
             self._project.add_platforms_lib(line)
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -363,7 +363,7 @@ Adding platforms library
                     text, line,
                     "<libraryname>.<componentname>.[componentversion] " +
                     "[newinstancename]")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return componentlist
 
@@ -381,7 +381,7 @@ Add component in project
                 line,
                 "<libraryname>.<componentname>.[componentversion] " +
                 "[newinstancename]")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -418,7 +418,7 @@ Add component in project
                     libraryname=subarg[0],
                     componentversion=componentversion,
                     instancename=instancename)
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -450,7 +450,7 @@ List components available in the library
             self.is_project_open()
             return [comp.instancename
                     for comp in self._project.instances]
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
 
@@ -461,7 +461,7 @@ List all project instances
         """
         try:
             self.is_project_open()
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         return self.columnize(self.listinstances())
@@ -472,7 +472,7 @@ List all project instances
         try:
             platformlist = self.completeargs(text, line,
                                              "<platformlib>.<platformname>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return platformlist
 
@@ -484,14 +484,14 @@ Select the platform to use
         try:
             self.is_project_open()
             self.checkargs(line, "<platformlib>.<platformname>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         try:
             args = line.strip().split(".")
             self._project.select_platform(args[1], args[0])
             self._project.save()
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -504,13 +504,13 @@ List platform available
         """
         try:
             self.is_project_open()
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         try:
             return self.columnize(
                 self._project.availables_plat())
-        except AttributeError, error:
+        except AttributeError as error:
             print(str(error))
 
     def complete_listinterfaces(self, text, line, begidx, endidx):
@@ -519,7 +519,7 @@ List platform available
         try:
             pinlist = self.completeargs(text, line,
                                         "<instancename>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return pinlist
 
@@ -535,7 +535,7 @@ List instance interface
                 [interface.name for interface in
                     self._project.get_instance(
                         line).interfaces]
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -550,7 +550,7 @@ List instance interface
                 text, line,
                 "<instancename>.<interfacename>.<portname>.<pinnum> " +
                 "<instancename>.<interfacename>.<portname>.<pinnum>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return pinlist
 
@@ -568,7 +568,7 @@ Connect pin between instances
                 line,
                 "<instancename>.<interfacename>.<portname>.[pinnum] " +
                 "<instancename>.<interfacename>.<portname>.[pinnum]")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -588,7 +588,7 @@ Connect pin between instances
                 self._project.get_instance(
                     dest[0]).get_interface(
                         dest[1]).get_port(dest[2]).get_pin(dest[3]))
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -602,7 +602,7 @@ Connect pin between instances
                 self.completeargs(
                     text, line,
                     "<instancename>.<interfacename>.<portname> <uvalue>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return portlist
 
@@ -616,7 +616,7 @@ Force input port unconnected value
             self.checkargs(
                 line,
                 "<instancename>.<interfacename>.<portname> <uvalue>")
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -635,7 +635,7 @@ Force input port unconnected value
                         "interface": source[1],
                         "port": source[2]}
             self._project.set_unconnected_value(portdict, uvalue)
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -649,7 +649,7 @@ Force input port unconnected value
                 text, line,
                 "<instancename>.<interfacename>.<portname> " +
                 "<instancename>.<interfacename>.<portname>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return portlist
 
@@ -666,7 +666,7 @@ Connect all pins of two same size ports.
                 line,
                 "<instancename>.<interfacename>.<portname> " +
                 "<instancename>.<interfacename>.<portname>")
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -686,7 +686,7 @@ Connect all pins of two same size ports.
                  "port": source[2]},
                 {"instance": dest[0], "interface": dest[1],
                  "port": dest[2]})
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -699,7 +699,7 @@ Connect all pins of two same size ports.
             buslist = self.completeargs(text, line,
                                         "<instancename>.<interfacename> " +
                                         "<instancename>.<interfacename>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return buslist
 
@@ -716,7 +716,7 @@ Connect interface between two components
             self.checkargs(line,
                            "<instancename>.<interfacename> " +
                            "<instancename>.<interfacename>")
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -730,7 +730,7 @@ Connect interface between two components
             sourcedict = {"instance": source[0], "interface": source[1]}
             destdict = {"instance": dest[0], "interface": dest[1]}
             self._project.connect_interface(sourcedict, destdict)
-        except PodError, error:
+        except PodError as error:
             print("<<interface " + source[1] +
                   " and interface " + dest[1] + " are not compatible>>")
             print DISPLAY
@@ -747,7 +747,7 @@ Connect interface between two components
                     text, line,
                     "<masterinstancename>.<masterinterfacename> " +
                     "<slaveinstancename>.<slaveinterfacename>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return connectlist
 
@@ -765,7 +765,7 @@ Suppress a pin connection
                 line,
                 "<masterinstancename>.<masterinterfacename> " +
                 "<slaveinstancename>.<slaveinterfacename>")
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -779,7 +779,7 @@ Suppress a pin connection
             masterdict = {"instance": source[0], "interface": source[1]}
             slavedict = {"instance": dest[0], "interface": dest[1]}
             self._project.del_bus(masterdict, slavedict)
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -793,7 +793,7 @@ Suppress a pin connection
                 text, line,
                 "<masterinstancename>.<masterinterfacename> " +
                 "<slaveinstancename>.<slaveinterfacename>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return buslist
 
@@ -811,7 +811,7 @@ Connect slave to master bus
                 line,
                 "<masterinstancename>.<masterinterfacename> " +
                 "<slaveinstancename>.<slaveinterfacename>")
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -825,7 +825,7 @@ Connect slave to master bus
             masterdict = {"instance": source[0], "interface": source[1]}
             slavedict = {"instance": dest[0], "interface": dest[1]}
             self._project.connect_bus(masterdict, slavedict)
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -839,7 +839,7 @@ Autoconnect bus if only one master in project
         try:
             self.is_project_open()
             self._project.auto_connect_busses()
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -854,7 +854,7 @@ Autoconnect bus if only one master in project
                     text, line,
                     "<instancename>.<interfacename>.<portname>.<pinnum> " +
                     "<instancename>.<interfacename>.<portname>.<pinnum>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return connectlist
 
@@ -873,7 +873,7 @@ Suppress a pin connection
                 line,
                 "<instancename>.<interfacename>.<portname>.[pinnum] " +
                 "[instancename].[interfacename].[portname].[pinnum]")
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -899,7 +899,7 @@ Suppress a pin connection
                  "port": source[2], "num": source[3]},
                 {"instance": dest[0], "interface": dest[1],
                  "port": dest[2], "num": dest[3]})
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -911,7 +911,7 @@ Suppress a pin connection
         componentlist = []
         try:
             componentlist = self.completeargs(text, line, "<instancename>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return componentlist
 
@@ -923,13 +923,13 @@ Suppress a component from project
         try:
             self.is_project_open()
             self.checkargs(line, "<instancename>")
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
         try:
             self._project.del_instance(line)
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -943,7 +943,7 @@ Check the project before code generation
         try:
             self.is_project_open()
             self._project.check()
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
         print DISPLAY
@@ -957,7 +957,7 @@ Check the project before code generation
                     text, line,
                     "<slaveinstancename>.<slaveinterfacename> " +
                     "<addressinhexa>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return addrlist
 
@@ -971,7 +971,7 @@ Set the base address of slave interface
             self.checkargs(
                 line,
                 "<slaveinstancename>.<slaveinterfacename> <addressinhexa>")
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -992,7 +992,7 @@ Set the base address of slave interface
                     names[0]).get_interface(names[1])
             interfacemaster = interfaceslave.master
             interfacemaster.alloc_mem.set_slave_addr(interfaceslave, arg[1])
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -1006,7 +1006,7 @@ List master interface
         """
         try:
             self.is_project_open()
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -1021,7 +1021,7 @@ List master interface
             mappinglist = \
                 self.completeargs(text, line,
                                   "<masterinstancename>.<masterinterfacename>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return mappinglist
 
@@ -1033,7 +1033,7 @@ Return mapping for a master interface
         try:
             self.is_project_open()
             self.checkargs(line, "<masterinstancename>.<masterinterfacename>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -1044,7 +1044,7 @@ Return mapping for a master interface
                 self._project.get_instance(
                     names[0]).get_interface(names[1])
             print(str(masterinterface.alloc_mem))
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
         print DISPLAY
@@ -1054,7 +1054,7 @@ Return mapping for a master interface
         printlist = []
         try:
             printlist = self.completeargs(text, line, "<instancename>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return printlist
 
@@ -1066,7 +1066,7 @@ Print instance in XML format
         try:
             self.is_project_open()
             self.checkargs(line, "<instancename>")
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -1078,7 +1078,7 @@ Print instance in XML format
         infolist = []
         try:
             infolist = self.completeargs(text, line, "<instancename>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return infolist
 
@@ -1091,7 +1091,7 @@ Print instance information
             self.is_project_open()
             self.checkargs(line, "<instancename>")
             instance = self._project.get_instance(line)
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -1142,7 +1142,7 @@ Print instance information
                 self.completeargs(
                     text, line,
                     "<instancename>.<genericname> <genericvalue>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return genericlist
 
@@ -1155,7 +1155,7 @@ Set generic parameter
             self.is_project_open()
             self.checkargs(line,
                            "<instancename>.<genericname> <genericvalue>")
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -1168,7 +1168,7 @@ Set generic parameter
                 generic.value = args[1]
             else:
                 raise PodError("this generic can't be modified by user", 0)
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -1192,7 +1192,7 @@ Close the project
         """
         try:
             self.is_project_open()
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print(str(error))
             return
@@ -1209,7 +1209,7 @@ Close the project
                 self.completeargs(
                     text, line,
                     "<masterinstancename>.<masterinterfacename>")
-        except PodError, error:
+        except PodError as error:
             print error
         return interconlist
 
@@ -1221,7 +1221,7 @@ Generate intercon for master given in argument
         try:
             self.is_project_open()
             self.checkargs(line, "<instancename>.<masterinterfacename>")
-        except PodError, error:
+        except PodError as error:
             print error
             return
         arg = line.split(' ')
@@ -1232,7 +1232,7 @@ Generate intercon for master given in argument
         try:
             interfacedict = {"instance": names[0], "interface": names[1]}
             self._project.generate_intercon(interfacedict)
-        except PodError, error:
+        except PodError as error:
             print error
             return
         print DISPLAY
@@ -1247,7 +1247,7 @@ Generate top component
             self._project.check()
             top = TopVHDL(self._project)
             top.generate()
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         print DISPLAY
@@ -1262,7 +1262,7 @@ Generate a report of the project
         try:
             self.is_project_open()
             text = self._project.generate_report()
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -1285,7 +1285,7 @@ List all force configured for this project
             for port in self._project.forced_ports:
                 print("port " + str(port.name) +
                       " is forced to " + port.force)
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -1295,7 +1295,7 @@ List all force configured for this project
         pinlist = []
         try:
             pinlist = self.completeargs(text, line, "<forcename> <forcestate>")
-        except PodError, error:
+        except PodError as error:
             print error
         return pinlist
 
@@ -1308,7 +1308,7 @@ Set fpga pin state in 'gnd', 'vcc'. To unset use 'undef' value
         try:
             self.is_project_open()
             self.checkargs(line, "<forcename> <forcestate>")
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -1319,7 +1319,7 @@ Set fpga pin state in 'gnd', 'vcc'. To unset use 'undef' value
 
         try:
             self._project.set_force(portname, state)
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -1335,7 +1335,7 @@ Set 1 if you want color output, 0 else
 
         try:
             SETTINGS.set_color(value)
-        except PodError, error:
+        except PodError as error:
             print DISPLAY
             print error
             return
@@ -1364,7 +1364,7 @@ Runs command(s) from a file.
                                 ('stdin', 'use_rawinput', ))
         try:
             self.stdin = open(fname, 'r')
-        except IOError, error:
+        except IOError as error:
             try:
                 self.stdin = open('%s.%s' % (fname,
                                              self.default_extension), 'r')
