@@ -1,7 +1,7 @@
 setcolor 0
 create i2cledbuttonextint
 selectplatform standard.apf27
-addinstance components.button push
+addinstance components.button.wb16 push
 addinstance components.led.wb16 blink
 addinstance components.i2cocore.wb16 i2c
 connectpin irq_mngr00.irq.irqport.0 i2c.irq.inta_o.0

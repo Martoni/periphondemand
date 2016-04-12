@@ -103,7 +103,9 @@ class Synthesis(WrapperXml):
                                                subnodename="tool")
             command_path = self.get_attr_value(key="default_path",
                                                subnodename="tool")
-            command_name = command_path + "/" + command_name
+            if command_path is not None:
+                if command_path != "":
+                    command_name = command_path + "/" + command_name
             if not sy.cmd_exist(command_name):
                 raise PodError("Synthesis tool tcl shell command named " +
                                command_name + " doesn't exist in PATH")
@@ -189,9 +191,8 @@ class Synthesis(WrapperXml):
             SYNTHESISPATH +\
             "/" + self.tcl_scriptname
         try:
-            self.plugin.generate_bitstream(
-                                      self.synthesis_toolcommandname,
-                                      scriptpath)
+            cmd = self.synthesis_toolcommandname
+            plugin.generate_bitstream(self, cmd, scriptpath)
         except PodError, error:
             raise PodError("Can't generate bitstream for this synthesis" +
                            " toolchain:" + self.synthesis_toolname +
