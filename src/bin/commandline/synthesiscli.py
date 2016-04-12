@@ -138,7 +138,7 @@ ise
         """
 
         if self._project.synthesis is None:
-            print PodError("Select toolchain before")
+            print(PodError("Select toolchain before"))
             return
         if line.strip() != "":
             filename = SETTINGS.path + TOOLCHAINPATH +\
@@ -150,7 +150,7 @@ ise
         except PodError as error:
             print(str(error))
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def do_generatepinout(self, line):
         """\
@@ -180,14 +180,14 @@ generate the bitstream for fpga configuration
         """
         del line
         if self._project.synthesis is None:
-            print PodError("Select toolchain before")
+            print(PodError("Select toolchain before"))
             return
         try:
             self._project.synthesis.generate_bitstream()
         except PodError as error:
             print(str(error))
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def complete_setiostandard(self, text, line, begidx, endidx):
         """ setiostandard command completion """
@@ -197,7 +197,7 @@ generate the bitstream for fpga configuration
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
         except PodError as error:
-            print error
+            print(error)
         return iolist
 
     def do_setiostandard(self, line):
@@ -246,12 +246,12 @@ get IO standard value
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print self._project.get_io(io_name).standard
+            print(self._project.get_io(io_name).standard)
         except PodError as error:
-            print DISPLAY
-            print error
+            print(DISPLAY)
+            print(error)
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def complete_setportoption(self, text, line, begidx, endidx):
         """ setportoption command completion """
@@ -305,18 +305,18 @@ get IO Port option value
         try:
             self.checkargs(line, "<IO_name>")
         except PodError as error:
-            print DISPLAY
-            print error
+            print(DISPLAY)
+            print(error)
             return
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print self._project.get_io(io_name).port_option
+            print(self._project.get_io(io_name).port_option)
         except PodError as error:
-            print DISPLAY
-            print error
+            print(DISPLAY)
+            print(error)
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def complete_setiodrive(self, text, line, begidx, endidx):
         """ setiodrive command completion """
@@ -375,7 +375,7 @@ get IO drive value
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print self._project.get_io(io_name).drive
+            print(self._project.get_io(io_name).drive)
         except PodError as error:
             print(str(DISPLAY))
             print(str(error))

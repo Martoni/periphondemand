@@ -41,7 +41,7 @@ class ConfigFile(WrapperXml):
         if os.path.exists(self.filename):
             WrapperXml.__init__(self, file=self.filename)
         else:
-            print filename + " doesn't exist, be created"
+            print(filename + " doesn't exist, be created")
             WrapperXml.__init__(self, nodename="podconfig")
             self.add_node(nodename="libraries")
             self.savefile()

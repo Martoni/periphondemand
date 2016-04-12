@@ -107,7 +107,7 @@ def main(argv):
         tmpfile = open(TMPFILENAME, "w")
         tmpfile.write("load " + argument)
         tmpfile.close()
-        print "Loading project " + argument + " :\n"
+        print("Loading project " + argument + " :\n")
         cli.do_source(TMPFILENAME)
 
     # infinite command loop

@@ -42,7 +42,7 @@ class test_port(unittest.TestCase):
             aport.force = "pouet"
 
 if __name__ == "__main__":
-    print "test_project class test\n"
+    print("test_project class test\n")
     unittest.main(
             testRunner=xmlrunner.XMLTestRunner(
                 output='test-reports'))

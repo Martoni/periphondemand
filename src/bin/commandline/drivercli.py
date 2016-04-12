@@ -54,7 +54,7 @@ class DriverCli(BaseCli):
         try:
             toollist = self.completeargs(text, line, "[drivertoolchain]")
         except PodError as error:
-            print error
+            print(error)
         return toollist
 
     def do_generateproject(self, line):
@@ -67,10 +67,10 @@ generate a project drivers directory with templates
             self.driver.generate_project()
             self.driver.fill_all_templates()
         except PodError as error:
-            print DISPLAY
-            print error
+            print(DISPLAY)
+            print(error)
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def do_filltemplates(self, line):
         """\
@@ -81,10 +81,10 @@ fill drivers templates
             self.testIfToolChainSelected()
             self.driver.fill_all_templates()
         except PodError as error:
-            print DISPLAY
-            print error
+            print(DISPLAY)
+            print(error)
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def do_copydrivers(self, line):
         """\
@@ -96,10 +96,10 @@ directory must be selected with setprojecttree
             self.testIfToolChainSelected()
             self.driver.copy_bsp_drivers()
         except PodError as error:
-            print DISPLAY
-            print error
+            print(DISPLAY)
+            print(error)
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def complete_selectprojecttree(self, text, line, begidx, endidx):
         """complete selectprojecttree command directories """
@@ -122,17 +122,17 @@ select software developpement tree, to copy driver
             self.testIfToolChainSelected()
             self.driver.set_bsp_directory(line)
         except PodError as error:
-            print DISPLAY
-            print error
+            print(DISPLAY)
+            print(error)
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def complete_selecttoolchain(self, text, line, begidx, endidx):
         toolchainlist = []
         try:
             toolchainlist = self.completeargs(text, line, "[drivertoolchain]")
         except PodError as error:
-            print error
+            print(error)
         return toolchainlist
 
     def do_selecttoolchain(self, line):
@@ -143,8 +143,8 @@ select operating system to generate drivers
         try:
             self.checkargs(line, "[drivertoolchain]")
         except PodError as error:
-            print DISPLAY
-            print error
+            print(DISPLAY)
+            print(error)
             return
         if line.strip() == "":
             if len(self._project.get_driver_toolchains()) == 1:
@@ -152,15 +152,15 @@ select operating system to generate drivers
                     self._project.get_driver_toolchains()[0]
             else:
                 if self._project.driver_toolchain is None:
-                    print "Choose a toolchain\n"
+                    print("Choose a toolchain\n")
                     for toolchain in \
                             self._project.get_driver_toolchains():
-                        print toolchain
+                        print(toolchain)
                     return
         else:
             try:
                 self._project.driver_toolchain = line
             except PodError as error:
-                print error
+                print(error)
                 return
         self.driver = self._project.driver

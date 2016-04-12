@@ -145,7 +145,7 @@ class Synthesis(WrapperXml):
                                    "/hdl/" + hdlfile.filename,
                                    compdir + "/")
                     except IOError as error:
-                        print DISPLAY
+                        print(DISPLAY)
                         raise PodError(str(error), 0)
 
     def generate_tcl(self, filename=None):
@@ -182,7 +182,7 @@ class Synthesis(WrapperXml):
         sy.rm_file(SETTINGS.path + TOOLCHAINPATH +
                    SYNTHESISPATH + "/" + self.name)
 
-        print self.plugin
+        print(self.plugin)
         self.plugin.generate_pinout(filename)
         return None
 

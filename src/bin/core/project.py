@@ -507,7 +507,7 @@ class Project(WrapperXml):
         except PodError as error:
             if error.level < 2:
                 raise error
-            print error
+            print(error)
 
         if platformlibname == "standard":
             platformdir = SETTINGS.path + PLATFORMPATH +\

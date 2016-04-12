@@ -132,11 +132,11 @@ class BaseCli(cmd.Cmd):
                     if line == "exit":
                         sys.exit(0)
                     if SETTINGS.is_script():
-                        print "$ " + line
+                        print("$ " + line)
                     stop = self.onecmd(line)
                     stop = self.postcmd(stop, line)
                 except KeyboardInterrupt:
-                    print PodError("User keyboard interrupt")
+                    print(PodError("User keyboard interrupt"))
             self.postloop()
         finally:
             if self.use_rawinput and self.completekey:
