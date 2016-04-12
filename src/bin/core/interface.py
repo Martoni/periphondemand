@@ -148,6 +148,9 @@ class Interface(WrapperXml):
     @property
     def addr_port_size(self):
         """ How many pin in address port ?  """
+        size = self.get_attr_value("addr_size")
+        if size is not None:
+            return int(size)
         try:
             return int(
                 self.get_port_by_type(
@@ -168,6 +171,15 @@ class Interface(WrapperXml):
             return self.bus.data_size
         else:
             return size
+
+    @property
+    def addr_size(self):
+        """ Get bus size """
+        size = self.get_attr_value("addr_size")
+        if size is None:
+            return int(self.addr_port_size)
+        else:
+            return int(size)
 
     @property
     def bus_name(self):

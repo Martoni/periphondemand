@@ -72,7 +72,6 @@ class Settings(object):
                 pass
 
             self.active_project = None
-            self.active_library = None
             self.active_component = None
 
     def get_platform_lib_path(self, platformlib_name):

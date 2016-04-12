@@ -603,6 +603,10 @@ class Project(WrapperXml):
         if pin_dest.parent.parent.is_bus():
             raise PodError("One of this pin is under a bus interface." +
                            "Please use connectbus.")
+        if int(pin_source.parent.size)-1 < int(pin_source.get_attr_value("num")):
+            raise PodError("Pin source number is greater than port size")
+        if int(pin_dest.parent.size)-1 < int(pin_dest.get_attr_value("num")):
+            raise PodError("Pin dest number is greater than port size")
         pin_source.connect_pin(pin_dest)
         self.save()
 

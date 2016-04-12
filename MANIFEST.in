@@ -1,4 +1,4 @@
-include README
+include README.md
 include COPYING
 include src/bin/pod
 recursive-include src/tests *
