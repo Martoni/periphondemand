@@ -197,16 +197,6 @@ class Port(WrapperXml):
         """ Set position """
         self.set_attr("position", position)
 
-    @WrapperXml.size.getter
-    def size(self):
-        size = self.get_attr_value("size")
-        if size.isdigit():
-            return size
-        else:
-            generic = self.parent.parent.get_generic(str(size))
-            value = generic.get_attr_value("value")
-            return value
-
     @property
     def frequency(self):
         """ Get a frequency for this port (if it's clock port) """

@@ -267,8 +267,13 @@ class WrapperXml(object):
 
     @property
     def size(self):
-        """ get size """
-        return self.get_attr_value("size")
+        size = self.get_attr_value("size")
+        if size.isdigit():
+            return int(size)
+        else:
+            generic = self.parent.parent.get_generic(str(size))
+            value = int(generic.get_attr_value("value"))
+            return value
 
     @size.setter
     def size(self, size):
