@@ -61,7 +61,7 @@ class BaseCli(cmd.Cmd):
         """ finish the statement """
         statement = firstline
         while not self.statementHasEnded(statement):
-            inp = self.pseudo_raw_input(self.continuation_prompt)
+            inp = self.pseudo_input(self.continuation_prompt)
             statement = '%s\n%s' % (statement, inp)
         return statement
         # assembling a list of lines and joining them at the end would be
@@ -77,14 +77,14 @@ class BaseCli(cmd.Cmd):
         """ Read a line """
         return self.stdin.readline()
 
-    def pseudo_raw_input(self, prompt):
-        """ copied from cmd's cmdloop; like raw_input,
+    def pseudo_input(self, prompt):
+        """ copied from cmd's cmdloop; like input,
             but accounts for changed stdin, stdout
         """
 
         if self.use_rawinput:
             try:
-                line = raw_input(prompt)
+                line = input(prompt)
             except EOFError:
                 line = 'EOF'
         else:
@@ -105,7 +105,7 @@ class BaseCli(cmd.Cmd):
         """
 
         # An almost perfect copy from Cmd; however,
-        # the pseudo_raw_input portion
+        # the pseudo_input portion
         # has been split out so that it can be called separately
 
         self.preloop()
@@ -127,7 +127,7 @@ class BaseCli(cmd.Cmd):
                     if self.cmdqueue:
                         line = self.cmdqueue.pop(0)
                     else:
-                        line = self.pseudo_raw_input(self.prompt)
+                        line = self.pseudo_input(self.prompt)
                     line = self.precmd(line)
                     if line == "exit":
                         sys.exit(0)
