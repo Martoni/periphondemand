@@ -84,7 +84,7 @@ class WrapperXml(object):
 
     def __str__(self):
         return ('<?xml version="1.0" encoding="utf-8"?>\n' +
-                ET.tostring(self.tree, "utf-8"))
+                ET.tostring(self.tree, "utf-8").decode("utf-8"))
 
     @property
     def text(self):
