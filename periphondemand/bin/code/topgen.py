@@ -41,6 +41,60 @@ class TopGen(object):
     def __init__(self, project):
         self.project = project
 
+    def header(self):
+        """ return header
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    def entity(self, entityname, portlist):
+        """ return code for Top entity
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    @classmethod
+    def architecture_head(cls, entityname):
+        """ return head of architecture
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    @classmethod
+    def architecture_foot(cls, entityname):
+        """ return architecture footer
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    def declare_components(self):
+        """ return components declaration
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    def declare_signals(self, componentslist, incomplete_external_ports_list):
+        """ return signals declaration
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    def declare_instance(self):
+        """ return instance declaration
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    @classmethod
+    def connect_forces(cls, portlist):
+        """ return connections forced
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    def connect_instance(self, incomplete_external_ports_list):
+        """ return instances connections
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    @classmethod
+    def architecture_begin(cls):
+        """ return architecture begin
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
     def generate(self):
         """ generate code for top component
         """
