@@ -179,6 +179,7 @@ class Project(WrapperXml):
 
     @property
     def projectpath(self):
+        """ Get projectpath directory name """
         return self._projectpath
 
     @property
