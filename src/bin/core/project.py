@@ -77,12 +77,13 @@ class Project(WrapperXml):
         if not self.void:
             if projectpathname.find(XMLEXT) >= 0:
                 try:
-                    SETTINGS.projectpath =\
+                    self._projectpath =\
                         os.path.abspath(os.path.dirname(projectpathname))
                 except IOError, error:
                     raise PodError(str(error), 0)
             else:
-                SETTINGS.projectpath = projectpathname
+                self._projectpath = projectpathname
+            SETTINGS.projectpath = self.project
             SETTINGS.author = ""
             SETTINGS.active_project = self
             name = os.path.basename(projectpathname)
@@ -175,6 +176,10 @@ class Project(WrapperXml):
     def library(self):
         """ Get library """
         return self._library
+
+    @property
+    def projectpath(self):
+        return self._projectpath
 
     @property
     def synthesis_toolchain(self):
