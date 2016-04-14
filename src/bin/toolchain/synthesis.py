@@ -50,8 +50,8 @@ class Synthesis(WrapperXml):
 
     def __init__(self, parent):
         self.parent = parent
-        filepath = SETTINGS.projectpath +\
-            "/" + SYNTHESISPATH +\
+        filepath = self.parent.projectpath + \
+            "/" + SYNTHESISPATH + \
             "/synthesis" + XMLEXT
         if not sy.file_exist(filepath):
             raise PodError("No synthesis project found", 3)
@@ -83,7 +83,7 @@ class Synthesis(WrapperXml):
 
     def save(self):
         """ Save xml """
-        self.save_xml(SETTINGS.projectpath +
+        self.save_xml(self.parent.projectpath +
                       "/synthesis/synthesis" + XMLEXT)
 
     @property
@@ -127,7 +127,7 @@ class Synthesis(WrapperXml):
         for component in self.parent.instances:
             if component.num == "0":
                 # Make directory
-                compdir = SETTINGS.projectpath +\
+                compdir = self.parent.projectpath +\
                     SYNTHESISPATH + "/" +\
                     component.name
                 if sy.dir_exist(compdir):
@@ -139,7 +139,7 @@ class Synthesis(WrapperXml):
                 # copy hdl files
                 for hdlfile in component.hdl_files:
                     try:
-                        sy.cp_file(SETTINGS.projectpath +
+                        sy.cp_file(self.parent.projectpath +
                                    COMPONENTSPATH + "/" +
                                    component.instancename +
                                    "/hdl/" + hdlfile.filename,
@@ -188,8 +188,8 @@ class Synthesis(WrapperXml):
 
     def generate_bitstream(self):
         """ Generate the bitstream for fpga configuration """
-        scriptpath = SETTINGS.projectpath +\
-            SYNTHESISPATH +\
+        scriptpath = self.parent.projectpath + \
+            SYNTHESISPATH + \
             "/" + self.tcl_scriptname
         try:
             cmd = self.synthesis_toolcommandname

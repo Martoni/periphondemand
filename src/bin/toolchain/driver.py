@@ -47,7 +47,7 @@ class Driver(WrapperXml):
 
     def __init__(self, project):
         self.project = project
-        filepath = SETTINGS.projectpath + "/" +\
+        filepath = self.project.projectpath + "/" + \
             DRIVERSPATH + "/drivers" + XMLEXT
         if not sy.file_exist(filepath):
             raise PodError("No driver project found", 3)
@@ -64,17 +64,17 @@ class Driver(WrapperXml):
             if component.num == "0":
                 driver_template = component.get_driver_template(op_sys)
                 if driver_template is not None:
-                    if sy.dir_exist(SETTINGS.projectpath + DRIVERSPATH +
+                    if sy.dir_exist(self.project.projectpath + DRIVERSPATH +
                                     "/" + component.name):
                         DISPLAY.msg("Driver directory for " +
                                     component.name +
                                     " allready exist. suppressing it")
-                        sy.rm_dir(SETTINGS.projectpath + DRIVERSPATH +
+                        sy.rm_dir(self.project.projectpath + DRIVERSPATH +
                                   "/" + component.name)
                     DISPLAY.msg("Create directory for " +
                                 component.name + " driver")
                     # create component directory
-                    sy.mkdir(SETTINGS.projectpath +
+                    sy.mkdir(self.project.projectpath +
                              DRIVERSPATH + "/" +
                              component.name)
                 else:
@@ -95,13 +95,13 @@ class Driver(WrapperXml):
                     for templatefile in driver_template.template_names:
                         try:
                             template = open(
-                                SETTINGS.projectpath + COMPONENTSPATH +
+                                self.project.projectpath + COMPONENTSPATH +
                                 "/" + component.instancename + "/" +
                                 DRIVERS_TEMPLATES_PATH + "/" +
                                 op_sys + "/" +
                                 templatefile, "r")
                             destfile = open(
-                                SETTINGS.projectpath + DRIVERSPATH + "/" +
+                                self.project.projectpath + DRIVERSPATH + "/" +
                                 component.name + "/" + templatefile,
                                 "w")
                         except IOError, error:
@@ -244,8 +244,8 @@ class Driver(WrapperXml):
         # deleting all directory in POD dir
         sy.del_all_dir(bspdir)
         for directory in \
-                sy.list_dir(SETTINGS.projectpath + DRIVERSPATH + "/"):
-            sy.cp_dir(SETTINGS.projectpath + DRIVERSPATH +
+                sy.list_dir(self.project.projectpath + DRIVERSPATH + "/"):
+            sy.cp_dir(self.project.projectpath + DRIVERSPATH +
                       "/" + directory,
                       self.get_bsp_dir())
 

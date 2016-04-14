@@ -97,19 +97,19 @@ class Project(WrapperXml):
 
     def create_project(self, name):
         """ Create a project """
-        if sy.dir_exist(SETTINGS.projectpath):
+        if sy.dir_exist(self.projectpath):
             raise PodError("Can't create project, directory " +
-                           SETTINGS.projectpath +
+                           self.projectpath +
                            " already exists", 0)
-        sy.mkdir(SETTINGS.projectpath)
+        sy.mkdir(self.projectpath)
 
-        sy.mkdir(SETTINGS.projectpath + BINARYPROJECTPATH)
-        sy.mkdir(SETTINGS.projectpath + COMPONENTSPATH)
-        sy.mkdir(SETTINGS.projectpath + OBJSPATH)
+        sy.mkdir(self.projectpath + BINARYPROJECTPATH)
+        sy.mkdir(self.projectpath + COMPONENTSPATH)
+        sy.mkdir(self.projectpath + OBJSPATH)
 
-        sy.mkdir(SETTINGS.projectpath + SIMULATIONPATH)
-        sy.mkdir(SETTINGS.projectpath + SYNTHESISPATH)
-        sy.mkdir(SETTINGS.projectpath + DRIVERSPATH)
+        sy.mkdir(self.projectpath + SIMULATIONPATH)
+        sy.mkdir(self.projectpath + SYNTHESISPATH)
+        sy.mkdir(self.projectpath + DRIVERSPATH)
 
         self.create_xml("project")
         self.name = name
@@ -193,10 +193,10 @@ class Project(WrapperXml):
             raise PodError("No toolchain named " + toolchainname + " in POD")
         sy.cp_file(SETTINGS.path + TOOLCHAINPATH + SYNTHESISPATH +
                    "/" + toolchainname + "/" + toolchainname + XMLEXT,
-                   SETTINGS.projectpath + SYNTHESISPATH + "/")
-        sy.rename_file(SETTINGS.projectpath + SYNTHESISPATH +
+                   self.projectpath + SYNTHESISPATH + "/")
+        sy.rename_file(self.projectpath + SYNTHESISPATH +
                        "/" + toolchainname + XMLEXT,
-                       SETTINGS.projectpath + SYNTHESISPATH +
+                       self.projectpath + SYNTHESISPATH +
                        "/synthesis" + XMLEXT)
         self.synthesis = Synthesis(self)
         self.save()
@@ -235,10 +235,10 @@ class Project(WrapperXml):
             raise PodError("No toolchain named " + toolchainname + " in POD")
         sy.cp_file(SETTINGS.path + TOOLCHAINPATH + SIMULATIONPATH +
                    "/" + toolchainname + "/" + toolchainname + XMLEXT,
-                   SETTINGS.projectpath + SIMULATIONPATH + "/")
-        sy.rename_file(SETTINGS.projectpath + SIMULATIONPATH +
+                   self.projectpath + SIMULATIONPATH + "/")
+        sy.rename_file(self.projectpath + SIMULATIONPATH +
                        "/" + toolchainname + XMLEXT,
-                       SETTINGS.projectpath + SIMULATIONPATH +
+                       self.projectpath + SIMULATIONPATH +
                        "/simulation" + XMLEXT)
         self.simulation = Simulation(self)
         self.save()
@@ -255,10 +255,10 @@ class Project(WrapperXml):
             raise PodError("No toolchain named " + toolchainname + " in POD")
         sy.cp_file(SETTINGS.path + TOOLCHAINPATH + DRIVERSPATH +
                    "/" + toolchainname + "/" + toolchainname + XMLEXT,
-                   SETTINGS.projectpath + DRIVERSPATH + "/")
-        sy.rename_file(SETTINGS.projectpath + DRIVERSPATH +
+                   self.projectpath + DRIVERSPATH + "/")
+        sy.rename_file(self.projectpath + DRIVERSPATH +
                        "/" + toolchainname + XMLEXT,
-                       SETTINGS.projectpath + DRIVERSPATH +
+                       self.projectpath + DRIVERSPATH +
                        "/drivers" + XMLEXT)
         self.driver = Driver(self)
         self.save()
@@ -536,7 +536,7 @@ class Project(WrapperXml):
 
         if sy.file_exist(platformdir + SIMULATIONPATH):
             sy.copy_all_files(platformdir + SIMULATIONPATH,
-                              SETTINGS.projectpath + SIMULATIONPATH)
+                              self.projectpath + SIMULATIONPATH)
         self.add_instance(component=platform)
         self.add_node(node=platform)
         # Adding platform default components
@@ -597,7 +597,7 @@ class Project(WrapperXml):
             self.synthesis.save()
         if self.simulation is not None:
             self.simulation.save()
-        self.save_xml(SETTINGS.projectpath + "/" + self.name + XMLEXT)
+        self.save_xml(self.projectpath + "/" + self.name + XMLEXT)
 
     def connect_pin_cmd(self, pin_source, pin_dest):
         """ connect pin between two instances
@@ -901,7 +901,7 @@ class Project(WrapperXml):
     def generate_report(self, filename=None):
         """ generate a project report """
         if filename is None:
-            report_file = open(SETTINGS.projectpath +
+            report_file = open(self.projectpath +
                                "/" + self.name +
                                "_report.txt", "w")
         else:
