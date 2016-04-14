@@ -83,7 +83,7 @@ class Project(WrapperXml):
                     raise PodError(str(error), 0)
             else:
                 self._projectpath = projectpathname
-            SETTINGS.projectpath = self.project
+            SETTINGS.projectpath = self.projectpath
             SETTINGS.author = ""
             SETTINGS.active_project = self
             name = os.path.basename(projectpathname)
