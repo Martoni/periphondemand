@@ -161,7 +161,7 @@ class Interface(WrapperXml):
     @property
     def mem_size(self):
         """ Get the memory size """
-        return ((2 ** self.addr_port_size) * self.regstep)
+        return int((2 ** self.addr_port_size) * self.regstep)
 
     @property
     def data_size(self):

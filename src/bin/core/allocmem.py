@@ -73,7 +73,7 @@ class AllocMem(object):
             try:
                 base = interface.base_addr
             except PodError:
-                base = self.lastaddress / size
+                base = int(self.lastaddress / size)
                 if (self.lastaddress % size) != 0:
                     base = base + 1
                 interface.base_addr = base * size
