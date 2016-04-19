@@ -16,6 +16,8 @@
 # ----------------------------------------------------------------------------
 """ Class that manage interfaces"""
 
+from functools import cmp_to_key
+
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.poderror import PodError
 
@@ -414,8 +416,7 @@ class Interface(WrapperXml):
         if len(self._registerslist) != 0:
             listreg = []
             # sort registers dict by offset order
-            self._registerslist.sort(lambda x, y: cmp(int(x.offset, 16),
-                                     int(y.offset, 16)))
+            self._registerslist.sort(key=lambda x: int(x.offset, 16))
             # display each register
             for register in self._registerslist:
                 listreg.append(

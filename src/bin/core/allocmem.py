@@ -109,7 +109,7 @@ class AllocMem(object):
         """
         mappinglist = []
         # sorting slave interface
-        self.listinterfaceslave.sort(lambda x, y: x.base_addr - y.base_addr)
+        self.listinterfaceslave.sort(key=lambda x: x.base_addr)
 
         baseaddress = 0
         for interface in self.listinterfaceslave:
