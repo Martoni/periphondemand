@@ -332,7 +332,7 @@ class Quartus(SynthesisWrapper):
             out += "SOURCE_FILE"
 
         out += " " + filename + "\n"
-        print out
+        print(out)
         return out
 
     def insert_tools_specific_commands(self):
@@ -385,9 +385,9 @@ class Quartus(SynthesisWrapper):
         """
         for line in sy.launch_as_shell(commandname, option):
             if settings.color() == 1:
-                print COLOR_SHELL + line + COLOR_END,
+                print(COLOR_SHELL + line + COLOR_END),
             else:
-                print "SHELL>" + line,
+                print("SHELL>" + line),
 
     def generate_bitstream(self, commandname, scriptname):
         """ generate the bitstream """

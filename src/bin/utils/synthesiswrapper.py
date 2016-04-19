@@ -301,9 +301,9 @@ class SynthesisWrapper:
 
         for line in sy.launch_as_shell(commandname, scriptname):
             if SETTINGS.color() == 1:
-                print COLOR_SHELL + line + COLOR_END,
+                print(COLOR_SHELL + line + COLOR_END),
             else:
-                print "SHELL>" + line,
+                print("SHELL>" + line),
         for ext_file in self.ext_files:
             try:
                 sy.cp_file(SETTINGS.projectpath + OBJSPATH + "/" +
