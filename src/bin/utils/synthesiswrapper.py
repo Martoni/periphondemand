@@ -98,7 +98,7 @@ class SynthesisWrapper:
         """
         raise NotImplementedError("method must be implemented", 0)
 
-    def addpinconstraints(self, connect, port, portdest):
+    def addpinconstraints(self, connect, port):
         """ return pin constraint definition
         """
         raise NotImplementedError("method must be implemented", 0)
@@ -231,14 +231,7 @@ class SynthesisWrapper:
                         else:
                             connect = connect[0]
 
-                        instancedest =\
-                            self.project.get_instance(connect["instance_dest"])
-                        interfacedest = \
-                            instancedest.get_interface(connect["interface_dest"])
-                        portdest = interfacedest.get_port(connect["port_dest"])
-
-                        out += self.addpinconstraints(connect, port,
-                                                      portdest)
+                        out += self.addpinconstraints(connect, port)
 
                         # if port as frequency parameters, it's a clock.
                         # then had xilinx clock constraint
