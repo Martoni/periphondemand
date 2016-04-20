@@ -84,7 +84,7 @@ class TopGen(object):
 
         # save file
         try:
-            file = open(SETTINGS.projectpath + SYNTHESISPATH +
+            file = open(self.project.projectpath + SYNTHESISPATH +
                         "/top_" + self.project.name + VHDLEXT, "w")
         except IOError, error:
             raise error

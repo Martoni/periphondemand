@@ -126,7 +126,7 @@ class Quartus(SynthesisWrapper):
         out += "# disabled instances\n"
 
         out += "save_system " + project_name + ".qsys\n"
-        tclfile = open(settings.projectpath + SYNTHESISPATH + "/" +
+        tclfile = open(self.project.projectpath + SYNTHESISPATH + "/" +
                        project_name + ".tcl", "w")
         tclfile.write(out)
 
@@ -194,7 +194,7 @@ class Quartus(SynthesisWrapper):
         """ Generate the constraint file in tcl for quartus fpga
         """
         if filename is None:
-            filename = settings.projectpath + \
+            filename = self.project.projectpath + \
                 SYNTHESISPATH + "/" + \
                 self.project.name + "_pinout" + TCLEXT
         self.project = self.project
@@ -276,7 +276,7 @@ class Quartus(SynthesisWrapper):
         out += "set_global_assignment -name DEVICE " + \
             platform.device + "\n"
         out += "set_global_assignment -name PROJECT_OUTPUT_DIRECTORY " + \
-            settings.projectpath + BINARYPROJECTPATH + "/\n"
+            self.project.projectpath + BINARYPROJECTPATH + "/\n"
         platform_option = self.project.platform.get_node("toolchain")
         if platform_option:
             for option in platform_option.get_nodes("option"):
@@ -341,7 +341,7 @@ class Quartus(SynthesisWrapper):
         """
         platform = self.project.platform
         # Create clocks constraints
-        sdcfile = settings.projectpath + SYNTHESISPATH + "/" + \
+        sdcfile = self.project.projectpath + SYNTHESISPATH + "/" + \
             self.project.name + ".sdc"
         self.generate_sdc(sdcfile)
         out = ""
@@ -395,17 +395,17 @@ class Quartus(SynthesisWrapper):
         rbf_commandname = default_path + "/" + \
             self.parent.get_synthesis_value("rbf")
 
-        result_file = settings.projectpath + BINARYPROJECTPATH + "/" + \
+        result_file = self.project.projectpath + BINARYPROJECTPATH + "/" + \
             BINARY_PREFIX + self.project.name + \
             ALTERA_BITSTREAM_SUFFIX
 
-        cnv_result_file = settings.projectpath + BINARYPROJECTPATH + "/" + \
+        cnv_result_file = self.project.projectpath + BINARYPROJECTPATH + "/" + \
             BINARY_PREFIX + self.project.name + \
             ALTERA_BINARY_SUFFIX
 
         pwd = sy.pwd()
-        sy.del_all(settings.projectpath + OBJSPATH)
-        sy.chdir(settings.projectpath + SYNTHESISPATH)
+        sy.del_all(self.project.projectpath + OBJSPATH)
+        sy.chdir(self.project.projectpath + SYNTHESISPATH)
         commandname = commandname + " -t "
 
         list_qsys_comp = self.needqsys()
@@ -416,7 +416,7 @@ class Quartus(SynthesisWrapper):
                 qsys_script
             for component in list_qsys_comp:
                 self.launch_as_shell(qsys_commandname,
-                                     " --script=" + settings.projectpath +
+                                     " --script=" + self.project.projectpath +
                                      SYNTHESISPATH + "/" +
                                      component.name + "_qsys.tcl")
 

@@ -102,20 +102,20 @@ class Component(WrapperXml):
         # copy and rename directory
         sy.cp_dir(project.library.library_path(libraryname) +
                   "/" + componentname,
-                  SETTINGS.projectpath + COMPONENTSPATH)
+                  self.parent.projectpath + COMPONENTSPATH)
         try:
-            sy.rename_dir(SETTINGS.projectpath +
+            sy.rename_dir(self.parent.projectpath +
                           COMPONENTSPATH + "/" + componentname,
-                          SETTINGS.projectpath + COMPONENTSPATH +
+                          self.parent.projectpath + COMPONENTSPATH +
                           "/" + instancename)
         except PodError:  # if directory exist
             pass
 
         # Rename xml file
-        sy.rename_file(SETTINGS.projectpath +
+        sy.rename_file(self.parent.projectpath +
                        COMPONENTSPATH + "/" + instancename +
                        "/" + componentversion + XMLEXT,
-                       SETTINGS.projectpath + COMPONENTSPATH +
+                       self.parent.projectpath + COMPONENTSPATH +
                        "/" + instancename + "/" + instancename + XMLEXT)
 
         # load component
@@ -127,7 +127,7 @@ class Component(WrapperXml):
         """ Load an instance from project directory
         """
         # load xml file
-        WrapperXml.__init__(self, file=SETTINGS.projectpath +
+        WrapperXml.__init__(self, file=self.parent.projectpath +
                             COMPONENTSPATH + "/" + instancename +
                             "/" + instancename + XMLEXT)
 
@@ -291,18 +291,18 @@ class Component(WrapperXml):
 
     def save(self):
         """ Save component in project directory files """
-        if not sy.dir_exist(SETTINGS.projectpath + COMPONENTSPATH +
+        if not sy.dir_exist(self.parent.projectpath + COMPONENTSPATH +
                             "/" + self.instancename):
-            sy.mkdir(SETTINGS.projectpath + COMPONENTSPATH +
+            sy.mkdir(self.parent.projectpath + COMPONENTSPATH +
                      "/" + self.instancename)
-        self.save_xml(SETTINGS.projectpath + COMPONENTSPATH + "/" +
+        self.save_xml(self.parent.projectpath + COMPONENTSPATH + "/" +
                       self.instancename + "/" +
                       self.instancename + ".xml")
 
     def del_instance(self):
         """ suppress component instance """
         if not self.is_platform():
-            sy.rm_dir(SETTINGS.projectpath + COMPONENTSPATH +
+            sy.rm_dir(self.parent.projectpath + COMPONENTSPATH +
                       "/" + self.instancename)
 
     @property
