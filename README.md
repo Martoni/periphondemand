@@ -19,12 +19,7 @@ Prerequisites
 Mandatory
 ---------
 
-* *Python 2.7*: POD uses python 2.7.
-* *pyparsing*: A python module to parse files.
- 
-On debian-based distribution, just type this command:
-
-``[  ] $ sudo apt-get install python-pyparsing``
+* *Python 3*: POD uses python 3.4+.
 
 Optional
 --------
