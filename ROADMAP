@@ -10,18 +10,18 @@
   
   * Platform and library out of POD repository
   * Manage FPGA IOs settings with FPGA configuration files for each type of FPGA
-  * Library documentation generator
   * All armadeus wiki documentation transfered
   * Functionals tests
   * Unit tests
   * Improve code quality according to Pylint and PEP8
   
 * **POD 1.2 :**
-  
+
+  * Python 3
   * Improve wishbone management
   
     * Fusion of all wishbone bus (wb8, wb16, wb32)
-    * Generate intercon that adapte slave size according to master
+    * Generate intercon that adapte slav size according to master
     * Manage wait states compatibility master-slave
   
   * Adding Quartus in generatebitstream
