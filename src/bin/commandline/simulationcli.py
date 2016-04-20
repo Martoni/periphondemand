@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     SimulationCli.py
@@ -49,7 +49,7 @@ class SimulationCli(BaseCli):
         try:
             alist = self.completeargs(text, line,
                                       "[simulationtoolchain]")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return alist
 
@@ -60,7 +60,7 @@ select toolchain used for simulation
         """
         try:
             self.checkargs(line, "[simulationtoolchain]")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
 
@@ -70,7 +70,7 @@ select toolchain used for simulation
                     self._project.get_simulation_toolchains()[0]
             else:
                 if self._project.simulation_toolchain is None:
-                    print "Choose a toolchain\n"
+                    print("Choose a toolchain\n")
                     project = self._project
                     for toolchain in \
                             project.get_simulation_toolchains():
@@ -79,7 +79,7 @@ select toolchain used for simulation
         else:
             try:
                 self._project.simulation_toolchain = line
-            except PodError, error:
+            except PodError as error:
                 print(str(error))
                 return
 
@@ -91,15 +91,15 @@ Make projects files for simulation (makefile and testbench sources)
         if line.strip() != "":
             try:
                 self.do_selecttoolchain(line)
-            except PodError, error:
+            except PodError as error:
                 print(str(error))
                 return
         elif self._project.simulation is None:
-            print PodError("Simulation toolchain must be selected before")
+            print(PodError("Simulation toolchain must be selected before"))
             return
 
         if self._project.simulation_toolchain is None:
-            print PodError("Choose a toolchain before", 0)
+            print(PodError("Choose a toolchain before", 0))
             for toolchain in \
                     self._project.get_simulation_toolchains():
                 print(str(toolchain.name))
@@ -107,7 +107,7 @@ Make projects files for simulation (makefile and testbench sources)
         try:
             filename = self._project.simulation.generate_template()
             filename = self._project.simulation.generate_makefile()
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         print(str(DISPLAY))
@@ -115,5 +115,5 @@ Make projects files for simulation (makefile and testbench sources)
         print("Makefile generated with name : " + filename + " Done")
 
 if __name__ == "__main__":
-    print "SimulationCli class test\n"
-    print SimulationCli.__doc__
+    print("SimulationCli class test\n")
+    print(SimulationCli.__doc__)

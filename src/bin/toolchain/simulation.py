@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     Simulation.py
@@ -73,7 +73,7 @@ class Simulation(WrapperXml):
                         SIMULATIONPATH + "/" + self.name)
         try:
             plugin = __import__(self.name)
-        except ImportError, error:
+        except ImportError as error:
             sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                             SIMULATIONPATH + "/" + self.name)
             raise PodError(str(error), 0)
@@ -88,7 +88,7 @@ class Simulation(WrapperXml):
                         SIMULATIONPATH + "/" + self.name)
         try:
             plugin = __import__(self.name)
-        except ImportError, error:
+        except ImportError as error:
             sys.path.remove(SETTINGS.path + TOOLCHAINPATH +
                             SIMULATIONPATH + "/" + self.name)
             raise PodError(str(error), 0)

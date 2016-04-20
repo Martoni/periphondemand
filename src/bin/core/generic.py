@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     Generic.py
@@ -137,7 +137,7 @@ class Generic(WrapperXml):
         """ setting the value """
         if self.match is None:
             self.set_attr("value", value)
-        elif re.compile(self.match).match(value):
+        elif re.compile(self.match.decode()).match(value):
             self.set_attr("value", value)
         else:
             raise PodError("Value doesn't match for attribute " + str(value))

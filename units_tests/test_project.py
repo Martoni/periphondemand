@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
@@ -56,7 +56,7 @@ class test_project(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    print "test_project class test\n"
+    print("test_project class test\n")
     unittest.main(
             testRunner=xmlrunner.XMLTestRunner(
                 output='test-reports'))

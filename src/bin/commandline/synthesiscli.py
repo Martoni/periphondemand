@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     SynthesisCli.py
@@ -52,7 +52,7 @@ class SynthesisCli(BaseCli):
         try:
             toolchainlist = self.completeargs(text, line,
                                               "[synthesistoolchain]")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return toolchainlist
 
@@ -63,7 +63,7 @@ select toolchain used for simulation
         """
         try:
             self.checkargs(line, "[synthesistoolchain]")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
 
@@ -81,7 +81,7 @@ select toolchain used for simulation
         else:
             try:
                 self._project.synthesis_toolchain = line
-            except PodError, error:
+            except PodError as error:
                 print(str(error))
                 return
 
@@ -93,7 +93,7 @@ select toolchain used for simulation
         try:
             toollist = self.completeargs(text, line,
                                          "[synthesistoolchain]")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return toollist
 
@@ -104,14 +104,14 @@ generate the project for synthesis tool
         """
         try:
             self.checkargs(line, "[synthesistoolchain]")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         # select toolchain
         if line.strip() != "":
             try:
                 self.do_selecttoolchain(line)
-            except PodError, error:
+            except PodError as error:
                 print(str(error))
                 return
         elif self._project.synthesis is None:
@@ -125,7 +125,7 @@ generate the project for synthesis tool
             self._project.synthesis.generate_pinout(None)
             print(str(DISPLAY))
             self._project.synthesis.generate_tcl(None)
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         print(str(DISPLAY))
@@ -138,7 +138,7 @@ ise
         """
 
         if self._project.synthesis is None:
-            print PodError("Select toolchain before")
+            print(PodError("Select toolchain before"))
             return
         if line.strip() != "":
             filename = SETTINGS.path + TOOLCHAINPATH +\
@@ -147,10 +147,10 @@ ise
             filename = None
         try:
             self._project.synthesis.generate_tcl(filename)
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def do_generatepinout(self, line):
         """\
@@ -168,7 +168,7 @@ ise
             filename = None
         try:
             self._project.synthesis.generate_pinout(filename)
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         print(str(DISPLAY))
@@ -180,14 +180,14 @@ generate the bitstream for fpga configuration
         """
         del line
         if self._project.synthesis is None:
-            print PodError("Select toolchain before")
+            print(PodError("Select toolchain before"))
             return
         try:
             self._project.synthesis.generate_bitstream()
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def complete_setiostandard(self, text, line, begidx, endidx):
         """ setiostandard command completion """
@@ -196,8 +196,8 @@ generate the bitstream for fpga configuration
         iolist = []
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
-        except PodError, error:
-            print error
+        except PodError as error:
+            print(error)
         return iolist
 
     def do_setiostandard(self, line):
@@ -207,7 +207,7 @@ set IO standard value
         """
         try:
             self.checkargs(line, "<IO_name> <standard_value>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -216,7 +216,7 @@ set IO standard value
         standard_value = arg[1]
         try:
             self._project.get_io(io_name).standard = standard_value
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -228,7 +228,7 @@ set IO standard value
         iolist = []
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return iolist
 
@@ -239,19 +239,19 @@ get IO standard value
         """
         try:
             self.checkargs(line, "<IO_name>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print self._project.get_io(io_name).standard
-        except PodError, error:
-            print DISPLAY
-            print error
+            print(self._project.get_io(io_name).standard)
+        except PodError as error:
+            print(DISPLAY)
+            print(error)
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def complete_setportoption(self, text, line, begidx, endidx):
         """ setportoption command completion """
@@ -260,7 +260,7 @@ get IO standard value
         iolist = []
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return iolist
 
@@ -271,7 +271,7 @@ set IO standard value
         """
         try:
             self.checkargs(line, "<IO_name> <port_option_value>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -281,7 +281,7 @@ set IO standard value
         try:
             self._project.get_io(
                 io_name).port_option = port_option_value
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -293,7 +293,7 @@ set IO standard value
         iolist = []
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return iolist
 
@@ -304,19 +304,19 @@ get IO Port option value
         """
         try:
             self.checkargs(line, "<IO_name>")
-        except PodError, error:
-            print DISPLAY
-            print error
+        except PodError as error:
+            print(DISPLAY)
+            print(error)
             return
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print self._project.get_io(io_name).port_option
-        except PodError, error:
-            print DISPLAY
-            print error
+            print(self._project.get_io(io_name).port_option)
+        except PodError as error:
+            print(DISPLAY)
+            print(error)
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def complete_setiodrive(self, text, line, begidx, endidx):
         """ setiodrive command completion """
@@ -325,7 +325,7 @@ get IO Port option value
         iolist = []
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return iolist
 
@@ -336,7 +336,7 @@ set IO drive value
         """
         try:
             self.checkargs(line, "<IO_name> <drive_value>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -345,7 +345,7 @@ set IO drive value
         drive_value = arg[1]
         try:
             self._project.get_io(io_name).drive = drive_value
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -357,7 +357,7 @@ set IO drive value
         iolist = []
         try:
             iolist = self.completeargs(text, line, "<IO_name>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return iolist
 
@@ -368,15 +368,15 @@ get IO drive value
         """
         try:
             self.checkargs(line, "<IO_name>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
         arg = line.split(' ')
         io_name = arg[0]
         try:
-            print self._project.get_io(io_name).drive
-        except PodError, error:
+            print(self._project.get_io(io_name).drive)
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -389,7 +389,7 @@ get IO drive value
         attributes = []
         try:
             attributes = self.completeargs(text, line, "<fpga_attributes>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return attributes
 
@@ -400,7 +400,7 @@ Set fpga attributes
         """
         try:
             self.checkargs(line, "<fpga_attributes> <attribute_value>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -410,7 +410,7 @@ Set fpga attributes
         try:
             platform = self._project.platform
             platform.set_attr(att_name, att_value, "fpga")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -423,7 +423,7 @@ Set fpga attributes
         attributes = []
         try:
             attributes = self.completeargs(text, line, "<fpga_attributes>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
         return attributes
 
@@ -434,7 +434,7 @@ get fpga attributes values
         """
         try:
             self.checkargs(line, "<fpga_attributes>")
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return
@@ -443,7 +443,7 @@ get fpga attributes values
         try:
             platform = self._project.platform
             print(str(platform.get_attr_value(att_name, "fpga")))
-        except PodError, error:
+        except PodError as error:
             print(str(DISPLAY))
             print(str(error))
             return

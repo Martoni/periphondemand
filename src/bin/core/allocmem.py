@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     AllocMem.py
@@ -73,7 +73,7 @@ class AllocMem(object):
             try:
                 base = interface.base_addr
             except PodError:
-                base = self.lastaddress / size
+                base = int(self.lastaddress / size)
                 if (self.lastaddress % size) != 0:
                     base = base + 1
                 interface.base_addr = base * size
@@ -109,7 +109,7 @@ class AllocMem(object):
         """
         mappinglist = []
         # sorting slave interface
-        self.listinterfaceslave.sort(lambda x, y: x.base_addr - y.base_addr)
+        self.listinterfaceslave.sort(key=lambda x: x.base_addr)
 
         baseaddress = 0
         for interface in self.listinterfaceslave:

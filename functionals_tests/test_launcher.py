@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Author:   Fabien Marteau <fabien.marteau@armadeus.com>
@@ -53,7 +53,7 @@ class test_launcher(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    print "Functionnals tests launcher"
+    print("Functionnals tests launcher")
     unittest.main(
             testRunner=xmlrunner.XMLTestRunner(
                 output='test-reports'))

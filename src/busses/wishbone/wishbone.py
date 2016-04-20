@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     wishbone16.py
@@ -71,7 +71,7 @@ def entity(intercon):
         for port in interface.ports:
             entity = entity + ONETAB * 2 + "%-40s" % port.name + " : " +\
                 "%-5s" % port.direction
-            if port.size == "1":
+            if port.max_pin_num == port.min_pin_num:
                 entity = entity + "std_logic;\n"
             else:
                 entity = entity + "std_logic_vector(" + port.max_pin_num +\
@@ -181,7 +181,7 @@ def genCaseByteEnable(masterinterface):
         if int(size) == int(master_size):
             out += write_bus_name
         else:
-            bitsize = byte_en_size / nb_byte
+            bitsize = int(byte_en_size / nb_byte)
             for i in range(bitsize):
                 val = bin(int(mask * pow(2, nb_byte*i)))[2:]
                 out += write_bus_name + "(" + \
@@ -206,10 +206,10 @@ def genCaseByteEnable(masterinterface):
             if not (int(size) == int(master_size)):
                 nb_byte = size / 8
                 mask = pow(2, nb_byte)-1
-                for i in range(byte_en_size / nb_byte):
+                for i in range(int(byte_en_size / nb_byte)):
                     val = bin(int(mask * pow(2, nb_byte*i)))[2:]
                     out += ' "' + \
-                        str(((bin(i*(size/8))[2:]).zfill(3))) + \
+                        str(((bin(i*(int(size / 8)))[2:]).zfill(3))) + \
                         '" when ' + byte_en_name + ' = "' + \
                         val.zfill(byte_en_size) + '" else\n' + 2 * ONETAB
 
@@ -501,7 +501,7 @@ def controlmaster(masterinterface, intercon):
             out += " when " + slaveinstancename + "_" +\
                 slaveinterfacename + "_cs='1' else\n"
             out += ONETAB * 9 + "  "
-        except PodError, e:
+        except PodError as error:
             pass
     out += " (others => '0');\n"
 
@@ -557,7 +557,7 @@ def selectWrite(masterinterface, intercon):
         else:
             nb_byte = data_size / 8
             mask = pow(2, nb_byte)-1
-            bitsize = master_size / data_size
+            bitsize = int(master_size / data_size)
             for i in range(bitsize):
                 min_pos = i * data_size
                 val = bin(int(mask * pow(2, nb_byte*i)))[2:]

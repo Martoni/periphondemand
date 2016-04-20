@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     candr.py
@@ -65,7 +65,7 @@ def entity(intercon):
         for port in interface.ports:
             entity = entity + ONETAB * 2 + "%-40s" % port.name + " : " +\
                 "%-5s" % port.direction
-            if port.size == "1":
+            if port.max_pin_num == port.min_pin_num:
                 entity = entity + "std_logic;\n"
             else:
                 entity = entity + "std_logic_vector(" + port.max_pin_num +\

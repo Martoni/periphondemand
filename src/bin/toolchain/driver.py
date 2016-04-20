@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     Driver.py
@@ -104,7 +104,7 @@ class Driver(WrapperXml):
                                 self.project.projectpath + DRIVERSPATH + "/" +
                                 component.name + "/" + templatefile,
                                 "w")
-                        except IOError, error:
+                        except IOError as error:
                             raise PodError(str(error), 0)
                         self.fill_template(template, destfile, component)
                         template.close()

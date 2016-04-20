@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     pod.py
@@ -45,7 +45,7 @@ TMPFILENAME = "podtmp"
 
 def usage():
     """ print POD arg usage """
-    print """\
+    print("""\
 Usage: pod [OPTION...]
 
     -h, --help             give this help list
@@ -54,7 +54,7 @@ Usage: pod [OPTION...]
     -v, --version          print program version
 
 Report bugs to http://periphondemand.sourceforge.net/
-"""
+""")
 
 
 def main(argv):
@@ -64,8 +64,8 @@ def main(argv):
                                                      "version",
                                                      "source=",
                                                      "load="])
-    except getopt.GetoptError, error:
-        print str(error)
+    except getopt.GetoptError as error:
+        print(error)
         usage()
         sys.exit(2)
     options = [arg[0] for arg in opts]
@@ -75,7 +75,7 @@ def main(argv):
         sys.exit(0)
 
     if "version" in options or "-v" in options:
-        print "Peripherals On Demand version " + VERSION
+        print("Peripherals On Demand version " + VERSION)
         sys.exit(0)
 
     cli = ProjectCli()
@@ -89,7 +89,7 @@ def main(argv):
                 argument = arg
                 break
         if not os.path.exists(argument):
-            print("[ERROR] script " + str(argument) + " doesn't exist")
+            print("[ERROR] script " + argument + " doesn't exist")
             usage()
             return
         cli.do_source(argument)
@@ -99,7 +99,7 @@ def main(argv):
                 argument = arg.strip('/')
                 break
             if not os.path.exists(argument):
-                print("[ERROR] project " + str(argument) +
+                print("[ERROR] project " + argument +
                       " doesn't exist")
                 usage()
                 return
@@ -107,7 +107,7 @@ def main(argv):
         tmpfile = open(TMPFILENAME, "w")
         tmpfile.write("load " + argument)
         tmpfile.close()
-        print "Loading project " + str(argument) + " :\n"
+        print("Loading project " + argument + " :\n")
         cli.do_source(TMPFILENAME)
 
     # infinite command loop

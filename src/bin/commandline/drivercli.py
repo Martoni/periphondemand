@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     DriverCli.py
@@ -53,8 +53,8 @@ class DriverCli(BaseCli):
         toollist = []
         try:
             toollist = self.completeargs(text, line, "[drivertoolchain]")
-        except PodError, error:
-            print error
+        except PodError as error:
+            print(error)
         return toollist
 
     def do_generateproject(self, line):
@@ -66,11 +66,11 @@ generate a project drivers directory with templates
             self.testIfToolChainSelected()
             self.driver.generate_project()
             self.driver.fill_all_templates()
-        except PodError, error:
-            print DISPLAY
-            print error
+        except PodError as error:
+            print(DISPLAY)
+            print(error)
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def do_filltemplates(self, line):
         """\
@@ -80,11 +80,11 @@ fill drivers templates
         try:
             self.testIfToolChainSelected()
             self.driver.fill_all_templates()
-        except PodError, error:
-            print DISPLAY
-            print error
+        except PodError as error:
+            print(DISPLAY)
+            print(error)
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def do_copydrivers(self, line):
         """\
@@ -95,11 +95,11 @@ directory must be selected with setprojecttree
         try:
             self.testIfToolChainSelected()
             self.driver.copy_bsp_drivers()
-        except PodError, error:
-            print DISPLAY
-            print error
+        except PodError as error:
+            print(DISPLAY)
+            print(error)
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def complete_selectprojecttree(self, text, line, begidx, endidx):
         """complete selectprojecttree command directories """
@@ -121,18 +121,18 @@ select software developpement tree, to copy driver
         try:
             self.testIfToolChainSelected()
             self.driver.set_bsp_directory(line)
-        except PodError, error:
-            print DISPLAY
-            print error
+        except PodError as error:
+            print(DISPLAY)
+            print(error)
             return
-        print DISPLAY
+        print(DISPLAY)
 
     def complete_selecttoolchain(self, text, line, begidx, endidx):
         toolchainlist = []
         try:
             toolchainlist = self.completeargs(text, line, "[drivertoolchain]")
-        except PodError, error:
-            print error
+        except PodError as error:
+            print(error)
         return toolchainlist
 
     def do_selecttoolchain(self, line):
@@ -142,9 +142,9 @@ select operating system to generate drivers
         """
         try:
             self.checkargs(line, "[drivertoolchain]")
-        except PodError, error:
-            print DISPLAY
-            print error
+        except PodError as error:
+            print(DISPLAY)
+            print(error)
             return
         if line.strip() == "":
             if len(self._project.get_driver_toolchains()) == 1:
@@ -152,15 +152,15 @@ select operating system to generate drivers
                     self._project.get_driver_toolchains()[0]
             else:
                 if self._project.driver_toolchain is None:
-                    print "Choose a toolchain\n"
+                    print("Choose a toolchain\n")
                     for toolchain in \
                             self._project.get_driver_toolchains():
-                        print toolchain
+                        print(toolchain)
                     return
         else:
             try:
                 self._project.driver_toolchain = line
-            except PodError, error:
-                print error
+            except PodError as error:
+                print(error)
                 return
         self.driver = self._project.driver

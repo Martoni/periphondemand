@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     WrapperSystem.py
@@ -115,7 +115,7 @@ def rename_file(oldfilepath, newfilepath):
     """
     try:
         return os.rename(oldfilepath, newfilepath)
-    except OSError, error:
+    except OSError as error:
         raise PodError(str(error) + "\nrenaming " +
                        str(oldfilepath) + " in " + str(newfilepath))
 
@@ -134,7 +134,7 @@ def mkdir(name):
     """ make directory """
     try:
         return os.makedirs(name)
-    except OSError, error:
+    except OSError as error:
         raise PodError("can't make directory " + name + " :\n" + str(error))
 
 
@@ -249,7 +249,7 @@ def del_all_dir(dirpath):
     try:
         for thedir in list_dir(dirpath):
             rm_dir(dirpath + "/" + thedir)
-    except IOError, error:
+    except IOError as error:
         raise PodError(str(error), 0)
 
 
@@ -259,7 +259,7 @@ def del_all_files(dirpath):
     try:
         for thefile in list_files(dirpath):
             os.remove(dirpath + "/" + thefile)
-    except IOError, error:
+    except IOError as error:
         raise PodError(str(error), 0)
 
 

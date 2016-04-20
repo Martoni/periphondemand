@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     Interface.py
@@ -15,6 +15,8 @@
 #
 # ----------------------------------------------------------------------------
 """ Class that manage interfaces"""
+
+from functools import cmp_to_key
 
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.poderror import PodError
@@ -161,7 +163,7 @@ class Interface(WrapperXml):
     @property
     def mem_size(self):
         """ Get the memory size """
-        return ((2 ** self.addr_port_size) * self.regstep)
+        return int((2 ** self.addr_port_size) * self.regstep)
 
     @property
     def data_size(self):
@@ -414,8 +416,7 @@ class Interface(WrapperXml):
         if len(self._registerslist) != 0:
             listreg = []
             # sort registers dict by offset order
-            self._registerslist.sort(lambda x, y: cmp(int(x.offset, 16),
-                                     int(y.offset, 16)))
+            self._registerslist.sort(key=lambda x: int(x.offset, 16))
             # display each register
             for register in self._registerslist:
                 listreg.append(

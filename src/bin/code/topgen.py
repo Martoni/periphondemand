@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     TopGen.py
@@ -52,7 +52,7 @@ class TopGen(object):
                     "_" +
                     masterinterface.name +
                     "_intercon")
-            except PodError, error:
+            except PodError as error:
                 raise PodError("Intercon missing, all intercon must be" +
                                "generated before generate top.\n" + str(error))
 
@@ -86,7 +86,7 @@ class TopGen(object):
         try:
             file = open(self.project.projectpath + SYNTHESISPATH +
                         "/top_" + self.project.name + VHDLEXT, "w")
-        except IOError, error:
+        except IOError as error:
             raise error
         file.write(out)
         file.close()

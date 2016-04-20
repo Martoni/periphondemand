@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     Port.py
@@ -196,16 +196,6 @@ class Port(WrapperXml):
     def position(self, position):
         """ Set position """
         self.set_attr("position", position)
-
-    @WrapperXml.size.getter
-    def size(self):
-        size = self.get_attr_value("size")
-        if size.isdigit():
-            return size
-        else:
-            generic = self.parent.parent.get_generic(str(size))
-            value = generic.get_attr_value("value")
-            return value
 
     @property
     def frequency(self):

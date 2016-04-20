@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     synthesiswrapper.py
@@ -98,7 +98,7 @@ class SynthesisWrapper:
         """
         raise NotImplementedError("method must be implemented", 0)
 
-    def addpinconstraints(self, connect, port, portdest):
+    def addpinconstraints(self, connect, port):
         """ return pin constraint definition
         """
         raise NotImplementedError("method must be implemented", 0)
@@ -171,7 +171,7 @@ class SynthesisWrapper:
 
         try:
             afile = open(filename, "w")
-        except IOError, error:
+        except IOError as error:
             raise PodError(str(error), 0)
         afile.write(out)
         afile.close()
@@ -231,14 +231,7 @@ class SynthesisWrapper:
                         else:
                             connect = connect[0]
 
-                        instancedest =\
-                            self.project.get_instance(connect["instance_dest"])
-                        interfacedest = \
-                            instancedest.get_interface(connect["interface_dest"])
-                        portdest = interfacedest.get_port(connect["port_dest"])
-
-                        out += self.addpinconstraints(connect, port,
-                                                      portdest)
+                        out += self.addpinconstraints(connect, port)
 
                         # if port as frequency parameters, it's a clock.
                         # then had xilinx clock constraint
@@ -301,9 +294,9 @@ class SynthesisWrapper:
 
         for line in sy.launch_as_shell(commandname, scriptname):
             if SETTINGS.color() == 1:
-                print COLOR_SHELL + line + COLOR_END,
+                print(COLOR_SHELL + line + COLOR_END),
             else:
-                print "SHELL>" + line,
+                print("SHELL>" + line),
         for ext_file in self.ext_files:
             try:
                 sy.cp_file(self.project.projectpath + OBJSPATH + "/" +

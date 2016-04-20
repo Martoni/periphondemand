@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     ise.py
@@ -82,41 +82,44 @@ class Ise(SynthesisWrapper):
         """ return line for pin forced
         """
         out = 'NET "force_' + str(port.name)
-        out = out + '" LOC="' + str(port.position)\
+        out += '" LOC="' + str(port.position)\
                   + '" | IOSTANDARD=' + str(port.standard)
         if port.drive is not None:
-            out = out + " | DRIVE=" + str(port.drive)
-        out = out + r'; # ' + str(port.name) + '\n'
+            out += " | DRIVE=" + str(port.drive)
+        out += r'; # ' + str(port.name) + '\n'
         return out
 
-    def addpinconstraints(self, connect, port, portdest):
+    def addpinconstraints(self, connect, port):
         """ return pin constraint definition
         """
         out = 'NET "' +\
             connect["instance_dest"] + "_" + connect["port_dest"]
-        if self.project.get_instance(
-                connect["instance_dest"]).get_interface(
-                    connect["interface_dest"]).get_port(
-                        connect["port_dest"]).size != "1":
-            if portdest.is_fully_connected():
-                out = out + "<" + connect["pin_dest"] + ">"
+        instancedest =\
+            self.project.get_instance(connect["instance_dest"])
+        interfacedest = \
+            instancedest.get_interface(connect["interface_dest"])
+        portdest = interfacedest.get_port(connect["port_dest"])
+
+        if portdest.size != 1:
+            if portdest.is_fully_connected() :
+                out += "<" + connect["pin_dest"] + ">"
             else:
-                out = out + "_pin" + connect["pin_dest"]
-        out = out + '" LOC="' + str(port.position) + '"'
+                out += "_pin" + connect["pin_dest"]
+        out += '" LOC="' + str(port.position) + '"'
         if portdest.port_option is not None:
-            out = out + ' | ' + str(portdest.port_option)
+            out += ' | ' + str(portdest.port_option)
         elif port.port_option is not None:
-            out = out + ' | ' + str(port.port_option)
+            out += ' | ' + str(port.port_option)
         if portdest.standard is not None:
-            out = out + " | IOSTANDARD=" +\
+            out += " | IOSTANDARD=" +\
                 str(portdest.standard)
         else:
-            out = out + " | IOSTANDARD=" + str(port.standard)
+            out += " | IOSTANDARD=" + str(port.standard)
         if portdest.drive is not None:
-            out = out + " | DRIVE=" + str(portdest.drive)
+            out += " | DRIVE=" + str(portdest.drive)
         elif port.drive is not None:
-            out = out + " | DRIVE=" + str(port.drive)
-        out = out + r'; # ' + str(port.name) + '\n'
+            out += " | DRIVE=" + str(port.drive)
+        out += r'; # ' + str(port.name) + '\n'
         return out
 
     @classmethod
@@ -127,7 +130,7 @@ class Ise(SynthesisWrapper):
             "_" + connect["port_dest"] + "\" TNM_NET = \"" +\
             connect["instance_dest"] + "_" + connect["port_dest"] +\
             "\";\n"
-        out = out + "TIMESPEC \"TS_" +\
+        out += "TIMESPEC \"TS_" +\
             connect["instance_dest"] +\
             "_" + connect["port_dest"] +\
             "\" = PERIOD \"" +\

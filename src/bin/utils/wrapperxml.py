@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     WrapperXml.py
@@ -60,7 +60,7 @@ class WrapperXml(object):
         """ initialize with filename"""
         try:
             self.open_xml(filename)
-        except IOError, error:
+        except IOError as error:
             raise PodError(str(error), 0)
 
     def __initnode(self, node):
@@ -79,12 +79,12 @@ class WrapperXml(object):
         """ initialize with nodestring """
         try:
             self.tree = ET.fromstring(nodestring)
-        except SyntaxError, error:
+        except SyntaxError as error:
             raise PodError("XML malformed :\n" + str(error), 0)
 
     def __str__(self):
         return ('<?xml version="1.0" encoding="utf-8"?>\n' +
-                ET.tostring(self.tree, "utf-8"))
+                ET.tostring(self.tree, "utf-8").decode("utf-8"))
 
     @property
     def text(self):
@@ -267,8 +267,13 @@ class WrapperXml(object):
 
     @property
     def size(self):
-        """ get size """
-        return self.get_attr_value("size")
+        size = self.get_attr_value("size")
+        if size.isdigit():
+            return int(size)
+        else:
+            generic = self.parent.parent.get_generic(str(size))
+            value = int(generic.get_attr_value("value"))
+            return value
 
     @size.setter
     def size(self, size):
@@ -301,20 +306,20 @@ class WrapperXml(object):
         if type(filename) == str and string is not None:
             try:
                 self.tree = ET.fromstring(filename)
-            except SyntaxError, error:
+            except SyntaxError as error:
                 raise PodError("Xml malformed in " +
                                filename + " : \n" + str(error))
         else:
             try:
                 xmlfile = open(filename, 'r')
-            except IOError, error:
+            except IOError as error:
                 raise PodError(str(error), 0)
             content =\
                 xmlfile.read().replace(
                     r'<?xml version="1.0" encoding="utf-8"?>', '')
             try:
                 self.tree = ET.fromstring(content)
-            except SyntaxError, error:
+            except SyntaxError as error:
                 raise PodError("Xml malformed in " +
                                filename + " :\n" + str(error))
 

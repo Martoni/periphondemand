@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     configfile.py
@@ -41,7 +41,7 @@ class ConfigFile(WrapperXml):
         if os.path.exists(self.filename):
             WrapperXml.__init__(self, file=self.filename)
         else:
-            print filename + " doesn't exist, be created"
+            print(filename + " doesn't exist, be created")
             WrapperXml.__init__(self, nodename="podconfig")
             self.add_node(nodename="libraries")
             self.savefile()
@@ -110,7 +110,7 @@ class ConfigFile(WrapperXml):
         from periphondemand.bin.utils import wrappersystem as sy
         try:
             tools = self.get_node("tools").get_nodes("tool")
-        except AttributeError, error:
+        except AttributeError as error:
             raise PodError("No synthesis command in .podrc. (" +
                            str(error) + ")")
         command_name = None
@@ -132,7 +132,7 @@ class ConfigFile(WrapperXml):
         """ Return the path to synthesis command """
         try:
             tools = self.get_node("tools").get_nodes("tool")
-        except AttributeError, error:
+        except AttributeError as error:
             raise PodError("No synthesis command in .podrc. (" +
                            str(error) + ")")
         for anode in tools:

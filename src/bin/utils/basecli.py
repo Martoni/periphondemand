@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Name:     cli.py
@@ -61,7 +61,7 @@ class BaseCli(cmd.Cmd):
         """ finish the statement """
         statement = firstline
         while not self.statementHasEnded(statement):
-            inp = self.pseudo_raw_input(self.continuation_prompt)
+            inp = self.pseudo_input(self.continuation_prompt)
             statement = '%s\n%s' % (statement, inp)
         return statement
         # assembling a list of lines and joining them at the end would be
@@ -77,14 +77,14 @@ class BaseCli(cmd.Cmd):
         """ Read a line """
         return self.stdin.readline()
 
-    def pseudo_raw_input(self, prompt):
-        """ copied from cmd's cmdloop; like raw_input,
+    def pseudo_input(self, prompt):
+        """ copied from cmd's cmdloop; like input,
             but accounts for changed stdin, stdout
         """
 
         if self.use_rawinput:
             try:
-                line = raw_input(prompt)
+                line = input(prompt)
             except EOFError:
                 line = 'EOF'
         else:
@@ -105,7 +105,7 @@ class BaseCli(cmd.Cmd):
         """
 
         # An almost perfect copy from Cmd; however,
-        # the pseudo_raw_input portion
+        # the pseudo_input portion
         # has been split out so that it can be called separately
 
         self.preloop()
@@ -127,16 +127,16 @@ class BaseCli(cmd.Cmd):
                     if self.cmdqueue:
                         line = self.cmdqueue.pop(0)
                     else:
-                        line = self.pseudo_raw_input(self.prompt)
+                        line = self.pseudo_input(self.prompt)
                     line = self.precmd(line)
                     if line == "exit":
                         sys.exit(0)
                     if SETTINGS.is_script():
-                        print "$ " + line
+                        print("$ " + line)
                     stop = self.onecmd(line)
                     stop = self.postcmd(stop, line)
                 except KeyboardInterrupt:
-                    print PodError("User keyboard interrupt")
+                    print(PodError("User keyboard interrupt"))
             self.postloop()
         finally:
             if self.use_rawinput and self.completekey:
@@ -419,7 +419,7 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "componentname":
             try:
                 libraryname.lower()
-            except Exception, error:
+            except Exception as error:
                 raise error
             arglist = [libraryname + "." + componentname
                        for componentname in
@@ -429,7 +429,7 @@ fpga_attributes    : give list of fpga attributes in platform
         elif subargt == "componentversion":
             try:
                 libraryname.lower()
-            except Exception, error:
+            except Exception as error:
                 raise error
             return [libraryname + "." + componentname + "." + comp
                     for comp in
@@ -530,7 +530,7 @@ fpga_attributes    : give list of fpga attributes in platform
         """
         try:
             self.checkargs(line, "<filename>")
-        except PodError, error:
+        except PodError as error:
             print(str(error))
             return
         # Create the file
@@ -538,7 +538,7 @@ fpga_attributes    : give list of fpga attributes in platform
         filename = filename + PODSCRIPTEXT
         try:
             historyfile = open(filename, "w")
-        except IOError, error:
+        except IOError as error:
             print(str(error))
             return
         # suppress the last command (its savehistory itself)
