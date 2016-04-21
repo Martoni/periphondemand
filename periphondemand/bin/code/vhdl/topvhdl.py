@@ -236,18 +236,18 @@ class TopVHDL(TopGen):
         """ construct architecture part of the file """
         out = "architecture " + entityname + "_1 of " + entityname + " is\n"
         # declare components
-        out = out + self.declare_components()
+        out += self.declare_components()
         # declare signals
-        out = out + self.declare_signals(self.project.instances,
+        out += self.declare_signals(self.project.instances,
                                          incompleteportslist)
         # begin
         out += "\nbegin\n"
         # Connect forces
-        out = out + self.connect_forces(portlist)
+        out += self.connect_forces(portlist)
         # declare Instance
-        out = out + self.declare_instance()
+        out += self.declare_instance()
         # instance connection
-        out = out + self.connect_instance(incompleteportslist)
+        out += self.connect_instance(incompleteportslist)
         # architecture foot
         out += "\nend architecture " + entityname + "_1;\n"
         return out

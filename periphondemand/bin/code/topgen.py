@@ -472,7 +472,7 @@ class TopGen(object):
         # entity
         entityname = "top_" + self.project.name
         portlist = self.project.platform.connect_ports
-        out = out + self.entity(entityname, portlist)
+        out += self.entity(entityname, portlist)
 
         # architecture
         incompleteportslist = self.project.platform.incomplete_ext_ports
