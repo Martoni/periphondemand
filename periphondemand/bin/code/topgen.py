@@ -84,10 +84,10 @@ class TopGen(object):
 
         # save file
         try:
-            file = open(self.project.projectpath + SYNTHESISPATH +
-                        "/top_" + self.project.name + VHDLEXT, "w")
+            top_file = open(self.project.projectpath + SYNTHESISPATH +
+                            "/top_" + self.project.name + VHDLEXT, "w")
         except IOError as error:
             raise error
-        file.write(out)
-        file.close()
+        top_file.write(out)
+        top_file.close()
         return out
