@@ -115,11 +115,7 @@ class Synthesis(WrapperXml):
     def get_synthesis_value(self, value):
         """ Return toolchain config content
         """
-        try:
-            return SETTINGS.get_synthesis_value(self.synthesis_toolname,
-                                                value)
-        except PodError:
-            raise PodError("sais pas quoi faire")
+        return SETTINGS.get_synthesis_value(self.synthesis_toolname, value)
 
     def generate_project(self):
         """ copy all hdl file in synthesis project directory
