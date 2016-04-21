@@ -340,7 +340,7 @@ def controlmaster(masterinterface, intercon):
             out = out + " when " + slaveinstancename + "_" +\
                 slaveinterfacename + "_cs = '1' else\n"
             out = out + ONETAB * 9 + "  "
-        except PodError, e:
+        except PodError as error:
             pass
     out = out + " (others = > '0');\n"
 

@@ -33,14 +33,14 @@ import sys  # for argv
 
 def usage():
     """ print POD arg usage """
-    print """\
+    print("""\
 Usage: launchtests [OPTION...]
 
     -h, --help          give this help list
     -r, --reset         reset output checker
 
 Report bugs to http://periphondemand.sourceforge.net/
-"""
+""")
 
 
 def diff(output, testname):
@@ -60,7 +60,7 @@ def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:],
                                    "hr", ["help", "reset"])
-    except getopt.GetoptError, error:
+    except getopt.GetoptError as error:
         print(str(error))
         usage()
         sys.exit(2)
@@ -82,14 +82,14 @@ def main():
     number_of_tests = int(testlist[-1][0:2])
 
     for i in range(number_of_tests):
-        print " Test number " + str(i + 1) + " : " + testlist[i][3:],
+        print(" Test number " + str(i + 1) + " : " + testlist[i][3:]),
         out = os.popen("pod -s "+testlist[i]).read()
         # if -r, create output files
         if reset:
             file_chk = open("chk_" + testlist[i], "w")
             file_chk.write(out)
             file_chk.close()
-            print "chk_" + testlist[i] + " written"
+            print("chk_" + testlist[i] + " written"),
         else:
             if not os.path.exists("chk_" + testlist[i]):
                 print("[ERROR] chk_" + testlist[i] + " doesn't exist. " +
@@ -97,10 +97,10 @@ def main():
                 sys.exit(-1)
             testout = diff(out, "chk_" + testlist[i])
             if testout is None:
-                print " Check"
+                print(" Check")
             else:
-                print " Not Check"
-                print testout
+                print(" Not Check")
+                print(testout)
 
 if __name__ == "__main__":
     main()
