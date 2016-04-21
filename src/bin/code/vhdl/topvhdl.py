@@ -143,20 +143,20 @@ class TopVHDL(TopGen):
         return out
 
     @classmethod
-    def architectureHead(cls, entityname):
+    def architecture_head(cls, entityname):
         """ head of architecture
         """
         out = "architecture " + entityname + "_1 of " + entityname + " is\n"
         return out
 
     @classmethod
-    def architectureFoot(cls, entityname):
+    def architecture_foot(cls, entityname):
         """ architecture footer
         """
         out = "\nend architecture " + entityname + "_1;\n"
         return out
 
-    def declareComponents(self):
+    def declare_components(self):
         """ Declare components
         """
         if self.project.vhdl_version == "vhdl93":
@@ -214,7 +214,7 @@ class TopVHDL(TopGen):
             out += ONETAB + "end component;\n"
         return out
 
-    def declareSignals(self, componentslist, incomplete_external_ports_list):
+    def declare_signals(self, componentslist, incomplete_external_ports_list):
         """ Declare signals ports
         """
         platformname = self.project.platform.instancename
@@ -264,7 +264,7 @@ class TopVHDL(TopGen):
                 str(port.real_size - 1) + " downto 0);\n"
         return out
 
-    def declareInstance(self):
+    def declare_instance(self):
         """ Declaring instances """
         out = ""
         out += ONETAB + "-------------------------\n"
@@ -329,7 +329,7 @@ class TopVHDL(TopGen):
         return out
 
     @classmethod
-    def connectForces(cls, portlist):
+    def connect_forces(cls, portlist):
         """ Connecting Forces """
         out = "\n"
         out += ONETAB + "-------------------\n"
@@ -409,7 +409,7 @@ class TopVHDL(TopGen):
             DISPLAY.msg(message, 2)
         return out
 
-    def connectInstance(self, incomplete_external_ports_list):
+    def connect_instance(self, incomplete_external_ports_list):
         """ Connect instances
         """
         out = ""
@@ -459,6 +459,6 @@ class TopVHDL(TopGen):
         return out
 
     @classmethod
-    def architectureBegin(cls):
+    def architecture_begin(cls):
         """ Write architecture begin """
         return "\nbegin\n"

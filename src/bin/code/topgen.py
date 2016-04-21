@@ -63,24 +63,24 @@ class TopGen(object):
         portlist = self.project.platform.connect_ports
         out = out + self.entity(entityname, portlist)
         # architecture head
-        out = out + self.architectureHead(entityname)
+        out = out + self.architecture_head(entityname)
         # declare components
-        out = out + self.declareComponents()
+        out = out + self.declare_components()
         # declare signals
         platform = self.project.platform
         incompleteportslist = platform.incomplete_ext_ports
-        out = out + self.declareSignals(self.project.instances,
-                                        incompleteportslist)
+        out = out + self.declare_signals(self.project.instances,
+                                         incompleteportslist)
         # begin
-        out = out + self.architectureBegin()
+        out = out + self.architecture_begin()
         # Connect forces
-        out = out + self.connectForces(portlist)
+        out = out + self.connect_forces(portlist)
         # declare Instance
-        out = out + self.declareInstance()
+        out = out + self.declare_instance()
         # instance connection
-        out = out + self.connectInstance(incompleteportslist)
+        out = out + self.connect_instance(incompleteportslist)
         # architecture foot
-        out = out + self.architectureFoot(entityname)
+        out = out + self.architecture_foot(entityname)
 
         # save file
         try:
