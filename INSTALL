@@ -34,13 +34,13 @@ Then checkout the standard library:
 
 To install it on your computer, just do (has super user):
 
-``$ python setup.py install``
+``$ python3 setup.py install``
 
 **Make a distribution archive**
 
 Make python POD distribution with command:
 
-``$ python setup.py sdist``
+``$ python3 setup.py sdist``
 
 The POD package can be found in directory dist/
 
@@ -58,7 +58,7 @@ Walk through periphondemand/ directory:
 
 Then install POD with root privilege:
 
-``$ python setup.py install``
+``$ python3 setup.py install``
 
 Enjoy
 ++++++
