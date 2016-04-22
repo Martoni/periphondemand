@@ -33,43 +33,8 @@ from setuptools import setup
 import os
 import re
 import sys
-sys.path.append("src/bin/")
+sys.path.append("periphondemand/bin/")
 from version import VERSION
-
-
-def visit(libfile, dirname, names):
-    """ function used for getLibraryTree to walk throw library tree"""
-    for file in names:
-        filepath = os.path.join(dirname, file)
-        if not os.path.isdir(filepath):
-            if not re.search(r".svn", filepath):
-                # FIXME:
-                # I can't find how to split with os.path !
-                # will be used when package_data work
-                #realpath = "/".join(filepath.split("/")[1:])
-                #libfile.append(realpath)
-                libfile.append(filepath)
-
-
-def getTree(directory):
-    """ return a tuple list of files """
-    libfile = []
-    os.walk(os.path.join("src", directory), visit, libfile)
-    new_libfile = []
-    for path_file in libfile:
-        new_libfile.append('/'.join(path_file.split('/')[1:]))
-    if (directory == "platforms"):
-        print(new_libfile)
-    return new_libfile
-
-# Package files
-package_files_list = []
-package_files_list.extend(getTree("library"))
-package_files_list.extend(getTree("platforms"))
-package_files_list.extend(getTree("templates"))
-package_files_list.extend(getTree("busses"))
-package_files_list.extend(getTree("toolchains"))
-package_files_list.extend(getTree("tests"))
 
 setup(name='PeriphOnDemand',
       version=VERSION,
@@ -79,7 +44,7 @@ setup(name='PeriphOnDemand',
                    '<nicolas.colombain@armadeus.com>',
       maintainer='Fabien Marteau',
       maintainer_email='fabien.marteau@armadeus.com',
-      package_dir={"periphondemand": "src"},
+      package_dir={"periphondemand": "periphondemand"},
       packages=['periphondemand',
                 'periphondemand.bin',
                 'periphondemand.bin.code',
@@ -89,8 +54,8 @@ setup(name='PeriphOnDemand',
                 'periphondemand.bin.toolchain',
                 'periphondemand.bin.utils',
                 'periphondemand.toolchains',
+                'periphondemand.templates',
                 ],
-      package_data={'periphondemand': package_files_list},
-      scripts=['src/bin/pod'],
+      scripts=['periphondemand/bin/pod'],
       license='GPL',
 )

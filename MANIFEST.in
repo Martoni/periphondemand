@@ -1,10 +1,11 @@
 include README.md
 include COPYING
-include src/bin/pod
-recursive-include src/tests *
+include periphondemand/bin/pod
+recursive-include periphondemand/tests *
 recursive-include libraries/library *
 recursive-include libraries/platforms *
-recursive-include src/templates *
-recursive-include src/busses *
-recursive-include src/toolchains *
-recursive-include src/bin *
+recursive-include templates *
+recursive-include periphondemand/busses *
+recursive-include periphondemand/toolchains *
+recursive-include periphondemand/bin *
+global-exclude *.pyc
