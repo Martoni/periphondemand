@@ -25,18 +25,22 @@
 # ----------------------------------------------------------------------------
 """ Manage ISE toolchain """
 
-from periphondemand.bin.utils.synthesiswrapper import SynthesisWrapper
 
 from periphondemand.bin.define import UCFEXT
 from periphondemand.bin.define import XILINX_BITSTREAM_SUFFIX
 from periphondemand.bin.define import XILINX_BINARY_SUFFIX
 
+from periphondemand.bin.toolchain.synthesis import Synthesis
 
-class Ise(SynthesisWrapper):
+
+class Ise(Synthesis):
     """ Manage specific ise synthesis toolchain part
     """
-    def __init__(self, project, parent):
-        SynthesisWrapper.__init__(self, project, parent)
+
+    name = "ise"
+
+    def __init__(self, parent):
+        Synthesis.__init__(self, parent)
 
     @classmethod
     def constraints_file_extension(cls):

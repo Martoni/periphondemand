@@ -41,6 +41,7 @@ from periphondemand.bin.core.library import Library
 
 from periphondemand.bin.toolchain.simulation import Simulation
 from periphondemand.bin.toolchain.synthesis import Synthesis
+from periphondemand.bin.toolchain.synthesis import synthesisFactory
 from periphondemand.bin.toolchain.driver import Driver
 
 SETTINGS = Settings()
@@ -142,22 +143,14 @@ class Project(WrapperXml):
                     self._instanceslist.append(comp)
 
         # load toolchains
-        # toolchains = self.get_node("toolchain")
-        # if(toolchains):
-        #       node = toolchains.get_node("simulation")
-        #       if node!=None:
-        #           self.simulation = Simulation(self, node.name)
-        #       node = toolchains.get_node("synthesis")
-        #       if node!=None:
-        #           self.synthesis = Synthesis(self, node.name)
-        try:
-            self.synthesis = Synthesis(self)
-        except PodError as error:
-            DISPLAY.msg(str(error))
-        try:
-            self.simulation = Simulation(self)
-        except PodError as error:
-            DISPLAY.msg(str(error))
+        toolchains = self.get_node("toolchain")
+        if(toolchains):
+              node = toolchains.get_node("simulation")
+              if node!=None:
+                  self.simulation = Simulation(self, node.name)
+              node = toolchains.get_node("synthesis")
+              if node!=None:
+                  self.synthesis = synthesisFactory(self, node.name)
 
         # Set bus master-slave
         for masterinterface in self.interfaces_master:
@@ -192,14 +185,7 @@ class Project(WrapperXml):
         """ Set the synthesis toolchain """
         if toolchainname not in self.get_synthesis_toolchains():
             raise PodError("No toolchain named " + toolchainname + " in POD")
-        sy.cp_file(SETTINGS.path + TOOLCHAINPATH + SYNTHESISPATH +
-                   "/" + toolchainname + "/" + toolchainname + XMLEXT,
-                   self.projectpath + SYNTHESISPATH + "/")
-        sy.rename_file(self.projectpath + SYNTHESISPATH +
-                       "/" + toolchainname + XMLEXT,
-                       self.projectpath + SYNTHESISPATH +
-                       "/synthesis" + XMLEXT)
-        self.synthesis = Synthesis(self)
+        self.synthesis = synthesisFactory(self, toolchainname)
         self.save()
 
     @property
@@ -594,8 +580,6 @@ class Project(WrapperXml):
         """ Save the project """
         for comp in self._instanceslist:
             comp.save()
-        if self.synthesis is not None:
-            self.synthesis.save()
         if self.simulation is not None:
             self.simulation.save()
         self.save_xml(self.projectpath + "/" + self.name + XMLEXT)

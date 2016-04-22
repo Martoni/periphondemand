@@ -112,7 +112,10 @@ class Settings(object):
 
     def get_synthesis_value(self, syntesisname, value):
         """ Get the synthesis value """
-        return self.configfile.get_synthesis_value(syntesisname, value)
+        try:
+            return self.configfile.get_synthesis_value(syntesisname, value)
+        except PodError:
+            return None
 
     components_dir = property(lambda self: self.get_directory("components"))
     board_dir = property(lambda self: self.get_directory("boards"))

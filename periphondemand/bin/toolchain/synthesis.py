@@ -25,15 +25,18 @@
 # ----------------------------------------------------------------------------
 """ Synthesis toolchain """
 
+import os
 import sys
 
 from periphondemand.bin.define import SYNTHESISPATH
 from periphondemand.bin.define import XMLEXT
+from periphondemand.bin.define import TCLEXT
+from periphondemand.bin.define import OBJSPATH
+from periphondemand.bin.define import VHDLEXT
 from periphondemand.bin.define import TOOLCHAINPATH
 from periphondemand.bin.define import COMPONENTSPATH
 
 from periphondemand.bin.utils.settings import Settings
-from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils.display import Display
@@ -43,53 +46,251 @@ import importlib
 SETTINGS = Settings()
 DISPLAY = Display()
 
-
-class Synthesis(WrapperXml):
-    """ Manage synthesis
+class Synthesis(object):
+    """ Synthesis tool generator
     """
-
     def __init__(self, parent):
-        self.parent = parent
-        filepath = self.parent.projectpath + \
-            "/" + SYNTHESISPATH + \
-            "/synthesis" + XMLEXT
-        if not sy.file_exist(filepath):
-            raise PodError("No synthesis project found", 3)
-        WrapperXml.__init__(self, file=filepath)
-        # adding path for toolchain plugin
-        sys.path.append(SETTINGS.path + TOOLCHAINPATH +
-                        SYNTHESISPATH + "/" + self.name)
-
-        # specific tool instanciation
-        try:
-            base_lib = "periphondemand.toolchains.synthesis"
-            module_name = str.upper(self.name[0]) + self.name[1:]
-            module = importlib.import_module(base_lib + "." +
-                                             self.name + "." +
-                                             self.name)
-            my_class = getattr(module, module_name)
-            self._plugin = my_class(parent, self)
-
-        except ImportError as error:
-            sy.rm_file(SETTINGS.path + TOOLCHAINPATH +
-                       SYNTHESISPATH + "/" + self.name)
-            raise PodError(str(error))
+        self._parent = parent
+        self.project = parent
+        self.tcl_scriptname = None
 
     @property
-    def plugin(self):
-        """ return synthesis generator instance
+    def parent(self):
+        """ Return parent object """
+        return self._parent
+
+    @classmethod
+    def constraints_file_extension(cls):
+        """ return file constraints extension
         """
-        return self._plugin
+        raise NotImplementedError("method must be implemented", 0)
 
-    def save(self):
-        """ Save xml """
-        self.save_xml(self.parent.projectpath +
-                      "/synthesis/synthesis" + XMLEXT)
+    def project_base_creation(self):
+        """ return string
+            for project creation
+        """
+        raise NotImplementedError("method must be implemented", 0)
 
-    @property
-    def synthesis_toolname(self):
-        """ return synthesis tool name """
-        return self.get_attr_value(key="name", subnodename="tool")
+    def project_base_configuration(self):
+        """ return basic project
+            configuration
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    @classmethod
+    def add_file_to_tcl(cls, filename):
+        """ return line according to the
+            synthesis tool
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    def add_constraints_file(self, filename):
+        """ return line for constraints file insertion
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    @classmethod
+    def addforcepinout(cls, port):
+        """ return line for pin forced
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    def addpinconstraints(self, connect, port):
+        """ return pin constraint definition
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    def addclockconstraints(self, connect, frequency):
+        """ return clock constraints line definition
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    @classmethod
+    def insert_tools_specific_commands(cls):
+        """ return lines for misc stuff
+            specific to a tool
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    @classmethod
+    def insert_tools_gen_cmds(cls):
+        """ return lines for bitstream generation
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    def ext_files(self):
+        """ return list of bitstream files extension
+        """
+        raise NotImplementedError("method must be implemented", 0)
+
+    def generate_bitstream(self):
+        """ generate the bitstream """
+        raise NotImplementedError("method must be implemented", 0)
+
+    def generatelibraryconstraints(self):
+        """ Adds constraints specified by a component,
+            such as placement for a PLL,
+            multiplier, etc. or clock informations
+            about PLL output signals
+        """
+        out = "# components constraints \n"
+        for instance in self.project.instances:
+            for constraint in instance.constraints:
+                instance_name = instance.instancename
+                attr_val = str(constraint.get_attr_value("name"))
+                if constraint.get_attr_value("type") == "clk":
+                    out += "NET \"" + instance_name + "/" + attr_val + \
+                           "\" TNM_NET = " + instance_name + "/" +\
+                           attr_val + ";\n"
+                    out += "TIMESPEC TS_" + instance_name + "_" + \
+                           attr_val.replace('/', '_') + " = PERIOD \"" + \
+                           instance_name + "/" + attr_val + "\""
+                    out += " %g" %\
+                        (1000 /
+                            float(constraint.get_attr_value("frequency"))) + \
+                        " ns HIGH 50%;\n"
+                elif constraint.get_attr_value("type") == "placement":
+                    out += "INST \"" + instance_name + "/" +\
+                        attr_val + "\" LOC=" +\
+                        constraint.get_attr_value("loc") + ";\n"
+                else:
+                    raise PodError("component " + instance.name +
+                                   " has an unknown type " +
+                                   constraint.get_attr_value("type"), 0)
+        return out
+
+    def generate_pinout(self, filename=None):
+        """ Generate the constraint file .ucf for xilinx fpga
+        """
+        if filename is None:
+            filename = self.project.projectpath + SYNTHESISPATH + "/" + \
+                self.project.name + "." + \
+                self.constraints_file_extension()
+
+        out = "# Constraint file, automaticaly generated by pod \n"
+        out += self.generatepinoutcontent()
+
+        try:
+            afile = open(filename, "w")
+        except IOError as error:
+            raise PodError(str(error), 0)
+        afile.write(out)
+        afile.close()
+        DISPLAY.msg("Constraint file generated with name : " + filename)
+        return filename
+
+    def generatepinoutcontent(self):
+        """ generate pinout definition
+            constraints
+        """
+        out = ""
+        for interface in self.project.platform.interfaces:
+            for port in interface.ports:
+                if port.force_defined():
+                    out += self.addforcepinout(port)
+                elif port.pins != []:
+                    pin = port.pins
+                    # Platform ports are all 1-sized, raise error if not
+                    if len(pin) != 1:
+                        raise PodError("Platform port " + port.name +
+                                       " has size different of 1", 0)
+                    pin = pin[0]
+                    # Only one connection per platform pin can be branched.
+                    # If several connections found, only first is used
+                    if pin.connections != []:
+                        # XXX use getConnectedPinList
+                        connect = pin.connections
+                        if len(connect) > 1:
+                            same_connections_ports = []
+                            DISPLAY.msg("severals pin connected to " +
+                                        port.name, 2)
+                            for connection in connect:
+                                DISPLAY.msg("      -> " +
+                                            connection["instance_dest"] +
+                                            "." +
+                                            connection["interface_dest"] +
+                                            "." +
+                                            connection["port_dest"] + "." +
+                                            connection["pin_dest"])
+                                same_connections_ports.append(
+                                    connection["instance_dest"] + "_" +
+                                    connection["port_dest"])
+
+                            same_connections_ports.sort()
+                            for connection in connect:
+                                if connection["instance_dest"] +\
+                                        "_" + connection["port_dest"] ==\
+                                        same_connections_ports[0]:
+                                    connect = connection
+                            DISPLAY.msg("Connection name: " +
+                                        connect["instance_dest"] +
+                                        "." +
+                                        connect["interface_dest"] +
+                                        "." +
+                                        connect["port_dest"] + "." +
+                                        connect["pin_dest"], 3)
+                        else:
+                            connect = connect[0]
+
+                        out += self.addpinconstraints(connect, port)
+
+                        # if port as frequency parameters, it's a clock.
+                        # then had xilinx clock constraint
+                        try:
+                            frequency = port.frequency
+                            out += self.addclockconstraints(connect, frequency)
+                        except:
+                            pass
+
+        out += self.generatelibraryconstraints()
+        return out
+
+    def generate_tcl(self, filename=None):
+        """ generate tcl script
+        """
+        if filename is None:
+            filename = self.project.name + TCLEXT
+
+        tclfile = open(self.project.projectpath + SYNTHESISPATH + "/" +
+                       filename, "w")
+        tclfile.write("# TCL script automaticaly generated by POD\n")
+        # create project
+        tclfile.write("cd .." + OBJSPATH + "\n")
+        tclfile.write(self.project_base_creation())
+
+        # Configuration
+        tclfile.write("# configure platform params\n")
+        tclfile.write(self.project_base_configuration())
+
+        # Source files
+        tclfile.write("## add components sources file\n")
+        tclfile.write("# add top level sources file\n")
+        tclfile.write(self.add_file_to_tcl(".." + SYNTHESISPATH + "/top_" +
+                      self.project.name + VHDLEXT))
+
+        for directory in sy.list_dir(self.project.projectpath + SYNTHESISPATH):
+            for afile in sy.list_files(self.project.projectpath +
+                                       SYNTHESISPATH + "/" + directory):
+                tclfile.write(self.add_file_to_tcl(".." + SYNTHESISPATH + "/" +
+                              directory + "/" + afile))
+
+        # Constraints files
+        tclfile.write("# add constraint file\n")
+        tclfile.write(self.add_constraints_file(SYNTHESISPATH + "/" +
+                                                self.project.name))
+        tclfile.write(self.insert_tools_specific_commands())
+
+        tclfile.write(self.insert_tools_gen_cmds())
+
+        DISPLAY.msg("TCL script generated with name : " +
+                    self.project.name + TCLEXT)
+
+        self.tcl_scriptname = self.project.name + TCLEXT
+        return self.tcl_scriptname
+
+    #
+    # XXX copy from synthesis
+    #
 
     @property
     def synthesis_toolcommandname(self):
@@ -97,25 +298,14 @@ class Synthesis(WrapperXml):
         try:
             # try if .podrc exists
             return SETTINGS.get_synthesis_tool_command(
-                self.synthesis_toolname)
+                self.SYNTH_CMD)
         except PodError:
-            # else use toolchain default
-            command_name = self.get_attr_value(key="command",
-                                               subnodename="tool")
-            command_path = self.get_attr_value(key="default_path",
-                                               subnodename="tool")
-            if command_path is not None:
-                if command_path != "":
-                    command_name = command_path + "/" + command_name
-            if not sy.cmd_exist(command_name):
-                raise PodError("Synthesis tool tcl shell command named " +
-                               command_name + " doesn't exist in PATH")
-            return command_name
+            return self.SYNTH_CMD
 
     def get_synthesis_value(self, value):
         """ Return toolchain config content
         """
-        return SETTINGS.get_synthesis_value(self.synthesis_toolname, value)
+        return SETTINGS.get_synthesis_value(self.name, value)
 
     def generate_project(self):
         """ copy all hdl file in synthesis project directory
@@ -144,53 +334,21 @@ class Synthesis(WrapperXml):
                         print(DISPLAY)
                         raise PodError(str(error), 0)
 
-    def generate_tcl(self, filename=None):
-        """ generate tcl script to drive synthesis tool """
-        sys.path.append(SETTINGS.path + TOOLCHAINPATH +
-                        SYNTHESISPATH + "/" + self.name)
-        filename = self.plugin.generate_tcl()
-        self.tcl_scriptname = str(filename)
-        return None
+#    def generate_pinout(self, filename):
+#        """ Generate pinout constraints file """
+#        sy.rm_file(SETTINGS.path + TOOLCHAINPATH +
+#                   SYNTHESISPATH + "/" + self.name)
+#
+#        self.generate_pinout(filename)
+#        return None
 
-    @property
-    def tcl_scriptname(self):
-        """ get the tcl script filename """
-        try:
-            return self.get_attr_value(key="filename",
-                                       subnodename="script")
-        except PodError:
-            raise PodError("TCL script must be generated before")
 
-    @tcl_scriptname.setter
-    def tcl_scriptname(self, filename):
-        """ set the tcl script filename """
-        if self.get_node("script") is None:
-            self.add_node(nodename="script",
-                          attributename="filename",
-                          value=str(filename))
-        else:
-            self.set_attr(key="filename",
-                              value=filename,
-                              subname="script")
+def synthesisFactory(parent, toolchainname):
+    """ return the toolchain object """
+    base_lib = "periphondemand.toolchains.synthesis"
+    module_name = str.upper(toolchainname[0]) + toolchainname[1:]
+    module = importlib.import_module(base_lib + "." + toolchainname + "." +
+                                     toolchainname)
+    MyClass = getattr(module, module_name)
 
-    def generate_pinout(self, filename):
-        """ Generate pinout constraints file """
-        sy.rm_file(SETTINGS.path + TOOLCHAINPATH +
-                   SYNTHESISPATH + "/" + self.name)
-
-        print(self.plugin)
-        self.plugin.generate_pinout(filename)
-        return None
-
-    def generate_bitstream(self):
-        """ Generate the bitstream for fpga configuration """
-        scriptpath = self.parent.projectpath + \
-            SYNTHESISPATH + \
-            "/" + self.tcl_scriptname
-        try:
-            cmd = self.synthesis_toolcommandname
-            self.plugin.generate_bitstream(cmd, scriptpath)
-        except PodError as error:
-            raise PodError("Can't generate bitstream for this synthesis" +
-                           " toolchain:" + self.synthesis_toolname +
-                           ", not implemented. (" + str(error) + ")")
+    return MyClass(parent)

@@ -44,16 +44,25 @@ from periphondemand.bin.utils.poderror import PodError
 from periphondemand.bin.utils.display import Display
 from periphondemand.bin.utils import wrappersystem as sy
 
-settings = Settings()
-display = Display()
+from periphondemand.bin.toolchain.synthesis import Synthesis
 
 
-class Quartus(SynthesisWrapper):
+SETTINGS = Settings()
+DISPLAY = Display()
+
+
+class Quartus(Synthesis):
     """ Manage specific synthesis part for
         quartus toolchain
     """
-    def __init__(self, project, parent):
-        SynthesisWrapper.__init__(self, project, parent)
+
+    SYNTH_CMD = "quartus_sh"
+    RBF_CMD = "quartus_cpf"
+    QSYS_SCRIPT = "qsys-script"
+    name = "quartus"
+
+    def __init__(self, parent):
+        Synthesis.__init__(self, parent)
 
     @classmethod
     def constraints_file_extension(cls):
@@ -213,7 +222,7 @@ class Quartus(SynthesisWrapper):
             raise PodError(str(error), 0)
         file_constr.write(out)
         file_constr.close()
-        display.msg("Constraint file generated with name :" + filename)
+        DISPLAY.msg("Constraint file generated with name :" + filename)
         return filename
 
     def generate_sdc(self, filename=None):
@@ -254,7 +263,7 @@ class Quartus(SynthesisWrapper):
             raise PodError(str(error), 0)
         sdc_file.write(out)
         sdc_file.close()
-        display.msg("Clocks Constraint file generated with name :" + filename)
+        DISPLAY.msg("Clocks Constraint file generated with name :" + filename)
         return filename
 
     def project_base_creation(self):
@@ -389,24 +398,29 @@ class Quartus(SynthesisWrapper):
         """ Display messages from toolchain
         """
         for line in sy.launch_as_shell(commandname, option):
-            if settings.color() == 1:
+            if SETTINGS.color() == 1:
                 print(COLOR_SHELL + line + COLOR_END),
             else:
                 print("SHELL>" + line),
 
-    def generate_bitstream(self, commandname, scriptname):
+    def generate_bitstream(self):
         """ generate the bitstream """
-        default_path = self.parent.get_synthesis_value("default_path")
-        rbf_commandname = default_path + "/" + \
-            self.parent.get_synthesis_value("rbf")
+        commandname = self.synthesis_toolcommandname
+        scriptpath = os.path.join(self.parent.projectpath + SYNTHESISPATH,
+                                  self.tcl_scriptname)
+        default_path = SETTINGS.get_synthesis_value("quartus", "default_path")
+        if default_path is not None:
+            rbf_commandname = os.path.join(default_path, self.RBF_CMD)
+        else:
+            rbf_commandname = self.RBF_CMD
 
-        result_file = self.project.projectpath + BINARYPROJECTPATH + "/" + \
-            BINARY_PREFIX + self.project.name + \
-            ALTERA_BITSTREAM_SUFFIX
+        result_file = os.path.join(self.project.projectpath + BINARYPROJECTPATH,
+                                   BINARY_PREFIX + self.project.name +
+                                   ALTERA_BITSTREAM_SUFFIX)
 
-        cnv_result_file = self.project.projectpath + BINARYPROJECTPATH + "/" + \
-            BINARY_PREFIX + self.project.name + \
-            ALTERA_BINARY_SUFFIX
+        cnv_result_file = os.path.join(
+                self.project.projectpath + BINARYPROJECTPATH,
+                BINARY_PREFIX + self.project.name + ALTERA_BINARY_SUFFIX)
 
         pwd = sy.pwd()
         sy.del_all(self.project.projectpath + OBJSPATH)
@@ -415,17 +429,23 @@ class Quartus(SynthesisWrapper):
 
         list_qsys_comp = self.needqsys()
         if len(list_qsys_comp):
-            qsys_path = self.parent.get_synthesis_value("qsys_path")
-            qsys_script = self.parent.get_synthesis_value("qsys_script")
-            qsys_commandname = default_path + "/" + qsys_path + "/" + \
-                qsys_script
-            for component in list_qsys_comp:
-                self.launch_as_shell(qsys_commandname,
-                                     " --script=" + self.project.projectpath +
-                                     SYNTHESISPATH + "/" +
-                                     component.name + "_qsys.tcl")
+            qsys_path = self.get_synthesis_value("qsys_path")
+            if qsys_path is not None:
+                qsys_commandname = os.path.join(default_path,
+                                                qsys_path,
+                                                self.QSYS_SCRIPT)
+            else:
+                qsys_commandname = self.QSYS_SCRIPT
 
-        self.launch_as_shell(commandname, scriptname)
+            for component in list_qsys_comp:
+                self.launch_as_shell(
+                        qsys_commandname,
+                        " --script=" +
+                        os.path.join(self.project.projectpath +
+                                     "/" + SYNTHESISPATH,
+                                     component.name + "_qsys.tcl"))
+
+        self.launch_as_shell(commandname, scriptpath)
 
         try:
             output_format = self.project.platform.output_format
