@@ -35,8 +35,11 @@ from periphondemand.bin.define import UCFEXT
 from periphondemand.bin.define import XILINX_BITSTREAM_SUFFIX
 from periphondemand.bin.define import XILINX_BINARY_SUFFIX
 
+from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.toolchain.synthesis import Synthesis
+
+SETTINGS = Settings()
 
 
 class Ise(Synthesis):
