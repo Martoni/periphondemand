@@ -1,5 +1,5 @@
 #!/bin/sh
 
-find src/ -name "*.py" | xargs pep8
+find periphondemand/ -name "*.py" | xargs pep8
 
-pylint --rcfile=pylint.cfg src
+pylint --rcfile=pylint.cfg periphondemand 
