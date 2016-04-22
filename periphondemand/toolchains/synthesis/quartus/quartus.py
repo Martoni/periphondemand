@@ -27,8 +27,6 @@
 
 import os
 
-from periphondemand.bin.utils.synthesiswrapper import SynthesisWrapper
-
 from periphondemand.bin.define import SYNTHESISPATH
 from periphondemand.bin.define import TCLEXT
 from periphondemand.bin.define import OBJSPATH
