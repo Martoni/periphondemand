@@ -25,11 +25,17 @@
 # ----------------------------------------------------------------------------
 """ Manage ISE toolchain """
 
+import os
 
+from periphondemand.bin.define import SYNTHESISPATH
+from periphondemand.bin.define import OBJSPATH
+from periphondemand.bin.define import BINARY_PREFIX
+from periphondemand.bin.define import BINARYPROJECTPATH
 from periphondemand.bin.define import UCFEXT
 from periphondemand.bin.define import XILINX_BITSTREAM_SUFFIX
 from periphondemand.bin.define import XILINX_BINARY_SUFFIX
 
+from periphondemand.bin.utils import wrappersystem as sy
 from periphondemand.bin.toolchain.synthesis import Synthesis
 
 
@@ -37,6 +43,7 @@ class Ise(Synthesis):
     """ Manage specific ise synthesis toolchain part
     """
 
+    SYNTH_CMD = "xtclsh"
     name = "ise"
 
     def __init__(self, parent):
@@ -188,3 +195,29 @@ class Ise(Synthesis):
         """ return list of bitstream files extension
         """
         return [XILINX_BITSTREAM_SUFFIX, XILINX_BINARY_SUFFIX]
+
+
+    def generate_bitstream(self):
+        """ generate the bitstream """
+        commandname = self.synthesis_toolcommandname
+        scriptpath = os.path.join(self.parent.projectpath + SYNTHESISPATH,
+                                  self.tcl_scriptname)
+        pwd = sy.pwd()
+        sy.del_all(self.project.projectpath + OBJSPATH)
+        sy.chdir(self.project.projectpath + SYNTHESISPATH)
+        commandname = commandname + " < "
+
+        for line in sy.launch_as_shell(commandname, scriptpath):
+            if SETTINGS.color() == 1:
+                print(COLOR_SHELL + line + COLOR_END),
+            else:
+                print("SHELL>" + line),
+        for ext_file in self.ext_files:
+            try:
+                sy.cp_file(self.project.projectpath + OBJSPATH + "/" +
+                           BINARY_PREFIX + self.project.name +
+                           ext_file,
+                           self.project.projectpath + BINARYPROJECTPATH + "/")
+            except IOError:
+                raise PodError("Can't copy bitstream")
+        sy.chdir(pwd)
