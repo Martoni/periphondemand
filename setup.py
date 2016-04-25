@@ -54,15 +54,14 @@ setup(name='PeriphOnDemand',
       maintainer_email='fabien.marteau@armadeus.com',
       packages=find_packages(),
       package_data = {
-          '':['*.xml',
-              'ghdlsimulationmakefile',
-              '*.tpl',
-              'busses/*/*',
-              'platforms/*/*',
-              'templates/*',
-              'toolchains/*/*/*'],
-          '': package_files("periphondemand/platforms"),
-          '': package_files("periphondemand/library"),
+        '':['*.xml',
+            'ghdlsimulationmakefile',
+            '*.tpl',
+            'busses/*/*',
+            'templates/*',] +
+          package_files("periphondemand/toolchains") +
+          package_files("periphondemand/platforms") +
+          package_files("periphondemand/library"),
       },
       scripts=['periphondemand/bin/pod'],
       license='GPL',
