@@ -26,6 +26,10 @@ Checkout the source code of periphondemand with the following command (git is ne
 
 ``$ git clone https://github.com/Martoni/periphondemand.git periphondemand``
 
+Go in periphondemand directory:
+
+``$ cd periphondemand``
+
 Then checkout the standard library:
 
 ``$ git clone https://github.com/Martoni/pod_lib.git libraries``

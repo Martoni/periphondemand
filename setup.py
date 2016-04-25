@@ -63,6 +63,7 @@ setup(name='PeriphOnDemand',
           package_files("periphondemand/platforms") +
           package_files("periphondemand/library"),
       },
+      zip_safe=False,
       scripts=['periphondemand/bin/pod'],
       license='GPL',
 )
