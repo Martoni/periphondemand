@@ -24,7 +24,7 @@ From GIT
 
 Checkout the source code of periphondemand with the following command (git is needed):
 
-``$ git clone https://github.com/Martoni/fpgarchitect.git periphondemand``
+``$ git clone https://github.com/Martoni/periphondemand.git periphondemand``
 
 Then checkout the standard library:
 
