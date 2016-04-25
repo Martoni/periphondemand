@@ -30,11 +30,19 @@
 # ----------------------------------------------------------------------------
 
 from setuptools import setup
+from setuptools import find_packages
 import os
 import re
 import sys
 sys.path.append("periphondemand/bin/")
 from version import VERSION
+
+def package_files(directory):
+    paths = []
+    for (path, directories, filenames) in os.walk(directory):
+        for filename in filenames:
+            paths.append('../' + os.path.join(path, filename))
+    return paths
 
 setup(name='PeriphOnDemand',
       version=VERSION,
@@ -44,18 +52,18 @@ setup(name='PeriphOnDemand',
                    '<nicolas.colombain@armadeus.com>',
       maintainer='Fabien Marteau',
       maintainer_email='fabien.marteau@armadeus.com',
-      package_dir={"periphondemand": "periphondemand"},
-      packages=['periphondemand',
-                'periphondemand.bin',
-                'periphondemand.bin.code',
-                'periphondemand.bin.code.vhdl',
-                'periphondemand.bin.commandline',
-                'periphondemand.bin.core',
-                'periphondemand.bin.toolchain',
-                'periphondemand.bin.utils',
-                'periphondemand.toolchains',
-                'periphondemand.templates',
-                ],
+      packages=find_packages(),
+      package_data = {
+          '':['*.xml',
+              'ghdlsimulationmakefile',
+              '*.tpl',
+              'busses/*/*',
+              'platforms/*/*',
+              'templates/*',
+              'toolchains/*/*/*'],
+          '': package_files("periphondemand/platforms"),
+          '': package_files("periphondemand/library"),
+      },
       scripts=['periphondemand/bin/pod'],
       license='GPL',
 )
