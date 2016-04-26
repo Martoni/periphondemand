@@ -128,6 +128,7 @@ select software developpement tree, to copy driver
         print(DISPLAY)
 
     def complete_selecttoolchain(self, text, line, begidx, endidx):
+        """ Complete selecttoolchain command """
         toolchainlist = []
         try:
             toolchainlist = self.completeargs(text, line, "[drivertoolchain]")

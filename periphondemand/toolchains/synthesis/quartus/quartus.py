@@ -319,7 +319,8 @@ class Quartus(Synthesis):
         # tclfile.write("project set package "+platform.package+"\n")
         # tclfile.write("project set speed "+platform.speed+"\n")
         # tclfile.write("project set {Preferred Language} VHDL\n")
-        # tclfile.write('project set "Create Binary Configuration File" TRUE\n');
+        # tclfile.write(
+        #            'project set "Create Binary Configuration File" TRUE\n');
         # Source files
         # tclfile.write("## add components sources file\n")
         # tclfile.write("# add top level sources file\n")

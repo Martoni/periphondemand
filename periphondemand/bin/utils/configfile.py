@@ -50,14 +50,14 @@ class ConfigFile(WrapperXml):
             self.personal_lib_list =\
                 [node.get_attr_value("path") for
                     node in self.get_subnodes("libraries", "lib")]
-        except:
+        except PodError:
             self.personal_lib_list = []
         try:
             self.personal_platformlib_list = \
                 [node.get_attr_value("path")
                     for node in self.get_subnodes("platforms",
                                                   "platform")]
-        except:
+        except PodError:
             self.personal_platformlib_list = []
 
     def del_library(self, path):

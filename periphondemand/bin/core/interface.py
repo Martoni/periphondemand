@@ -16,8 +16,6 @@
 # ----------------------------------------------------------------------------
 """ Class that manage interfaces"""
 
-from functools import cmp_to_key
-
 from periphondemand.bin.utils.wrapperxml import WrapperXml
 from periphondemand.bin.utils.poderror import PodError
 

@@ -25,15 +25,10 @@
 # ----------------------------------------------------------------------------
 """ Synthesis toolchain """
 
-import os
-import sys
-
 from periphondemand.bin.define import SYNTHESISPATH
-from periphondemand.bin.define import XMLEXT
 from periphondemand.bin.define import TCLEXT
 from periphondemand.bin.define import OBJSPATH
 from periphondemand.bin.define import VHDLEXT
-from periphondemand.bin.define import TOOLCHAINPATH
 from periphondemand.bin.define import COMPONENTSPATH
 
 from periphondemand.bin.utils.settings import Settings
@@ -239,7 +234,7 @@ class Synthesis(object):
                         try:
                             frequency = port.frequency
                             out += self.addclockconstraints(connect, frequency)
-                        except:
+                        except PodError:
                             pass
 
         out += self.generatelibraryconstraints()
@@ -287,10 +282,6 @@ class Synthesis(object):
 
         self.tcl_scriptname = self.project.name + TCLEXT
         return self.tcl_scriptname
-
-    #
-    # XXX copy from synthesis
-    #
 
     @property
     def synthesis_toolcommandname(self):
@@ -343,12 +334,12 @@ class Synthesis(object):
 #        return None
 
 
-def synthesisFactory(parent, toolchainname):
+def synthesis_factory(parent, toolchainname):
     """ return the toolchain object """
     base_lib = "periphondemand.toolchains.synthesis"
     module_name = str.upper(toolchainname[0]) + toolchainname[1:]
     module = importlib.import_module(base_lib + "." + toolchainname + "." +
                                      toolchainname)
-    MyClass = getattr(module, module_name)
+    my_class = getattr(module, module_name)
 
-    return MyClass(parent)
+    return my_class(parent)

@@ -27,6 +27,8 @@
 
 import os
 
+from periphondemand.bin.utils.poderror import PodError
+
 from periphondemand.bin.define import SYNTHESISPATH
 from periphondemand.bin.define import OBJSPATH
 from periphondemand.bin.define import BINARY_PREFIX
@@ -34,6 +36,8 @@ from periphondemand.bin.define import BINARYPROJECTPATH
 from periphondemand.bin.define import UCFEXT
 from periphondemand.bin.define import XILINX_BITSTREAM_SUFFIX
 from periphondemand.bin.define import XILINX_BINARY_SUFFIX
+from periphondemand.bin.define import COLOR_SHELL
+from periphondemand.bin.define import COLOR_END
 
 from periphondemand.bin.utils.settings import Settings
 from periphondemand.bin.utils import wrappersystem as sy

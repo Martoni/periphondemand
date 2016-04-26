@@ -40,8 +40,7 @@ from periphondemand.bin.core.platform import Platform
 from periphondemand.bin.core.library import Library
 
 from periphondemand.bin.toolchain.simulation import Simulation
-from periphondemand.bin.toolchain.synthesis import Synthesis
-from periphondemand.bin.toolchain.synthesis import synthesisFactory
+from periphondemand.bin.toolchain.synthesis import synthesis_factory
 from periphondemand.bin.toolchain.driver import Driver
 
 SETTINGS = Settings()
@@ -145,12 +144,12 @@ class Project(WrapperXml):
         # load toolchains
         toolchains = self.get_node("toolchain")
         if(toolchains):
-              node = toolchains.get_node("simulation")
-              if node!=None:
-                  self.simulation = Simulation(self, node.name)
-              node = toolchains.get_node("synthesis")
-              if node!=None:
-                  self.synthesis = synthesisFactory(self, node.name)
+            node = toolchains.get_node("simulation")
+            if node is not None:
+                self.simulation = Simulation(self, node.name)
+            node = toolchains.get_node("synthesis")
+            if node is not None:
+                self.synthesis = synthesis_factory(self, node.name)
 
         # Set bus master-slave
         for masterinterface in self.interfaces_master:
@@ -185,7 +184,7 @@ class Project(WrapperXml):
         """ Set the synthesis toolchain """
         if toolchainname not in self.get_synthesis_toolchains():
             raise PodError("No toolchain named " + toolchainname + " in POD")
-        self.synthesis = synthesisFactory(self, toolchainname)
+        self.synthesis = synthesis_factory(self, toolchainname)
         self.save()
 
     @property
@@ -593,7 +592,8 @@ class Project(WrapperXml):
         if pin_dest.parent.parent.is_bus():
             raise PodError("One of this pin is under a bus interface." +
                            "Please use connectbus.")
-        if int(pin_source.parent.size)-1 < int(pin_source.get_attr_value("num")):
+        if int(pin_source.parent.size)-1 <\
+                int(pin_source.get_attr_value("num")):
             raise PodError("Pin source number is greater than port size")
         if int(pin_dest.parent.size)-1 < int(pin_dest.get_attr_value("num")):
             raise PodError("Pin dest number is greater than port size")
