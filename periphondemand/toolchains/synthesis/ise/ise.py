@@ -101,7 +101,7 @@ class Ise(Synthesis):
         """
         out = 'NET "force_' + str(port.name)
         out += '" LOC="' + str(port.position)\
-                  + '" | IOSTANDARD=' + str(port.standard)
+               + '" | IOSTANDARD=' + str(port.standard)
         if port.drive is not None:
             out += " | DRIVE=" + str(port.drive)
         out += r'; # ' + str(port.name) + '\n'
@@ -119,7 +119,7 @@ class Ise(Synthesis):
         portdest = interfacedest.get_port(connect["port_dest"])
 
         if portdest.size != 1:
-            if portdest.is_fully_connected() :
+            if portdest.is_fully_connected():
                 out += "<" + connect["pin_dest"] + ">"
             else:
                 out += "_pin" + connect["pin_dest"]
@@ -202,7 +202,6 @@ class Ise(Synthesis):
         """ return list of bitstream files extension
         """
         return [XILINX_BITSTREAM_SUFFIX, XILINX_BINARY_SUFFIX]
-
 
     def generate_bitstream(self):
         """ generate the bitstream """

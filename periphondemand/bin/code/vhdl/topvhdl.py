@@ -239,7 +239,7 @@ class TopVHDL(TopGen):
         out += self.declare_components()
         # declare signals
         out += self.declare_signals(self.project.instances,
-                                         incompleteportslist)
+                                    incompleteportslist)
         # begin
         out += "\nbegin\n"
         # Connect forces

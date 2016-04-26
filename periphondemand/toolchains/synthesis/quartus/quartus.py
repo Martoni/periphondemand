@@ -413,13 +413,14 @@ class Quartus(Synthesis):
         else:
             rbf_commandname = self.RBF_CMD
 
-        result_file = os.path.join(self.project.projectpath + BINARYPROJECTPATH,
+        result_file = os.path.join(self.project.projectpath +
+                                   BINARYPROJECTPATH,
                                    BINARY_PREFIX + self.project.name +
                                    ALTERA_BITSTREAM_SUFFIX)
 
         cnv_result_file = os.path.join(
-                self.project.projectpath + BINARYPROJECTPATH,
-                BINARY_PREFIX + self.project.name + ALTERA_BINARY_SUFFIX)
+            self.project.projectpath + BINARYPROJECTPATH,
+            BINARY_PREFIX + self.project.name + ALTERA_BINARY_SUFFIX)
 
         pwd = sy.pwd()
         sy.del_all(self.project.projectpath + OBJSPATH)
@@ -438,11 +439,11 @@ class Quartus(Synthesis):
 
             for component in list_qsys_comp:
                 self.launch_as_shell(
-                        qsys_commandname,
-                        " --script=" +
-                        os.path.join(self.project.projectpath +
-                                     "/" + SYNTHESISPATH,
-                                     component.name + "_qsys.tcl"))
+                    qsys_commandname,
+                    " --script=" +
+                    os.path.join(self.project.projectpath +
+                                 "/" + SYNTHESISPATH,
+                                 component.name + "_qsys.tcl"))
 
         self.launch_as_shell(commandname, scriptpath)
 

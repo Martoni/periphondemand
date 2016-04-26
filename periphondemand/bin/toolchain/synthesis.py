@@ -41,6 +41,7 @@ import importlib
 SETTINGS = Settings()
 DISPLAY = Display()
 
+
 class Synthesis(object):
     """ Synthesis tool generator
     """
