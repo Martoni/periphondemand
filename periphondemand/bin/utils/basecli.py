@@ -81,7 +81,6 @@ class BaseCli(cmd.Cmd):
         """ copied from cmd's cmdloop; like input,
             but accounts for changed stdin, stdout
         """
-
         if self.use_rawinput:
             try:
                 line = input(prompt)
@@ -91,7 +90,7 @@ class BaseCli(cmd.Cmd):
             self.stdout.write(prompt)
             self.stdout.flush()
             line = self.stdin.readline()
-            if not len(line):
+            if len(line) == 0:
                 line = 'EOF'
             else:
                 if line[-1] == '\n':  # this was always true in Cmd
