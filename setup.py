@@ -37,6 +37,11 @@ import sys
 sys.path.append("periphondemand/bin/")
 from version import VERSION
 
+import sysconfig
+if float(sysconfig.get_python_version()) < 3.4:
+    raise Exception("POD need python >= 3.4")
+
+
 def package_files(directory):
     paths = []
     for (path, directories, filenames) in os.walk(directory):
