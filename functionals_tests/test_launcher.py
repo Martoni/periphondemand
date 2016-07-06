@@ -51,6 +51,15 @@ class test_launcher(unittest.TestCase):
         self.assertTrue(os.path.isfile(PROJECT_NAME + "/binaries/top_apf6_wbextvalidation.periph.rbf"))
         os.system("rm -rf  apf6_validation")
 
+    def test_redpitaya_blink(self):
+        """ testing redpitaya_blink script"""
+        PROJECT_NAME = "redpitaya_blink"
+        os.system("rm -rf  " + PROJECT_NAME)
+        with self.assertRaises(SystemExit):
+            pod.main(['pod', '-s', 'functionals_tests/redpitaya_blink.pod'])
+        self.assertTrue(os.path.isfile(PROJECT_NAME + "/binaries/top_redpitaya_blink.bit"))
+        os.system("rm -rf  redpitaya_blink")
+
 
 if __name__ == "__main__":
     print("Functionnals tests launcher")

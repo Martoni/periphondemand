@@ -1,0 +1,26 @@
+setcolor 0
+create redpitaya_blink
+selectplatform standard.redpitaya
+selectvhdlversion vhdl93
+addinstance components.blinker blink
+setgeneric blink.NB_LEDS 8
+setgeneric blink.prescaler 10000000
+connectpin blink.output.output_o.0 redpitaya.fpga.LED0
+connectpin blink.output.output_o.1 redpitaya.fpga.LED1
+connectpin blink.output.output_o.2 redpitaya.fpga.LED2
+connectpin blink.output.output_o.3 redpitaya.fpga.LED3
+connectpin blink.output.output_o.4 redpitaya.fpga.LED4
+connectpin blink.output.output_o.5 redpitaya.fpga.LED5
+connectpin blink.output.output_o.6 redpitaya.fpga.LED6
+connectpin blink.output.output_o.7 redpitaya.fpga.LED7
+
+autoconnectbus
+
+generateintercon redpitaya_axi_wrapper00.candroutput
+
+generatetop
+synthesis.selecttoolchain vivado
+synthesis.generateproject
+synthesis.generatebitstream
+report
+exit
