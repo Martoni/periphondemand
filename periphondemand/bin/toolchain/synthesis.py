@@ -290,7 +290,7 @@ class Synthesis(object):
         try:
             # try if .podrc exists
             return SETTINGS.get_synthesis_tool_command(
-                self.SYNTH_CMD)
+                self.name)
         except PodError:
             return self.SYNTH_CMD
 
