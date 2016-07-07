@@ -16,6 +16,7 @@ connectpin blink.output.output_o.7 redpitaya.fpga.LED7
 
 autoconnectbus
 
+generateintercon redpitaya_axi_wrapper00.axim
 generateintercon redpitaya_axi_wrapper00.candroutput
 
 generatetop
