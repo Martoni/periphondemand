@@ -60,6 +60,15 @@ class test_launcher(unittest.TestCase):
         self.assertTrue(os.path.isfile(PROJECT_NAME + "/binaries/top_redpitaya_blink.bit"))
         os.system("rm -rf  redpitaya_blink")
 
+    def test_redpitaya_axi_gpio_ctl(self):
+        """ testing redpitaya_axi_gpio_ctl script"""
+        PROJECT_NAME = "redpitaya_axi_gpio_ctl"
+        os.system("rm -rf  " + PROJECT_NAME)
+        with self.assertRaises(SystemExit):
+            pod.main(['pod', '-s', 'functionals_tests/redpitaya_axi_gpio_ctl.pod'])
+        self.assertTrue(os.path.isfile(PROJECT_NAME + "/binaries/top_redpitaya_axi_gpio_ctl.bit"))
+        os.system("rm -rf  redpitaya_axi_gpio_ctl")
+
 
 if __name__ == "__main__":
     print("Functionnals tests launcher")
