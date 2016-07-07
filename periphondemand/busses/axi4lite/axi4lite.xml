@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bus name="axi4lite" version="1.0" datasize="16">
+    <description></description>
+    <class name="AXIM" type="master">
+        <type name="CLK" type="clock" dir="out"/>                                           
+        <type name="RST" type="reset" dir="out"/>                                           
+        <type name="ARADR" type="araddress" dir="out" />                                      
+        <type name="ARPROT" type="arprot" dir="out" />                                      
+        <type name="ARREADY" type="arready" dir="in" />                                     
+        <type name="ARVALID" type="arvalid" dir="out" />                                    
+        <type name="AWADR" type="awaddress" dir="out" />                                      
+        <type name="AWPROT" type="awprot" dir="out" />                                      
+        <type name="AWREADY" type="awready" dir="in" />                                     
+        <type name="AWVALID" type="awvalid" dir="out" />                                    
+        <type name="BREADY" type="bready" dir="out" />                                      
+        <type name="BRESP" type="bresp" dir="in" />                                         
+        <type name="BVALID" type="bvalid" dir="in" />                                       
+        <type name="RDATA" type="rdata" dir="in" />                                        
+        <type name="RREADY" type="rready" dir="out" />                                      
+        <type name="RRESP" type="rresp" dir="in" />                                         
+        <type name="RVALID" type="rvalid" dir="in" />                                       
+        <type name="WDATA" type="wdata" dir="out" />                                       
+        <type name="WREADY" type="wready" dir="in" />                                       
+        <type name="WSTRB" type="wstrb" dir="out" />                                        
+        <type name="WVALID" type="wvalid" dir="out" />  		
+
+
+
+    </class>
+    <class name="AXIS" type="slave">
+        <type name="CLK" type="clock" dir="in"/>                                           
+        <type name="RST" type="reset" dir="in"/>                                           
+        <type name="ARADR" type="araddress" dir="in" />                                      
+        <type name="ARPROT" type="arprot" dir="in" />                                      
+        <type name="ARREADY" type="arready" dir="out" />                                     
+        <type name="ARVALID" type="arvalid" dir="in" />                                    
+        <type name="AWADR" type="awaddress" dir="in" />                                      
+        <type name="AWPROT" type="awprot" dir="in" />                                      
+        <type name="AWREADY" type="awready" dir="out" />                                     
+        <type name="AWVALID" type="awvalid" dir="in" />                                    
+        <type name="BREADY" type="bready" dir="in" />                                      
+        <type name="BRESP" type="bresp" dir="out" />                                         
+        <type name="BVALID" type="bvalid" dir="out" />                                       
+        <type name="RDATA" type="rdata" dir="out" />                                        
+        <type name="RREADY" type="rready" dir="in" />                                      
+        <type name="RRESP" type="rresp" dir="out" />                                         
+        <type name="RVALID" type="rvalid" dir="out" />                                       
+        <type name="WDATA" type="wdata" dir="in" />                                       
+        <type name="WREADY" type="wready" dir="out" />                                       
+        <type name="WSTRB" type="wstrb" dir="in" />                                        
+        <type name="WVALID" type="wvalid" dir="in" />  		
+    </class>
+</bus>
