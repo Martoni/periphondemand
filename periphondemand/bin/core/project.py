@@ -656,9 +656,14 @@ class Project(WrapperXml):
             pass
         else:
             self.del_instance(intercon.instancename)
-
         instance = self.get_instance(interfacedict["instance"])
         interface = instance.get_interface(interfacedict["interface"])
+
+        if len(interface.slaves) == 0:
+            DISPLAY.msg(interfacedict["instance"] + "." +
+                        interfacedict["interface"] +
+                        " not generated because no slaves")
+            return
         intercon = Intercon(self, interface)
         self.add_instance(component=intercon)
         self.save()

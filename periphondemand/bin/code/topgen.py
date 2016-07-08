@@ -457,15 +457,17 @@ class TopGen(object):
         """
         # checking if all intercons are done
         for masterinterface in self.project.interfaces_master:
-            try:
-                self.project.get_instance(
-                    masterinterface.parent.instancename +
-                    "_" +
-                    masterinterface.name +
-                    "_intercon")
-            except PodError as error:
-                raise PodError("Intercon missing, all intercon must be" +
-                               "generated before generate top.\n" + str(error))
+            if len(masterinterface.slaves) != 0:
+                try:
+                    self.project.get_instance(
+                        masterinterface.parent.instancename +
+                        "_" +
+                        masterinterface.name +
+                        "_intercon")
+                except PodError as error:
+                    raise PodError("Intercon missing, all intercon must be" +
+                                   " generated before generate top.\n" +
+                                   str(error))
 
         # header
         out = self.header()
