@@ -272,10 +272,29 @@ class Interface(WrapperXml):
         """ Connect an interface between two components
         """
         if len(interface_dest.ports) != len(self.ports):
-            raise PodError(self.parent.name + "." + self.name +
-                           " and " + interface_dest.parent.name +
-                           "." + interface_dest.name +
-                           "are not the same number of ports")
+            dest_len = len(interface_dest.ports)
+            src_len = len(self.ports)
+            if dest_len > src_len:
+                for port in interface_dest.ports:
+                    if port.is_optional:
+                        try:
+                            if self.get_port_by_type(port.porttype) is None:
+                                pass
+                        except PodError:
+                            dest_len -= 1
+            else:
+                for port in self.ports:
+                    if port.is_optional:
+                        try:
+                            if interface_dest.get_port_by_type(port.porttype) is None:
+                                pass
+                        except PodError:
+                            src_len -= 1
+            if src_len != dest_len :
+                raise PodError(self.parent.name + "." + self.name +
+                               " and " + interface_dest.parent.name +
+                               "." + interface_dest.name +
+                               "are not the same number of ports")
         for port in self.ports:
             if port.porttype is None:
                 raise PodError(self.parent.name + "." +
@@ -284,9 +303,10 @@ class Interface(WrapperXml):
             try:
                 port_dst = interface_dest.get_port_by_type(port.porttype)
             except PodError:
-                raise PodError(interface_dest.parent.name + "." +
-                               interface_dest.name + " have no " +
-                               port.porttype + " port")
+                if port.is_optional == False:
+                    raise PodError(interface_dest.parent.name + "." +
+                                   interface_dest.name + " have no " +
+                                   port.porttype + " port")
             if port_dst.direction == port.direction:
                 raise PodError("Ports " + self.parent.name + "." +
                                self.name + "." + port.name +
@@ -303,10 +323,13 @@ class Interface(WrapperXml):
                                "." + self.name +
                                "." + port.name +
                                " is already connected")
-
         for port in self.ports:
-            port_dst = interface_dest.get_port_by_type(port.porttype)
-            port.connect_port(port_dst)
+            try:
+                port_dst = interface_dest.get_port_by_type(port.porttype)
+                port.connect_port(port_dst)
+            except PodError as error:
+                if port.is_optional != True:
+                    raise error
 
     def connect_bus(self, instanceslave, interfaceslavename):
         """ Connect an interfaceslave to an interface bus master
