@@ -113,6 +113,14 @@ class Port(WrapperXml):
             return False
 
     @property
+    def is_optional(self):
+        """ get port direction """
+        if self.get_attr_value("optional") == "true":
+            return True
+        else:
+            return False
+
+    @property
     def unconnected_value(self):
         """ Get unconnected value """
         try:
@@ -311,7 +319,7 @@ class Port(WrapperXml):
         size = self.size
         if size != port_dest.size:
             raise PodError("The two ports have differents size")
-        if self.pins != []:
+        if self.pins != [] and self.direction == "in":
             raise PodError("Port connection " +
                            self.name + " is not void")
         if port_dest.pins != []:

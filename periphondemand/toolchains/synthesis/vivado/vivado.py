@@ -293,26 +293,67 @@ class Vivado(Synthesis):
         for instance in self.project.instances:
             if instance.constraints != []:
                 for constraint in instance.constraints:
-                    inst_name = instance.getInstanceName()
-                    attr_name = str(constraint.getAttributeValue("name"))
-                    if constraint.getAttributeValue("type") == "clk":
-                        out += "NET \"" + inst_name + "/" + \
-                            attr_name + "\" TNM_NET = " + \
-                            inst_name + "/" + attr_name + ";\n"
-                        out += "TIMESPEC TS_" + inst_name + "_" + \
-                            attr_name.replace('/', '_') + " = PERIOD \"" + \
-                            inst_name + "/" + attr_name + '"'
-                        frequency = constraint.getAttributeValue("frequency")
-                        out += " %g" % ((1000 / float(frequency))) + \
-                            " ns HIGH 50%;\n"
-                    elif constraint.getAttributeValue("type") == "placement":
+                    inst_name = instance.instancename
+                    attr_name = str(constraint.get_attr_value("name"))
+                    constr_type = constraint.get_attr_value("type")
+                    sig_type = constraint.get_attr_value("sig_type")
+
+                    if sig_type is None:
+                        sig_type = "ports"
+                    if constr_type == "clk":
+                        frequency = constraint.get_attr_value("frequency")
+                        freq = " %g" % ((1000 / float(frequency)))
+                        out += "create_clock -period " + freq + \
+                            " -name " + inst_name + "_" + attr_name + \
+                            " [get_" + sig_type + " " + inst_name
+                        if sig_type == "ports":
+                            out += "_"
+                        else:
+                            out += "/"
+                        out += attr_name + "]\n"
+                    elif constr_type == "placement":
                         out += 'INST "' + inst_name + "/" + \
                             attr_name + '" LOC=' + \
-                            constraint.getAttributeValue("loc") + ";\n"
+                            constraint.get_attr_value("loc") + ";\n"
+                    elif constr_type == "false_path":
+                        # GGM : add verification : this attributes are
+                        # mandatory for false_path
+                        src_type = constraint.get_attr_value("src_type")
+                        dest_type = constraint.get_attr_value("dest_type")
+                        out += "set_false_path -from [get_"
+                        if src_type == "clocks" or src_type == "inst_clocks":
+                            out += "clocks "
+                        else:
+                            out += src_type
+                        if src_type == "inst_clocks":
+                            out += inst_name + "_"
+                        elif src_type == "pins":
+                            out += inst_name + "/"
+                        out += constraint.get_attr_value("src") + \
+                            "] -to [get_"
+                        if dest_type == "clocks" or dest_type == "inst_clocks":
+                            out += "clocks "
+                        else:
+                            out += src_type
+                        if dest_type == "inst_clocks":
+                            out += inst_name + "_"
+                        elif dest_type == "pins":
+                            out += inst_name + "/"
+                        out += constraint.get_attr_value("dest") + "]\n"
+                    elif constr_type == "input_delay":
+                        out += "set_input_delay -clock " + inst_name + "_" + \
+                            constraint.get_attr_value("src") + " " + \
+                            constraint.get_attr_value("value") + " " + \
+                            "[get_" + sig_type + " " + inst_name
+                        if sig_type == "ports":
+                            out += "_"
+                        else:
+                            out += "/"
+                        out += constraint.get_attr_value("dest") + "]\n"
                     else:
                         raise PodError("component " + instance.name +
                                        " has an unknown type " +
-                                       constraint.getAttributeValue("type"), 0)
+                                       constr_type, 0)
         return out
 
     @classmethod

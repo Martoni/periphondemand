@@ -165,7 +165,7 @@ class Quartus(Synthesis):
             instancedest.get_interface(connect["interface_dest"])
         portdest = interfacedest.get_port(connect["port_dest"])
 
-        if portdest.size != "1":
+        if portdest.size != 1:
             dest_conn = dest_conn + "[" + connect["pin_dest"] + "]"
         if port.position is not None:
             out += 'set_location_assignment ' + \
