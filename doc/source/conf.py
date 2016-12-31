@@ -50,7 +50,7 @@ copyright = u'2014, Fabien Marteau, Gwenael Goavec-Merou, Nicolas Colombain'
 
 # A hack to get version
 versiondict = {}
-versionfile = open("../../src/bin/version.py", "r")
+versionfile = open("../../periphondemand/bin/version.py", "r")
 versionstring = versionfile.read()
 versionfile.close()
 exec compile(versionstring, '<string>', 'exec') in versiondict
