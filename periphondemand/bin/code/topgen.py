@@ -383,10 +383,13 @@ class TopGen(object):
                 if len(port.pins) != 0:
                     if (port.direction == "inout") or\
                             (port.direction == "in"):
-                        destname = sorted(
-                            [aport.extended_name for aport in
-                             port.ports_with_same_connection]
-                            )[0]
+                        try:
+                            destname = sorted(
+                                [aport.extended_name for aport in
+                                 port.ports_with_same_connection])[0]
+                        except IndexError:
+                            raise PodError("{} port {} has no connection"
+                                          .format(port.direction, port.name))
                     else:
                         destname = port.extended_name
                     out += indent + \
