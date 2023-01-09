@@ -37,8 +37,8 @@ import sys
 sys.path.append("periphondemand/bin/")
 from version import VERSION
 
-import sysconfig
-if float(sysconfig.get_python_version()) < 3.4:
+(major, minor) = (sys.version_info.major, sys.version_info.minor)
+if major < 3 or (major == 3 and minor < 4):
     raise Exception("POD need python >= 3.4")
 
 
