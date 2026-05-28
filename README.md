@@ -49,9 +49,13 @@ Then checkout the standard library:
 
 **Install it**
 
-To install it on your computer, just do (has super user):
+To install it on your computer:
 
-``$ python setup.py install``
+``$ pip install .``
+
+To install it in editable mode :
+
+``$ pip install -e .``
 
 **Make a distribution archive**
 
@@ -73,14 +77,14 @@ Walk through periphondemand/ directory:
 
 ``$ cd periphondemand``
 
-Then install POD with root privilege:
+Then install POD :
 
-``$ python setup.py install``
+``$ pip install .``
 
 Enjoy
 =====
 
-To launch periphondemand just type «pod»:
+To launch periphondemand type «pod»:
 
 ``$ pod``
 
