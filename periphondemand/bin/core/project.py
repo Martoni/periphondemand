@@ -909,7 +909,7 @@ class Project(WrapperXml):
                 try:
                     for reg in interfaceslave.registers_map:
                         text += ONETAB + "  " +\
-                            "0x%02x : %s\n" % (reg["offset"], reg["name"])
+                            "0x%02x : %s\n" % (int(reg["offset"]), reg["name"])
                 except PodError:
                     text += "\n"
         report_file.write(text)
