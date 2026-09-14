@@ -206,6 +206,8 @@ class Ise(Synthesis):
     def generate_bitstream(self):
         """ generate the bitstream """
         commandname = self.synthesis_toolcommandname
+        if self.tcl_scriptname is None:
+                raise PodError("Generate tcl script before")
         scriptpath = os.path.join(self.parent.projectpath + SYNTHESISPATH,
                                   self.tcl_scriptname)
         pwd = sy.pwd()
