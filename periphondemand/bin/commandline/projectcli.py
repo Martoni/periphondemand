@@ -48,6 +48,10 @@ from periphondemand.bin.core.project import Project
 
 from periphondemand.bin.code.vhdl.topvhdl import TopVHDL
 
+from periphondemand.bin.gui.schematic import build_snapshot
+from periphondemand.bin.gui.viewer import open_viewer
+from periphondemand.bin.gui.viewer import close_viewer
+
 SETTINGS = Settings()
 DISPLAY = Display()
 
@@ -1269,6 +1273,52 @@ Generate a report of the project
         print(DISPLAY)
         print("report : ")
         print(text)
+
+    def complete_view(self, text, line, begidx, endidx):
+        """ view command completion """
+        return [word for word in ("refresh", "close")
+                if word.startswith(text)]
+
+    def do_view(self, line):
+        """\
+Usage : view [refresh|close]
+Open a graphical schematic viewer of the project in a window.
+'view refresh' updates the window after a project modification,
+'view close' closes it. The console stays usable while the
+window is open.
+        """
+        try:
+            self.is_project_open()
+        except PodError as error:
+            print(DISPLAY)
+            print(error)
+            return
+        arg = line.strip().lower()
+        if arg not in ("", "refresh", "close"):
+            print("Usage : view [refresh|close]")
+            return
+        if arg == "close":
+            close_viewer()
+            print("Viewer closed")
+            return
+        try:
+            snapshot = build_snapshot(self._project)
+        except PodError as error:
+            print(DISPLAY)
+            print(error)
+            return
+        except Exception as error:       # noqa: BLE001
+            print(DISPLAY)
+            print("Unable to build the schematic: %s" % error)
+            return
+        viewer = open_viewer(snapshot)
+        if viewer is None:
+            return
+        if arg == "refresh":
+            print("Viewer refreshed")
+        else:
+            print(DISPLAY)
+            print("Viewer opened")
 
     def is_project_open(self):
         """ check if project is open, raise error if not
