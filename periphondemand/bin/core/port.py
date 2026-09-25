@@ -232,7 +232,7 @@ class Port(WrapperXml):
             else:
                 return False
         except AttributeError:
-            return False
+            return PodError(f"Can't find variable attribute on port {self.name}")
 
     def check_variable_port(self):
         """ check if variable port is correctly connected.
@@ -246,11 +246,13 @@ class Port(WrapperXml):
                 return True
             tab = []
             for pin in listofpin:
+                pin.check_connection()
                 if pin.num is not None:
                     tab.append(int(pin.num))
             tab.sort()
             if (len(tab) - 1) != tab[-1]:
                 return False
+            # check pin connection
             return True
         else:
             return True
@@ -296,14 +298,14 @@ class Port(WrapperXml):
         src dest|  out in  inout lock clock
         ------------------------------------
         out     |   x   v    v     x    x
-        in      |   v   v    v     x    v
+        in      |   v   x    v     x    v
         inout   |   v   v    v     x    x
         lock    |   v   v    v     x    x
         clock   |   x   v    x     x    x
         """
         listdir = ["out", "in", "inout", "lock", "clock"]
         checktab = ((0, 1, 1, 0, 0),
-                    (1, 1, 1, 0, 1),
+                    (1, 0, 1, 0, 1),
                     (1, 1, 1, 0, 0),
                     (1, 1, 1, 0, 0),
                     (0, 1, 0, 0, 0))
@@ -370,7 +372,7 @@ class Port(WrapperXml):
 
     @property
     def ports_with_same_connection(self):
-        """ Return a list of ports that are connected on sames pin.
+        """ Return a list of ports that are connected on this pin 0.
             only works with port on externals I/O (platform). If only this
             one port is connected to one pin, self port is returned.
         """

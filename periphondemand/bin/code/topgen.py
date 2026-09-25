@@ -296,6 +296,7 @@ class TopGen(object):
         for component in componentslist:
             if component.is_platform() is True:
                 continue
+            print(f"-- {component.instancename}")
             out += "\n" + ONETAB + self.insert_comment(component.instancename)
             for interface in component.interfaces:
                 out += ONETAB + self.insert_comment(interface.name)
@@ -307,14 +308,17 @@ class TopGen(object):
                         continue
                     if len(port.pins) == 0:
                         continue
-                    connection_list = port.pins[0].connections
-                    if len(connection_list) == 0:
-                        continue
-                    if connection_list[0]["instance_dest"] == platformname:
-                        continue
+                    if len(port.pins) == port.size:
+                        pin0_connection_list = port.pins[0].connections
+                        # No declaratino if no connections
+                        if len(pin0_connection_list) == 0:
+                            continue
+                        # No declaration if port is complete and connected
+                        # to platform
+                        if pin0_connection_list[0]["instance_dest"] == platformname:
+                            continue
                     instancename = component.instancename + "_" + port.name
-                    out += ONETAB + \
-                        self.declare_signal(instancename, port)
+                    out += ONETAB + self.declare_signal(instancename, port)
 
         out += "\n" + ONETAB + self.insert_comment("void pins")
 
@@ -381,8 +385,8 @@ class TopGen(object):
                     continue
                 destname = ""
                 if len(port.pins) != 0:
-                    if (port.direction == "inout") or\
-                            (port.direction == "in"):
+                    if ((port.direction == "inout") or (port.direction == "in"))\
+                        and (port.pins[0].connections[0]['port_dest'] == 'fpga'):
                         try:
                             destname = sorted(
                                 [aport.extended_name for aport in
@@ -452,7 +456,23 @@ class TopGen(object):
                 out += ONETAB * 2 + self.insert_comment(interface.name)
                 for port in interface.ports:
                     if port.direction == "in":
+                        # Connect if all in port is connected
                         out += self.connect_in_port(component, interface, port)
+                    elif port.direction == "out":
+                        if len(port.pins) > 1:
+                            # Connect if some out pin on platform pad
+                            for pin in port.pins:
+                                if pin.is_connected_to_inst(self.project.platform):
+                                    instancename = pin.parent.parent.parent.instancename
+                                    portname = pin.parent.name
+                                    srcname = f"{instancename}_{portname}"
+                                    destname = srcname
+                                    out += ONETAB*2 + \
+                                        self.connect_inc_signals(
+                                                srcname,
+                                                destname,
+                                                pin.parent.direction,
+                                                pin.num)
         return out
 
     def generate(self):

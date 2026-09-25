@@ -175,6 +175,11 @@ class Pin(WrapperXml):
                            " : Port " + str(pin_dest.parent.name) +
                            " is forced, can't be connected")
 
+        if pin_dest.parent.direction == self.parent.direction:
+            same_dir = self.parent.direction
+            if same_dir != "inout":
+                raise PodError(f"{message} : can't connect {same_dir} on {same_dir}")
+
         if self.parent.direction == "in":
             if len(self.connections) != 0:
                 try:
@@ -254,3 +259,10 @@ class Pin(WrapperXml):
             if connexion["instance_dest"] == instance_name:
                 return True
         return False
+
+    def check_connection(self):
+        if not self.is_connected():
+            return False
+        print(f"{len(self.connections)} connexions")
+        for pin in self.connections:
+            print(f"DEBUG TODO check {pin}")

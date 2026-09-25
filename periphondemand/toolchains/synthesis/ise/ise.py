@@ -186,14 +186,7 @@ class Ise(Synthesis):
         out += 'process run "Generate Programming File"\n'
 
         # Run post synthesis model generation
-        out += 'process run "Generate Post-Synthesis Simulation Model"\n'
-        #    out += 'cp netgen/synthesis/top_' +
-        #                    SETTINGS.active_project.name + \
-        #        '_synthesis.vhd ../simulation/\n')
-        # Run post place and route model generation
-        out += 'process run ' + \
-            '"Generate Post-Place & Route Simulation Model"\n'
-        out += 'process run "Implement Design" -force rerun_all\n'
+        out += 'process run "Implement Design"\n'
         out += 'project close\n'
         return out
 
