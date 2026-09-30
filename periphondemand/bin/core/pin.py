@@ -176,9 +176,12 @@ class Pin(WrapperXml):
                            " is forced, can't be connected")
 
         if pin_dest.parent.direction == self.parent.direction:
-            same_dir = self.parent.direction
-            if same_dir != "inout":
-                raise PodError(f"{message} : can't connect {same_dir} on {same_dir}")
+            # is one of pin is from platform ?
+            if (not pin_dest.parent.parent.parent.is_platform()) and \
+                    (not self.parent.parent.parent.is_platform()):
+                same_dir = self.parent.direction
+                if same_dir != "inout":
+                    raise PodError(f"{message} : can't connect {same_dir} on {same_dir}")
 
         if self.parent.direction == "in":
             if len(self.connections) != 0:
